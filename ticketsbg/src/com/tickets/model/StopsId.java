@@ -11,55 +11,57 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class StopsId implements java.io.Serializable {
 
-	private int routeId;
+    private int routeId;
 
-	private int idx;
+    private int idx;
 
-	public StopsId() {
-	}
+    public StopsId() {
+    }
 
-	public StopsId(int routeId, int idx) {
-		this.routeId = routeId;
-		this.idx = idx;
-	}
+    public StopsId(int routeId, int idx) {
+        this.routeId = routeId;
+        this.idx = idx;
+    }
 
-	@Column(name = "route_id", nullable = false)
-	public int getRouteId() {
-		return this.routeId;
-	}
+    @Column(name = "route_id", nullable = false)
+    public int getRouteId() {
+        return this.routeId;
+    }
 
-	public void setRouteId(int routeId) {
-		this.routeId = routeId;
-	}
+    public void setRouteId(int routeId) {
+        this.routeId = routeId;
+    }
 
-	@Column(name = "idx", nullable = false)
-	public int getIdx() {
-		return this.idx;
-	}
+    @Column(name = "idx", nullable = false)
+    public int getIdx() {
+        return this.idx;
+    }
 
-	public void setIdx(int idx) {
-		this.idx = idx;
-	}
+    public void setIdx(int idx) {
+        this.idx = idx;
+    }
 
-	public boolean equals(Object other) {
-		if ((this == other))
-			return true;
-		if ((other == null))
-			return false;
-		if (!(other instanceof StopsId))
-			return false;
-		StopsId castOther = (StopsId) other;
+    @Override
+    public boolean equals(Object other) {
+        if ((this == other))
+            return true;
+        if ((other == null))
+            return false;
+        if (!(other instanceof StopsId))
+            return false;
+        StopsId castOther = (StopsId) other;
 
-		return (this.getRouteId() == castOther.getRouteId())
-				&& (this.getIdx() == castOther.getIdx());
-	}
+        return (this.getRouteId() == castOther.getRouteId())
+                && (this.getIdx() == castOther.getIdx());
+    }
 
-	public int hashCode() {
-		int result = 17;
+    @Override
+    public int hashCode() {
+        int result = 17;
 
-		result = 37 * result + this.getRouteId();
-		result = 37 * result + this.getIdx();
-		return result;
-	}
+        result = 37 * result + this.getRouteId();
+        result = 37 * result + this.getIdx();
+        return result;
+    }
 
 }

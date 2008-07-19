@@ -11,69 +11,71 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class PricesId implements java.io.Serializable {
 
-	private int routeId;
+    private int routeId;
 
-	private int start;
+    private int start;
 
-	private int end;
+    private int end;
 
-	public PricesId() {
-	}
+    public PricesId() {
+    }
 
-	public PricesId(int routeId, int start, int end) {
-		this.routeId = routeId;
-		this.start = start;
-		this.end = end;
-	}
+    public PricesId(int routeId, int start, int end) {
+        this.routeId = routeId;
+        this.start = start;
+        this.end = end;
+    }
 
-	@Column(name = "route_id", nullable = false)
-	public int getRouteId() {
-		return this.routeId;
-	}
+    @Column(name = "route_id", nullable = false)
+    public int getRouteId() {
+        return this.routeId;
+    }
 
-	public void setRouteId(int routeId) {
-		this.routeId = routeId;
-	}
+    public void setRouteId(int routeId) {
+        this.routeId = routeId;
+    }
 
-	@Column(name = "start", nullable = false)
-	public int getStart() {
-		return this.start;
-	}
+    @Column(name = "start", nullable = false)
+    public int getStart() {
+        return this.start;
+    }
 
-	public void setStart(int start) {
-		this.start = start;
-	}
+    public void setStart(int start) {
+        this.start = start;
+    }
 
-	@Column(name = "end", nullable = false)
-	public int getEnd() {
-		return this.end;
-	}
+    @Column(name = "end", nullable = false)
+    public int getEnd() {
+        return this.end;
+    }
 
-	public void setEnd(int end) {
-		this.end = end;
-	}
+    public void setEnd(int end) {
+        this.end = end;
+    }
 
-	public boolean equals(Object other) {
-		if ((this == other))
-			return true;
-		if ((other == null))
-			return false;
-		if (!(other instanceof PricesId))
-			return false;
-		PricesId castOther = (PricesId) other;
+    @Override
+    public boolean equals(Object other) {
+        if ((this == other))
+            return true;
+        if ((other == null))
+            return false;
+        if (!(other instanceof PricesId))
+            return false;
+        PricesId castOther = (PricesId) other;
 
-		return (this.getRouteId() == castOther.getRouteId())
-				&& (this.getStart() == castOther.getStart())
-				&& (this.getEnd() == castOther.getEnd());
-	}
+        return (this.getRouteId() == castOther.getRouteId())
+                && (this.getStart() == castOther.getStart())
+                && (this.getEnd() == castOther.getEnd());
+    }
 
-	public int hashCode() {
-		int result = 17;
+    @Override
+    public int hashCode() {
+        int result = 17;
 
-		result = 37 * result + this.getRouteId();
-		result = 37 * result + this.getStart();
-		result = 37 * result + this.getEnd();
-		return result;
-	}
+        result = 37 * result + this.getRouteId();
+        result = 37 * result + this.getStart();
+        result = 37 * result + this.getEnd();
+        return result;
+    }
 
 }

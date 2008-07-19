@@ -11,55 +11,57 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class TicketsId implements java.io.Serializable {
 
-	private int runId;
+    private int runId;
 
-	private short seat;
+    private short seat;
 
-	public TicketsId() {
-	}
+    public TicketsId() {
+    }
 
-	public TicketsId(int runId, short seat) {
-		this.runId = runId;
-		this.seat = seat;
-	}
+    public TicketsId(int runId, short seat) {
+        this.runId = runId;
+        this.seat = seat;
+    }
 
-	@Column(name = "run_id", nullable = false)
-	public int getRunId() {
-		return this.runId;
-	}
+    @Column(name = "run_id", nullable = false)
+    public int getRunId() {
+        return this.runId;
+    }
 
-	public void setRunId(int runId) {
-		this.runId = runId;
-	}
+    public void setRunId(int runId) {
+        this.runId = runId;
+    }
 
-	@Column(name = "seat", nullable = false)
-	public short getSeat() {
-		return this.seat;
-	}
+    @Column(name = "seat", nullable = false)
+    public short getSeat() {
+        return this.seat;
+    }
 
-	public void setSeat(short seat) {
-		this.seat = seat;
-	}
+    public void setSeat(short seat) {
+        this.seat = seat;
+    }
 
-	public boolean equals(Object other) {
-		if ((this == other))
-			return true;
-		if ((other == null))
-			return false;
-		if (!(other instanceof TicketsId))
-			return false;
-		TicketsId castOther = (TicketsId) other;
+    @Override
+    public boolean equals(Object other) {
+        if ((this == other))
+            return true;
+        if ((other == null))
+            return false;
+        if (!(other instanceof TicketsId))
+            return false;
+        TicketsId castOther = (TicketsId) other;
 
-		return (this.getRunId() == castOther.getRunId())
-				&& (this.getSeat() == castOther.getSeat());
-	}
+        return (this.getRunId() == castOther.getRunId())
+                && (this.getSeat() == castOther.getSeat());
+    }
 
-	public int hashCode() {
-		int result = 17;
+    @Override
+    public int hashCode() {
+        int result = 17;
 
-		result = 37 * result + this.getRunId();
-		result = 37 * result + this.getSeat();
-		return result;
-	}
+        result = 37 * result + this.getRunId();
+        result = 37 * result + this.getSeat();
+        return result;
+    }
 
 }

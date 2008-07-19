@@ -41,6 +41,7 @@ public class RouteDayId implements java.io.Serializable {
         this.dayId = dayId;
     }
 
+    @Override
     public boolean equals(Object other) {
         if ((this == other))
             return true;
@@ -54,6 +55,7 @@ public class RouteDayId implements java.io.Serializable {
                 && (this.getDayId() == castOther.getDayId());
     }
 
+    @Override
     public int hashCode() {
         int result = 17;
 
