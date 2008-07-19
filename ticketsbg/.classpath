@@ -56,5 +56,7 @@
 	<classpathentry kind="lib" path="lib/spring-framework-2.5.1/dist/modules/spring-webmvc.jar"/>
 	<classpathentry kind="lib" path="lib/spring-framework-2.5.1/dist/modules/spring-webmvc-portlet.jar"/>
 	<classpathentry kind="lib" path="lib/spring-framework-2.5.1/dist/modules/spring-webmvc-struts.jar"/>
+	<classpathentry kind="lib" path="lib/gwt/gwt-user.jar"/>
+	<classpathentry kind="lib" path="lib/gwt/gwt-dev-windows.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

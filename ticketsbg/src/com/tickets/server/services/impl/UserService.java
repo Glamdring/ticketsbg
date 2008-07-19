@@ -1,4 +1,4 @@
-package com.tickets.services;
+package com.tickets.server.services.impl;
 
 import javax.annotation.Resource;
 

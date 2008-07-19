@@ -38,7 +38,7 @@ public class HibernateUtil {
             .addAnnotatedClass(User.class)
             .addAnnotatedClass(UsersHistory.class)
             .setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver")
-            .setProperty("hibernate.connection.url", "jdbc:mysql://localhost/tickets?characterEncoding=utf8")
+            .setProperty("hibernate.connection.url", "jdbc:mysql://169.254.61.23/tickets?characterEncoding=utf8")
             .setProperty("hibernate.connection.username", "common")
             .setProperty("hibernate.connection.password", "qaz")
             .setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect")

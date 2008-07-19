@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.tickets.dao.interfaces.Dao;
-import com.tickets.services.UserService;
+import com.tickets.server.services.impl.UserService;
 
 @Repository("dao")
 public class GenericDao<E> extends Dao<E> {

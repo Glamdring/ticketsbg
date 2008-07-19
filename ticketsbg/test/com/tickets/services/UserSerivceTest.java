@@ -7,6 +7,7 @@ import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
 
 import com.tickets.dao.GenericDao;
 import com.tickets.model.User;
+import com.tickets.server.services.impl.UserService;
 
 public class UserSerivceTest extends AbstractDependencyInjectionSpringContextTests {
 
