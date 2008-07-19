@@ -1,0 +1,53 @@
+<beans
+    xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+>
+
+    <context:annotation-config/>
+    <context:component-scan base-package="com.tickets"/>
+
+    <!-- bean id="userService" class="com.tickets.services.UserService">
+    <property name="service" ref="userService" />
+    <property name="dao" ref="dao" />
+    </bean>
+  <bean id="dao" class="com.tickets.dao.GenericDao"/-->
+
+    <bean class="org.springframework.context.annotation.CommonAnnotationBeanPostProcessor"/>
+ <!--aop:aspectj-autoproxy/-->
+<bean name="starter" class="com.tickets.aop.TransactionStarter" />
+<bean name="committer" class="com.tickets.aop.TransactionCommitter "/>
+<bean name="rollbacker" class="com.tickets.aop.TransactionRollbacker "/>
+
+<bean name="pointcut.advisor1" class="org.springframework.aop.support.StaticMethodMatcherPointcutAdvisor">
+ <property name="advice" ref="starter" />
+</bean>
+
+<bean name="pointcut.advisor2" class="org.springframework.aop.support.StaticMethodMatcherPointcutAdvisor">
+ <property name="advice" ref="committer" />
+</bean>
+
+<bean name="pointcut.advisor3" class="org.springframework.aop.support.StaticMethodMatcherPointcutAdvisor">
+ <property name="advice" ref="rollbacker" />
+</bean>
+
+<bean name="myRawController" class="com.tickets.services.UserService" />
+
+<!-- Create the proxy bean that returns AOP'd varieties of our controller -->
+<bean name="myController" class="org.springframework.aop.framework.ProxyFactoryBean">
+  <property name="interceptorNames">
+    <list>
+      <value>pointcut.advisor1</value>
+      <value>pointcut.advisor2</value>
+      <value>pointcut.advisor3</value>
+      <value>myRawController</value>
+    </list>
+  </property>
+</bean>
+
+</beans>

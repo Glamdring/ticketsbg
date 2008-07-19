@@ -1,0 +1,8 @@
+<project name="tickets" basedir=".">
+<property name="libs" location="lib" />
+
+<war>
+  <lib dir="${libs}" includes="**/*.jar" />
+</war>
+
+</project>
