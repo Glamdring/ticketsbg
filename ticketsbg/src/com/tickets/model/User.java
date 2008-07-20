@@ -27,7 +27,9 @@ public class User implements java.io.Serializable {
 
     private String email = "";
 
-    private String name = "";
+    private String name;
+
+    private boolean active;
 
     private Set<UsersHistory> history = new HashSet<UsersHistory>();
 
@@ -97,6 +99,15 @@ public class User implements java.io.Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Column(name = "active")
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     @Override

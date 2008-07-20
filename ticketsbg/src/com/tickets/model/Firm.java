@@ -29,6 +29,8 @@ public class Firm implements java.io.Serializable {
 
     private String other;
 
+    private boolean isActive;
+
     private Set<Staff> staff = new HashSet<Staff>();
 
     @ManyToMany
@@ -97,6 +99,16 @@ public class Firm implements java.io.Serializable {
 
     public void setOther(String other) {
         this.other = other;
+    }
+
+
+    @Column(name = "active")
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean isActive) {
+        this.isActive = isActive;
     }
 
     @Override

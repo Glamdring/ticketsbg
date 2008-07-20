@@ -29,6 +29,6 @@ public class UserSerivceTest extends AbstractDependencyInjectionSpringContextTes
 
         User user = new User();
         user.setUsername("Bozhidar Bozhanov");
-        System.out.println(usrv.saveUser(user));
+        //System.out.println(usrv.saveUser(user));
     }
 }

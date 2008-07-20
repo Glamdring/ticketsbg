@@ -31,6 +31,8 @@ public class Ticket implements java.io.Serializable {
 
     private Run run;
 
+    private boolean committed;
+
     @ManyToOne
     @JoinColumn(name="run_id", insertable = false, updatable = false)
     public Run getRun() {
@@ -104,6 +106,15 @@ public class Ticket implements java.io.Serializable {
 
     public void setPrice(Float price) {
         this.price = price;
+    }
+
+    @Column(name = "committed")
+    public boolean isCommitted() {
+        return committed;
+    }
+
+    public void setCommitted(boolean committed) {
+        this.committed = committed;
     }
 
     @Override
