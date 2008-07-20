@@ -1,53 +1,88 @@
-<beans
-    xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:context="http://www.springframework.org/schema/context"
-    xsi:schemaLocation="
-http://www.springframework.org/schema/beans
-http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-http://www.springframework.org/schema/context
-http://www.springframework.org/schema/context/spring-context-2.5.xsd"
->
+<?xml version="1.0" encoding="UTF-8"?>
 
-    <context:annotation-config/>
+<beans xmlns="http://www.springframework.org/schema/beans"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:aop="http://www.springframework.org/schema/aop"
+         xmlns:tx="http://www.springframework.org/schema/tx"
+         xmlns:context="http://www.springframework.org/schema/context"
+         xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+    <context:annotation-config />
     <context:component-scan base-package="com.tickets"/>
 
-    <!-- bean id="userService" class="com.tickets.services.UserService">
-    <property name="service" ref="userService" />
-    <property name="dao" ref="dao" />
+<!-- Hibernate SessionFactory -->
+
+    <bean id="sessionFactory"
+        class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+        <!--property name="configLocation"
+            value="classpath:com/tickets/model/hibernate.cfg.xml">
+        </property-->
+        <property name="annotatedClasses">
+            <list>
+                <value>com.tickets.model.Day</value>
+                <value>com.tickets.model.Firm</value>
+                <value>com.tickets.model.Price</value>
+                <value>com.tickets.model.Route</value>
+                <value>com.tickets.model.RouteDay</value>
+                <value>com.tickets.model.RouteHour</value>
+                <value>com.tickets.model.Run</value>
+                <value>com.tickets.model.Staff</value>
+                <value>com.tickets.model.Stop</value>
+                <value>com.tickets.model.Ticket</value>
+                <value>com.tickets.model.User</value>
+                <value>com.tickets.model.UsersHistory</value>
+            </list>
+        </property>
+
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
     </bean>
-  <bean id="dao" class="com.tickets.dao.GenericDao"/-->
 
-    <bean class="org.springframework.context.annotation.CommonAnnotationBeanPostProcessor"/>
- <!--aop:aspectj-autoproxy/-->
-<bean name="starter" class="com.tickets.aop.TransactionStarter" />
-<bean name="committer" class="com.tickets.aop.TransactionCommitter "/>
-<bean name="rollbacker" class="com.tickets.aop.TransactionRollbacker "/>
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+        <property name="jdbcUrl" value="jdbc:mysql://169.254.61.23/tickets?characterEncoding=utf8"/>
+        <property name="testConnectionOnCheckin" value="true"></property>
+        <property name="testConnectionOnCheckout" value="true"></property>
+        <property name="properties">
+            <props>
+                    <prop key="c3p0.min_size">10</prop>
+                    <prop key="c3p0.max_size">100</prop>
+                    <prop key="c3p0.timeout">540</prop>
+                    <prop key="c3p0.acquireRetryAttempts">10</prop>
+                    <prop key="c3p0.acquireIncrement">5</prop>
+                    <prop key="c3p0.idleConnectionTestPeriod">540</prop>
+                    <prop key="c3p0.initialPoolSize">20</prop>
+                    <prop key="c3p0.maxPoolSize">100</prop>
+                    <prop key="c3p0.maxIdleTime">30</prop>
+                    <prop key="c3p0.maxStatements">50</prop>
+                    <prop key="c3p0.minPoolSize">10</prop>
+                    <prop key="user">common</prop>
+                    <prop key="password">qaz</prop>
+            </props>
+        </property>
+    </bean>
+    <!-- Transaction manager for a single Hibernate SessionFactory (alternative to JTA) -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory"><ref local="sessionFactory"/></property>
+    </bean>
+    <bean id="dao" class="com.tickets.dao.Dao" scope="prototype">
+        <property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>
 
-<bean name="pointcut.advisor1" class="org.springframework.aop.support.StaticMethodMatcherPointcutAdvisor">
- <property name="advice" ref="starter" />
-</bean>
+    <aop:config>
+        <aop:pointcut id="serviceMethods" expression="execution(* com.tickets.server.services.impl.*.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethods"/>
+    </aop:config>
 
-<bean name="pointcut.advisor2" class="org.springframework.aop.support.StaticMethodMatcherPointcutAdvisor">
- <property name="advice" ref="committer" />
-</bean>
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="*" propagation="REQUIRED"/>
+        </tx:attributes>
+    </tx:advice>
 
-<bean name="pointcut.advisor3" class="org.springframework.aop.support.StaticMethodMatcherPointcutAdvisor">
- <property name="advice" ref="rollbacker" />
-</bean>
-
-<bean name="myRawController" class="com.tickets.services.UserService" />
-
-<!-- Create the proxy bean that returns AOP'd varieties of our controller -->
-<bean name="myController" class="org.springframework.aop.framework.ProxyFactoryBean">
-  <property name="interceptorNames">
-    <list>
-      <value>pointcut.advisor1</value>
-      <value>pointcut.advisor2</value>
-      <value>pointcut.advisor3</value>
-      <value>myRawController</value>
-    </list>
-  </property>
-</bean>
 
 </beans>
