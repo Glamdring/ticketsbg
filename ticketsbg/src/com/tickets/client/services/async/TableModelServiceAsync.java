@@ -21,9 +21,11 @@
  * This software is freeware. Use it at your own risk.
  */
 
-package com.tickets.client.components;
+package com.tickets.client.services.async;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.tickets.client.components.DataFilter;
+import com.tickets.client.components.TableColumn;
 
 public interface TableModelServiceAsync {
     public void getColumns(AsyncCallback<TableColumn[][]> callback);

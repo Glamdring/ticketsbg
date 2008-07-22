@@ -41,6 +41,7 @@ import com.google.gwt.user.client.ui.SourcesTableEvents;
 import com.google.gwt.user.client.ui.TableListener;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLTable.RowFormatter;
+import com.tickets.client.services.async.TableModelServiceAsync;
 
 public class AdvancedTable extends Composite {
 

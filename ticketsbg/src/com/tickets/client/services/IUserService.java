@@ -1,8 +1,15 @@
 package com.tickets.client.services;
 
+import com.google.gwt.user.client.rpc.RemoteService;
 import com.tickets.client.model.User;
 
-public interface IUserService {
+/**
+ * Interface for handling users.
+ *
+ * @author Bozhidar Bozhanov
+ *
+ */
+public interface IUserService extends RemoteService {
 
     /**
      * Registers a new user

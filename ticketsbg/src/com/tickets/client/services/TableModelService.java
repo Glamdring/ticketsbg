@@ -19,9 +19,11 @@
  * This software is freeware. Use it at your own risk.
  */
 
-package com.tickets.client.components;
+package com.tickets.client.services;
 
 import com.google.gwt.user.client.rpc.RemoteService;
+import com.tickets.client.components.DataFilter;
+import com.tickets.client.components.TableColumn;
 
 public interface TableModelService extends RemoteService {
     public TableColumn[] getColumns();

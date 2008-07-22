@@ -11,6 +11,8 @@ package com.tickets.client.components;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
+import com.tickets.client.services.TableModelService;
+import com.tickets.client.services.async.TableModelServiceAsync;
 
 public class ServiceUtils {
 
