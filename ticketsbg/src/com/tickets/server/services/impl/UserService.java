@@ -13,8 +13,8 @@ import javax.xml.bind.ValidationException;
 
 import org.springframework.stereotype.Service;
 
-import com.tickets.model.User;
-import com.tickets.server.services.IUserService;
+import com.tickets.client.model.User;
+import com.tickets.client.services.IUserService;
 
 @Service("userService")
 public class UserService extends BaseService<User> implements IUserService {

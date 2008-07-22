@@ -1,6 +1,6 @@
-package com.tickets.server.services;
+package com.tickets.client.services;
 
-import com.tickets.model.User;
+import com.tickets.client.model.User;
 
 public interface IUserService {
 
