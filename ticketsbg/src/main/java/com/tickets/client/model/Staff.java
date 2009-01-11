@@ -2,12 +2,12 @@ package com.tickets.client.model;
 
 // Generated 2008-1-20 22:59:52 by Hibernate Tools 3.2.0.b9
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
@@ -19,28 +19,17 @@ import javax.persistence.UniqueConstraint;
  */
 @Entity
 @Table(name = "staff", uniqueConstraints = @UniqueConstraint(columnNames = "firm_id"))
-public class Staff implements java.io.Serializable {
-
-    private int id;
-
-    private int firmId;
-
-    private String username;
-
-    private String password;
-
-    private String email;
-
-    private String name;
+public class Staff extends BaseUser implements Serializable {
 
     private byte privs;
 
     private Set<Firm> firms = new HashSet<Firm>();
 
-    private Set<UsersHistory> history = new HashSet<UsersHistory>();
-
     @OneToMany(mappedBy="staff")
     @OrderBy("dtm DESC")
+    private Set<UsersHistory> history = new HashSet<UsersHistory>();
+
+
     public Set<UsersHistory> getHistory() {
         return history;
     }
@@ -61,28 +50,6 @@ public class Staff implements java.io.Serializable {
     public Staff() {
     }
 
-    public Staff(int id, int firmId, String username, String password,
-            String email, String name, byte privs) {
-        this.id = id;
-        this.firmId = firmId;
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.name = name;
-        this.privs = privs;
-    }
-
-    @Id
-    @Column(name = "id", nullable = false)
-    public int getId() {
-        return this.id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    @Column(name = "firm_id", unique = true, nullable = false)
     public int getFirmId() {
         return this.firmId;
     }
@@ -91,7 +58,7 @@ public class Staff implements java.io.Serializable {
         this.firmId = firmId;
     }
 
-    @Column(name = "username", nullable = false, length = 40)
+
     public String getUsername() {
         return this.username;
     }
