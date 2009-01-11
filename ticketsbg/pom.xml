@@ -83,9 +83,14 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-        	<groupId>hibernate</groupId>
+        	<groupId>org.hibernate</groupId>
         	<artifactId>hibernate</artifactId>
-        	<version>3.0.5</version>
+        	<version>3.2.1.ga</version>
+        </dependency>
+        <dependency>
+        	<groupId>org.hibernate</groupId>
+        	<artifactId>hibernate-annotations</artifactId>
+        	<version>3.2.1.ga</version>
         </dependency>
         <dependency>
         	<groupId>org.springframework</groupId>
@@ -105,12 +110,7 @@
         <dependency>
         	<groupId>commons-email</groupId>
         	<artifactId>commons-email</artifactId>
-        	<version>20030310.165926</version>
-        </dependency>
-        <dependency>
-        	<groupId>org.hibernate</groupId>
-        	<artifactId>hibernate-annotations</artifactId>
-        	<version>3.4.0.GA</version>
+        	<version>1.1</version>
         </dependency>
         <dependency>
         	<groupId>org.springframework</groupId>
@@ -121,6 +121,36 @@
         	<groupId>net.sf.gwt-widget</groupId>
         	<artifactId>gwt-sl</artifactId>
         	<version>0.1.5</version>
+        </dependency>
+        <dependency>
+        	<groupId>aspectj</groupId>
+        	<artifactId>aspectjweaver</artifactId>
+        	<version>1.5.3</version>
+        </dependency>
+        <dependency>
+        	<groupId>org.hibernate</groupId>
+        	<artifactId>hibernate-c3p0</artifactId>
+        	<version>3.3.1.GA</version>
+        </dependency>
+        <dependency>
+        	<groupId>org.slf4j</groupId>
+        	<artifactId>slf4j-log4j12</artifactId>
+        	<version>1.5.0</version>
+        </dependency>
+        <dependency>
+        	<groupId>mysql</groupId>
+        	<artifactId>mysql-connector-java</artifactId>
+        	<version>5.1.6</version>
+        </dependency>
+        <dependency>
+        	<groupId>org.springframework</groupId>
+        	<artifactId>spring-webmvc</artifactId>
+        	<version>2.5.6</version>
+        </dependency>
+        <dependency>
+        	<groupId>javax.mail</groupId>
+        	<artifactId>mail</artifactId>
+        	<version>1.4.1</version>
         </dependency>
     </dependencies>
 
@@ -212,7 +242,7 @@
                     <warSourceExcludes>.gwt-tmp/**</warSourceExcludes>                  
                 </configuration>                
             </plugin>
-            <!--  tell the compiler we can use 1.5 -->
+            <!--  tell the compiler we can use 1.6 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -220,6 +250,33 @@
                     <source>1.6</source>
                     <target>1.6</target>
                 </configuration>
+            </plugin>
+            
+            <plugin>
+            	<artifactId>maven-antrun-plugin</artifactId>
+            	<executions>
+            		<execution>
+            			<id>resourcesCopy</id>
+            			<phase>compile</phase>
+            			<configuration>
+            				<tasks>
+            				<copy
+            					toDir="${project.build.directory}/classes">
+            					<fileset dir="src/main/resources" />
+            				</copy>
+            				<copy toDir="${basedir}/target/tomcat/webapps/ROOT/WEB-INF/classes">
+            						<fileset dir="${project.build.directory}/classes" />
+            				</copy>
+            				<copy
+            					file="${basedir}/src/main/webapp/WEB-INF/handler-servlet.xml"
+            					toFile="${basedir}/target/tomcat/webapps/ROOT/WEB-INF/handler-servlet.xml" />
+            				</tasks>
+            			</configuration>
+            			<goals>
+            				<goal>run</goal>
+            			</goals>
+            		</execution>
+            	</executions>
             </plugin>
         </plugins>
     </build>

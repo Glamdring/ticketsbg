@@ -4,6 +4,8 @@ package com.tickets.client.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -14,8 +16,11 @@ import javax.persistence.Table;
 @Table(name = "days")
 public class Day implements java.io.Serializable {
 
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private int id;
 
+    @Column(length=10)
     private String name;
 
     public Day() {
@@ -26,8 +31,7 @@ public class Day implements java.io.Serializable {
         this.name = name;
     }
 
-    @Id
-    @Column(name = "id", nullable = false)
+
     public int getId() {
         return this.id;
     }
@@ -36,7 +40,6 @@ public class Day implements java.io.Serializable {
         this.id = id;
     }
 
-    @Column(name = "name", nullable = false, length = 10)
     public String getName() {
         return this.name;
     }
@@ -44,27 +47,4 @@ public class Day implements java.io.Serializable {
     public void setName(String name) {
         this.name = name;
     }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + id;
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        final Day other = (Day) obj;
-        if (id != other.id)
-            return false;
-        return true;
-    }
-
 }

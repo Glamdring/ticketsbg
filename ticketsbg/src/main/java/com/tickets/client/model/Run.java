@@ -7,6 +7,8 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -20,16 +22,19 @@ import javax.persistence.Table;
 @Table(name = "runs")
 public class Run implements java.io.Serializable {
 
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private int id;
 
+    @Column
     private int seats;
 
+    @OneToMany(mappedBy="run")
     private Set<Ticket> tickets = new HashSet<Ticket>();
 
+    @ManyToOne
     private RouteHour routeHour;
 
-    @ManyToOne
-    @JoinColumn(name="route_hour_id")
     public RouteHour getRouteHour() {
         return routeHour;
     }
@@ -38,7 +43,7 @@ public class Run implements java.io.Serializable {
         this.routeHour = routeHour;
     }
 
-    @OneToMany(mappedBy="run")
+
     public Set<Ticket> getTickets() {
         return tickets;
     }
@@ -50,12 +55,6 @@ public class Run implements java.io.Serializable {
     public Run() {
     }
 
-    public Run(int id, int seats) {
-        this.id = id;
-        this.seats = seats;
-    }
-
-    @Id
     public int getId() {
         return this.id;
     }
@@ -64,7 +63,6 @@ public class Run implements java.io.Serializable {
         this.id = id;
     }
 
-    @Column(name = "seats", nullable = false)
     public int getSeats() {
         return this.seats;
     }
@@ -72,27 +70,4 @@ public class Run implements java.io.Serializable {
     public void setSeats(int seats) {
         this.seats = seats;
     }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + id;
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        final Run other = (Run) obj;
-        if (id != other.id)
-            return false;
-        return true;
-    }
-
 }

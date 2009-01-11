@@ -16,73 +16,43 @@ import javax.persistence.Table;
 @Table(name = "stops")
 public class Stop implements java.io.Serializable {
 
-    private StopsId id;
+    @EmbeddedId
+    @AttributeOverrides( {
+            @AttributeOverride(name = "routeId", column = @Column(name = "route_id", nullable = false)),
+            @AttributeOverride(name = "idx", column = @Column(name = "idx", nullable = false)) })
+    private StopId id;
 
+    @Column
     private int arrivalTime;
 
+    @Column
     private int departureTime;
 
     public Stop() {
     }
 
-    public Stop(StopsId id, int arrivalHour, int departureHour) {
-        this.id = id;
-        this.arrivalTime = arrivalHour;
-        this.departureTime = departureHour;
-    }
-
-    @EmbeddedId
-    @AttributeOverrides( {
-            @AttributeOverride(name = "routeId", column = @Column(name = "route_id", nullable = false)),
-            @AttributeOverride(name = "idx", column = @Column(name = "idx", nullable = false)) })
-    public StopsId getId() {
+    public StopId getId() {
         return this.id;
     }
 
-    public void setId(StopsId id) {
+    public void setId(StopId id) {
         this.id = id;
     }
 
-    @Column(name = "arrival_hour", nullable = false)
-    public int getArrivalHour() {
-        return this.arrivalTime;
+    public int getArrivalTime() {
+        return arrivalTime;
     }
 
-    public void setArrivalHour(int arrivalHour) {
-        this.arrivalTime = arrivalHour;
+    public void setArrivalTime(int arrivalTime) {
+        this.arrivalTime = arrivalTime;
     }
 
-    @Column(name = "departure_hour", nullable = false)
-    public int getDepartureHour() {
-        return this.departureTime;
+    public int getDepartureTime() {
+        return departureTime;
     }
 
-    public void setDepartureHour(int departureHour) {
-        this.departureTime = departureHour;
+    public void setDepartureTime(int departureTime) {
+        this.departureTime = departureTime;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        final Stop other = (Stop) obj;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        return true;
-    }
 }

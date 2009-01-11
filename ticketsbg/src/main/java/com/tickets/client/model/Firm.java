@@ -7,6 +7,8 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -19,44 +21,49 @@ import javax.persistence.Table;
 @Table(name = "firms")
 public class Firm implements java.io.Serializable {
 
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private int id;
 
+    @Column
     private String name;
 
+    @Column
     private String bulstat;
 
+    @Column
     private String epayKin;
 
+    @Column
+    private String iban;
+
+    @Column
+    private String bank;
+
+    @Column
+    private String bic;
+
+    @Column
     private String other;
 
+    @Column
     private boolean isActive;
-
-    private Set<Staff> staff = new HashSet<Staff>();
 
     @ManyToMany
     @JoinTable(name="firms_staff")
-    public Set<Staff> getStaff() {
+    private Set<User> staff = new HashSet<User>();
+
+    public Set<User> getStaff() {
         return staff;
     }
 
-    public void setStaff(Set<Staff> staff) {
+    public void setStaff(Set<User> staff) {
         this.staff = staff;
     }
 
     public Firm() {
     }
 
-    public Firm(int id, String name, String bulstat, String epayKin,
-            String other) {
-        this.id = id;
-        this.name = name;
-        this.bulstat = bulstat;
-        this.epayKin = epayKin;
-        this.other = other;
-    }
-
-    @Id
-    @Column(name = "id", nullable = false)
     public int getId() {
         return this.id;
     }
@@ -65,7 +72,6 @@ public class Firm implements java.io.Serializable {
         this.id = id;
     }
 
-    @Column(name = "name", nullable = false, length = 50)
     public String getName() {
         return this.name;
     }
@@ -74,7 +80,6 @@ public class Firm implements java.io.Serializable {
         this.name = name;
     }
 
-    @Column(name = "bulstat", nullable = false, length = 50)
     public String getBulstat() {
         return this.bulstat;
     }
@@ -83,7 +88,6 @@ public class Firm implements java.io.Serializable {
         this.bulstat = bulstat;
     }
 
-    @Column(name = "epay_kin", nullable = false, length = 50)
     public String getEpayKin() {
         return this.epayKin;
     }
@@ -92,7 +96,6 @@ public class Firm implements java.io.Serializable {
         this.epayKin = epayKin;
     }
 
-    @Column(name = "other", nullable = false, length = 50)
     public String getOther() {
         return this.other;
     }
@@ -102,7 +105,6 @@ public class Firm implements java.io.Serializable {
     }
 
 
-    @Column(name = "active")
     public boolean isActive() {
         return isActive;
     }
@@ -111,26 +113,28 @@ public class Firm implements java.io.Serializable {
         this.isActive = isActive;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + id;
-        return result;
+    public String getIban() {
+        return iban;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        final Firm other = (Firm) obj;
-        if (id != other.id)
-            return false;
-        return true;
+    public void setIban(String iban) {
+        this.iban = iban;
+    }
+
+    public String getBank() {
+        return bank;
+    }
+
+    public void setBank(String bank) {
+        this.bank = bank;
+    }
+
+    public String getBic() {
+        return bic;
+    }
+
+    public void setBic(String bic) {
+        this.bic = bic;
     }
 
 }

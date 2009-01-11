@@ -8,7 +8,7 @@ import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
 
 import com.tickets.client.model.User;
 import com.tickets.dao.Dao;
-import com.tickets.server.services.impl.UserServiceImpl;
+import com.tickets.server.services.UserServiceImpl;
 import com.tickets.server.utils.SpringContext;
 
 public class UserSerivceTest extends AbstractDependencyInjectionSpringContextTests {
@@ -25,7 +25,7 @@ public class UserSerivceTest extends AbstractDependencyInjectionSpringContextTes
         Dao<User> dao = (Dao<User>) a.getBean("dao");
         Object o = a.getBean("dao");
 
-        //assertTrue(usrv.getDao() != null);
+        assertTrue(usrv.getDao() != null);
 
         User user = new User();
         user.setUsername("Bozhidar Bozhanov");

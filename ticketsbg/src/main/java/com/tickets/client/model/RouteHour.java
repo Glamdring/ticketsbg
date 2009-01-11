@@ -7,8 +7,9 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -20,18 +21,19 @@ import javax.persistence.Table;
 @Table(name = "runs")
 public class RouteHour implements java.io.Serializable {
 
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private int id;
 
-    private int routeId;
-
+    @Column
     private int hour;
 
+    @ManyToOne
     private Route route;
 
+    @OneToMany(mappedBy="routeHour")
     private Set<Run> runs = new HashSet<Run>();
 
-    @ManyToOne
-    @JoinColumn(name="FK_routes_hours_routes")
     public Route getRoute() {
         return route;
     }
@@ -40,7 +42,7 @@ public class RouteHour implements java.io.Serializable {
         this.route = route;
     }
 
-    @OneToMany(mappedBy="routeHour")
+
     public Set<Run> getRuns() {
         return runs;
     }
@@ -52,12 +54,6 @@ public class RouteHour implements java.io.Serializable {
     public RouteHour(){
     }
 
-    public RouteHour(int id, int routeId, int hour) {
-        this.id = id;
-        this.routeId = routeId;
-        this.hour = hour;
-    }
-
     public int getHour() {
         return hour;
     }
@@ -66,16 +62,6 @@ public class RouteHour implements java.io.Serializable {
         this.hour = hour;
     }
 
-    public int getRouteId() {
-        return routeId;
-    }
-
-    public void setRouteId(int routeId) {
-        this.routeId = routeId;
-    }
-
-    @Id
-    @Column(name = "id", nullable = false)
     public int getId() {
         return this.id;
     }
@@ -83,6 +69,5 @@ public class RouteHour implements java.io.Serializable {
     public void setId(int id) {
         this.id = id;
     }
-
 
 }

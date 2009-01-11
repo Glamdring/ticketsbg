@@ -11,8 +11,10 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class UsersHistoryId implements java.io.Serializable {
 
+    @Column
     private int runId;
 
+    @Column
     private int seat;
 
     public UsersHistoryId() {
@@ -23,7 +25,6 @@ public class UsersHistoryId implements java.io.Serializable {
         this.seat = seat;
     }
 
-    @Column(name = "run_id", nullable = false)
     public int getRunId() {
         return this.runId;
     }
@@ -32,36 +33,12 @@ public class UsersHistoryId implements java.io.Serializable {
         this.runId = runId;
     }
 
-    @Column(name = "seat", nullable = false)
     public int getSeat() {
         return this.seat;
     }
 
     public void setSeat(int seat) {
         this.seat = seat;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if ((this == other))
-            return true;
-        if ((other == null))
-            return false;
-        if (!(other instanceof UsersHistoryId))
-            return false;
-        UsersHistoryId castOther = (UsersHistoryId) other;
-
-        return (this.getRunId() == castOther.getRunId())
-                && (this.getSeat() == castOther.getSeat());
-    }
-
-    @Override
-    public int hashCode() {
-        int result = 17;
-
-        result = 37 * result + this.getRunId();
-        result = 37 * result + this.getSeat();
-        return result;
     }
 
 }

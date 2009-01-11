@@ -22,18 +22,18 @@
         </property-->
         <property name="annotatedClasses">
             <list>
-                <value>com.tickets.model.Day</value>
-                <value>com.tickets.model.Firm</value>
-                <value>com.tickets.model.Price</value>
-                <value>com.tickets.model.Route</value>
-                <value>com.tickets.model.RouteDay</value>
-                <value>com.tickets.model.RouteHour</value>
-                <value>com.tickets.model.Run</value>
-                <value>com.tickets.model.Staff</value>
-                <value>com.tickets.model.Stop</value>
-                <value>com.tickets.model.Ticket</value>
-                <value>com.tickets.model.User</value>
-                <value>com.tickets.model.UsersHistory</value>
+                <value>com.tickets.client.model.Day</value>
+                <value>com.tickets.client.model.Firm</value>
+                <value>com.tickets.client.model.Price</value>
+                <value>com.tickets.client.model.Route</value>
+                <value>com.tickets.client.model.RouteDay</value>
+                <value>com.tickets.client.model.RouteHour</value>
+                <value>com.tickets.client.model.Run</value>
+                <value>com.tickets.client.model.Staff</value>
+                <value>com.tickets.client.model.Stop</value>
+                <value>com.tickets.client.model.Ticket</value>
+                <value>com.tickets.client.model.User</value>
+                <value>com.tickets.client.model.UsersHistory</value>
             </list>
         </property>
 
@@ -82,7 +82,7 @@
     <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
         <property name="sessionFactory"><ref local="sessionFactory"/></property>
     </bean>
-    <bean id="dao" class="com.tickets.dao.Dao" scope="prototype">
+    <bean id="dao" class="com.tickets.server.dao.Dao" scope="prototype">
         <property name="sessionFactory" ref="sessionFactory"></property>
     </bean>
 
@@ -99,12 +99,12 @@
 
     <bean id="urlMapping"
     	class="org.gwtwidgets.server.spring.GWTHandler">
-    	<property name="mapping">
+    	<property name="mappings">
     		<map>
     			<entry key="/users.rpc" value-ref="userService" />
     		</map>
     	</property>
-    	<property name="usingInstrumentation" value="true" />
+    	<!-- property name="usingInstrumentation" value="true" /-->
     </bean>
 
 </beans>

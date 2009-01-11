@@ -17,7 +17,7 @@ import com.tickets.client.services.UserServiceAsync;
 
 public class LoginScreen extends FormPanel {
 
-    private static final String USER_SERVLET_NAME = "userService";
+    private static final String USER_SERVLET_NAME = "/handler/userService";
     public LoginScreen() {
         setLabelSeparator(":");
         final UserServiceAsync service = GWT.create(UserService.class);
@@ -38,14 +38,12 @@ public class LoginScreen extends FormPanel {
             @Override
             public void componentSelected(ButtonEvent ce) {
 
-                final long start = System.currentTimeMillis();
                 AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
                       public void onSuccess(Boolean result) {
                           MessageBox.alert("asd", result.toString(), null);
                       }
 
                       public void onFailure(Throwable caught) {
-                          GWT.log("" + (System.currentTimeMillis() - start), null);
                           if (caught instanceof UserException) {
                               CustomMessageBox.error(Messages.m.loginFailed(),
                                     ((UserException) caught).getMessage(), null);

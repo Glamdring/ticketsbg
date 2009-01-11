@@ -1,6 +1,8 @@
 package com.tickets.client.exceptions;
 
-public class UserException extends Exception {
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+public class UserException extends Exception implements IsSerializable {
 
     public UserException() {
 

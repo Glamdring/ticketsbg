@@ -17,7 +17,7 @@ public interface UserService extends RemoteService {
      *
      * @param user
      */
-    void register(User user);
+    void register(User user) throws UserException;
 
 
     /**
@@ -25,8 +25,13 @@ public interface UserService extends RemoteService {
      * @param username
      * @param password
      * @param isStaff
+     *
+     * @return the id of the user
      */
-    boolean login(String username, char[] password, boolean isStaff)
+    int login(String username,
+            char[] password,
+            boolean isStaff,
+            boolean passwordAlreadyHashed)
         throws UserException;
 
 }

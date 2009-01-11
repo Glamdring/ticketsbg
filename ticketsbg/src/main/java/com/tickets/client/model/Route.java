@@ -7,6 +7,8 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
@@ -20,27 +22,26 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "routes", uniqueConstraints = @UniqueConstraint(columnNames = "firm_id"))
 public class Route implements java.io.Serializable {
 
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private int id;
 
+    @Column
     private int firmId;
 
+    @Column
     private int seats;
 
+    @OneToMany(mappedBy="route")
+    @OrderBy("hour")
     private Set<RouteHour> routeHours = new HashSet<RouteHour>();
 
+    @OneToMany(mappedBy="route")
     private Set<RouteDay> routeDays = new HashSet<RouteDay>();
 
     public Route() {
     }
 
-    public Route(int id, int firmId, int seats) {
-        this.id = id;
-        this.firmId = firmId;
-        this.seats = seats;
-    }
-
-    @OneToMany(mappedBy="route")
-    @OrderBy("hour")
     public Set<RouteHour> getRouteHours(){
         return routeHours;
     }
@@ -49,8 +50,6 @@ public class Route implements java.io.Serializable {
         this.routeHours = routeHours;
     }
 
-    @Id
-    @Column(name = "id", nullable = false)
     public int getId() {
         return this.id;
     }
@@ -59,7 +58,6 @@ public class Route implements java.io.Serializable {
         this.id = id;
     }
 
-    @Column(name = "firm_id", unique = true, nullable = false)
     public int getFirmId() {
         return this.firmId;
     }
@@ -68,7 +66,6 @@ public class Route implements java.io.Serializable {
         this.firmId = firmId;
     }
 
-    @Column(name = "seats", nullable = false)
     public int getSeats() {
         return this.seats;
     }
@@ -77,35 +74,12 @@ public class Route implements java.io.Serializable {
         this.seats = seats;
     }
 
-    @OneToMany(mappedBy="route")
     public Set<RouteDay> getRouteDays() {
         return routeDays;
     }
 
     public void setRouteDays(Set<RouteDay> routeDays) {
         this.routeDays = routeDays;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + id;
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        final Route other = (Route) obj;
-        if (id != other.id)
-            return false;
-        return true;
     }
 
 }

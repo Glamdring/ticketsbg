@@ -2,11 +2,16 @@ package com.tickets.client.model;
 
 // Generated 2008-1-20 22:59:52 by Hibernate Tools 3.2.0.b9
 
+import java.math.BigDecimal;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
@@ -16,23 +21,19 @@ import javax.persistence.Table;
 @Table(name = "prices")
 public class Price implements java.io.Serializable {
 
-    private PricesId id;
-
-    private float price;
-
-    public Price() {
-    }
-
-    public Price(PricesId id, float price) {
-        this.id = id;
-        this.price = price;
-    }
-
     @EmbeddedId
     @AttributeOverrides( {
             @AttributeOverride(name = "routeId", column = @Column(name = "route_id", nullable = false)),
             @AttributeOverride(name = "start", column = @Column(name = "start", nullable = false)),
             @AttributeOverride(name = "end", column = @Column(name = "end", nullable = false)) })
+    private PricesId id;
+
+    @Column
+    private BigDecimal price;
+
+    public Price() {
+    }
+
     public PricesId getId() {
         return this.id;
     }
@@ -41,38 +42,12 @@ public class Price implements java.io.Serializable {
         this.id = id;
     }
 
-    @Column(name = "price", nullable = false, precision = 12, scale = 0)
-    public float getPrice() {
-        return this.price;
+    public BigDecimal getPrice() {
+        return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        final Price other = (Price) obj;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        return true;
     }
 
 }
