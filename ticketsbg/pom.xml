@@ -117,6 +117,11 @@
         	<artifactId>spring-test</artifactId>
         	<version>2.5.6</version>
         </dependency>
+        <dependency>
+        	<groupId>net.sf.gwt-widget</groupId>
+        	<artifactId>gwt-sl</artifactId>
+        	<version>0.1.5</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -129,17 +134,17 @@
                 <configuration>
                     <logLevel>INFO</logLevel>
                     <compileTargets>
-                        <value>com.totsp.sample.Application</value>
+                        <value>com.tickets.Main</value>
                     </compileTargets>
-                    <runTarget>com.totsp.sample.Application/Application.html</runTarget>
+                    <runTarget>com.tickets.Main/Main.html</runTarget>
                     <style>DETAILED</style>
                     <noServer>false</noServer>
                     <extraJvmArgs>-Xmx512m</extraJvmArgs>
                     <i18nConstantsNames>
-                        <value>com.totsp.sample.client.AppConstants</value>
+                        <value>com.tickets.client.constants.Messages</value>
                     </i18nConstantsNames>
                     <i18nMessagesNames>
-                        <value>com.totsp.sample.client.AppMessages</value>
+                        <value>com.tickets.client.constants.Messages</value>
                     </i18nMessagesNames>
                     <!--
                         this parameter is VERY important with automatic mode - has to
@@ -154,8 +159,8 @@
                 <executions>
                     <execution>
                         <goals>
-                            <goal>mergewebxml</goal>
-                            <goal>i18n</goal>
+                            <!-- goal>mergewebxml</goal-->
+                            <!-- goal>i18n</goal-->
                             <goal>compile</goal>
                             <goal>test</goal>
                         </goals>
@@ -203,7 +208,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
-                    <webXml>target/web.xml</webXml>
+                    <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
                     <warSourceExcludes>.gwt-tmp/**</warSourceExcludes>                  
                 </configuration>                
             </plugin>
