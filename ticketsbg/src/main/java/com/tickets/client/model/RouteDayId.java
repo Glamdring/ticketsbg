@@ -40,4 +40,31 @@ public class RouteDayId implements java.io.Serializable {
     public void setDayId(int dayId) {
         this.dayId = dayId;
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + dayId;
+        result = prime * result + routeId;
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final RouteDayId other = (RouteDayId) obj;
+        if (dayId != other.dayId)
+            return false;
+        if (routeId != other.routeId)
+            return false;
+        return true;
+    }
+
+
 }

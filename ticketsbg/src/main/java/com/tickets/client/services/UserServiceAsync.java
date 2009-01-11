@@ -28,6 +28,7 @@ public interface UserServiceAsync {
     void login(String username,
             char[] password,
             boolean isStaff,
+            boolean passwordAlreadyHashed,
             AsyncCallback<Boolean> callback);
 
 }

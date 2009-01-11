@@ -24,7 +24,7 @@ public class Run implements java.io.Serializable {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    private int id;
+    private int runId;
 
     @Column
     private int seats;
@@ -55,16 +55,16 @@ public class Run implements java.io.Serializable {
     public Run() {
     }
 
-    public int getId() {
-        return this.id;
+    public int getRunId() {
+        return runId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setRunId(int runId) {
+        this.runId = runId;
     }
 
     public int getSeats() {
-        return this.seats;
+        return seats;
     }
 
     public void setSeats(int seats) {

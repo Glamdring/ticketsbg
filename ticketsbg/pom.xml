@@ -152,6 +152,20 @@
         	<artifactId>mail</artifactId>
         	<version>1.4.1</version>
         </dependency>
+        <dependency>
+            <artifactId>gwt-math</artifactId>
+            <groupId>com.googlecode</groupId>
+            <version>2.0.3</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/gwt-math-2.0.3.jar</systemPath>
+        </dependency>
+        <dependency>
+            <artifactId>gwt-math-server</artifactId>
+            <groupId>com.googlecode</groupId>
+            <version>2.0.3</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/gwt-math-server-2.0.3.jar</systemPath>
+        </dependency>
     </dependencies>
 
     <build>

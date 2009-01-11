@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
@@ -26,8 +28,9 @@ public class Route implements java.io.Serializable {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private int id;
 
-    @Column
-    private int firmId;
+    @ManyToOne
+    @JoinColumn(name="firm_id", referencedColumnName="firmId")
+    private Firm firm;
 
     @Column
     private int seats;
@@ -58,12 +61,12 @@ public class Route implements java.io.Serializable {
         this.id = id;
     }
 
-    public int getFirmId() {
-        return this.firmId;
+    public Firm getFirm() {
+        return firm;
     }
 
-    public void setFirmId(int firmId) {
-        this.firmId = firmId;
+    public void setFirm(Firm firm) {
+        this.firm = firm;
     }
 
     public int getSeats() {

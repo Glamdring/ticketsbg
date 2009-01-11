@@ -41,4 +41,31 @@ public class StopId implements java.io.Serializable {
         this.idx = idx;
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + idx;
+        result = prime * result + routeId;
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final StopId other = (StopId) obj;
+        if (idx != other.idx)
+            return false;
+        if (routeId != other.routeId)
+            return false;
+        return true;
+    }
+
+
+
 }

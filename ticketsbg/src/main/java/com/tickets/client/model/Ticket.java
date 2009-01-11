@@ -2,6 +2,8 @@ package com.tickets.client.model;
 
 // Generated 2008-1-20 22:59:52 by Hibernate Tools 3.2.0.b9
 
+import java.math.BigDecimal;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -29,16 +31,20 @@ public class Ticket implements java.io.Serializable {
     @JoinColumn(name="user_id", referencedColumnName="userId")
     private User user;
 
+    @Column(length = 16)
     private String paymentCode;
 
+    @Column(length = 16)
     private String ticketCode;
 
-    private Float price;
+    @Column
+    private BigDecimal price;
 
     @ManyToOne
-    @JoinColumn(name="run_id", referencedColumnName="runId")
+    @JoinColumn(name="run_id", referencedColumnName="runId", insertable=false, updatable=false)
     private Run run;
 
+    @Column
     private boolean committed;
 
     public Run getRun() {
@@ -52,17 +58,6 @@ public class Ticket implements java.io.Serializable {
     public Ticket() {
     }
 
-    public Ticket(TicketsId id, int userId) {
-        this.id = id;
-    }
-
-    public Ticket(TicketsId id, int userId, String paymentCode,
-            String ticketCode, Float price) {
-        this.id = id;
-        this.paymentCode = paymentCode;
-        this.ticketCode = ticketCode;
-        this.price = price;
-    }
 
     public TicketsId getId() {
         return this.id;
@@ -72,7 +67,7 @@ public class Ticket implements java.io.Serializable {
         this.id = id;
     }
 
-    @Column(name = "payment_code", length = 16)
+
     public String getPaymentCode() {
         return this.paymentCode;
     }
@@ -81,7 +76,6 @@ public class Ticket implements java.io.Serializable {
         this.paymentCode = paymentCode;
     }
 
-    @Column(name = "ticket_code", length = 16)
     public String getTicketCode() {
         return this.ticketCode;
     }
@@ -90,16 +84,6 @@ public class Ticket implements java.io.Serializable {
         this.ticketCode = ticketCode;
     }
 
-    @Column(name = "price", precision = 12, scale = 0)
-    public Float getPrice() {
-        return this.price;
-    }
-
-    public void setPrice(Float price) {
-        this.price = price;
-    }
-
-    @Column(name = "committed")
     public boolean isCommitted() {
         return committed;
     }
@@ -108,28 +92,19 @@ public class Ticket implements java.io.Serializable {
         this.committed = committed;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        return result;
+    public User getUser() {
+        return user;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        final Ticket other = (Ticket) obj;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        return true;
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 }

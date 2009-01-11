@@ -41,4 +41,30 @@ public class UsersHistoryId implements java.io.Serializable {
         this.seat = seat;
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + runId;
+        result = prime * result + seat;
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final UsersHistoryId other = (UsersHistoryId) obj;
+        if (runId != other.runId)
+            return false;
+        if (seat != other.seat)
+            return false;
+        return true;
+    }
+
+
 }

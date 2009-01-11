@@ -29,7 +29,6 @@
                 <value>com.tickets.client.model.RouteDay</value>
                 <value>com.tickets.client.model.RouteHour</value>
                 <value>com.tickets.client.model.Run</value>
-                <value>com.tickets.client.model.Staff</value>
                 <value>com.tickets.client.model.Stop</value>
                 <value>com.tickets.client.model.Ticket</value>
                 <value>com.tickets.client.model.User</value>

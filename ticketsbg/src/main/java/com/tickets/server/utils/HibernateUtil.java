@@ -11,7 +11,6 @@ import com.tickets.client.model.Route;
 import com.tickets.client.model.RouteDay;
 import com.tickets.client.model.RouteHour;
 import com.tickets.client.model.Run;
-import com.tickets.client.model.Staff;
 import com.tickets.client.model.Stop;
 import com.tickets.client.model.Ticket;
 import com.tickets.client.model.User;
@@ -32,7 +31,6 @@ public class HibernateUtil {
             .addAnnotatedClass(RouteHour.class)
             .addAnnotatedClass(RouteDay.class)
             .addAnnotatedClass(Run.class)
-            .addAnnotatedClass(Staff.class)
             .addAnnotatedClass(Stop.class)
             .addAnnotatedClass(Ticket.class)
             .addAnnotatedClass(User.class)

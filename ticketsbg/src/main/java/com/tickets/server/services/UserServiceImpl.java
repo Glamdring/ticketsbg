@@ -47,12 +47,12 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
                 User user = result.get(0);
                 user.setChangePasswordAfterLogin(true);
                 getDao().save(user);
-                return user.getId();
+                return user.getUserId();
             }
         } else if (!result.get(0).isActive()) {
             throw new UserException(Constants.USER_INACTIVE);
         } else {
-            return result.get(0).getId();
+            return result.get(0).getUserId();
         }
     }
 

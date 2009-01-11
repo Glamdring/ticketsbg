@@ -1,5 +1,7 @@
 package com.tickets.client;
 
+import java.util.Locale;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.AbsolutePanel;

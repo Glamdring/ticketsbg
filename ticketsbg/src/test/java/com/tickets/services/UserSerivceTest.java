@@ -7,7 +7,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
 
 import com.tickets.client.model.User;
-import com.tickets.dao.Dao;
+import com.tickets.server.dao.Dao;
 import com.tickets.server.services.UserServiceImpl;
 import com.tickets.server.utils.SpringContext;
 

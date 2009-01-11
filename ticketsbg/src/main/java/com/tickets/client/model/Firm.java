@@ -23,7 +23,7 @@ public class Firm implements java.io.Serializable {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    private int id;
+    private int firmId;
 
     @Column
     private String name;
@@ -64,12 +64,12 @@ public class Firm implements java.io.Serializable {
     public Firm() {
     }
 
-    public int getId() {
-        return this.id;
+    public int getFirmId() {
+        return this.firmId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setFirmId(int id) {
+        this.firmId = id;
     }
 
     public String getName() {

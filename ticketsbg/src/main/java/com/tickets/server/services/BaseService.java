@@ -4,7 +4,7 @@ import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
 
-import com.tickets.dao.Dao;
+import com.tickets.server.dao.Dao;
 
 /**
  * Base class for all services.

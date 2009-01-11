@@ -1,22 +1,29 @@
 package com.tickets.client.model;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
-public class User {
+@Entity
+@Table(name="users")
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    private int id;
+    private int userId;
 
     @Column(nullable = false, length = 40)
     private String username;
@@ -52,7 +59,9 @@ public class User {
     @OrderBy("dtm DESC")
     private Set<UsersHistory> history = new HashSet<UsersHistory>();
 
-    @ManyToMany(mappedBy="user")
+    @ManyToMany
+    @JoinTable(name="firms_users", joinColumns=@JoinColumn(name="user_id", referencedColumnName="userId"),
+            inverseJoinColumns=@JoinColumn(name="firm_id", referencedColumnName="firmId"))
     private Set<Firm> firms = new HashSet<Firm>();
 
     @Column
@@ -61,12 +70,12 @@ public class User {
     @Column
     private boolean isStaff;
 
-    public int getId() {
-        return id;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setUserId(int id) {
+        this.userId = id;
     }
 
     public String getUsername() {

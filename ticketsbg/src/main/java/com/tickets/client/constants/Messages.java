@@ -18,4 +18,11 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
 
     String login();
     String loginFailed();
+    String email();
+    String repeatPassword();
+    String name();
+
+    String emailInvalid();
+    String forgottenPassword();
+    String register();
 }
