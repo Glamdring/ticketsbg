@@ -2,7 +2,11 @@ package com.tickets.server.services;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.util.List;
+
+import javax.crypto.Cipher;
 
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
@@ -15,11 +19,15 @@ import com.tickets.client.model.User;
 import com.tickets.client.services.UserService;
 import com.tickets.server.constants.Msgs;
 import com.tickets.server.constants.Settings;
+import com.tickets.server.utils.CertificateManager;
+import com.tickets.server.utils.base64.Base64Decoder;
+import com.tickets.server.utils.base64.Base64Encoder;
 
 @Service("userService")
 public class UserServiceImpl extends BaseService<User> implements UserService {
 
     private static Logger log = Logger.getLogger(UserServiceImpl.class);
+    public static final String ENCODING = "ISO-8859-1";
 
     @SuppressWarnings("unchecked")
     public int login(String username, char[] password,
@@ -46,13 +54,42 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
             } else {
                 User user = result.get(0);
                 user.setChangePasswordAfterLogin(true);
-                getDao().save(user);
+                //getDao().save(user);
                 return user.getUserId();
             }
         } else if (!result.get(0).isActive()) {
             throw new UserException(Constants.USER_INACTIVE);
         } else {
             return result.get(0).getUserId();
+        }
+    }
+
+    public String encryptPassword(char[] password) {
+        try {
+            byte[] bytes = new String(password).getBytes(ENCODING);
+
+            PublicKey key = CertificateManager.getPublicKey();
+            Cipher cipher = Cipher.getInstance("RSA");
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+            String base64String = Base64Encoder.toBase64String(cipher.doFinal(bytes));
+
+            return base64String;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    public char[] decryptPassword(String password) {
+        try {
+            byte[] bytes = Base64Decoder.toByteArray(password);
+            PrivateKey key = CertificateManager.getPrivateKey();
+            Cipher cipher = Cipher.getInstance("RSA");
+            cipher.init(Cipher.DECRYPT_MODE, key);
+            return new String(cipher.doFinal(bytes), ENCODING).toCharArray();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
         }
     }
 

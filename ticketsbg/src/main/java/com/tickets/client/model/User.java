@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
@@ -19,7 +21,21 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name="users")
-public class User implements Serializable {
+@NamedQueries({
+        @NamedQuery(
+            name = "User.login",
+            query = "select u from User u where u.username=:username and u.password=:password"
+        ),
+        @NamedQuery(
+            name = "User.tempLogin",
+            query = "select u from User u where u.username=:username and u.temporaryPassword=:password"
+        ),
+        @NamedQuery(
+            name = "User.getByUsernameAndEmail",
+            query = "select u from User u where u.username=:username and u.email=:email"
+        )
+})
+public class User extends DataObject implements Serializable {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -188,5 +204,10 @@ public class User implements Serializable {
 
     public void setRepeatPassword(String repeatPassword) {
         this.repeatPassword = repeatPassword;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + " : " + username + " : " + name + " : " + password;
     }
 }

@@ -166,6 +166,20 @@
             <scope>system</scope>
             <systemPath>${basedir}/lib/gwt-math-server-2.0.3.jar</systemPath>
         </dependency>
+        <dependency>
+            <artifactId>gwt-log</artifactId>
+            <groupId>com.googlecode</groupId>
+            <version>2.5.3</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/gwt-log-2.5.3.jar</systemPath>
+        </dependency>
+        <dependency>
+            <artifactId>gwtx</artifactId>
+            <groupId>com.googlecode</groupId>
+            <version>1.5</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/gwtx-1.5.jar</systemPath>
+        </dependency>
     </dependencies>
 
     <build>
@@ -182,7 +196,8 @@
                     </compileTargets>
                     <runTarget>com.tickets.Main/Main.html</runTarget>
                     <style>DETAILED</style>
-                    <noServer>false</noServer>
+                    <!-- noServer>true</noServer>
+                    <port>8080</port-->
                     <extraJvmArgs>-Xmx512m</extraJvmArgs>
                     <i18nConstantsNames>
                         <value>com.tickets.client.constants.Messages</value>

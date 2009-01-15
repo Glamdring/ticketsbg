@@ -19,6 +19,14 @@
 	<inherits name="com.google.gwt.i18n.I18N" />
 	<extend-property name="locale" values="bg" />
 	
+	<!-- Logger -->
+	<inherits name="com.allen_sauer.gwt.log.gwt-log-DEBUG" />
+	<set-property name="log_RemoteLogger" value="ENABLED" />
+	<set-property name="log_DivLogger" value="DISABLED" />
+	
+	<!-- Reflection -->
+	<inherits name="com.googlecode.gwtx.Java" />
+    
 	<!-- Specify the app entry point class.                         -->
 	<entry-point class="com.tickets.client.Main" />
 

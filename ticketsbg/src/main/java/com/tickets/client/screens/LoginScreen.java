@@ -1,5 +1,6 @@
 package com.tickets.client.screens;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.widget.MessageBox;
@@ -24,6 +25,7 @@ public class LoginScreen extends BaseFormPanel {
     private static final String USER_SERVLET_NAME = "/handler/userService";
     public LoginScreen() {
         setLabelSeparator(":");
+        Log.info("INFO");
         final UserServiceAsync service = GWT.create(UserService.class);
         ServiceDefTarget endPoint = (ServiceDefTarget) service;
         endPoint.setServiceEntryPoint(USER_SERVLET_NAME);
@@ -56,7 +58,7 @@ public class LoginScreen extends BaseFormPanel {
                       };
                 };
 
-                if (validateForm()) {
+                if (isValid()) {
                     service.login(usernameField.getValue(),
                         passwordField.getValue().toCharArray(), true, false, callback);
                 }
