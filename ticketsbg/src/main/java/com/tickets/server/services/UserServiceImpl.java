@@ -48,9 +48,9 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
                     hash(new String(password))});
 
             if (result == null || result.size() != 1) {
-                throw new UserException(Constants.INCORRECT_LOGIN_DATA);
+                throw UserException.INCORRECT_LOGIN_DATA;
             } else if (!result.get(0).isActive()) {
-                throw new UserException(Constants.USER_INACTIVE);
+                throw UserException.USER_INACTIVE;
             } else {
                 User user = result.get(0);
                 user.setChangePasswordAfterLogin(true);
@@ -58,7 +58,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
                 return user.getUserId();
             }
         } else if (!result.get(0).isActive()) {
-            throw new UserException(Constants.USER_INACTIVE);
+            throw UserException.USER_INACTIVE;
         } else {
             return result.get(0).getUserId();
         }
@@ -103,9 +103,9 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
 
         user.setRegisteredTimestamp(System.currentTimeMillis());
 
-        HtmlEmail email = getPreconfiguredMail();
+        getDao().save(user);
         try {
-
+            HtmlEmail email = getPreconfiguredMail();
             email.addTo(user.getEmail());
             email.setFrom(Settings.getValue("confirmation.email.sender"));
             email.setSubject(Msgs.getString("confirmation.email.subject"));
@@ -117,10 +117,9 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
 
             email.send();
 
-            getDao().save(user);
         } catch (EmailException eex) {
             log.error("Mail problem", eex);
-            throw new UserException("email.problem");
+            throw UserException.EMAIL_PROBLEM;
         }
     }
 
@@ -136,9 +135,9 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
                 user.setActive(true);
                 return getDao().save(user);
             }
-            throw new UserException(Constants.USER_ALREADY_ACTIVE);
+            throw UserException.USER_ALREADY_ACTIVE;
         }
-        throw new UserException(Constants.INVALID_ACTIVATION_CODE);
+        throw UserException.INVALID_ACTIVATION_CODE;
     }
 
     public User getUserById(String id) {
@@ -183,10 +182,10 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
                 getDao().save(user);
             } catch (EmailException eex) {
                 log.error("Mail server not configured", eex);
-                throw new UserException("unexpected.problem");
+                throw UserException.UNEXPECTED_PROBLEM;
             }
         } else {
-            throw new UserException("invalid.username.email.combination");
+            throw UserException.INVALID_EMAIL_USER_COMBINATION;
         }
     }
 

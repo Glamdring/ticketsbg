@@ -299,6 +299,12 @@
             				<copy
             					file="${basedir}/src/main/webapp/WEB-INF/handler-servlet.xml"
             					toFile="${basedir}/target/tomcat/webapps/ROOT/WEB-INF/handler-servlet.xml" />
+            				
+            				<copy
+                                toDir="${basedir}/target/tomcat/webapps/ROOT">
+                                <fileset dir="${project.build.directory}/tickets-1.0" includes="**/*.rpc" />
+                            </copy>
+                            	
             				</tasks>
             			</configuration>
             			<goals>

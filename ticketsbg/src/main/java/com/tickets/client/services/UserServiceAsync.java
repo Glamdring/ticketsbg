@@ -29,6 +29,6 @@ public interface UserServiceAsync {
             char[] password,
             boolean isStaff,
             boolean passwordAlreadyHashed,
-            AsyncCallback<Boolean> callback);
+            AsyncCallback<Integer> callback);
 
 }

@@ -43,15 +43,22 @@ public class LoginScreen extends BaseFormPanel {
         loginButton.addSelectionListener(new SelectionListener<ButtonEvent>() {
             public void componentSelected(ButtonEvent ce) {
 
-                AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
-                      public void onSuccess(Boolean result) {
+                AsyncCallback<Integer> callback = new AsyncCallback<Integer>() {
+                      public void onSuccess(Integer result) {
                           MessageBox.alert("asd", result.toString(), null);
                       }
 
                       public void onFailure(Throwable caught) {
                           if (caught instanceof UserException) {
+                              UserException ue = ((UserException) caught);
+                              String message = "";
+                              if (ue.equals(UserException.INCORRECT_LOGIN_DATA))
+                                  message = Messages.m.incorrectLoginData();
+                              if (ue.equals(UserException.USER_INACTIVE))
+                                  message = Messages.m.userInactive();
+
                               CustomMessageBox.error(Messages.m.loginFailed(),
-                                    ((UserException) caught).getMessage(), null);
+                                      message, null);
                           } else {
                               GWT.log("error", caught);
                           }

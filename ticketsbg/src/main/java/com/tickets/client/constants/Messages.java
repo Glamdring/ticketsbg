@@ -25,4 +25,9 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
     String emailInvalid();
     String forgottenPassword();
     String register();
+    String successfulRegistration();
+    String registrationFailed();
+    String emailProblem();
+    String incorrectLoginData();
+    String userInactive();
 }

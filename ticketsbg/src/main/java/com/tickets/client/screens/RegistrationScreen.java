@@ -64,7 +64,7 @@ public class RegistrationScreen extends BaseFormPanel<User> {
         emailField.setName("email");
 
         final TextField<String> nameField = new TextField<String>();
-        nameField.setFieldLabel(Messages.m.username());
+        nameField.setFieldLabel(Messages.m.name());
         nameField.setAllowBlank(false);
         nameField.setName("name");
 
@@ -73,15 +73,21 @@ public class RegistrationScreen extends BaseFormPanel<User> {
             @Override
             public void componentSelected(ButtonEvent ce) {
 
-                AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
-                    public void onSuccess(Boolean result) {
-                        MessageBox.alert("asd", result.toString(), null);
+                AsyncCallback<Void> callback = new AsyncCallback<Void>() {
+                    public void onSuccess(Void result) {
+                        MessageBox.alert(Messages.m.successfulRegistration(),
+                                Messages.m.successfulRegistration(), null);
                     }
 
                     public void onFailure(Throwable caught) {
                         if (caught instanceof UserException) {
-                            CustomMessageBox.error(Messages.m.loginFailed(),
-                                    ((UserException) caught).getMessage(), null);
+                            UserException ue = ((UserException) caught);
+                            String message = "";
+                            if (ue.equals(UserException.EMAIL_PROBLEM))
+                                message = Messages.m.emailProblem();
+
+                            CustomMessageBox.error(Messages.m.registrationFailed(),
+                                    message, null);
                         } else {
                             Log.error("error", caught);
                         }
@@ -89,11 +95,8 @@ public class RegistrationScreen extends BaseFormPanel<User> {
                 };
 
                 if (isValid()) {
-                    System.out.println(user);
-                    service.login(usernameField.getValue(),
-                            passwordField.getValue().toCharArray(), true, false, callback);
+                    service.register(user, callback);
                 }
-
             }
         });
 
