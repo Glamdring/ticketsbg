@@ -24,15 +24,12 @@
 	<set-property name="log_RemoteLogger" value="ENABLED" />
 	<set-property name="log_DivLogger" value="DISABLED" />
 	
-	<!-- Reflection -->
-	<inherits name="com.googlecode.gwtx.Java" />
-    
-	<!-- Specify the app entry point class.                         -->
-	<entry-point class="com.tickets.client.Main" />
-
     <!-- RPC servlet -->
     <servlet path="/handler/*" class="org.springframework.web.servlet.DispatcherServlet" />
-    
+
+    <!-- Specify the app entry point class.                         -->
+    <entry-point class="com.tickets.client.Main" />
+        
 	<!-- Specify the application specific style sheet.              -->
 	<stylesheet src="Main.css" />
 

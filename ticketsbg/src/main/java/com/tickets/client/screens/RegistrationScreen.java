@@ -109,11 +109,8 @@ public class RegistrationScreen extends BaseFormPanel<User> {
 
         setCustomMessages();
         setValidateOnBlur(false);
+        setModel(user);
         bindForm();
     }
 
-    @Override
-    protected User getEntity() {
-        return user;
-    }
 }

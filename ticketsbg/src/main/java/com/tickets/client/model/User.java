@@ -19,8 +19,6 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
-
 @Entity
 @Table(name="users")
 @NamedQueries({
@@ -93,6 +91,7 @@ public class User extends DataObject implements Serializable {
     }
 
     public void setUserId(int id) {
+        set("userId", id);
         this.userId = id;
     }
 
@@ -101,6 +100,7 @@ public class User extends DataObject implements Serializable {
     }
 
     public void setUsername(String username) {
+        set("username", username);
         this.username = username;
     }
 
@@ -109,6 +109,7 @@ public class User extends DataObject implements Serializable {
     }
 
     public void setPassword(String password) {
+        set("password", password);
         this.password = password;
     }
 
@@ -117,10 +118,12 @@ public class User extends DataObject implements Serializable {
     }
 
     public void setEmail(String email) {
+        set("email", email);
         this.email = email;
     }
 
     public String getName() {
+        set("name", name);
         return name;
     }
 
@@ -133,6 +136,7 @@ public class User extends DataObject implements Serializable {
     }
 
     public void setActive(boolean active) {
+        set("active", active);
         this.active = active;
     }
 
@@ -141,6 +145,7 @@ public class User extends DataObject implements Serializable {
     }
 
     public void setHistory(Set<UsersHistory> history) {
+        set("history", history);
         this.history = history;
     }
 
@@ -149,6 +154,7 @@ public class User extends DataObject implements Serializable {
     }
 
     public void setFirms(Set<Firm> firms) {
+        set("firms", firms);
         this.firms = firms;
     }
 
@@ -157,6 +163,7 @@ public class User extends DataObject implements Serializable {
     }
 
     public void setPrivs(byte privs) {
+        set("privs", privs);
         this.privs = privs;
     }
 
@@ -165,6 +172,7 @@ public class User extends DataObject implements Serializable {
     }
 
     public void setStaff(boolean isStaff) {
+        set("isStaff", isStaff);
         this.isStaff = isStaff;
     }
 
@@ -173,6 +181,7 @@ public class User extends DataObject implements Serializable {
     }
 
     public void setChangePasswordAfterLogin(boolean changePasswordAfterLogin) {
+        set("changePasswordAfterLogin", changePasswordAfterLogin);
         this.changePasswordAfterLogin = changePasswordAfterLogin;
     }
 
@@ -181,6 +190,7 @@ public class User extends DataObject implements Serializable {
     }
 
     public void setActivationCode(String activationCode) {
+        set("activationCode", activationCode);
         this.activationCode = activationCode;
     }
 
@@ -189,6 +199,7 @@ public class User extends DataObject implements Serializable {
     }
 
     public void setRegisteredTimestamp(long registeredTimestamp) {
+        set("registeredTimestamp", registeredTimestamp);
         this.registeredTimestamp = registeredTimestamp;
     }
 
@@ -197,6 +208,7 @@ public class User extends DataObject implements Serializable {
     }
 
     public void setTemporaryPassword(String temporaryPassword) {
+        set("temporaryPassword", temporaryPassword);
         this.temporaryPassword = temporaryPassword;
     }
 
@@ -205,6 +217,7 @@ public class User extends DataObject implements Serializable {
     }
 
     public void setRepeatPassword(String repeatPassword) {
+        set("repeatPassword", repeatPassword);
         this.repeatPassword = repeatPassword;
     }
 

@@ -11,7 +11,7 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
 
     String timeTable();
     String view();
-    String courses();
+    String routes();
 
     String username();
     String password();

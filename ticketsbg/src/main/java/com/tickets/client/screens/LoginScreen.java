@@ -9,6 +9,7 @@ import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -40,12 +41,15 @@ public class LoginScreen extends BaseFormPanel {
         passwordField.setPassword(true);
 
         Button loginButton = new Button(Messages.m.login());
+        loginButton.setType("submit");
         loginButton.addSelectionListener(new SelectionListener<ButtonEvent>() {
             public void componentSelected(ButtonEvent ce) {
 
                 AsyncCallback<Integer> callback = new AsyncCallback<Integer>() {
                       public void onSuccess(Integer result) {
                           MessageBox.alert("asd", result.toString(), null);
+                          RootPanel.get().clear();
+                          RootPanel.get().add(new MainScreen());
                       }
 
                       public void onFailure(Throwable caught) {
