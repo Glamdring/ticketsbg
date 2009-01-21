@@ -4,17 +4,17 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
 
-import com.tickets.client.model.Day;
-import com.tickets.client.model.Firm;
-import com.tickets.client.model.Price;
-import com.tickets.client.model.Route;
-import com.tickets.client.model.RouteDay;
-import com.tickets.client.model.RouteHour;
-import com.tickets.client.model.Run;
-import com.tickets.client.model.Stop;
-import com.tickets.client.model.Ticket;
-import com.tickets.client.model.User;
-import com.tickets.client.model.UsersHistory;
+import com.tickets.model.Day;
+import com.tickets.model.Firm;
+import com.tickets.model.Price;
+import com.tickets.model.Route;
+import com.tickets.model.RouteDay;
+import com.tickets.model.RouteHour;
+import com.tickets.model.Run;
+import com.tickets.model.Stop;
+import com.tickets.model.Ticket;
+import com.tickets.model.User;
+import com.tickets.model.UsersHistory;
 
 public class HibernateUtil {
 

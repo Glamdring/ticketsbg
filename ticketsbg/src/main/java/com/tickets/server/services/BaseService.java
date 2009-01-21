@@ -1,9 +1,12 @@
 package com.tickets.server.services;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
 
+import com.tickets.client.services.BaseClientService;
 import com.tickets.server.dao.Dao;
 
 /**
@@ -15,7 +18,7 @@ import com.tickets.server.dao.Dao;
  * Note that the service can use other classes as well, by supplying them
  * as arguments to the DAO
  */
-public class BaseService<E> {
+public abstract class BaseService<E> implements BaseClientService<E> {
 
     protected static Logger log = Logger.getLogger(BaseService.class);
 
@@ -28,5 +31,49 @@ public class BaseService<E> {
 
     public Dao<E> getDao(){
         return dao;
+    }
+
+    public E save(E e) throws RuntimeException {
+        try {
+            return getDao().save(e);
+        } catch (Exception ex) {
+            log.error("Error saving", ex);
+            return e;
+        }
+    }
+
+    public E get(Class<E> clazz, int id) {
+        E result = getDao().getById(clazz, id);
+        if (result == null)
+            try {
+                result = clazz.newInstance();
+            } catch (Exception ex) {
+            }
+
+        return result;
+    }
+
+    public void delete(E e) {
+        getDao().delete(e);
+    }
+
+    @SuppressWarnings("unchecked")
+    public void delete(Class clazz, int id) {
+        getDao().delete(clazz, id);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> List<T> list(Class<T> clazz) {
+        List<T> result = getDao().findByQuery("from " + clazz.getName(), null,
+                null);
+        return result;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> List<T> listOrdered(Class<T> clazz, String orderColumn) {
+        List<T> result = getDao().findByQuery(
+                "from " + clazz.getName() + " order by " + orderColumn, null,
+                null);
+        return result;
     }
 }

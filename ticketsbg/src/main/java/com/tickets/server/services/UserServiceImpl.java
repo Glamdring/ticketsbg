@@ -13,10 +13,10 @@ import org.apache.commons.mail.HtmlEmail;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import com.tickets.client.constants.Constants;
-import com.tickets.client.exceptions.UserException;
-import com.tickets.client.model.User;
 import com.tickets.client.services.UserService;
+import com.tickets.constants.Constants;
+import com.tickets.exceptions.UserException;
+import com.tickets.model.User;
 import com.tickets.server.constants.Msgs;
 import com.tickets.server.constants.Settings;
 import com.tickets.server.utils.CertificateManager;
@@ -251,6 +251,16 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
         }
 
         return hexString.toString();
+    }
+
+    @Override
+    public List list() {
+        return list(User.class);
+    }
+
+    @Override
+    public List listOrdered(String orderColumn) {
+        return listOrdered(User.class, orderColumn);
     }
 
 }

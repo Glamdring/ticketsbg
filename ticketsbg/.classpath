@@ -1,63 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="test"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="var" path="JUNIT_HOME/junit.jar"/>
-	<classpathentry kind="lib" path="lib/spring-framework-2.5.1/dist/spring.jar"/>
-	<classpathentry kind="lib" path="lib/hibernate/hibernate3.jar"/>
-	<classpathentry kind="lib" path="lib/hibernate/hibernate-commons-annotations.jar"/>
-	<classpathentry kind="lib" path="lib/hibernate/hibernate-annotations.jar"/>
-	<classpathentry kind="lib" path="lib/hibernate/hibernate-entitymanager.jar"/>
-	<classpathentry kind="lib" path="lib/mysql-driver/mysql-connector-java-3.1.7-bin.jar"/>
-	<classpathentry kind="lib" path="lib/j2ee/persistence.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="lib/dom4j/dom4j-1.6.1.jar"/>
-	<classpathentry kind="lib" path="lib/dom4j/jaxen-1.1-beta-7.jar"/>
-	<classpathentry kind="lib" path="lib/c3p0/c3p0-0.9.1.2.jar"/>
-	<classpathentry kind="lib" path="lib/ehcache/ehcache-1.3.0.jar"/>
-	<classpathentry kind="lib" path="lib/log4j/log4j-1.2.14.jar"/>
-	<classpathentry kind="lib" path="lib/jakarta-commons/commons-attributes-api.jar"/>
-	<classpathentry kind="lib" path="lib/jakarta-commons/commons-attributes-compiler.jar"/>
-	<classpathentry kind="lib" path="lib/jakarta-commons/commons-beanutils.jar"/>
-	<classpathentry kind="lib" path="lib/jakarta-commons/commons-codec.jar"/>
-	<classpathentry kind="lib" path="lib/jakarta-commons/commons-collections.jar"/>
-	<classpathentry kind="lib" path="lib/jakarta-commons/commons-dbcp.jar"/>
-	<classpathentry kind="lib" path="lib/jakarta-commons/commons-digester.jar"/>
-	<classpathentry kind="lib" path="lib/jakarta-commons/commons-discovery.jar"/>
-	<classpathentry kind="lib" path="lib/jakarta-commons/commons-fileupload.jar"/>
-	<classpathentry kind="lib" path="lib/jakarta-commons/commons-httpclient.jar"/>
-	<classpathentry kind="lib" path="lib/jakarta-commons/commons-io.jar"/>
-	<classpathentry kind="lib" path="lib/jakarta-commons/commons-lang.jar"/>
-	<classpathentry kind="lib" path="lib/jakarta-commons/commons-logging.jar"/>
-	<classpathentry kind="lib" path="lib/jakarta-commons/commons-pool.jar"/>
-	<classpathentry kind="lib" path="lib/jakarta-commons/commons-validator.jar"/>
-	<classpathentry kind="lib" path="lib/j2ee/jta.jar"/>
-	<classpathentry kind="lib" path="lib/cglib/cglib-2.2_beta1.jar"/>
-	<classpathentry kind="lib" path="lib/j2ee/common-annotations.jar"/>
-	<classpathentry kind="lib" path="lib/jakarta-taglibs/standard.jar"/>
-	<classpathentry kind="lib" path="lib/asm/asm-2.2.3.jar"/>
-	<classpathentry kind="lib" path="lib/asm/asm-commons-2.2.3.jar"/>
-	<classpathentry kind="lib" path="lib/asm/asm-util-2.2.3.jar"/>
-	<classpathentry kind="lib" path="lib/aspectj/aspectjrt.jar"/>
-	<classpathentry kind="lib" path="lib/aspectj/aspectjweaver.jar"/>
-	<classpathentry kind="lib" path="lib/hsqldb/hsqldb.jar"/>
-	<classpathentry kind="lib" path="lib/spring-framework-2.5.1/dist/modules/spring-aop.jar"/>
-	<classpathentry kind="lib" path="lib/spring-framework-2.5.1/dist/modules/spring-beans.jar"/>
-	<classpathentry kind="lib" path="lib/spring-framework-2.5.1/dist/modules/spring-context.jar"/>
-	<classpathentry kind="lib" path="lib/spring-framework-2.5.1/dist/modules/spring-context-support.jar"/>
-	<classpathentry kind="lib" path="lib/spring-framework-2.5.1/dist/modules/spring-core.jar"/>
-	<classpathentry kind="lib" path="lib/spring-framework-2.5.1/dist/modules/spring-jdbc.jar"/>
-	<classpathentry kind="lib" path="lib/spring-framework-2.5.1/dist/modules/spring-jms.jar"/>
-	<classpathentry kind="lib" path="lib/spring-framework-2.5.1/dist/modules/spring-orm.jar"/>
-	<classpathentry kind="lib" path="lib/spring-framework-2.5.1/dist/modules/spring-test.jar"/>
-	<classpathentry kind="lib" path="lib/spring-framework-2.5.1/dist/modules/spring-tx.jar"/>
-	<classpathentry kind="lib" path="lib/spring-framework-2.5.1/dist/modules/spring-web.jar"/>
-	<classpathentry kind="lib" path="lib/spring-framework-2.5.1/dist/modules/spring-webmvc.jar"/>
-	<classpathentry kind="lib" path="lib/spring-framework-2.5.1/dist/modules/spring-webmvc-portlet.jar"/>
-	<classpathentry kind="lib" path="lib/spring-framework-2.5.1/dist/modules/spring-webmvc-struts.jar"/>
-	<classpathentry kind="lib" path="lib/gwt/gwt-user.jar"/>
-	<classpathentry kind="lib" path="lib/j2ee/mail.jar"/>
-	<classpathentry kind="lib" path="lib/j2ee/servlet-api.jar"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="src" output="target/classes" path="src/main/java"/>
+	<classpathentry excluding="**" kind="src" output="target/classes" path="src/main/resources"/>
+	<classpathentry kind="src" output="target/test-classes" path="src/test/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>

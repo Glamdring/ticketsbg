@@ -1,12 +1,12 @@
-package com.tickets.server.constants;
+package com.tickets.constants;
 
 import java.io.InputStream;
+import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.Properties;
 
-import com.tickets.constants.Messages;
-
-public class Msgs {
+@SuppressWarnings("serial")
+public class Messages implements Serializable {
     private static Properties messages;
 
     public static String getString(String key, Object... args) {
@@ -29,7 +29,7 @@ public class Msgs {
     private static void load() {
         try {
             InputStream is = Messages.class
-                    .getResourceAsStream("/msgs.properties");
+                    .getResourceAsStream("/Messages.properties");
             messages = new Properties();
             messages.load(is);
         } catch (Exception ex) {
@@ -37,3 +37,4 @@ public class Msgs {
         }
     }
 }
+

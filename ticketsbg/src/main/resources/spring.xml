@@ -96,21 +96,25 @@
         </tx:attributes>
     </tx:advice>
 
-    <bean id="urlMapping"
+    <!-- bean id="urlMapping"
     	class="org.gwtwidgets.server.spring.GWTHandler">
     	<property name="mappings">
     		<map>
     			<entry key="/users.rpc" value-ref="userService" />
+    			<entry key="/routes.rpc" value-ref="routeService" />
     		</map>
     	</property>
-    	<!-- property name="usingInstrumentation" value="true" /-->
-    </bean>
+    	<!- property name="usingInstrumentation" value="true" /->
+    </bean-->
     
-     <bean id="userServiceExport" class="org.gwtwidgets.server.spring.GWTRPCServiceExporter" lazy-init="default" autowire="default" dependency-check="default">
+     <!-- bean id="userServiceExport" class="org.gwtwidgets.server.spring.GWTRPCServiceExporter" lazy-init="default" autowire="default" dependency-check="default">
         <property name="service" ref="userService" /> 
         <property name="serviceInterfaces">
-            <value>com.tickets.client.services.UserService</value> 
+            <list>
+                <value>com.tickets.client.services.UserService</value>
+                <value>com.tickets.client.services.UserService</value>
+            </list>  
         </property>
-    </bean>
+    </bean-->
 
 </beans>

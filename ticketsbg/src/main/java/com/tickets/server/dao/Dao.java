@@ -11,7 +11,7 @@ import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 
-import com.tickets.client.model.User;
+import com.tickets.model.User;
 
 @Repository("dao")
 @Scope("prototype")

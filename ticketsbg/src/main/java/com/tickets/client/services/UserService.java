@@ -1,8 +1,7 @@
 package com.tickets.client.services;
 
-import com.google.gwt.user.client.rpc.RemoteService;
-import com.tickets.client.exceptions.UserException;
-import com.tickets.client.model.User;
+import com.tickets.exceptions.UserException;
+import com.tickets.model.User;
 
 /**
  * Interface for handling users.
@@ -10,7 +9,7 @@ import com.tickets.client.model.User;
  * @author Bozhidar Bozhanov
  *
  */
-public interface UserService extends RemoteService {
+public interface UserService extends BaseClientService<User> {
 
     /**
      * Registers a new user

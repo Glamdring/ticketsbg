@@ -31,6 +31,17 @@
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 
+	<servlet>
+		<servlet-name>gwt-log-remote-logger-servlet</servlet-name>
+		<servlet-class>
+			com.allen_sauer.gwt.log.server.RemoteLoggerServiceImpl
+		</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>gwt-log-remote-logger-servlet</servlet-name>
+		<url-pattern>/gwt-log</url-pattern>
+	</servlet-mapping>
 
 	<servlet-mapping>
 		<servlet-name>handler</servlet-name>
