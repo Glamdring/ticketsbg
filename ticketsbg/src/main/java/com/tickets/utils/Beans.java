@@ -1,4 +1,4 @@
-package com.tickets.server.utils;
+package com.tickets.utils;
 
 import org.apache.log4j.Logger;
 

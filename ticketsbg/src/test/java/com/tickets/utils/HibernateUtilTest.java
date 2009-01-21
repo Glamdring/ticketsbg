@@ -2,7 +2,7 @@ package com.tickets.utils;
 
 import org.junit.Test;
 
-import com.tickets.server.utils.HibernateUtil;
+import com.tickets.utils.HibernateUtil;
 
 public class HibernateUtilTest {
 

@@ -1,10 +1,9 @@
-package com.tickets.server.services;
+package com.tickets.services;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.tickets.client.services.RouteService;
 import com.tickets.model.Route;
 
 @Service("routeService")

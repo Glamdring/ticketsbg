@@ -1,4 +1,4 @@
-package com.tickets.server.utils.base64;
+package com.tickets.utils.base64;
 
 /**
  *

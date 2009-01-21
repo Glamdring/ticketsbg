@@ -1,4 +1,4 @@
-package com.tickets.server.utils;
+package com.tickets.utils;
 
 import javax.servlet.ServletContext;
 

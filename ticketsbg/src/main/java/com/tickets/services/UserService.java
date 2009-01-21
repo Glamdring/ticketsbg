@@ -1,4 +1,4 @@
-package com.tickets.client.services;
+package com.tickets.services;
 
 import com.tickets.exceptions.UserException;
 import com.tickets.model.User;

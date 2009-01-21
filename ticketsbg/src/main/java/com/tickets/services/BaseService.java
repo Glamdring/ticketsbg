@@ -1,4 +1,4 @@
-package com.tickets.server.services;
+package com.tickets.services;
 
 import java.util.List;
 
@@ -6,8 +6,7 @@ import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
 
-import com.tickets.client.services.BaseClientService;
-import com.tickets.server.dao.Dao;
+import com.tickets.dao.Dao;
 
 /**
  * Base class for all services.

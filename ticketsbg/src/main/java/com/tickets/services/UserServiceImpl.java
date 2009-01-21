@@ -1,4 +1,4 @@
-package com.tickets.server.services;
+package com.tickets.services;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -13,15 +13,14 @@ import org.apache.commons.mail.HtmlEmail;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import com.tickets.client.services.UserService;
 import com.tickets.constants.Constants;
+import com.tickets.constants.Messages;
+import com.tickets.constants.Settings;
 import com.tickets.exceptions.UserException;
 import com.tickets.model.User;
-import com.tickets.server.constants.Msgs;
-import com.tickets.server.constants.Settings;
-import com.tickets.server.utils.CertificateManager;
-import com.tickets.server.utils.base64.Base64Decoder;
-import com.tickets.server.utils.base64.Base64Encoder;
+import com.tickets.utils.CertificateManager;
+import com.tickets.utils.base64.Base64Decoder;
+import com.tickets.utils.base64.Base64Encoder;
 
 @Service("userService")
 public class UserServiceImpl extends BaseService<User> implements UserService {
@@ -108,8 +107,8 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
             HtmlEmail email = getPreconfiguredMail();
             email.addTo(user.getEmail());
             email.setFrom(Settings.getValue("confirmation.email.sender"));
-            email.setSubject(Msgs.getString("confirmation.email.subject"));
-            email.setHtmlMsg(Msgs.getString("confirmation.email.content",
+            email.setSubject(Messages.getString("confirmation.email.subject"));
+            email.setHtmlMsg(Messages.getString("confirmation.email.content",
                     user.getName(), user.getUsername(), user.getRepeatPassword(),
                     Settings.getValue("base.url")
                             + "/users.do?method=activate&code="
@@ -175,8 +174,8 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
                 HtmlEmail mail = getPreconfiguredMail();
                 mail.setFrom(Settings.getValue("temp.password.email.sender"));
                 mail.addTo(email);
-                mail.setSubject(Msgs.getString("temp.password.email.subject"));
-                mail.setHtmlMsg(Msgs.getString("temp.password.email.content",
+                mail.setSubject(Messages.getString("temp.password.email.subject"));
+                mail.setHtmlMsg(Messages.getString("temp.password.email.content",
                         user.getName(), tempPassword));
                 mail.send();
                 getDao().save(user);

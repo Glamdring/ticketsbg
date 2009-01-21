@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package com.tickets.server.utils;
+package com.tickets.utils;
 
 import java.io.File;
 import java.io.FileInputStream;

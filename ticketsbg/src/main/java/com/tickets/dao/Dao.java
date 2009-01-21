@@ -1,4 +1,4 @@
-package com.tickets.server.dao;
+package com.tickets.dao;
 
 import java.io.Serializable;
 import java.sql.Connection;

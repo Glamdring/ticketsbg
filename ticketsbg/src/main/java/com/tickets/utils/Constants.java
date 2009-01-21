@@ -1,4 +1,4 @@
-package com.tickets.server.utils;
+package com.tickets.utils;
 
 public class Constants {
     public static final String FS = System.getProperty("file.separator");

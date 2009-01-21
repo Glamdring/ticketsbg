@@ -1,9 +1,8 @@
-package com.tickets.server.constants;
+package com.tickets.constants;
 
 import java.io.InputStream;
 import java.util.Properties;
 
-import com.tickets.constants.Messages;
 
 public class Settings {
 
