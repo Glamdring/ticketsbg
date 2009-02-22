@@ -22,17 +22,17 @@
         </property-->
         <property name="annotatedClasses">
             <list>
-                <value>com.tickets.client.model.Day</value>
-                <value>com.tickets.client.model.Firm</value>
-                <value>com.tickets.client.model.Price</value>
-                <value>com.tickets.client.model.Route</value>
-                <value>com.tickets.client.model.RouteDay</value>
-                <value>com.tickets.client.model.RouteHour</value>
-                <value>com.tickets.client.model.Run</value>
-                <value>com.tickets.client.model.Stop</value>
-                <value>com.tickets.client.model.Ticket</value>
-                <value>com.tickets.client.model.User</value>
-                <value>com.tickets.client.model.UsersHistory</value>
+                <value>com.tickets.model.Day</value>
+                <value>com.tickets.model.Firm</value>
+                <value>com.tickets.model.Price</value>
+                <value>com.tickets.model.Route</value>
+                <value>com.tickets.model.RouteDay</value>
+                <value>com.tickets.model.RouteHour</value>
+                <value>com.tickets.model.Run</value>
+                <value>com.tickets.model.Stop</value>
+                <value>com.tickets.model.Ticket</value>
+                <value>com.tickets.model.User</value>
+                <value>com.tickets.model.UsersHistory</value>
             </list>
         </property>
 
@@ -81,12 +81,12 @@
     <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
         <property name="sessionFactory"><ref local="sessionFactory"/></property>
     </bean>
-    <bean id="dao" class="com.tickets.server.dao.Dao" scope="prototype">
+    <bean id="dao" class="com.tickets.dao.Dao" scope="prototype">
         <property name="sessionFactory" ref="sessionFactory"></property>
     </bean>
 
     <aop:config>
-        <aop:pointcut id="serviceMethods" expression="execution(* com.tickets.server.services.impl.*.*(..))"/>
+        <aop:pointcut id="serviceMethods" expression="execution(* com.tickets.services.impl.*.*(..))"/>
         <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethods"/>
     </aop:config>
 
@@ -95,26 +95,39 @@
             <tx:method name="*" propagation="REQUIRED"/>
         </tx:attributes>
     </tx:advice>
+    
+    <!-- Loading MyFaces Orchestra modules -->
+    <!-- import resource="classpath*:/META-INF/spring-orchestra-init.xml" /-->
 
-    <!-- bean id="urlMapping"
-    	class="org.gwtwidgets.server.spring.GWTHandler">
-    	<property name="mappings">
-    		<map>
-    			<entry key="/users.rpc" value-ref="userService" />
-    			<entry key="/routes.rpc" value-ref="routeService" />
-    		</map>
-    	</property>
-    	<!- property name="usingInstrumentation" value="true" /->
+    <!--
+    This two bean definition below handles the creation and lookup of beans that has the conversational scopes
+    as listed in the 'scopes' map. 
+     -->
+    <!-- bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
+      <property name="scopes">
+        <map>
+          <entry key="conversation.access">
+            <bean class="org.apache.myfaces.orchestra.conversation.spring.SpringConversationScope">
+              <property name="timeout" value="30" />
+              <property name="advices">
+                <list>
+                  <ref bean="persistentContextConversationInterceptor"/>
+                </list>
+              </property>
+              <property name="lifetime" value="access" />
+            </bean>
+          </entry>
+        </map>
+      </property>
+    </bean>
+    <bean id="persistentContextConversationInterceptor"
+        class="org.apache.myfaces.orchestra.conversation.spring.PersistenceContextConversationInterceptor">
+        <property name="persistenceContextFactory" ref="jpaPersistentContextFactory"/>
+    </bean>
+    
+    <bean id="persistentContextFactory"
+        class="org.apache.myfaces.orchestra.conversation.spring.JpaPersistenceContextFactory">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean-->
     
-     <!-- bean id="userServiceExport" class="org.gwtwidgets.server.spring.GWTRPCServiceExporter" lazy-init="default" autowire="default" dependency-check="default">
-        <property name="service" ref="userService" /> 
-        <property name="serviceInterfaces">
-            <list>
-                <value>com.tickets.client.services.UserService</value>
-                <value>com.tickets.client.services.UserService</value>
-            </list>  
-        </property>
-    </bean-->
-
 </beans>

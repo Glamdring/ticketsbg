@@ -1,14 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
-<web-app>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	version="2.5">
 	<display-name>Tickets</display-name>
+
+	<context-param>
+		<param-name>javax.faces.DEFAULT_SUFFIX
+		</param-name>
+		<param-value>.jsp</param-value>
+	</context-param>
+	<context-param>
+		<param-name>com.sun.faces.validateXml
+		</param-name>
+		<param-value>false</param-value>
+	</context-param>
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
-			/WEB-INF/classes/spring.xml,/WEB-INF/handler-servlet.xml
+			/WEB-INF/classes/spring.xml
 		</param-value>
 	</context-param>
+
+	<context-param>
+		<param-name>org.ajax4jsf.RESOURCE_URI_PREFIX
+		</param-name>
+		<param-value>rfRes</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>javax.faces.CONFIG_FILES
+		</param-name>
+		<param-value>/WEB-INF/faces-config.xml
+		</param-value>
+	</context-param>
+
+	<filter>
+		<display-name>RichFaces Filter</display-name>
+		<filter-name>richfaces</filter-name>
+		<filter-class>org.ajax4jsf.Filter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>richfaces</filter-name>
+		<servlet-name>Faces Servlet</servlet-name>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+		<dispatcher>INCLUDE</dispatcher>
+	</filter-mapping>
 
 	<listener>
 		<listener-class>
@@ -22,34 +61,30 @@
 		</listener-class>
 	</listener>
 
-
 	<servlet>
-		<servlet-name>handler</servlet-name>
-		<servlet-class>
-			org.springframework.web.servlet.DispatcherServlet
+		<servlet-name>Faces Servlet</servlet-name>
+		<servlet-class>javax.faces.webapp.FacesServlet
 		</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 
 	<servlet>
-		<servlet-name>gwt-log-remote-logger-servlet</servlet-name>
-		<servlet-class>
-			com.allen_sauer.gwt.log.server.RemoteLoggerServiceImpl
+		<servlet-name>CXFServlet</servlet-name>
+		<servlet-class>org.apache.cxf.transport.servlet.CXFServlet
 		</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>gwt-log-remote-logger-servlet</servlet-name>
-		<url-pattern>/gwt-log</url-pattern>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.jsp</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>
-		<servlet-name>handler</servlet-name>
-		<url-pattern>/handler/*</url-pattern>
+		<servlet-name>CXFServlet</servlet-name>
+		<url-pattern>/ws/*</url-pattern>
 	</servlet-mapping>
 
-
 	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
 </web-app>

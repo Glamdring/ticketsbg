@@ -8,7 +8,6 @@ import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
 
 import com.tickets.dao.Dao;
 import com.tickets.model.User;
-import com.tickets.services.UserServiceImpl;
 import com.tickets.utils.SpringContext;
 
 public class UserSerivceTest extends AbstractDependencyInjectionSpringContextTests {
@@ -16,7 +15,7 @@ public class UserSerivceTest extends AbstractDependencyInjectionSpringContextTes
     @Test
     public void testSaveUser() throws Exception {
 
-        String path = new File("").getAbsolutePath() + "/src/";
+        String path = new File("").getAbsolutePath() + "/src/main/resources/";
         SpringContext.init(path);
         ApplicationContext a = SpringContext.getContext();
 

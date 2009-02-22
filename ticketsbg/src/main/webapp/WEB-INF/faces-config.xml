@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
+	version="1.2">
+
+	<application>
+		<!-- ViewHandler implementation for Facelets -->
+		<view-handler>com.sun.facelets.FaceletViewHandler</view-handler>
+
+		<!--
+			This is the JSF 1.2 ELResolver that delegates to the Spring root
+			WebApplicationContext resolving name references to Spring-defined
+			beans.
+		-->
+		<el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
+
+		<locale-config>
+			<default-locale>bg</default-locale>
+			<supported-locale>bg</supported-locale>
+			<!-- supported-locale>en</supported-locale-->
+		</locale-config>
+		<message-bundle>com.tickets.constants.messages</message-bundle>
+	</application>
+
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>adminPanel</from-outcome>
+			<to-view-id>/admin/index.jsp</to-view-id>
+			<redirect/>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+        <navigation-case>
+            <from-outcome>routesList</from-outcome>
+            <to-view-id>/admin/routes.jsp</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
+</faces-config>

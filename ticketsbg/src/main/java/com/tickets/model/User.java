@@ -31,8 +31,8 @@ import javax.persistence.Transient;
             query = "select u from User u where u.username=:username and u.temporaryPassword=:password"
         ),
         @NamedQuery(
-            name = "User.getByUsernameAndEmail",
-            query = "select u from User u where u.username=:username and u.email=:email"
+            name = "User.getByEmail",
+            query = "select u from User u where u.email=:email"
         )
 })
 public class User extends DataObject implements Serializable {

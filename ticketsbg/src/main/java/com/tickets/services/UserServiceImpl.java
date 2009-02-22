@@ -158,12 +158,10 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
         log.info("Cleaning inactive users : " + result);
     }
 
-    @SuppressWarnings("unchecked")
-    public void remindPassword(String username, String email)
+    public void remindPassword(String email)
             throws UserException {
-        List list = getDao().findByNamedQuery("User.getByUsernameAndEmail",
-                new String[] {"username", "email"}, new Object[] {username,
-                        email});
+        List list = getDao().findByNamedQuery("User.getByEmail",
+                new String[] {"email"}, new Object[] {email});
 
         if (list.size() > 0) {
             User user = (User) list.get(0);
@@ -184,7 +182,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
                 throw UserException.UNEXPECTED_PROBLEM;
             }
         } else {
-            throw UserException.INVALID_EMAIL_USER_COMBINATION;
+            throw UserException.INVALID_EMAIL;
         }
     }
 

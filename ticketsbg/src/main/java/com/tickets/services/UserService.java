@@ -9,7 +9,7 @@ import com.tickets.model.User;
  * @author Bozhidar Bozhanov
  *
  */
-public interface UserService extends BaseClientService<User> {
+public interface UserService extends Service<User> {
 
     /**
      * Registers a new user

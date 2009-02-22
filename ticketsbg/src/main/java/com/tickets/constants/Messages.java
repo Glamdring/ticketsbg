@@ -1,40 +1,51 @@
 package com.tickets.constants;
 
-import java.io.InputStream;
 import java.io.Serializable;
 import java.text.MessageFormat;
-import java.util.Properties;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
-@SuppressWarnings("serial")
 public class Messages implements Serializable {
-    private static Properties messages;
+    private static Map<Locale, ResourceBundle> bundles = new HashMap<Locale, ResourceBundle>();
+    private static final Locale DEFAULT_LOCALE = new Locale("bg");
 
-    public static String getString(String key, Object... args) {
-        if (messages == null)
-            load();
-
-        try {
-            String msg = messages.getProperty(key);
-            if (msg == null)
-                msg = key;
-
-            MessageFormat format = new MessageFormat(msg);
-
-            return format.format(args);
-        } catch (Exception ex) {
-            return key;
+    protected static ClassLoader getCurrentClassLoader(Object defaultObject) {
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        if (loader == null) {
+            loader = defaultObject.getClass().getClassLoader();
         }
+        return loader;
     }
 
-    private static void load() {
+    public static String getString(String key, Object...params) {
+        return getString(key, DEFAULT_LOCALE, params);
+    }
+
+    public static String getString(String key, Locale locale, Object...params) {
+
+        if (!bundles.containsKey(locale))
+            load(locale);
+
+        String text = null;
+
         try {
-            InputStream is = Messages.class
-                    .getResourceAsStream("/Messages.properties");
-            messages = new Properties();
-            messages.load(is);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+            text = bundles.get(locale).getString(key);
+        } catch (MissingResourceException e) {
+            text = "?? " + key + " ??";
         }
+
+        if (params != null) {
+            MessageFormat mf = new MessageFormat(text, locale);
+            text = mf.format(params);
+        }
+        return text;
+    }
+
+    private static void load(Locale locale) {
+        bundles.put(locale, ResourceBundle.getBundle("com.tickets.constants.messages", locale,
+                getCurrentClassLoader(locale)));
     }
 }
-
