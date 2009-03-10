@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<taglib
+  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
+  xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  version="2.1">
+
+  <display-name>Custom components over Ajax4Jsf</display-name>
+  <tlib-version>1.0</tlib-version>
+  <short-name>cust</short-name>
+  <uri>http://tickets.com/cust</uri>
+
+  <tag>
+    <description />
+    <display-name>Ajax-enabled repeater</display-name>
+    <name>repeat</name>
+    <tag-class>com.tickets.components.jsp.IteratorTag</tag-class>
+    <body-content>JSP</body-content>
+
+    <attribute>
+      <description>This attribute defines row keys that are updated after an AJAX request.</description>
+      <name>ajaxKeys</name>
+      <deferred-value>
+        <type>java.util.Set</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>The attribute takes a value-binding expression for a component property of
+a backing bean</description>
+      <name>binding</name>
+      <deferred-value>
+        <type>javax.faces.component.UIComponent</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>It defines EL-binding  for a component state for saving or redefinition.</description>
+      <name>componentState</name>
+      <deferred-value>
+        <type>org.ajax4jsf.model.DataComponentState</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>A zero-relative row number of the first row to display</description>
+      <name>first</name>
+      <deferred-value>
+        <type>int</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>Every component may have a unique id that is automatically created if omitted</description>
+      <name>id</name>
+      <rtexprvalue>false</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <description>If "false", this component is not rendered</description>
+      <name>rendered</name>
+      <deferred-value>
+        <type>boolean</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>Converter for a row key object</description>
+      <name>rowKeyConverter</name>
+      <deferred-value>
+        <type>javax.faces.convert.Converter</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>The attribute  provides access to a row key in a Request scope.</description>
+      <name>rowKeyVar</name>
+      <rtexprvalue>false</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <description>A number of rows to display, or zero for all remaining
+            rows in the table</description>
+      <name>rows</name>
+      <deferred-value>
+        <type>int</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>The attribute  provides access to a component state on the client side.</description>
+      <name>stateVar</name>
+      <rtexprvalue>false</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <description>The current value for this component.</description>
+      <name>value</name>
+      <deferred-value>
+        <type>java.lang.Object</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>A request-scope attribute via which the data object for the
+            current row will be used when iterating</description>
+      <name>var</name>
+      <rtexprvalue>false</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+
+  </tag>
+</taglib>

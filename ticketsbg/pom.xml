@@ -217,6 +217,11 @@
             <scope>system</scope>
             <systemPath>${basedir}/lib/j4j.jar</systemPath>
         </dependency>
+        <dependency>
+        	<groupId>com.ocpsoft</groupId>
+        	<artifactId>ocpsoft-pretty-faces</artifactId>
+        	<version>1.2.2</version>
+        </dependency>
 	</dependencies>
 
 	<build>

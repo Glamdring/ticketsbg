@@ -28,15 +28,35 @@
 		<navigation-case>
 			<from-outcome>adminPanel</from-outcome>
 			<to-view-id>/admin/index.jsp</to-view-id>
-			<redirect/>
+			<redirect />
 		</navigation-case>
 	</navigation-rule>
-	
+
 	<navigation-rule>
-        <navigation-case>
-            <from-outcome>routesList</from-outcome>
-            <to-view-id>/admin/routes.jsp</to-view-id>
-            <redirect/>
-        </navigation-case>
-    </navigation-rule>
+		<navigation-case>
+			<from-outcome>routesList</from-outcome>
+			<to-view-id>/admin/routes.jsp</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>routeScreen</from-outcome>
+			<to-view-id>/admin/route.jsp</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<component>
+		<description />
+		<display-name>Iterator</display-name>
+		<component-type>com.tickets.Iterator</component-type>
+		<component-class>com.tickets.components.UIIterator</component-class>
+
+		<component-extension>
+			<component-family>javax.faces.Data</component-family>
+			<renderer-type>org.ajax4jsf.components.RepeatRenderera</renderer-type>
+		</component-extension>
+	</component>
 </faces-config>
