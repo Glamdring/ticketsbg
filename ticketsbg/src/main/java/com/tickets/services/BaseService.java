@@ -1,5 +1,6 @@
 package com.tickets.services;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -41,8 +42,8 @@ public abstract class BaseService<E> implements Service<E> {
         }
     }
 
-    public E get(Class<E> clazz, int id) {
-        E result = getDao().getById(clazz, id);
+    public <T> T get(Class<T> clazz, Serializable id) {
+        T result = getDao().getById(clazz, id);
         if (result == null)
             try {
                 result = clazz.newInstance();
@@ -56,7 +57,6 @@ public abstract class BaseService<E> implements Service<E> {
         getDao().delete(e);
     }
 
-    @SuppressWarnings("unchecked")
     public void delete(Class clazz, int id) {
         getDao().delete(clazz, id);
     }
@@ -74,5 +74,14 @@ public abstract class BaseService<E> implements Service<E> {
                 "from " + clazz.getName() + " order by " + orderColumn, null,
                 null);
         return result;
+    }
+
+    public Object saveObject(Object e) throws RuntimeException {
+        try {
+            return getDao().saveObject(e);
+        } catch (Exception ex) {
+            log.error("Error saving", ex);
+            return e;
+        }
     }
 }

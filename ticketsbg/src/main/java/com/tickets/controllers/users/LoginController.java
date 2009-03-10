@@ -3,13 +3,16 @@ package com.tickets.controllers.users;
 import javax.faces.component.UIInput;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import com.tickets.annotations.Action;
 import com.tickets.controllers.BaseController;
 import com.tickets.exceptions.UserException;
 import com.tickets.services.UserService;
 
 @Controller("loginController")
+@Scope("request")
 public class LoginController extends BaseController {
 
     private String username;
@@ -19,6 +22,7 @@ public class LoginController extends BaseController {
     @Autowired
     private UserService userService;
 
+    @Action
     public String login() {
         //FacesContext.getCurrentInstance().getExternalContext().getRequest();
         System.out.println(username + ":" + password + ":" + admin);

@@ -1,11 +1,12 @@
 package com.tickets.model;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -36,20 +37,12 @@ public class Route extends DataObject implements Serializable {
 
     @OneToMany(mappedBy="route")
     @OrderBy("hour")
-    private Set<RouteHour> routeHours = new HashSet<RouteHour>();
+    private List<RouteHour> routeHours;
 
-    @OneToMany(mappedBy="route")
-    private Set<RouteDay> routeDays = new HashSet<RouteDay>();
+    @OneToMany(mappedBy="route", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+    private List<RouteDay> routeDays;
 
     public Route() {
-    }
-
-    public Set<RouteHour> getRouteHours(){
-        return routeHours;
-    }
-
-    public void setRouteHours(Set<RouteHour> routeHours){
-        this.routeHours = routeHours;
     }
 
     public int getId() {
@@ -76,19 +69,27 @@ public class Route extends DataObject implements Serializable {
         this.seats = seats;
     }
 
-    public Set<RouteDay> getRouteDays() {
-        return routeDays;
-    }
-
-    public void setRouteDays(Set<RouteDay> routeDays) {
-        this.routeDays = routeDays;
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<RouteHour> getRouteHours() {
+        return routeHours;
+    }
+
+    public void setRouteHours(List<RouteHour> routeHours) {
+        this.routeHours = routeHours;
+    }
+
+    public List<RouteDay> getRouteDays() {
+        return routeDays;
+    }
+
+    public void setRouteDays(List<RouteDay> routeDays) {
+        this.routeDays = routeDays;
     }
 }

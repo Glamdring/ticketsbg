@@ -11,8 +11,6 @@ import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 
-import com.tickets.model.User;
-
 @Repository("dao")
 @Scope("prototype")
 public class Dao<E> extends HibernateDaoSupport {
@@ -31,7 +29,6 @@ public class Dao<E> extends HibernateDaoSupport {
         return (T) getHibernateTemplate().get(clazz, id);
     }
 
-    @SuppressWarnings("unchecked")
     public E save(E e) {
         if (!getHibernateTemplate().contains(e))
             e = merge(e);
@@ -46,7 +43,6 @@ public class Dao<E> extends HibernateDaoSupport {
         return e;
     }
 
-    @SuppressWarnings("unchecked")
     public List findByQuery(String query, String[] names, Object[] args) {
         if (names == null)
             names = new String[] {};
@@ -57,7 +53,6 @@ public class Dao<E> extends HibernateDaoSupport {
         return getHibernateTemplate().findByNamedParam(query, names, args);
     }
 
-    @SuppressWarnings("unchecked")
     public List findByNamedQuery(String name, String[] names, Object[] args) {
         return getHibernateTemplate().findByNamedQueryAndNamedParam(name,
                 names, args);
@@ -92,7 +87,6 @@ public class Dao<E> extends HibernateDaoSupport {
          getHibernateTemplate().evict(o);
      }
 
-     @SuppressWarnings("unchecked")
      public void deleteObject(Object object) {
          getHibernateTemplate().delete(object);
      }
@@ -122,7 +116,6 @@ public class Dao<E> extends HibernateDaoSupport {
       * @param query
       * @return result list
       */
-      @SuppressWarnings("unchecked")
       public List findByQuery(String query) {
           return findByQuery(query, null, null);
       }
@@ -132,12 +125,7 @@ public class Dao<E> extends HibernateDaoSupport {
        * @param query
        * @return result list
        */
-      @SuppressWarnings("unchecked")
       public List findByNamedQuery(String query) {
           return findByNamedQuery(query, null, null);
       }
-
-    public void update(User user) {
-        getHibernateTemplate().update(user);
-    }
 }

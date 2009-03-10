@@ -26,7 +26,7 @@
 				<enabled>true</enabled>
 			</releases>
 			<snapshots>
-				<enabled>false</enabled>
+				<enabled>true</enabled>
 			</snapshots>
 		</repository>
 
@@ -35,6 +35,11 @@
 			<name>Apache Incubating Repository</name>
 			<url>http://people.apache.org/repo/m2-incubating-repository/</url>
 		</repository>
+        <repository>
+            <id>apache-incubating</id>
+            <name>Apache Incubating Repository</name>
+            <url>http://people.apache.org/repo/m2-incubating-repository/</url>
+        </repository>
 
 	</repositories>
 
@@ -157,7 +162,6 @@
 			<artifactId>standard</artifactId>
 			<version>1.1.2</version>
 		</dependency>
-		
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-core</artifactId>
@@ -200,7 +204,19 @@
         	<groupId>org.apache.myfaces.orchestra</groupId>
         	<artifactId>myfaces-orchestra-core15</artifactId>
         	<version>1.0</version>
-        </dependency>      
+        </dependency>
+        <dependency>
+        	<groupId>org.apache.myfaces.tomahawk</groupId>
+        	<artifactId>tomahawk</artifactId>
+        	<version>1.1.8</version>
+        </dependency>
+        <dependency>
+            <artifactId>j4j</artifactId>
+            <groupId>com.javascript4jsf</groupId>
+            <version>1</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/j4j.jar</systemPath>
+        </dependency>
 	</dependencies>
 
 	<build>

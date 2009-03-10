@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -23,12 +24,17 @@ public class RouteDay implements Serializable {
      @EmbeddedId
         @AttributeOverrides( {
                 @AttributeOverride(name = "routeId", column = @Column(name = "route_id", nullable = false)),
-                @AttributeOverride(name = "dayId", column = @Column(name = "day_id", unique = true, nullable = false)) })
+                @AttributeOverride(name = "dayId", column = @Column(name = "day_id", nullable = false)) })
     private RouteDayId id;
 
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name="route_id", insertable = false, updatable = false)
     private Route route;
+
+
+    @ManyToOne
+    @JoinColumn(name="day_id", insertable = false, updatable = false)
+    private Day day;
 
     public Route getRoute() {
         return route;
@@ -51,5 +57,13 @@ public class RouteDay implements Serializable {
 
     public void setId(RouteDayId id) {
         this.id = id;
+    }
+
+    public Day getDay() {
+        return day;
+    }
+
+    public void setDay(Day day) {
+        this.day = day;
     }
 }
