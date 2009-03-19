@@ -6,13 +6,15 @@ import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.springframework.context.annotation.Scope;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
-import org.springframework.stereotype.Repository;
 
-@Repository("dao")
-@Scope("prototype")
+/**
+ * Dao - defined in the spring.xml
+ * @author Bozhidar Bozhanov
+ *
+ * @param <E>
+ */
 public class Dao<E> extends HibernateDaoSupport {
 
     public void delete(E e) {

@@ -13,6 +13,7 @@ import com.tickets.utils.SpringContext;
 public class UserSerivceTest extends AbstractDependencyInjectionSpringContextTests {
 
     @Test
+    @SuppressWarnings({ "unused", "unchecked" })
     public void testSaveUser() throws Exception {
 
         String path = new File("").getAbsolutePath() + "/src/main/resources/";
@@ -21,6 +22,7 @@ public class UserSerivceTest extends AbstractDependencyInjectionSpringContextTes
 
 
         UserServiceImpl usrv = (UserServiceImpl) a.getBean("userService");
+
         Dao<User> dao = (Dao<User>) a.getBean("dao");
         Object o = a.getBean("dao");
 

@@ -1,6 +1,7 @@
 package com.tickets.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -16,6 +17,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+
+import org.hibernate.annotations.IndexColumn;
 
 @Entity
 @Table(name = "routes", uniqueConstraints = @UniqueConstraint(columnNames = "firm_id"))
@@ -40,7 +43,12 @@ public class Route extends DataObject implements Serializable {
     private List<RouteHour> routeHours;
 
     @OneToMany(mappedBy="route", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+    @OrderBy("routeDayId")
     private List<RouteDay> routeDays;
+
+    @OneToMany(mappedBy="route", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+    @IndexColumn(name="idx")
+    private List<Stop> stops;
 
     public Route() {
     }
@@ -92,4 +100,22 @@ public class Route extends DataObject implements Serializable {
     public void setRouteDays(List<RouteDay> routeDays) {
         this.routeDays = routeDays;
     }
+
+    public List<Stop> getStops() {
+        return stops;
+    }
+
+    @Deprecated
+    public void setStops(List<Stop> stops) {
+        this.stops = stops;
+    }
+
+    public void addStop(Stop stop) {
+        if (stops == null)
+            stops = new ArrayList<Stop>();
+
+        stop.setRoute(this);
+        stops.add(stop);
+    }
+
 }

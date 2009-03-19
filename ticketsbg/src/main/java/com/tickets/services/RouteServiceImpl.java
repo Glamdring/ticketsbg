@@ -8,17 +8,14 @@ import org.springframework.stereotype.Service;
 import com.tickets.model.Day;
 import com.tickets.model.Route;
 import com.tickets.model.RouteDay;
-import com.tickets.model.RouteDayId;
 
 @Service("routeService")
 public class RouteServiceImpl extends BaseService<Route> implements RouteService {
 
-    @Override
     public List list() {
         return list(Route.class);
     }
 
-    @Override
     public List listOrdered(String orderColumn) {
         return listOrdered(Route.class, orderColumn);
     }
@@ -36,8 +33,6 @@ public class RouteServiceImpl extends BaseService<Route> implements RouteService
             RouteDay rd = new RouteDay();
             rd.setDay(day);
             rd.setRoute(route);
-            RouteDayId id = new RouteDayId(route.getId(), day.getId());
-            rd.setId(id);
             saveObject(rd);
         }
     }

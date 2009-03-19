@@ -11,6 +11,7 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.faces.model.ListDataModel;
 
+import org.apache.myfaces.orchestra.conversation.Conversation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,7 @@ import com.tickets.model.Route;
 import com.tickets.services.RouteService;
 
 @Controller("routeController")
-@Scope("conversation.access")
+@Scope("conversation.manual")
 public class RouteController extends BaseController implements Serializable {
 
     private Route route;
@@ -69,18 +70,28 @@ public class RouteController extends BaseController implements Serializable {
 
     @PostConstruct
     public void init() {
+        refreshList();
         route = new Route();
         days = routeService.list(Day.class);
         for (Day day : days) {
             day.setLabel(Messages.getString(day.getName()));
             dayNames.put(day.getName(), day.getLabel());
         }
-        refreshList();
     }
 
     private void refreshList() {
         routesModel = new ListDataModel(routeService.list());
+
+        // End the current conversation in case the list of routes
+        // is refreshed, but only if the bean has not just been constructed
+        if (route != null)
+            endConversation();
     }
+
+    private void endConversation() {
+        Conversation.getCurrentInstance().invalidate();
+    }
+
     public Route getRoute() {
         return route;
     }

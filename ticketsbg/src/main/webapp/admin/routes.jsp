@@ -6,13 +6,13 @@
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:c="http://java.sun.com/jstl/core"
 	xmlns:fmt="http://java.sun.com/jstl/fmt"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
 	template="admin_template.jsp">
 	<ui:define name="body">
 		<f:view>
 			<h:form id="routeForm">
 				<h:messages />
-				<h:commandLink value="#{msg.add}"
-					action="#{routeController.newRoute}" />
+				<h:commandLink value="#{msg.add}" action="#{routeController.newRoute}" />
 				<rich:dataTable
 					onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
 					onRowMouseOut="this.style.backgroundColor='white'" cellpadding="0"
@@ -38,8 +38,8 @@
 					<rich:column>
 						<a4j:repeat var="routeDay" value="#{route.routeDays}">
 							<h:outputText
-                                value="#{routeController.dayNames[routeDay.day.name]}" />
-                            <h:outputText value="&#160;" />
+								value="#{routeController.dayNames[routeDay.day.name]}" />
+							<h:outputText value="&#160;" />
 						</a4j:repeat>
 					</rich:column>
 
@@ -49,28 +49,8 @@
 						<h:outputText value="&#160;" />
 						<h:commandLink value="#{msg.remove}"
 							action="#{routeController.delete}" />
-						<h:outputText value="&#160;" />
-						<h:commandLink value="#{msg.addCourse}"
-							action="#{routeController.addCourse}" />
 					</rich:column>
 
-
-					<!-- rich:subTable
-            onRowMouseOver="this.style.backgroundColor='#F8F8F8'"
-            onRowMouseOut="this.style.backgroundColor='grey'" var="route"
-            value="#{record.items}">
-            <rich:column>
-              <h:outputText value="#{route.name}"></h:outputText>
-            </rich:column>
-            <rich:column>
-              <h:commandLink action="#{routeController.edit}">
-                <h:outputText value="#{msg.edit}" />
-              </h:commandLink>
-              <h:commandLink value="#{msg.remove}"
-                action="#{routeController.delete}">
-              </h:commandLink>
-            </rich:column>
-          </rich:subTable-->
 				</rich:dataTable>
 			</h:form>
 		</f:view>

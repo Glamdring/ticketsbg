@@ -14,4 +14,8 @@ public interface RouteService extends Service<Route> {
 
     Integer[] getDaysList(Route route);
 
+    List list();
+
+    List listOrdered(String orderColumn);
+
 }

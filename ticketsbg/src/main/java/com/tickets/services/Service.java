@@ -4,9 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 
 public interface Service<E> {
-     List list();
-
-     List listOrdered(String orderColumn);
 
      E save(E entity);
 

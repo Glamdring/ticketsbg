@@ -47,6 +47,14 @@
 			<redirect />
 		</navigation-case>
 	</navigation-rule>
+	
+	<navigation-rule>
+        <navigation-case>
+            <from-outcome>stopScreen</from-outcome>
+            <to-view-id>/admin/stop.jsp</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
 
 	<component>
 		<description />
@@ -59,4 +67,5 @@
 			<renderer-type>org.ajax4jsf.components.RepeatRenderera</renderer-type>
 		</component-extension>
 	</component>
+	
 </faces-config>

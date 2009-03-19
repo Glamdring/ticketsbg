@@ -250,12 +250,10 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
         return hexString.toString();
     }
 
-    @Override
     public List list() {
         return list(User.class);
     }
 
-    @Override
     public List listOrdered(String orderColumn) {
         return listOrdered(User.class, orderColumn);
     }
