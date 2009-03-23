@@ -21,12 +21,12 @@
 					</tr>
 					<tr>
 						<td><h:outputLabel value="#{msg.timeToArrival}" /></td>
-						<td><rich:inputNumberSpinner 
+						<td><rich:inputNumberSpinner maxValue="1000"
 							value="${stopController.stop.timeToArrival}" /></td>
 					</tr>
 					<tr>
 						<td><h:outputLabel value="#{msg.timeToDeparture}" /></td>
-						<td><rich:inputNumberSpinner 
+						<td><rich:inputNumberSpinner maxValue="1000"
 							value="${stopController.stop.timeToDeparture}" /></td>
 					</tr>
 					<tr>

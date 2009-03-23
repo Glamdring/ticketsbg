@@ -50,7 +50,7 @@ public class Firm implements java.io.Serializable {
     private boolean isActive;
 
     @ManyToMany
-    @JoinTable(name="firms_staff")
+    @JoinTable(name="firmsStaff")
     private Set<User> staff = new HashSet<User>();
 
     public Set<User> getStaff() {

@@ -20,7 +20,7 @@ public class Price implements java.io.Serializable {
 
     @EmbeddedId
     @AttributeOverrides( {
-            @AttributeOverride(name = "routeId", column = @Column(name = "route_id", nullable = false)),
+            @AttributeOverride(name = "routeId", column = @Column(name = "routeId", nullable = false)),
             @AttributeOverride(name = "start", column = @Column(name = "start", nullable = false)),
             @AttributeOverride(name = "end", column = @Column(name = "end", nullable = false)) })
     private PricesId id;

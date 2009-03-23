@@ -26,10 +26,13 @@
 		<param-value>blueSky</param-value>
 	</context-param>
 	<context-param>
+	   <param-name>org.richfaces.CONTROL_SKINNING</param-name>
+	   <param-value>enable</param-value>
+    </context-param>
+	<context-param>
         <param-name>facelets.LIBRARIES</param-name>
         <param-value>/WEB-INF/facelets/custom.taglib.xml</param-value>
     </context-param>
-
 	<context-param>
 		<param-name>org.ajax4jsf.RESOURCE_URI_PREFIX
 		</param-name>

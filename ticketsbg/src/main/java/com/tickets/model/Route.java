@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,12 +15,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.IndexColumn;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
-@Table(name = "routes", uniqueConstraints = @UniqueConstraint(columnNames = "firm_id"))
+@Table(name = "routes")
 public class Route extends DataObject implements Serializable {
 
     @Id
@@ -29,7 +31,7 @@ public class Route extends DataObject implements Serializable {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name="firm_id", referencedColumnName="firmId")
+    @JoinColumn(name="firmId", referencedColumnName="firmId")
     private Firm firm;
 
     @Column
@@ -38,16 +40,20 @@ public class Route extends DataObject implements Serializable {
     @Column
     private int seats;
 
-    @OneToMany(mappedBy="route")
-    @OrderBy("hour")
+    @OneToMany(mappedBy="route", fetch=FetchType.EAGER)
+    @OrderBy("minutes")
+    @Cascade({CascadeType.ALL, CascadeType.DELETE_ORPHAN})
     private List<RouteHour> routeHours;
 
-    @OneToMany(mappedBy="route", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-    @OrderBy("routeDayId")
+    @OneToMany(mappedBy="route")
+    @OrderBy("day")
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @Cascade({CascadeType.ALL, CascadeType.DELETE_ORPHAN})
     private List<RouteDay> routeDays;
 
-    @OneToMany(mappedBy="route", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-    @IndexColumn(name="idx")
+    @OneToMany(fetch=FetchType.EAGER, mappedBy="route")
+    @IndexColumn(name="idx", base=1)
+    @Cascade({CascadeType.ALL, CascadeType.DELETE_ORPHAN})
     private List<Stop> stops;
 
     public Route() {
@@ -89,6 +95,7 @@ public class Route extends DataObject implements Serializable {
         return routeHours;
     }
 
+    @Deprecated
     public void setRouteHours(List<RouteHour> routeHours) {
         this.routeHours = routeHours;
     }
@@ -101,6 +108,13 @@ public class Route extends DataObject implements Serializable {
         this.routeDays = routeDays;
     }
 
+    public void addRouteDay(RouteDay rd) {
+        if (routeDays == null)
+            routeDays = new ArrayList<RouteDay>();
+
+        rd.setRoute(this);
+        routeDays.add(rd);
+    }
     public List<Stop> getStops() {
         return stops;
     }
@@ -116,6 +130,14 @@ public class Route extends DataObject implements Serializable {
 
         stop.setRoute(this);
         stops.add(stop);
+    }
+
+    public void addHour(RouteHour hour) {
+        if (routeHours == null)
+            routeHours = new ArrayList<RouteHour>();
+
+        hour.setRoute(this);
+        routeHours.add(hour);
     }
 
 }

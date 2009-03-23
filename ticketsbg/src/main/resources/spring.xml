@@ -52,7 +52,7 @@
     </bean>
 
     <bean id="namingStrategy"
-        class="org.hibernate.cfg.ImprovedNamingStrategy" />
+        class="org.hibernate.cfg.DefaultNamingStrategy" />
 
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
         <property name="driverClass" value="com.mysql.jdbc.Driver"/>
@@ -81,7 +81,7 @@
     <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
         <property name="sessionFactory"><ref local="sessionFactory"/></property>
     </bean>
-    <bean id="dao" class="com.tickets.dao.Dao" scope="prototype">
+    <bean id="dao" class="com.tickets.dao.DaoImpl" scope="prototype">
         <property name="sessionFactory" ref="sessionFactory"></property>
     </bean>
 

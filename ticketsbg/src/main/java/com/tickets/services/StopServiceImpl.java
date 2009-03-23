@@ -11,13 +11,6 @@ public class StopServiceImpl extends BaseService<Stop> implements StopService {
 
     public Stop addStopToRoute(Stop stop, Route route) {
 
-
-//        List<Stop> existingStops = getDao().findByNamedQuery("Stop.findStopsByRoute",
-//                new String[]{"route"}, new Object[]{route});
-//
-//        stop.setRoute(route);
-//        stop.setIdx(existingStops.size());
-
         if (stop.getIdx() == 0) {
             if (route.getStops() != null) {
                 stop.setIdx(route.getStops().size() + 1);

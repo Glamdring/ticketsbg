@@ -76,8 +76,8 @@ public class User extends DataObject implements Serializable {
     private Set<UsersHistory> history = new HashSet<UsersHistory>();
 
     @ManyToMany
-    @JoinTable(name="firms_users", joinColumns=@JoinColumn(name="user_id", referencedColumnName="userId"),
-            inverseJoinColumns=@JoinColumn(name="firm_id", referencedColumnName="firmId"))
+    @JoinTable(name="firmsUsers", joinColumns=@JoinColumn(name="userId", referencedColumnName="userId"),
+            inverseJoinColumns=@JoinColumn(name="firmId", referencedColumnName="firmId"))
     private Set<Firm> firms = new HashSet<Firm>();
 
     @Column

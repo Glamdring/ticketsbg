@@ -189,7 +189,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
     public void changePassword(String password, User user) {
         user.setPassword(hash(password));
         user.setTemporaryPassword("");
-        getDao().saveOrUpdate(user);
+        getDao().save(user);
     }
 
     private HtmlEmail getPreconfiguredMail() {

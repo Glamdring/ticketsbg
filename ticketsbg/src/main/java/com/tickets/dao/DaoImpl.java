@@ -15,7 +15,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
  *
  * @param <E>
  */
-public class Dao<E> extends HibernateDaoSupport {
+public class DaoImpl<E> extends HibernateDaoSupport implements Dao<E> {
 
     public void delete(E e) {
         deleteObject(e);
@@ -74,16 +74,6 @@ public class Dao<E> extends HibernateDaoSupport {
 
         return o;
     }
-
-    /**
-     * Use this if no merging is required
-     *
-     * @param o
-     */
-     public void saveOrUpdate(Object o) {
-         evict(o);
-         getHibernateTemplate().saveOrUpdate(o);
-     }
 
      public void evict(Object o) {
          getHibernateTemplate().evict(o);

@@ -2,11 +2,10 @@ package com.tickets.controllers;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.faces.model.ListDataModel;
@@ -31,11 +30,8 @@ public class RouteController extends BaseController implements Serializable {
     private List<Day> days;
     private Integer[] daysPickList;
     private Map<String, String> dayNames = new HashMap<String, String>();
-    private Set<String> tmp = new HashSet<String>();
-    {
-        tmp.add("asd");
-        tmp.add("kofar");
-    }
+    private Date hour;
+    private int selectedHour;
 
     @Autowired
     private RouteService routeService;
@@ -65,6 +61,19 @@ public class RouteController extends BaseController implements Serializable {
     public String newRoute() {
         daysPickList = new Integer[0];
         route = new Route();
+        return "routeScreen";
+    }
+
+    @Action
+    public String addHour() {
+        routeService.addHourToRoute(hour, route);
+        return "routeScreen";
+    }
+
+    @Action
+    public String removeHour() {
+        routeService.removeHour(selectedHour, route);
+        selectedHour = 0;
         return "routeScreen";
     }
 
@@ -132,11 +141,19 @@ public class RouteController extends BaseController implements Serializable {
         this.dayNames = dayNames;
     }
 
-    public Set<String> getTmp() {
-        return tmp;
+    public Date getHour() {
+        return hour;
     }
 
-    public void setTmp(Set<String> tmp) {
-        this.tmp = tmp;
+    public void setHour(Date hour) {
+        this.hour = hour;
+    }
+
+    public int getSelectedHour() {
+        return selectedHour;
+    }
+
+    public void setSelectedHour(int selectedHour) {
+        this.selectedHour = selectedHour;
     }
 }

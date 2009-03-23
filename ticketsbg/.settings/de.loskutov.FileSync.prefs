@@ -1,7 +1,8 @@
-#Wed Feb 18 22:59:19 EET 2009
+#Sun Mar 22 21:08:45 EET 2009
 WARNING=DO NOT MODIFY THIS FILE IF YOU DON'T UNDERSTAND
 defaultDestination=
 defaultVariables=
 eclipse.preferences.version=1
 map|0=src/main/webapp|C\:/tomcat/apache-tomcat-6.0.18/webapps/tickets|,|,|,
+map|1=src/main/resources|C\:/tomcat/apache-tomcat-6.0.18/webapps/tickets/WEB-INF/classes|,|,|,
 useCurrentDateForDestinationFiles=false

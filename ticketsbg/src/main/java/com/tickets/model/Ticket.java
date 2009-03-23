@@ -22,13 +22,13 @@ public class Ticket implements java.io.Serializable {
 
     @EmbeddedId
     @AttributeOverrides( {
-            @AttributeOverride(name = "runId", column = @Column(name = "run_id", nullable = false)),
+            @AttributeOverride(name = "runId", column = @Column(name = "runId", nullable = false)),
             @AttributeOverride(name = "seat", column = @Column(name = "seat", nullable = false)) })
     private TicketsId id;
 
 
     @ManyToOne
-    @JoinColumn(name="user_id", referencedColumnName="userId")
+    @JoinColumn(name="userId", referencedColumnName="userId")
     private User user;
 
     @Column(length = 16)
@@ -41,7 +41,7 @@ public class Ticket implements java.io.Serializable {
     private BigDecimal price;
 
     @ManyToOne
-    @JoinColumn(name="run_id", referencedColumnName="runId", insertable=false, updatable=false)
+    @JoinColumn(name="runId", referencedColumnName="runId", insertable=false, updatable=false)
     private Run run;
 
     @Column
