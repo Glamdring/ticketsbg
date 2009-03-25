@@ -99,7 +99,8 @@ public class DaoImpl<E> extends HibernateDaoSupport implements Dao<E> {
          return (Integer) getHibernateTemplate().execute(cb);
      }
 
-     public Connection getConnection() {
+     @SuppressWarnings("deprecation")
+    public Connection getConnection() {
          return getSession().connection();
      }
 

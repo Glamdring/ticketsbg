@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -40,21 +39,23 @@ public class Route extends DataObject implements Serializable {
     @Column
     private int seats;
 
-    @OneToMany(mappedBy="route", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy="route")
     @OrderBy("minutes")
+    @LazyCollection(LazyCollectionOption.FALSE)
     @Cascade({CascadeType.ALL, CascadeType.DELETE_ORPHAN})
-    private List<RouteHour> routeHours;
+    private List<RouteHour> routeHours = new ArrayList<RouteHour>();
 
     @OneToMany(mappedBy="route")
     @OrderBy("day")
     @LazyCollection(LazyCollectionOption.FALSE)
     @Cascade({CascadeType.ALL, CascadeType.DELETE_ORPHAN})
-    private List<RouteDay> routeDays;
+    private List<RouteDay> routeDays = new ArrayList<RouteDay>();
 
-    @OneToMany(fetch=FetchType.EAGER, mappedBy="route")
+    @OneToMany(mappedBy="route")
     @IndexColumn(name="idx", base=1)
+    @LazyCollection(LazyCollectionOption.FALSE)
     @Cascade({CascadeType.ALL, CascadeType.DELETE_ORPHAN})
-    private List<Stop> stops;
+    private List<Stop> stops = new ArrayList<Stop>();
 
     public Route() {
     }
@@ -109,8 +110,6 @@ public class Route extends DataObject implements Serializable {
     }
 
     public void addRouteDay(RouteDay rd) {
-        if (routeDays == null)
-            routeDays = new ArrayList<RouteDay>();
 
         rd.setRoute(this);
         routeDays.add(rd);
@@ -125,16 +124,12 @@ public class Route extends DataObject implements Serializable {
     }
 
     public void addStop(Stop stop) {
-        if (stops == null)
-            stops = new ArrayList<Stop>();
 
         stop.setRoute(this);
         stops.add(stop);
     }
 
     public void addHour(RouteHour hour) {
-        if (routeHours == null)
-            routeHours = new ArrayList<RouteHour>();
 
         hour.setRoute(this);
         routeHours.add(hour);

@@ -13,13 +13,40 @@
     <context:annotation-config />
     <context:component-scan base-package="com.tickets"/>
 
-<!-- Hibernate SessionFactory -->
+    <context:property-placeholder location="classpath:application.properties"/>
+    
+    <!-- Generic Hibernate beans (for use with both DAO implementations -->
+    <bean id="namingStrategy"
+        class="org.hibernate.cfg.DefaultNamingStrategy" />
 
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+        <property name="jdbcUrl" value="${database.url}"/>
+        <property name="testConnectionOnCheckin" value="true"></property>
+        <property name="testConnectionOnCheckout" value="true"></property>
+        <property name="properties">
+            <props>
+                    <prop key="c3p0.min_size">10</prop>
+                    <prop key="c3p0.max_size">100</prop>
+                    <prop key="c3p0.timeout">540</prop>
+                    <prop key="c3p0.acquireRetryAttempts">10</prop>
+                    <prop key="c3p0.acquireIncrement">5</prop>
+                    <prop key="c3p0.idleConnectionTestPeriod">540</prop>
+                    <prop key="c3p0.initialPoolSize">20</prop>
+                    <prop key="c3p0.maxPoolSize">100</prop>
+                    <prop key="c3p0.maxIdleTime">30</prop>
+                    <prop key="c3p0.maxStatements">50</prop>
+                    <prop key="c3p0.minPoolSize">10</prop>
+                    <prop key="user">${database.username}</prop>
+                    <prop key="password">${database.password}</prop>
+            </props>
+        </property>
+    </bean>
+    <!-- End of generic Hibernate-related beans -->
+    
+    <!-- Use the following beans for HibernateDaoTemplate -->
     <bean id="sessionFactory"
         class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
-        <!--property name="configLocation"
-            value="classpath:com/tickets/model/hibernate.cfg.xml">
-        </property-->
         <property name="annotatedClasses">
             <list>
                 <value>com.tickets.model.Day</value>
@@ -38,45 +65,19 @@
 
         <property name="dataSource" ref="dataSource" />
         <property name="namingStrategy" ref="namingStrategy" />
-        <property name="schemaUpdate" value="true" />
+        <property name="schemaUpdate" value="${jdbc.generateDDL}" />
 
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">
-                    org.hibernate.dialect.MySQL5InnoDBDialect
+                    ${jdbc.dialect}
                 </prop>
                 <!-- TODO : set to false -->
-                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.show_sql">${jdbc.showSql}</prop>
             </props>
         </property>
     </bean>
-
-    <bean id="namingStrategy"
-        class="org.hibernate.cfg.DefaultNamingStrategy" />
-
-    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
-        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
-        <property name="jdbcUrl" value="jdbc:mysql://localhost/tickets?characterEncoding=utf8"/>
-        <property name="testConnectionOnCheckin" value="true"></property>
-        <property name="testConnectionOnCheckout" value="true"></property>
-        <property name="properties">
-            <props>
-                    <prop key="c3p0.min_size">10</prop>
-                    <prop key="c3p0.max_size">100</prop>
-                    <prop key="c3p0.timeout">540</prop>
-                    <prop key="c3p0.acquireRetryAttempts">10</prop>
-                    <prop key="c3p0.acquireIncrement">5</prop>
-                    <prop key="c3p0.idleConnectionTestPeriod">540</prop>
-                    <prop key="c3p0.initialPoolSize">20</prop>
-                    <prop key="c3p0.maxPoolSize">100</prop>
-                    <prop key="c3p0.maxIdleTime">30</prop>
-                    <prop key="c3p0.maxStatements">50</prop>
-                    <prop key="c3p0.minPoolSize">10</prop>
-                    <prop key="user">root</prop>
-                    <prop key="password"></prop>
-            </props>
-        </property>
-    </bean>
+    
     <!-- Transaction manager for a single Hibernate SessionFactory (alternative to JTA) -->
     <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
         <property name="sessionFactory"><ref local="sessionFactory"/></property>
@@ -84,13 +85,65 @@
     <bean id="dao" class="com.tickets.dao.DaoImpl" scope="prototype">
         <property name="sessionFactory" ref="sessionFactory"></property>
     </bean>
+    
+    <!-- End of HibernateDaoTemplate specific beans -->
+    
+    
+    <!-- Use the following beans with EntityManager DAO implementation -->
 
+    <!--
+    This is the convenient way to set up an EntityManagerFactory and inject it into the DAO's afterwards.
+    JNDI Lookup can also be used here. By default configuration file in META-INF/persistence.xml is used.
+    Parameters are located in application.properties file.
+     -->
+    <bean id="entityManagerFactory"
+        class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="persistenceUnitName" value="tickets" />
+        <property name="dataSource" ref="dataSource" />
+        <property name="jpaVendorAdapter">
+            <bean
+                class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="showSql"          value="${jdbc.showSql}" />
+                <property name="databasePlatform" value="${jdbc.dialect}" />
+                <property name="generateDdl"      value="${jdbc.generateDDL}" />
+            </bean>
+        </property>
+        <!-- property name="jpaProperties">
+            <props>
+		      <prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.DefaultNamingStrategy</prop>
+	       </props>
+        </property-->
+    </bean>
+    
+
+    <!--
+    This binds an entity manager from the specified entityManagerFactory to the thread for transactional data access. 
+     -->
+    <bean id="jpaTransactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+    </bean>
+    
+    <!--
+    This class translates native resource exceptions to Spring's DataAccessException hierarchy.
+    It's applied to any bean that carries the Repository annotation, hence all our DAO classes.
+     -->
+    <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+    
+    <!-- 
+    This class processes the PersistenceUnit/PersistenceContext annotations to inject the corresponding 
+    EntityManagerFactory/EntityManager
+     -->
+    <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
+    
+    <!-- End of EntityManager DAO implementation beans -->
+    
+    
     <aop:config>
         <aop:pointcut id="serviceMethods" expression="execution(* com.tickets.services.impl.*.*(..))"/>
         <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethods"/>
     </aop:config>
 
-    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+    <tx:advice id="txAdvice" transaction-manager="jpaTransactionManager">
         <tx:attributes>
             <tx:method name="*" propagation="REQUIRED"/>
         </tx:attributes>
