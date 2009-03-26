@@ -1,7 +1,6 @@
 package com.tickets.services;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -32,9 +31,6 @@ public class RouteServiceImpl extends BaseService<Route> implements RouteService
 
     @Override
     public void save(Route route, List<Integer> applicableDays) {
-        if (route.getRouteDays() == null)
-            route.setRouteDays(new ArrayList<RouteDay>(applicableDays.size()));
-
         List<RouteDay> routeDays = route.getRouteDays();
 
         Integer[] daysArray = applicableDays.toArray(new Integer[applicableDays.size()]);
@@ -50,13 +46,14 @@ public class RouteServiceImpl extends BaseService<Route> implements RouteService
                 Day day = getDay(dayId);
                 RouteDay rd = new RouteDay();
                 rd.setDay(day);
-                rd.setRoute(route);
-                routeDays.add(rd);
+                //rd.setRoute(route);
+                //routeDays.add(rd);
+                route.addRouteDay(rd);
             }
         }
 
-        route.setRouteDays(routeDays);
-        route = save(route);
+        //route.setRouteDays(routeDays)
+        save(route);
     }
 
     private boolean containsDay(List<RouteDay> list, Integer dayId) {
@@ -94,12 +91,10 @@ public class RouteServiceImpl extends BaseService<Route> implements RouteService
             return;
 
         List<RouteHour> list = route.getRouteHours();
-        if (list == null)
-            return;
 
         for (int i = 0; i < list.size(); i ++) {
             if (list.get(i).getId() == hourId) {
-                list.remove(list.get(i)); //TODO check behaviour (Not removing by index, so that DELETE_ORPHAN is triggered)
+                list.remove(i); //TODO check behaviour (Not removing by index, so that DELETE_ORPHAN is triggered)
                 break;
             }
         }

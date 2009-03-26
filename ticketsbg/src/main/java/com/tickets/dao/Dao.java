@@ -4,33 +4,77 @@ import java.io.Serializable;
 import java.sql.Connection;
 import java.util.List;
 
+import org.hibernate.Query;
+
 public interface Dao<E> {
 
+    /**
+     * Deletes an object identified by the specified Id
+     *
+     * @param <T>
+     * @param clazz
+     * @param id
+     */
     <T extends Serializable> void delete(Class clazz, T id);
 
+    /**
+     * Deletes the specified object
+     * @param e
+     */
+    void delete(Object obj);
+
+    /**
+     * Loads the object from the persistent store
+     *
+     * @param <T>
+     * @param clazz
+     * @param id
+     * @return the entity, if found.
+     */
     <T> T getById(Class<T> clazz, Serializable id);
 
-    E save(E e);
+    /**
+     * Makes the entity persistent.
+     * If it is transient, saves it.
+     * If it is detatched, attaches it.
+     *
+     * @param entity
+     */
+    void persist(Object e);
 
-    E merge(E e);
-
-    void delete(E e);
-
-    List findByQuery(String query, String[] names, Object[] args);
-
-    List findByNamedQuery(String name, String[] names, Object[] args);
-
-    Object saveObject(Object o);
-
-    Object mergeIfNotContained(Object o);
-
+    /**
+     * Removes the specified object from the session
+     * @param o
+     */
     void evict(Object o);
 
-    void deleteObject(Object object);
+    /**
+     * Lists the result of the specified query
+     *
+     * @param query
+     * @param names
+     * @param args
+     * @return the result list
+     */
+    List findByQuery(String query, String[] names, Object[] args);
+
+    /**
+     * Lists the result of the specified named query
+     *
+     * @param name
+     * @param names
+     * @param args
+     * @return the result list
+     */
+    List findByNamedQuery(String name, String[] names, Object[] args);
 
     int executeQuery(final String query, final String[] names,
             final Object[] args);
 
+    /**
+     * Retrieves the underlying database connection
+     * @return connection
+     */
     Connection getConnection();
 
     /**
@@ -48,4 +92,18 @@ public interface Dao<E> {
      * @return result list
      */
     List findByNamedQuery(String query);
+
+    /**
+     * Executes the specified query. Use only in case of specific Query-object
+     * manipulations.
+     * @param query
+     * @return the result list
+     */
+    List findByQuery(Query query);
+
+    /**
+     * Re-attaches the entity to the session (via session.update)
+     * @param entity
+     */
+    void attach(Object entity);
 }

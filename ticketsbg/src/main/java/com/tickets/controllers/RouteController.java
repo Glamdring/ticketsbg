@@ -8,9 +8,11 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.ListDataModel;
 
 import org.apache.myfaces.orchestra.conversation.Conversation;
+import org.richfaces.component.html.HtmlOrderingList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -19,7 +21,9 @@ import com.tickets.annotations.Action;
 import com.tickets.constants.Messages;
 import com.tickets.model.Day;
 import com.tickets.model.Route;
+import com.tickets.model.Stop;
 import com.tickets.services.RouteService;
+import com.tickets.services.StopService;
 
 @Controller("routeController")
 @Scope("conversation.manual")
@@ -32,6 +36,12 @@ public class RouteController extends BaseController implements Serializable {
     private Map<String, String> dayNames = new HashMap<String, String>();
     private Date hour;
     private int selectedHour;
+    private Stop stop;
+    private HtmlOrderingList stopsTable;
+
+    @Autowired
+    private StopService stopService;
+
 
     @Autowired
     private RouteService routeService;
@@ -75,6 +85,49 @@ public class RouteController extends BaseController implements Serializable {
         routeService.removeHour(selectedHour, route);
         selectedHour = 0;
         return "routeScreen";
+    }
+
+    @Action
+    public String addStop() {
+        stop = new Stop();
+        return "stopScreen";
+    }
+
+    @Action
+    public String editStop() {
+        stop = (Stop) stopsTable.getRowData();
+
+        return "stopScreen";
+    }
+
+    @Action
+    public String saveStop() {
+        stopService.addStopToRoute(stop, route);
+
+        return "routeScreen";
+    }
+
+    @Action
+    public String deleteStop() {
+        Stop stop = (Stop) stopsTable.getRowData();
+        stopService.delete(stop, route);
+
+        return "routeScreen";
+    }
+
+    @Action
+    public String cancel() {
+        endConversation();
+        return "routesList";
+    }
+
+    @SuppressWarnings("unused")
+    public void listReordered(ValueChangeEvent evt) {
+        if (route.getStops() != null) {
+            for (int i = 0, max = route.getStops().size(); i < max; i ++) {
+                route.getStops().get(i).setIdx(i + 1);
+            }
+        }
     }
 
     @PostConstruct
@@ -155,5 +208,21 @@ public class RouteController extends BaseController implements Serializable {
 
     public void setSelectedHour(int selectedHour) {
         this.selectedHour = selectedHour;
+    }
+
+    public Stop getStop() {
+        return stop;
+    }
+
+    public void setStop(Stop stop) {
+        this.stop = stop;
+    }
+
+    public HtmlOrderingList getStopsTable() {
+        return stopsTable;
+    }
+
+    public void setStopsTable(HtmlOrderingList stopsTable) {
+        this.stopsTable = stopsTable;
     }
 }

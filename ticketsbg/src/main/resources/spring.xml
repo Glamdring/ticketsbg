@@ -20,8 +20,10 @@
         class="org.hibernate.cfg.DefaultNamingStrategy" />
 
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
-        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
         <property name="jdbcUrl" value="${database.url}"/>
+        <property name="user" value="${database.username}"/>
+        <property name="password" value="${database.password}" />
+        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
         <property name="testConnectionOnCheckin" value="true"></property>
         <property name="testConnectionOnCheckout" value="true"></property>
         <property name="properties">
@@ -69,11 +71,9 @@
 
         <property name="hibernateProperties">
             <props>
-                <prop key="hibernate.dialect">
-                    ${jdbc.dialect}
-                </prop>
-                <!-- TODO : set to false -->
+                <prop key="hibernate.dialect">${jdbc.dialect}</prop>
                 <prop key="hibernate.show_sql">${jdbc.showSql}</prop>
+                <!-- prop key="hibernate.current_session_context_class">thread</prop-->
             </props>
         </property>
     </bean>
@@ -82,9 +82,9 @@
     <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
         <property name="sessionFactory"><ref local="sessionFactory"/></property>
     </bean>
-    <bean id="dao" class="com.tickets.dao.DaoImpl" scope="prototype">
+    <!-- bean id="dao" class="com.tickets.dao.DaoImpl" scope="prototype">
         <property name="sessionFactory" ref="sessionFactory"></property>
-    </bean>
+    </bean-->
     
     <!-- End of HibernateDaoTemplate specific beans -->
     
@@ -137,13 +137,12 @@
     
     <!-- End of EntityManager DAO implementation beans -->
     
-    
     <aop:config>
-        <aop:pointcut id="serviceMethods" expression="execution(* com.tickets.services.impl.*.*(..))"/>
+        <aop:pointcut id="serviceMethods" expression="execution(* com.tickets.services.*.*(..))"/>
         <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethods"/>
     </aop:config>
 
-    <tx:advice id="txAdvice" transaction-manager="jpaTransactionManager">
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <tx:attributes>
             <tx:method name="*" propagation="REQUIRED"/>
         </tx:attributes>

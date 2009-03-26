@@ -22,6 +22,7 @@ public class StopListConverter implements Converter {
         try {
             return routeController.getRoute().getStops().get(Integer.parseInt(str) - 1);
         } catch (Exception ex) {
+            ex.printStackTrace();
             return null;
         }
     }

@@ -1,9 +1,10 @@
 package com.tickets.dao;
 
 import org.springframework.beans.factory.SmartFactoryBean;
-import org.springframework.stereotype.Component;
 
-@Component("daoFactory")
+import com.tickets.utils.SpringContext;
+
+//@Component("daoFactory")
 public class DaoFactoryBean implements SmartFactoryBean {
 
     @Override
@@ -18,7 +19,7 @@ public class DaoFactoryBean implements SmartFactoryBean {
 
     @Override
     public Object getObject() throws Exception {
-        return new DaoImpl();
+        return SpringContext.getContext().getBean("dao");
     }
 
     @Override

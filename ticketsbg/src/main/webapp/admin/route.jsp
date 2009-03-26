@@ -69,11 +69,11 @@
 
 							<rich:panel header="${msg.stops}" styleClass="internalPanel">
 								<h:commandButton value="#{msg.addStop}"
-									action="#{stopController.addStop}" />
-								<rich:orderingList binding="#{stopController.stopsTable}"
+									action="#{routeController.addStop}" />
+								<rich:orderingList binding="#{routeController.stopsTable}"
 									var="stop" value="#{routeController.route.stops}"
 									converter="#{stopListConverter}" showButtonLabels="false"
-									valueChangeListener="#{stopController.listReordered}"
+									valueChangeListener="#{routeController.listReordered}"
 									listWidth="500" listHeight="150">
 
 									<rich:column>
@@ -98,14 +98,14 @@
 										<f:facet name="header">
 											<h:outputText value="" id="col4" />
 										</f:facet>
-										<h:commandLink action="#{stopController.edit}"
+										<h:commandLink action="#{routeController.editStop}"
 											title="#{msg.edit}">
 											<h:graphicImage value="/images/edit.png"
 												style="width:16; height:16; border-style: none;"
 												alt="#{msg.edit}" title="#{msg.edit}" />
 										</h:commandLink>
 										<h:outputText value="&#160;" />
-										<h:commandLink action="#{stopController.delete}"
+										<h:commandLink action="#{routeController.deleteStop}"
 											title="#{msg.remove}">
 											<h:graphicImage value="/images/delete.png"
 												style="width:16; height:16; border-style: none;"
@@ -121,7 +121,7 @@
 							value="#{msg.save}">
 							<cust:defaultAction />
 						</h:commandButton>
-						<h:commandButton action="routesList" value="#{msg.cancel}" />
+						<h:commandButton action="#{routeController.cancel}" value="#{msg.cancel}" />
 					</rich:panel>
 				</h:panelGrid></div>
 			</h:form>

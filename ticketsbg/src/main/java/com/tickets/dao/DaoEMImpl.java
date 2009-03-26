@@ -24,12 +24,7 @@ public class DaoEMImpl<E> implements Dao<E> {
 
     }
 
-    public void delete(E e) {
-        entityManager.remove(e);
-
-    }
-
-    public void deleteObject(Object object) {
+    public void delete(Object object) {
         entityManager.remove(object);
 
     }
@@ -106,26 +101,12 @@ public class DaoEMImpl<E> implements Dao<E> {
     }
 
 
-    public E merge(E e) {
-        return entityManager.merge(e);
-    }
-
-
-    public Object mergeIfNotContained(Object o) {
-        if (!entityManager.contains(o))
-            return entityManager.merge(o);
-
-        return o;
-    }
-
-
-    public E save(E e) {
-        if (!entityManager.contains(e))
-            e = merge(e);
+    public void persist(Object e) {
+        //TODO make work
+        if (entityManager.contains(e))
+            e = entityManager.merge(e);
         else
             entityManager.persist(e);
-
-        return e;
     }
 
 
@@ -135,5 +116,12 @@ public class DaoEMImpl<E> implements Dao<E> {
         return o;
     }
 
+    public List findByQuery(org.hibernate.Query query) {
+        return query.list();
+    }
 
+    @Override
+    public void attach(Object entity) {
+        entityManager.persist(entity);
+    }
 }

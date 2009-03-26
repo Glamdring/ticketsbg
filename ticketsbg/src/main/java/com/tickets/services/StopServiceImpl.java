@@ -8,7 +8,6 @@ import com.tickets.model.Stop;
 @Service("stopService")
 public class StopServiceImpl extends BaseService<Stop> implements StopService {
 
-
     public Stop addStopToRoute(Stop stop, Route route) {
 
         if (stop.getIdx() == 0) {
@@ -23,5 +22,15 @@ public class StopServiceImpl extends BaseService<Stop> implements StopService {
         }
 
         return stop;
+    }
+
+    @Override
+    public void delete(Stop stop, Route route) {
+        route.getStops().remove(stop);
+
+        int i = 1;
+        for (Stop s : route.getStops()) {
+            s.setIdx(i++);
+        }
     }
 }

@@ -4,45 +4,36 @@ import java.io.Serializable;
 import java.sql.Connection;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.springframework.orm.hibernate3.HibernateCallback;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.hibernate.SessionFactory;
+import org.springframework.stereotype.Repository;
 
 /**
- * Dao - defined in the spring.xml
  * @author Bozhidar Bozhanov
  *
  * @param <E>
  */
-public class DaoImpl<E> extends HibernateDaoSupport implements Dao<E> {
+@Repository("dao")
+public class DaoImpl<E> implements Dao<E> {
 
-    public void delete(E e) {
-        deleteObject(e);
-    }
+    @Resource(name="sessionFactory")
+    private SessionFactory sessionFactory;
 
     @SuppressWarnings("unchecked")
     public <T extends Serializable> void delete(Class clazz, T id) {
-        getHibernateTemplate().delete(getById(clazz, id));
+        getSession().delete(getById(clazz, id));
     }
 
     @SuppressWarnings("unchecked")
     public <T> T getById(Class<T> clazz, Serializable id) {
-        return (T) getHibernateTemplate().get(clazz, id);
+        return (T) getSession().get(clazz, id);
     }
 
-    public E save(E e) {
-        if (!getHibernateTemplate().contains(e))
-            e = merge(e);
-
-        getHibernateTemplate().saveOrUpdate(e);
-        return e;
-    }
-
-    @SuppressWarnings("unchecked")
-    public E merge(E e) {
-        e = (E) getHibernateTemplate().merge(e);
-        return e;
+    public void persist(Object o) {
+        getSession().saveOrUpdate(o);
     }
 
     public List findByQuery(String query, String[] names, Object[] args) {
@@ -52,73 +43,75 @@ public class DaoImpl<E> extends HibernateDaoSupport implements Dao<E> {
         if (args == null)
             args = new Object[] {};
 
-        return getHibernateTemplate().findByNamedParam(query, names, args);
+        Query q = getSession().createQuery(query);
+        for (int i = 0; i < names.length; i ++) {
+            q.setParameter(names[i], args[i]);
+        }
+
+        return q.list();
     }
 
     public List findByNamedQuery(String name, String[] names, Object[] args) {
-        return getHibernateTemplate().findByNamedQueryAndNamedParam(name,
-                names, args);
+        if (names == null)
+            names = new String[] {};
+
+        if (args == null)
+            args = new Object[] {};
+
+         Query q = getSession().getNamedQuery(name);
+         for (int i = 0; i < names.length; i ++) {
+             q.setParameter(names[i], args[i]);
+         }
+
+         return q.list();
     }
 
-    public Object saveObject(Object o) {
-        if (!getHibernateTemplate().contains(o))
-            o = getHibernateTemplate().merge(o);
-
-        getHibernateTemplate().saveOrUpdate(o);
-        return o;
+    public void evict(Object o) {
+        getSession().evict(o);
     }
 
-    public Object mergeIfNotContained(Object o) {
-        if (!getHibernateTemplate().contains(o))
-            o = getHibernateTemplate().merge(o);
-
-        return o;
+    public void delete(Object object) {
+        getSession().delete(object);
     }
 
-     public void evict(Object o) {
-         getHibernateTemplate().evict(o);
-     }
+    public int executeQuery(String query, String[] names, Object[] args) {
+        if (names == null)
+            names = new String[] {};
 
-     public void deleteObject(Object object) {
-         getHibernateTemplate().delete(object);
-     }
+        if (args == null)
+            args = new Object[] {};
 
-     public int executeQuery(final String query, final String[] names,
-             final Object[] args) {
-         HibernateCallback cb = new HibernateCallback() {
-             @Override
-             public Object doInHibernate(Session session) {
-                 Query q = session.createQuery(query);
-                 for (int j = 0; j < args.length; j++) {
-                     q.setParameter(names[j], args[j]);
-                 }
-                 return q.executeUpdate();
-             }
-         };
+        Query q = getSession().getNamedQuery(query);
+        for (int i = 0; i < names.length; i ++) {
+            q.setParameter(names[i], args[i]);
+        }
 
-         return (Integer) getHibernateTemplate().execute(cb);
-     }
+        return q.executeUpdate();
+    }
 
-     @SuppressWarnings("deprecation")
+    @SuppressWarnings("deprecation")
     public Connection getConnection() {
-         return getSession().connection();
-     }
+        return getSession().connection();
+    }
 
-     /**
-      * Convinient method for calling no-param queries
-      * @param query
-      * @return result list
-      */
-      public List findByQuery(String query) {
-          return findByQuery(query, null, null);
-      }
+    public List findByQuery(String query) {
+        return findByQuery(query, null, null);
+    }
 
-      /**
-       * Convinient method for calling no-param named queries
-       * @param query
-       * @return result list
-       */
-      public List findByNamedQuery(String query) {
-          return findByNamedQuery(query, null, null);
-      }
+    public List findByNamedQuery(String query) {
+        return findByNamedQuery(query, null, null);
+    }
+
+    public List findByQuery(Query query) {
+        return query.list();
+    }
+
+    public void attach(Object entity) {
+        getSession().update(entity);
+    }
+
+    private Session getSession() {
+        return sessionFactory.getCurrentSession();
+    }
+
 }

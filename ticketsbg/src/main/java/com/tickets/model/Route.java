@@ -17,9 +17,9 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-import org.hibernate.annotations.IndexColumn;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.collection.PersistentBag;
 
 @Entity
 @Table(name = "routes")
@@ -52,7 +52,7 @@ public class Route extends DataObject implements Serializable {
     private List<RouteDay> routeDays = new ArrayList<RouteDay>();
 
     @OneToMany(mappedBy="route")
-    @IndexColumn(name="idx", base=1)
+    @OrderBy("idx")
     @LazyCollection(LazyCollectionOption.FALSE)
     @Cascade({CascadeType.ALL, CascadeType.DELETE_ORPHAN})
     private List<Stop> stops = new ArrayList<Stop>();
@@ -110,7 +110,6 @@ public class Route extends DataObject implements Serializable {
     }
 
     public void addRouteDay(RouteDay rd) {
-
         rd.setRoute(this);
         routeDays.add(rd);
     }
@@ -120,17 +119,18 @@ public class Route extends DataObject implements Serializable {
 
     @Deprecated
     public void setStops(List<Stop> stops) {
-        this.stops = stops;
+        //Not acting in case MyFaces calls it
+        if (stops instanceof PersistentBag)
+            this.stops = stops;
+
     }
 
     public void addStop(Stop stop) {
-
         stop.setRoute(this);
         stops.add(stop);
     }
 
     public void addHour(RouteHour hour) {
-
         hour.setRoute(this);
         routeHours.add(hour);
     }

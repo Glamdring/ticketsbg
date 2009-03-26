@@ -102,7 +102,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
 
         user.setRegisteredTimestamp(System.currentTimeMillis());
 
-        getDao().save(user);
+        getDao().persist(user);
         try {
             HtmlEmail email = getPreconfiguredMail();
             email.addTo(user.getEmail());
@@ -123,7 +123,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
     }
 
     @SuppressWarnings("unchecked")
-    public User activateUserWithCode(String code) throws UserException {
+    public void activateUserWithCode(String code) throws UserException {
         List<User> list = getDao().findByQuery("select u from User u "
                 + "where u.activationCode=:code", new String[] {"code"},
                 new Object[] {code});
@@ -132,7 +132,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
             User user = list.get(0);
             if (!user.isActive()) {
                 user.setActive(true);
-                return getDao().save(user);
+                getDao().persist(user);
             }
             throw UserException.USER_ALREADY_ACTIVE;
         }
@@ -176,7 +176,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
                 mail.setHtmlMsg(Messages.getString("temp.password.email.content",
                         user.getName(), tempPassword));
                 mail.send();
-                getDao().save(user);
+                getDao().persist(user);
             } catch (EmailException eex) {
                 log.error("Mail server not configured", eex);
                 throw UserException.UNEXPECTED_PROBLEM;
@@ -189,7 +189,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
     public void changePassword(String password, User user) {
         user.setPassword(hash(password));
         user.setTemporaryPassword("");
-        getDao().save(user);
+        getDao().persist(user);
     }
 
     private HtmlEmail getPreconfiguredMail() {

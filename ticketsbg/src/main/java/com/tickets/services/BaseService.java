@@ -22,7 +22,7 @@ public abstract class BaseService<E> implements Service<E> {
 
     protected static Logger log = Logger.getLogger(BaseService.class);
 
-    @Resource(name="daoFactory")
+    @Resource(name="dao")
     private Dao<E> dao;
 
     public void setDao(Dao<E> dao){
@@ -33,12 +33,11 @@ public abstract class BaseService<E> implements Service<E> {
         return dao;
     }
 
-    public E save(E e) throws RuntimeException {
+    public void save(E e) throws RuntimeException {
         try {
-            return getDao().save(e);
+            getDao().persist(e);
         } catch (Exception ex) {
             log.error("Error saving", ex);
-            return e;
         }
     }
 
@@ -76,12 +75,11 @@ public abstract class BaseService<E> implements Service<E> {
         return result;
     }
 
-    public Object saveObject(Object e) throws RuntimeException {
+    public void saveObject(Object e) throws RuntimeException {
         try {
-            return getDao().saveObject(e);
+            getDao().persist(e);
         } catch (Exception ex) {
             log.error("Error saving", ex);
-            return e;
         }
     }
 }

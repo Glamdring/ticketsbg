@@ -14,4 +14,12 @@ public interface StopService extends Service<Stop> {
      * @return the modified stop (with the set idx)
      */
     Stop addStopToRoute(Stop stop, Route route);
+
+    /**
+     * Removes a stop and sets the order of the remaining ones
+     *
+     * @param stop
+     * @param route
+     */
+    void delete(Stop stop, Route route);
 }

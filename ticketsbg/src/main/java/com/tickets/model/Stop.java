@@ -1,6 +1,5 @@
 package com.tickets.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,7 +29,7 @@ public class Stop implements java.io.Serializable {
     private int stopId;
 
   //@Index(name="routeIndex")
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name="routeId", nullable=false)
     private Route route;
 

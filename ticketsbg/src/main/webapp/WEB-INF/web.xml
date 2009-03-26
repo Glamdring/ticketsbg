@@ -67,7 +67,12 @@
         <listener-class>
             org.apache.myfaces.orchestra.conversation.servlet.ConversationManagerSessionListener
         </listener-class>
-    </listener> 
+    </listener>
+    <listener>
+        <listener-class>
+            com.tickets.utils.StartupListener
+        </listener-class>
+    </listener>  
 
     <filter>
         <display-name>RichFaces Filter</display-name>
