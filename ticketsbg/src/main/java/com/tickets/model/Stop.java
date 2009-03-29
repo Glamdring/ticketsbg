@@ -1,5 +1,7 @@
 package com.tickets.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,13 +24,12 @@ import javax.persistence.Table;
             query = "SELECT s FROM Stop s WHERE s.id.route=:route"
     )
 })
-public class Stop implements java.io.Serializable {
+public class Stop implements Serializable, Comparable<Stop> {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private int stopId;
 
-  //@Index(name="routeIndex")
     @ManyToOne
     @JoinColumn(name="routeId", nullable=false)
     private Route route;
@@ -99,6 +100,18 @@ public class Stop implements java.io.Serializable {
 
     public void setTimeToDeparture(int timeToDeparture) {
         this.timeToDeparture = timeToDeparture;
+    }
+
+
+    @Override
+    public int compareTo(Stop stop) {
+        if (stop.getIdx() > this.getIdx())
+            return -1;
+
+        if (stop.getIdx() < this.getIdx())
+            return 1;
+
+        return 0;
     }
 
 }

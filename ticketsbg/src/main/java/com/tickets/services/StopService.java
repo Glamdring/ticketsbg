@@ -1,5 +1,8 @@
 package com.tickets.services;
 
+import org.richfaces.model.ListRowKey;
+
+import com.tickets.model.Price;
 import com.tickets.model.Route;
 import com.tickets.model.Stop;
 
@@ -22,4 +25,18 @@ public interface StopService extends Service<Stop> {
      * @param route
      */
     void delete(Stop stop, Route route);
+
+    /**
+     * Manages reordering of the stops list
+     * @param route
+     */
+    void listReoredered(Route route);
+
+    /**
+     * Gets the Price for the following path in the tree
+     * @param rowKey
+     * @param route
+     * @return price
+     */
+    Price getPrice(ListRowKey rowKey, Route route);
 }

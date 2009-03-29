@@ -57,6 +57,12 @@ public class Route extends DataObject implements Serializable {
     @Cascade({CascadeType.ALL, CascadeType.DELETE_ORPHAN})
     private List<Stop> stops = new ArrayList<Stop>();
 
+
+    @OneToMany(mappedBy="route")
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @Cascade({CascadeType.ALL})
+    private List<Price> prices = new ArrayList<Price>();
+
     public Route() {
     }
 
@@ -113,6 +119,15 @@ public class Route extends DataObject implements Serializable {
         rd.setRoute(this);
         routeDays.add(rd);
     }
+
+    public List<Price> getPrices() {
+        return prices;
+    }
+
+    public void setPrices(List<Price> prices) {
+        this.prices = prices;
+    }
+
     public List<Stop> getStops() {
         return stops;
     }
@@ -133,6 +148,11 @@ public class Route extends DataObject implements Serializable {
     public void addHour(RouteHour hour) {
         hour.setRoute(this);
         routeHours.add(hour);
+    }
+
+    public void addPrice(Price price) {
+        price.setRoute(this);
+        prices.add(price);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.tickets.controllers;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -13,6 +14,11 @@ import javax.faces.model.ListDataModel;
 
 import org.apache.myfaces.orchestra.conversation.Conversation;
 import org.richfaces.component.html.HtmlOrderingList;
+import org.richfaces.component.html.HtmlTree;
+import org.richfaces.event.NodeSelectedEvent;
+import org.richfaces.model.ListRowKey;
+import org.richfaces.model.TreeNode;
+import org.richfaces.model.TreeNodeImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -20,6 +26,7 @@ import org.springframework.stereotype.Controller;
 import com.tickets.annotations.Action;
 import com.tickets.constants.Messages;
 import com.tickets.model.Day;
+import com.tickets.model.Price;
 import com.tickets.model.Route;
 import com.tickets.model.Stop;
 import com.tickets.services.RouteService;
@@ -38,6 +45,10 @@ public class RouteController extends BaseController implements Serializable {
     private int selectedHour;
     private Stop stop;
     private HtmlOrderingList stopsTable;
+    private TreeNode<Stop> pricesTreeData;
+    private Price price;
+    private BigDecimal priceValue;
+    private BigDecimal twoWayPriceValue;
 
     @Autowired
     private StopService stopService;
@@ -57,6 +68,7 @@ public class RouteController extends BaseController implements Serializable {
     public String edit(){
         route = (Route) routesModel.getRowData();
         daysPickList = routeService.getDaysList(route);
+        refreshTreeModel();
         return "routeScreen";
     }
 
@@ -96,14 +108,13 @@ public class RouteController extends BaseController implements Serializable {
     @Action
     public String editStop() {
         stop = (Stop) stopsTable.getRowData();
-
         return "stopScreen";
     }
 
     @Action
     public String saveStop() {
         stopService.addStopToRoute(stop, route);
-
+        listReordered(null);
         return "routeScreen";
     }
 
@@ -121,13 +132,51 @@ public class RouteController extends BaseController implements Serializable {
         return "routesList";
     }
 
+    @Action
+    public String savePrice() {
+        price.setPrice(priceValue);
+        price.setTwoWayPrice(twoWayPriceValue);
+        return null;
+    }
+
     @SuppressWarnings("unused")
     public void listReordered(ValueChangeEvent evt) {
-        if (route.getStops() != null) {
-            for (int i = 0, max = route.getStops().size(); i < max; i ++) {
-                route.getStops().get(i).setIdx(i + 1);
+        //TODO : skip the multiple events!
+        stopService.listReoredered(route);
+        refreshTreeModel();
+    }
+
+    public void nodeSelected(NodeSelectedEvent evt) {
+        if (evt.getSource() instanceof HtmlTree) {
+            HtmlTree tree = (HtmlTree) evt.getSource();
+            ListRowKey rowKey = (ListRowKey) tree.getRowKey();
+            if (rowKey.depth() == 1) {
+                //TODO: expand
+            } else {
+                price = stopService.getPrice(rowKey, route);
+                priceValue = new BigDecimal(price.getPrice().doubleValue());
+                twoWayPriceValue = new BigDecimal(price.getTwoWayPrice().doubleValue());
             }
         }
+    }
+
+    public void refreshTreeModel() {
+        pricesTreeData = new TreeNodeImpl<Stop>();
+        for (int i = 0; i < route.getStops().size() - 1; i ++) {
+            TreeNode<Stop> node = new TreeNodeImpl<Stop>();
+            node.setData(route.getStops().get(i));
+            //the root node is the parrent
+            node.setParent(pricesTreeData);
+            pricesTreeData.addChild("start" + node.getData().getStopId(), node);
+
+            for (int j = i + 1; j < route.getStops().size(); j ++) {
+                TreeNode<Stop> subNode = new TreeNodeImpl<Stop>();
+                subNode.setData(route.getStops().get(j));
+                subNode.setParent(node);
+                node.addChild("end" + subNode.getData().getStopId(), subNode);
+            }
+        }
+
     }
 
     @PostConstruct
@@ -224,5 +273,37 @@ public class RouteController extends BaseController implements Serializable {
 
     public void setStopsTable(HtmlOrderingList stopsTable) {
         this.stopsTable = stopsTable;
+    }
+
+    public TreeNode<Stop> getPricesTreeData() {
+        return pricesTreeData;
+    }
+
+    public void setPricesTreeData(TreeNode<Stop> pricesTreeData) {
+        this.pricesTreeData = pricesTreeData;
+    }
+
+    public Price getPrice() {
+        return price;
+    }
+
+    public void setPrice(Price price) {
+        this.price = price;
+    }
+
+    public BigDecimal getPriceValue() {
+        return priceValue;
+    }
+
+    public void setPriceValue(BigDecimal priceValue) {
+        this.priceValue = priceValue;
+    }
+
+    public BigDecimal getTwoWayPriceValue() {
+        return twoWayPriceValue;
+    }
+
+    public void setTwoWayPriceValue(BigDecimal twoWayPriceValue) {
+        this.twoWayPriceValue = twoWayPriceValue;
     }
 }

@@ -22,5 +22,4 @@ public interface RouteService extends Service<Route> {
     void addHourToRoute(Date hour, Route route);
 
     void removeHour(int hourId, Route route);
-
 }

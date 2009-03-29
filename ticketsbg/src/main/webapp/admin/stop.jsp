@@ -16,24 +16,25 @@
 				<table>
 					<tr>
 						<td><h:outputLabel value="#{msg.stopName}" for="stopName" /></td>
-						<td><h:inputText value="#{stopController.stop.name}"
+						<td><h:inputText value="#{routeController.stop.name}"
 							id="stopName" /></td>
 					</tr>
 					<tr>
 						<td><h:outputLabel value="#{msg.timeToArrival}" /></td>
 						<td><rich:inputNumberSpinner maxValue="1000"
-							value="${stopController.stop.timeToArrival}" /></td>
+							value="${routeController.stop.timeToArrival}" /></td>
 					</tr>
 					<tr>
 						<td><h:outputLabel value="#{msg.timeToDeparture}" /></td>
 						<td><rich:inputNumberSpinner maxValue="1000"
-							value="${stopController.stop.timeToDeparture}" /></td>
+							value="${routeController.stop.timeToDeparture}" /></td>
 					</tr>
 					<tr>
 						<td colspan="2"><h:commandButton
-							action="#{stopController.save}" value="#{msg.save}">
+							action="#{routeController.saveStop}" value="#{msg.save}">
 							<cust:defaultAction />
-						</h:commandButton> <h:commandButton action="routeScreen" value="#{msg.cancel}" /></td>
+						</h:commandButton>
+						<h:commandButton action="routeScreen" value="#{msg.cancel}" /></td>
 					</tr>
 				</table>
 			</h:form>

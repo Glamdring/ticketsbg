@@ -32,8 +32,8 @@
 							<rich:toolTip value="#{msg.routeNameHint}" followMouse="true" />
 						</a4j:outputPanel>
 						<h:inputText value="#{routeController.route.name}" id="routeName" />
-
 					</rich:panel>
+					
 					<rich:panel header="#{msg.routeDetailsHeader}">
 						<h:panelGrid columns="3" columnClasses="gridContent">
 							<rich:panel header="#{msg.daysOfWeek}" styleClass="internalPanel">
@@ -116,12 +116,58 @@
 							</rich:panel>
 						</h:panelGrid>
 					</rich:panel>
+
+					<rich:panel header="#{msg.prices}">
+						<h:panelGrid columns="3" columnClasses="gridContent">
+							<rich:panel styleClass="internalPanel">
+								<rich:tree switchType="client" ajaxSubmitSelection="true" style="width:300px"
+									value="#{routeController.pricesTreeData}" var="stop"
+									nodeFace="node"
+									nodeSelectListener="#{routeController.nodeSelected}">
+									
+									<rich:treeNode type="node" reRender="priceField,twoWayPriceField">
+										<h:outputText value="#{stop.name}" />
+									</rich:treeNode>
+								</rich:tree>
+							</rich:panel>
+							<rich:panel styleClass="internalPanel">
+								<h:panelGrid columns="2" styleClass="dr-pnl-b" style="padding:0px; margin:0px;">
+								    <a4j:outputPanel>
+									   <h:outputLabel value="#{msg.oneWay}:" for="priceField" />
+									   <rich:toolTip value="#{msg.zeroPriceTip}" followMouse="true" />
+								    </a4j:outputPanel>
+									<h:inputText value="#{routeController.priceValue}" id="priceField">
+										<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+									</h:inputText>
+									
+									<a4j:outputPanel>
+							    	    <h:outputLabel value="#{msg.twoWay}:" for="twoWayPriceField" />
+							    	    <rich:toolTip value="#{msg.zeroPriceTip}" followMouse="true" />
+						    	    </a4j:outputPanel>
+									<h:inputText value="#{routeController.twoWayPriceValue}" id="twoWayPriceField">
+										<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+									</h:inputText>
+
+									<a4j:commandButton value="#{msg.save}"
+										action="#{routeController.savePrice}" />
+								</h:panelGrid>
+							</rich:panel>
+                            <rich:panel styleClass="internalPanel">
+                                <h:outputLabel for="seats" value="#{msg.seats}: " />
+                                <h:inputText value="#{routeController.route.seats}" id="seats">
+                                    <f:convertNumber maxFractionDigits="0"/>
+                                </h:inputText>
+                            </rich:panel>							
+						</h:panelGrid>
+					</rich:panel>
+
 					<rich:panel>
 						<h:commandButton action="#{routeController.save}"
-							value="#{msg.save}">
+							value="#{msg.save}" immediate="true">
 							<cust:defaultAction />
 						</h:commandButton>
-						<h:commandButton action="#{routeController.cancel}" value="#{msg.cancel}" />
+						<h:commandButton action="#{routeController.cancel}"
+							value="#{msg.cancel}" immediate="true" />
 					</rich:panel>
 				</h:panelGrid></div>
 			</h:form>
