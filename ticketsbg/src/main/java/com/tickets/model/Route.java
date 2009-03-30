@@ -19,7 +19,6 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
-import org.hibernate.collection.PersistentBag;
 
 @Entity
 @Table(name = "routes")
@@ -135,9 +134,8 @@ public class Route extends DataObject implements Serializable {
     @Deprecated
     public void setStops(List<Stop> stops) {
         //Not acting in case MyFaces calls it
-        if (stops instanceof PersistentBag)
+        //if (stops instanceof PersistentBag)
             this.stops = stops;
-
     }
 
     public void addStop(Stop stop) {

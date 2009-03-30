@@ -124,12 +124,13 @@ public class StopServiceImpl extends BaseService<Stop> implements StopService {
         int startStopId = Integer.parseInt(((String) keys.get(0)).replace("start", ""));
         int endStopId = Integer.parseInt(((String) keys.get(1)).replace("end", ""));
 
+        return getPrice(startStopId, endStopId, route);
+    }
+
+    @Override
+    public Price getPrice(int startStopId, int endStopId, Route route) {
         Stop startStop = getStop(startStopId, route.getStops());
         Stop endStop = getStop(endStopId, route.getStops());
-
-//        List result = getDao().findByNamedQuery("Price.get",
-//                new String[] {"startStop", "endStop", "route"},
-//                new Object[] {startStop, endStop, route});
 
         Price searchedPrice = null;
 

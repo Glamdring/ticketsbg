@@ -29,6 +29,7 @@ public interface StopService extends Service<Stop> {
     /**
      * Manages reordering of the stops list
      * @param route
+     * @param stops
      */
     void listReoredered(Route route);
 
@@ -39,4 +40,13 @@ public interface StopService extends Service<Stop> {
      * @return price
      */
     Price getPrice(ListRowKey rowKey, Route route);
+
+    /**
+     * Gets the price for the following stops
+     * @param startStopId
+     * @param endStopId
+     * @param route
+     * @return price
+     */
+    Price getPrice(int startStopId, int endStopId, Route route);
 }

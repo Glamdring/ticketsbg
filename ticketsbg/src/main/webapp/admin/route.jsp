@@ -120,15 +120,28 @@
 					<rich:panel header="#{msg.prices}">
 						<h:panelGrid columns="3" columnClasses="gridContent">
 							<rich:panel styleClass="internalPanel">
-								<rich:tree switchType="client" ajaxSubmitSelection="true" style="width:300px"
-									value="#{routeController.pricesTreeData}" var="stop"
-									nodeFace="node"
-									nodeSelectListener="#{routeController.nodeSelected}">
-									
-									<rich:treeNode type="node" reRender="priceField,twoWayPriceField">
-										<h:outputText value="#{stop.name}" />
-									</rich:treeNode>
-								</rich:tree>
+								<rich:tree switchType="client" ajaxSubmitSelection="true" style="width:300px;"
+                                    value="#{routeController.pricesTreeData}" var="data"
+                                    nodeFace="#{data.price == null ? 'start' : 'end'}" id="pricesTree"
+                                    nodeSelectListener="#{routeController.nodeSelected}"
+                                    adviseNodeOpened="#{routeController.getExpandedNodes}">
+                                    
+                                    <rich:treeNode type="start" reRender="priceField,twoWayPriceField">
+                                        <div style="font-size: 11px;">
+	                                        <h:outputText value="#{msg.fromStop} " />
+	                                        <h:outputText value="#{data.stop.name}" />
+                                        </div>
+                                    </rich:treeNode>
+                                    <rich:treeNode type="end" reRender="priceField,twoWayPriceField">
+                                        <div style="font-size: 11px;">
+                                            <h:outputText value="#{msg.toStop} " />
+	                                        <h:outputText value="#{data.stop.name}" />
+	                                        <h:outputText value=" (" />
+	                                        <h:outputText value="#{data.price.price}" converter="#{currencyConverter}" />
+	                                        <h:outputText value=")" />
+	                                    </div>
+                                    </rich:treeNode>
+                                </rich:tree>
 							</rich:panel>
 							<rich:panel styleClass="internalPanel">
 								<h:panelGrid columns="2" styleClass="dr-pnl-b" style="padding:0px; margin:0px;">
@@ -148,8 +161,10 @@
 										<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 									</h:inputText>
 
+                                    <h:outputText />
 									<a4j:commandButton value="#{msg.save}"
 										action="#{routeController.savePrice}" />
+									
 								</h:panelGrid>
 							</rich:panel>
                             <rich:panel styleClass="internalPanel">
@@ -163,11 +178,11 @@
 
 					<rich:panel>
 						<h:commandButton action="#{routeController.save}"
-							value="#{msg.save}" immediate="true">
+							value="#{msg.save}">
 							<cust:defaultAction />
 						</h:commandButton>
 						<h:commandButton action="#{routeController.cancel}"
-							value="#{msg.cancel}" immediate="true" />
+							value="#{msg.cancel}" />
 					</rich:panel>
 				</h:panelGrid></div>
 			</h:form>
