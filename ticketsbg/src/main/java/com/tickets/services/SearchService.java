@@ -1,12 +1,16 @@
 package com.tickets.services;
 
 import java.util.Date;
+import java.util.List;
+
+import com.tickets.model.Run;
 
 public interface SearchService {
 
-    void search(String startStop,
+    List<Run> search(String startStop,
             String endStop,
             Integer dayId,
-            Date fromTime,
-            Date toTime);
+            Date date,
+            int fromHour,
+            int toHour);
 }

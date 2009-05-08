@@ -4,12 +4,11 @@ import java.io.File;
 
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
-import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
 
 import com.tickets.model.User;
 import com.tickets.utils.SpringContext;
 
-public class UserSerivceTest extends AbstractDependencyInjectionSpringContextTests {
+public class UserSerivceTest {
 
     @Test
     @SuppressWarnings({ "unused" })

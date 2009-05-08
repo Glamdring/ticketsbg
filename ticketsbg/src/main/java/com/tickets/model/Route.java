@@ -62,6 +62,15 @@ public class Route extends DataObject implements Serializable {
     @Cascade({CascadeType.ALL})
     private List<Price> prices = new ArrayList<Price>();
 
+
+    @OneToMany(mappedBy="route")
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @Cascade({CascadeType.ALL})
+    private List<Run> runs = new ArrayList<Run>();
+
+    @Column
+    private int publishedRunsPeriod = 30;
+
     public Route() {
     }
 
@@ -151,6 +160,28 @@ public class Route extends DataObject implements Serializable {
     public void addPrice(Price price) {
         price.setRoute(this);
         prices.add(price);
+    }
+
+    public int getPublishedRunsPeriod() {
+        return publishedRunsPeriod;
+    }
+
+    public void setPublishedRunsPeriod(int publishedRunsPeriod) {
+        this.publishedRunsPeriod = publishedRunsPeriod;
+    }
+
+    public List<Run> getRuns() {
+        return runs;
+    }
+
+    @Deprecated
+    public void setRuns(List<Run> runs) {
+        this.runs = runs;
+    }
+
+    public void addRun(Run run) {
+        run.setRoute(this);
+        runs.add(run);
     }
 
 }
