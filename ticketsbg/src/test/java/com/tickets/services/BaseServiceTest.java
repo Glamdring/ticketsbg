@@ -14,7 +14,7 @@ import org.springframework.context.ApplicationContext;
 import com.tickets.dao.Dao;
 import com.tickets.utils.SpringContext;
 
-public abstract class BaseServiceText {
+public abstract class BaseServiceTest {
 
     private static ApplicationContext ctx;
 
