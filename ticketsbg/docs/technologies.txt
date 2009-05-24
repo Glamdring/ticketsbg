@@ -1,5 +1,5 @@
-GWT
+JSF
+RichFaces
 Hibernate
-Spring MVC
 Spring
 JasperReport
