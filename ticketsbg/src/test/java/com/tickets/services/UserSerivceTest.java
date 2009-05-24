@@ -19,12 +19,7 @@ public class UserSerivceTest {
         ApplicationContext a = SpringContext.getContext();
 
 
-        UserServiceImpl usrv = (UserServiceImpl) a.getBean("userService");
-
-//        Dao<User> dao = (Dao<User>) a.getBean("dao");
-//        Object o = a.getBean("dao");
-//
-//        assertTrue(usrv.getDao() != null);
+        UserService usrv = (UserService) a.getBean("userService");
 
         User user = new User();
         user.setUsername("Bozhidar Bozhanov");

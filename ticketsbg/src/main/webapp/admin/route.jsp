@@ -11,15 +11,15 @@
 	template="admin_template.jsp">
 	<ui:define name="header">
 		<style>
-			.gridContent {
-				vertical-align: top;
-			}
-			
-			.internalPanel {
-				height: 230px;
-				text-align: center;
-			}
-		</style>
+.gridContent {
+	vertical-align: top;
+}
+
+.internalPanel {
+	height: 230px;
+	text-align: center;
+}
+</style>
 	</ui:define>
 	<ui:define name="body">
 		<f:view>
@@ -33,7 +33,7 @@
 						</a4j:outputPanel>
 						<h:inputText value="#{routeController.route.name}" id="routeName" />
 					</rich:panel>
-					
+
 					<rich:panel header="#{msg.routeDetailsHeader}">
 						<h:panelGrid columns="3" columnClasses="gridContent">
 							<rich:panel header="#{msg.daysOfWeek}" styleClass="internalPanel">
@@ -68,13 +68,14 @@
 							</rich:panel>
 
 							<rich:panel header="${msg.stops}" styleClass="internalPanel">
-								<h:commandButton value="#{msg.addStop}"
-									action="#{routeController.addStop}" />
+								<a4j:commandButton value="#{msg.addStop}"
+									action="#{routeController.addStop}" oncomplete="#{rich:component('stopPanel')}.show()" />
+									
 								<rich:orderingList binding="#{routeController.stopsTable}"
 									var="stop" value="#{routeController.route.stops}"
 									converter="#{stopListConverter}" showButtonLabels="false"
 									valueChangeListener="#{routeController.listReordered}"
-									listWidth="500" listHeight="150">
+									listWidth="500" listHeight="150" id="stopsTable">
 
 									<rich:column>
 										<f:facet name="header">
@@ -98,12 +99,16 @@
 										<f:facet name="header">
 											<h:outputText value="" id="col4" />
 										</f:facet>
-										<h:commandLink action="#{routeController.editStop}"
+										<a4j:commandLink
+											oncomplete="#{rich:component('stopPanel')}.show()"
 											title="#{msg.edit}">
 											<h:graphicImage value="/images/edit.png"
 												style="width:16; height:16; border-style: none;"
 												alt="#{msg.edit}" title="#{msg.edit}" />
-										</h:commandLink>
+
+											<f:setPropertyActionListener value="#{stop}"
+												target="#{routeController.stop}" />
+										</a4j:commandLink>
 										<h:outputText value="&#160;" />
 										<h:commandLink action="#{routeController.deleteStop}"
 											title="#{msg.remove}">
@@ -117,62 +122,66 @@
 						</h:panelGrid>
 					</rich:panel>
 
-					<rich:panel header="#{msg.prices}">
+					<rich:panel header="#{msg.prices}"
+						rendered="#{routeController.route.id > 0}">
 						<h:panelGrid columns="3" columnClasses="gridContent">
 							<rich:panel styleClass="internalPanel">
-								<rich:tree switchType="client" ajaxSubmitSelection="true" style="width:300px;"
-                                    value="#{routeController.pricesTreeData}" var="data"
-                                    nodeFace="#{data.price == null ? 'start' : 'end'}" id="pricesTree"
-                                    nodeSelectListener="#{routeController.nodeSelected}"
-                                    adviseNodeOpened="#{routeController.getExpandedNodes}">
-                                    
-                                    <rich:treeNode type="start" reRender="priceField,twoWayPriceField">
-                                        <div style="font-size: 11px;">
-	                                        <h:outputText value="#{msg.fromStop} " />
-	                                        <h:outputText value="#{data.stop.name}" />
-                                        </div>
-                                    </rich:treeNode>
-                                    <rich:treeNode type="end" reRender="priceField,twoWayPriceField">
-                                        <div style="font-size: 11px;">
-                                            <h:outputText value="#{msg.toStop} " />
-	                                        <h:outputText value="#{data.stop.name}" />
-	                                        <h:outputText value=" (" />
-	                                        <h:outputText value="#{data.price.price}" converter="#{currencyConverter}" />
-	                                        <h:outputText value=")" />
-	                                    </div>
-                                    </rich:treeNode>
-                                </rich:tree>
+								<rich:tree switchType="client" ajaxSubmitSelection="true"
+									style="width:300px;" value="#{routeController.pricesTreeData}"
+									var="data" nodeFace="#{data.leaf ? 'end' : 'start'}"
+									id="pricesTree"
+									nodeSelectListener="#{routeController.nodeSelected}"
+									adviseNodeOpened="#{routeController.getExpandedNodes}">
+
+									<rich:treeNode type="start"
+										reRender="priceField,twoWayPriceField">
+										<div style="font-size: 11px;"><h:outputText
+											value="#{msg.fromStop} " /> <h:outputText
+											value="#{data.stop.name}" /></div>
+									</rich:treeNode>
+									<rich:treeNode type="end"
+										reRender="priceField,twoWayPriceField">
+										<div style="font-size: 11px;"><h:outputText
+											value="#{msg.toStop} " /> <h:outputText
+											value="#{data.stop.name}" /> <h:outputText value=" (" /> <h:outputText
+											value="#{data.price.price}" converter="#{currencyConverter}" />
+										<h:outputText value=")" /></div>
+									</rich:treeNode>
+								</rich:tree>
 							</rich:panel>
 							<rich:panel styleClass="internalPanel">
-								<h:panelGrid columns="2" styleClass="dr-pnl-b" style="padding:0px; margin:0px;">
-								    <a4j:outputPanel>
-									   <h:outputLabel value="#{msg.oneWay}:" for="priceField" />
-									   <rich:toolTip value="#{msg.zeroPriceTip}" followMouse="true" />
-								    </a4j:outputPanel>
-									<h:inputText value="#{routeController.priceValue}" id="priceField">
-										<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-									</h:inputText>
-									
+								<h:panelGrid columns="2" styleClass="dr-pnl-b"
+									style="padding:0px; margin:0px;">
 									<a4j:outputPanel>
-							    	    <h:outputLabel value="#{msg.twoWay}:" for="twoWayPriceField" />
-							    	    <rich:toolTip value="#{msg.zeroPriceTip}" followMouse="true" />
-						    	    </a4j:outputPanel>
-									<h:inputText value="#{routeController.twoWayPriceValue}" id="twoWayPriceField">
+										<h:outputLabel value="#{msg.oneWay}:" for="priceField" />
+										<rich:toolTip value="#{msg.zeroPriceTip}" followMouse="true" />
+									</a4j:outputPanel>
+									<h:inputText value="#{routeController.priceValue}"
+										id="priceField">
 										<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 									</h:inputText>
 
-                                    <h:outputText />
+									<a4j:outputPanel>
+										<h:outputLabel value="#{msg.twoWay}:" for="twoWayPriceField" />
+										<rich:toolTip value="#{msg.zeroPriceTip}" followMouse="true" />
+									</a4j:outputPanel>
+									<h:inputText value="#{routeController.twoWayPriceValue}"
+										id="twoWayPriceField">
+										<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+									</h:inputText>
+
+									<h:outputText />
 									<a4j:commandButton value="#{msg.save}"
 										action="#{routeController.savePrice}" />
-									
+
 								</h:panelGrid>
 							</rich:panel>
-                            <rich:panel styleClass="internalPanel">
-                                <h:outputLabel for="seats" value="#{msg.seats}: " />
-                                <h:inputText value="#{routeController.route.seats}" id="seats">
-                                    <f:convertNumber maxFractionDigits="0"/>
-                                </h:inputText>
-                            </rich:panel>							
+							<rich:panel styleClass="internalPanel">
+								<h:outputLabel for="seats" value="#{msg.seats}: " />
+								<h:inputText value="#{routeController.route.seats}" id="seats">
+									<f:convertNumber maxFractionDigits="0" />
+								</h:inputText>
+							</rich:panel>
 						</h:panelGrid>
 					</rich:panel>
 
@@ -187,5 +196,20 @@
 				</h:panelGrid></div>
 			</h:form>
 		</f:view>
+
+		<rich:modalPanel id="stopPanel" autosized="true" width="450">
+			<f:facet name="header">
+				<h:outputText value="#{msg.addOrModifyStop}" />
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="/images/close.png" id="hidelink"
+						styleClass="hidelink" />
+					<rich:componentControl for="stopPanel" attachTo="hidelink"
+						operation="hide" event="onclick" />
+				</h:panelGroup>
+			</f:facet>
+			<a4j:include viewId="stop.jsp" />
+		</rich:modalPanel>
 	</ui:define>
 </ui:composition>

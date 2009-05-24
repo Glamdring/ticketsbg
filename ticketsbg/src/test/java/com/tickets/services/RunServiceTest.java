@@ -8,14 +8,15 @@ import org.junit.Test;
 import com.tickets.dao.Dao;
 import com.tickets.model.Run;
 
-public class RunServiceTest extends BaseServiceText {
+public class RunServiceTest extends BaseServiceTest {
 
-    private static RunServiceImpl service;
+    private static RunService service;
 
     @BeforeClass
     public static void initTest() {
-        service = new RunServiceImpl();
+        service = (RunService) getBean("runService");
     }
+
     @Test
     public void testCreateRoutes() {
         service.createRuns();
@@ -33,6 +34,6 @@ public class RunServiceTest extends BaseServiceText {
 
     @Override
     public BaseService getService() {
-        return service;
+        return (BaseService) service;
     }
 }

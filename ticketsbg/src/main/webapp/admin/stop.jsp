@@ -7,37 +7,32 @@
 	xmlns:j4j="http://javascript4jsf.dev.java.net/"
 	xmlns:c="http://java.sun.com/jstl/core"
 	xmlns:cust="http://tickets.com/cust"
-	xmlns:t="http://myfaces.apache.org/tomahawk"
-	template="admin_template.jsp">
-	<ui:define name="body">
-		<f:view>
-			<h:messages />
-			<h:form id="routeForm">
-				<table>
-					<tr>
-						<td><h:outputLabel value="#{msg.stopName}" for="stopName" /></td>
-						<td><h:inputText value="#{routeController.stop.name}"
-							id="stopName" /></td>
-					</tr>
-					<tr>
-						<td><h:outputLabel value="#{msg.timeToArrival}" /></td>
-						<td><rich:inputNumberSpinner maxValue="1000"
-							value="${routeController.stop.timeToArrival}" /></td>
-					</tr>
-					<tr>
-						<td><h:outputLabel value="#{msg.timeToDeparture}" /></td>
-						<td><rich:inputNumberSpinner maxValue="1000"
-							value="${routeController.stop.timeToDeparture}" /></td>
-					</tr>
-					<tr>
-						<td colspan="2"><h:commandButton
-							action="#{routeController.saveStop}" value="#{msg.save}">
-							<cust:defaultAction />
-						</h:commandButton>
-						<h:commandButton action="routeScreen" value="#{msg.cancel}" /></td>
-					</tr>
-				</table>
-			</h:form>
-		</f:view>
-	</ui:define>
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+	<f:view>
+		<h:messages />
+		<h:form id="stopForm">
+			<a4j:outputPanel ajaxRendered="true">
+				<h:panelGrid columns="2" columnClasses="rich-panel">
+					<h:outputLabel value="#{msg.stopName}" for="stopName" />
+					<h:inputText value="#{routeController.stop.name}" id="stopName" />
+
+					<h:outputLabel value="#{msg.timeToArrival}" for="timeToArrival" />
+					<rich:inputNumberSpinner maxValue="1000"
+						value="${routeController.stop.timeToArrival}" id="timeToArrival" />
+
+					<h:outputLabel value="#{msg.timeToDeparture}" for="timeToDeparture" />
+					<rich:inputNumberSpinner maxValue="1000"
+						value="${routeController.stop.timeToDeparture}"
+						id="timeToDeparture" />
+
+					<a4j:commandButton action="#{routeController.saveStop}"
+						value="#{msg.save}" reRender="stopsTable,pricesTree"
+						oncomplete="#{rich:component('stopPanel')}.hide();">
+						<cust:defaultAction />
+					</a4j:commandButton>
+					<h:outputText></h:outputText>
+				</h:panelGrid>
+			</a4j:outputPanel>
+		</h:form>
+	</f:view>
 </ui:composition>

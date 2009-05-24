@@ -4,6 +4,7 @@ public class StopPriceHolder {
 
     private Stop stop;
     private Price price;
+    private boolean leaf;
 
     public StopPriceHolder() {
         super();
@@ -26,4 +27,11 @@ public class StopPriceHolder {
         this.price = price;
     }
 
+    public boolean isLeaf() {
+        return leaf;
+    }
+
+    public void setLeaf(boolean leaf) {
+        this.leaf = leaf;
+    }
 }

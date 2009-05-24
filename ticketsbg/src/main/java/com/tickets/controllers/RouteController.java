@@ -46,7 +46,7 @@ public class RouteController extends BaseController implements Serializable {
     private Map<String, String> dayNames = new HashMap<String, String>();
     private Date hour;
     private int selectedHour;
-    private Stop stop;
+    private Stop stop = new Stop();
     private HtmlOrderingList stopsTable;
     private TreeNode<StopPriceHolder> pricesTreeData;
     private Price price;
@@ -103,22 +103,14 @@ public class RouteController extends BaseController implements Serializable {
     }
 
     @Action
-    public String addStop() {
+    public void addStop() {
         stop = new Stop();
-        return "stopScreen";
     }
 
     @Action
-    public String editStop() {
-        stop = (Stop) stopsTable.getRowData();
-        return "stopScreen";
-    }
-
-    @Action
-    public String saveStop() {
+    public void saveStop() {
         stopService.addStopToRoute(stop, route);
         listReordered(null);
-        return "routeScreen";
     }
 
     @Action
@@ -195,6 +187,7 @@ public class RouteController extends BaseController implements Serializable {
                 holder.setPrice(stopService.getPrice(node.getData().getStop().getStopId(),
                         holder.getStop().getStopId(), route));
 
+                holder.setLeaf(true);
                 subNode.setData(holder);
                 subNode.setParent(node);
                 node.addChild("end" + subNode.getData().getStop().getStopId(), subNode);
