@@ -25,7 +25,7 @@ import javax.persistence.TemporalType;
         @NamedQuery(name = "Run.getLastRunForRoute",
                 query = "SELECT run FROM Run run WHERE route=:route ORDER BY time DESC LIMIT 1"),
         @NamedQuery(name = "Run.getLastRuns",
-                query = "SELECT DISTINCT new list(route, run) FROM Route AS route LEFT OUTER JOIN route.runs AS run GROUP BY run.route ORDER BY run.time")
+                query = "SELECT DISTINCT new list(route, run) FROM Route AS route LEFT OUTER JOIN route.runs AS run GROUP BY route ORDER BY run.time")
 })
 public class Run implements Serializable {
 

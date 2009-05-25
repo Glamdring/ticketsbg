@@ -2,6 +2,8 @@ package com.tickets.model;
 
 // Generated 2008-1-20 22:59:52 by Hibernate Tools 3.2.0.b9
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,7 +17,7 @@ import javax.persistence.Transient;
  */
 @Entity
 @Table(name = "days")
-public class Day implements java.io.Serializable {
+public class Day implements Serializable, Comparable<Day> {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -58,5 +60,16 @@ public class Day implements java.io.Serializable {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    @Override
+    public int compareTo(Day d) {
+        if (this.getId() > d.getId())
+            return 1;
+
+        if (this.getId() < d.getId())
+            return -1;
+
+        return 0;
     }
 }

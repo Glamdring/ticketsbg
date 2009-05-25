@@ -39,7 +39,7 @@ public class RunServiceImpl extends BaseService<Run> implements RunService<Run> 
         int day = time.get(Calendar.DAY_OF_YEAR);
         int dayOfWeek = time.get(Calendar.DAY_OF_WEEK);
         // the current day, starting from Monday
-        int currentDay = dayOfWeek > 1 ? dayOfWeek - 1 : 7;
+        int currentDay = dayOfWeek; // > 1 ? dayOfWeek - 1 : 7; if locale is EN
 
         CircularLinkedList<RouteDay> routeDays =
             new CircularLinkedList<RouteDay>(route.getRouteDays());
@@ -47,10 +47,11 @@ public class RunServiceImpl extends BaseService<Run> implements RunService<Run> 
 
         // Identifying the day from which to start generating
         ListNode<RouteDay> dayNode = null;
-        for (int i = 0; i < routeDays.size(); i ++) {
+        int routeDaysCount = routeDays.size();
+        for (int i = 0; i < routeDaysCount; i ++) {
             // The first week-day of the route which is after the current day
             int diff = routeDays.get(i).getValue().getDay().getId() - currentDay;
-            if (diff > 0) {
+            if (diff > 0 || i == routeDaysCount - 1) {
                 dayNode = routeDays.get(i);
                 break;
             }
@@ -65,8 +66,19 @@ public class RunServiceImpl extends BaseService<Run> implements RunService<Run> 
             (day - now.get(Calendar.DAY_OF_YEAR));
 
         //TODO new year?
-        now.add(Calendar.DAY_OF_YEAR, day - now.get(Calendar.DAY_OF_YEAR));
-        for (int i = 0; i < daysToGenerate; i ++) {
+        //Starting either from the last already generated day + 1, or from today (=yesterday + 1)
+        now.add(Calendar.DAY_OF_YEAR, day - now.get(Calendar.DAY_OF_YEAR) + 1);
+        while (daysToGenerate > 0) {
+            int tmpDay = dayNode.getValue().getDay().getId();
+            // 'scrolling' to the next date where a run is needed
+            // then setting the current day for the next iteration to be
+            // the day for which a run has been added on this iteration
+            int daysToScroll = tmpDay >= currentDay ? tmpDay - currentDay : 7 - currentDay + tmpDay;
+            currentDay = tmpDay;
+            now.add(Calendar.DAY_OF_YEAR, daysToScroll);
+            dayNode = dayNode.getNext();
+            daysToGenerate -= daysToScroll;
+
             for (RouteHour rh : route.getRouteHours()) {
                 Run run = new Run();
                 Calendar runTime = (Calendar) now.clone();
@@ -76,9 +88,6 @@ public class RunServiceImpl extends BaseService<Run> implements RunService<Run> 
                 run.setTime(runTime);
                 route.addRun(run);
             }
-            int tmpDay = dayNode.getValue().getDay().getId();
-            now.add(Calendar.DAY_OF_YEAR, tmpDay - currentDay);
-            dayNode = dayNode.getNext();
         }
     }
 }
