@@ -59,7 +59,7 @@ public class RunServiceImpl extends BaseService<Run> implements RunService<Run> 
         if (dayNode == null)
             return; // no day found
 
-        Calendar now = GeneralUtils.getEmptyCalendar();
+        Calendar now = GeneralUtils.createEmptyCalendar();
         now.setTimeInMillis(System.currentTimeMillis());
 
         int daysToGenerate = route.getPublishedRunsPeriod() -

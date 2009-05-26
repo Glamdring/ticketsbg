@@ -8,7 +8,6 @@
 	<application>
 		<!-- ViewHandler implementation for Facelets -->
 		<view-handler>com.sun.facelets.FaceletViewHandler</view-handler>
-
 		<!--
 			This is the JSF 1.2 ELResolver that delegates to the Spring root
 			WebApplicationContext resolving name references to Spring-defined
@@ -56,6 +55,14 @@
         </navigation-case>
     </navigation-rule>
 
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>searchResults</from-outcome>
+            <to-view-id>/searchResults.jsp</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
 	<component>
 		<description />
 		<display-name>Iterator</display-name>

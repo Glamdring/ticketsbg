@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
@@ -14,7 +15,9 @@
 			<a4j:outputPanel ajaxRendered="true">
 				<h:panelGrid columns="2" columnClasses="rich-panel">
 					<h:outputLabel value="#{msg.stopName}" for="stopName" />
+					<!-- TODO : combo with all cities + autocomplete? -->
 					<h:inputText value="#{routeController.stop.name}" id="stopName" />
+					
 
 					<h:outputLabel value="#{msg.timeToArrival}" for="timeToArrival" />
 					<rich:inputNumberSpinner maxValue="1000"

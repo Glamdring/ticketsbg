@@ -11,7 +11,7 @@ public class GeneralUtils {
         return c;
     }
 
-    public static Calendar getEmptyCalendar() {
+    public static Calendar createEmptyCalendar() {
         return Calendar.getInstance(getLocale());
     }
 

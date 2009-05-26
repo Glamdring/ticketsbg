@@ -7,10 +7,30 @@ import com.tickets.model.Run;
 
 public interface SearchService {
 
+    /**
+     * Performs a search listing all runs for the specified criteria
+     *
+     * @param startStop
+     * @param endStop
+     * @param date
+     * @param fromHour
+     * @param toHour
+     * @param isTimeForDeparture defines whether the selected time is
+     * 	for departure (true) or for arrival(false)
+     * @return list of runs
+     */
     List<Run> search(String startStop,
             String endStop,
-            Integer dayId,
             Date date,
             int fromHour,
-            int toHour);
+            int toHour,
+            boolean isTimeForDeparture);
+
+
+    /**
+     * Lists all available stop names
+     *
+     * @return list of stop names
+     */
+    List<String> listAllStops();
 }

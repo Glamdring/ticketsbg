@@ -7,6 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Tickets</title>
+    <ui:insert name="header" />
   </head>
   <body style="margin-left: 0px; margin-top: 0px; margin-right: 0px">
     <f:loadBundle var="msg" basename="com.tickets.constants.messages" />

@@ -22,6 +22,10 @@ import javax.persistence.Table;
     @NamedQuery(
             name = "Stop.findStopsByRoute",
             query = "SELECT s FROM Stop s WHERE s.id.route=:route"
+    ),
+    @NamedQuery(
+            name = "Stop.listAllStopNames",
+            query = "SELECT s.name FROM Stop s GROUP BY s.name ORDER BY s.name"
     )
 })
 public class Stop implements Serializable, Comparable<Stop> {
