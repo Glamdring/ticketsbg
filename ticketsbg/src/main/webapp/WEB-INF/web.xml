@@ -28,7 +28,7 @@
 	</context-param>
 	<context-param>
 		<param-name>org.richfaces.SKIN</param-name>
-		<param-value>blueSky</param-value>
+		<param-value>tickets</param-value>
 	</context-param>
 	<context-param>
 		<param-name>org.richfaces.CONTROL_SKINNING

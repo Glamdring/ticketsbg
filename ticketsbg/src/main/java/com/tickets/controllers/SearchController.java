@@ -21,17 +21,27 @@ public class SearchController extends BaseController {
     @Autowired
     private SearchService searchService;
 
+    private static final String ONE_WAY = "oneWay";
+    private static final String TWO_WAY = "twoWay";
+
     private String fromStop;
     private String toStop;
+
     private int fromHour = 0;
     private int toHour = 24;
     private Date date;
     private boolean timeForDeparture = true;
 
+    private int returnFromHour = 0;
+    private int returnToHour = 24;
+    private Date returnDate;
+    private boolean returnTimeForDeparture = true;
+
     private ListDataModel resultsModel;
     private List<String> stopNames;
     private Integer[] hoursFrom;
     private Integer[] hoursTo;
+    private String travelType = TWO_WAY;
 
     @Action
     public String search() {
@@ -134,5 +144,45 @@ public class SearchController extends BaseController {
 
     public void setHoursTo(Integer[] hoursTo) {
         this.hoursTo = hoursTo;
+    }
+
+    public String getTravelType() {
+        return travelType;
+    }
+
+    public void setTravelType(String travelType) {
+        this.travelType = travelType;
+    }
+
+    public int getReturnFromHour() {
+        return returnFromHour;
+    }
+
+    public void setReturnFromHour(int returnFromHour) {
+        this.returnFromHour = returnFromHour;
+    }
+
+    public int getReturnToHour() {
+        return returnToHour;
+    }
+
+    public void setReturnToHour(int returnToHour) {
+        this.returnToHour = returnToHour;
+    }
+
+    public Date getReturnDate() {
+        return returnDate;
+    }
+
+    public void setReturnDate(Date returnDate) {
+        this.returnDate = returnDate;
+    }
+
+    public boolean isReturnTimeForDeparture() {
+        return returnTimeForDeparture;
+    }
+
+    public void setReturnTimeForDeparture(boolean returnTimeForDeparture) {
+        this.returnTimeForDeparture = returnTimeForDeparture;
     }
 }

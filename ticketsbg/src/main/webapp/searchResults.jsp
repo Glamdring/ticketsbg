@@ -13,15 +13,26 @@
 		<f:view>
 			<h:form id="searchResults">
 				<h:messages />
-				<rich:dataTable value="#{searchController.resultsModel}" var="result">
-				    <rich:column>
-				        <f:facet name="header">
-				            <h:outputText value="#{msg.dateTime}" />
-				        </f:facet>
-				        <h:outputText value="#{result.time.time}">
-				            <f:convertDateTime pattern="dd.MM.yyyy hh:mm" />
-				        </h:outputText>
-				    </rich:column>
+				<rich:dataTable value="#{searchController.resultsModel}"
+					var="result">
+
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg.routeName}" />
+						</f:facet>
+						<h:outputText value="#{result.route.name}">
+							<f:convertDateTime pattern="dd.MM.yyyy hh:mm" />
+						</h:outputText>
+					</rich:column>
+
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg.dateTime}" />
+						</f:facet>
+						<h:outputText value="#{result.time.time}">
+							<f:convertDateTime pattern="dd.MM.yyyy hh:mm" />
+						</h:outputText>
+					</rich:column>
 				</rich:dataTable>
 			</h:form>
 		</f:view>
