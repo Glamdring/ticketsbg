@@ -31,6 +31,7 @@ public class SearchServiceImpl extends BaseService implements SearchService {
                 new String[] { "fromStop", "toStop", "fromTime", "toTime" },
                 new Object[] { fromStop, toStop, fromTime, toTime });
 
+        //TODO filter the runs where the start stop idx > end stop idx.
         return result;
     }
 
