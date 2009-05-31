@@ -13,10 +13,12 @@
 		<f:view>
 			<h:form id="searchResults">
 				<h:messages />
-				<h:outputText value="#{msg.searchResultsFor}">
-					<f:param value="#{searchController.fromStop}" />
-					<f:param value="#{searchController.toStop}" />
-				</h:outputText>
+				
+				<h:outputText value="#{msg.searchResultsFrom} " />
+				<h:outputText value="#{searchController.fromStop}" style="font-weight: bold;" />
+				<h:outputText value=" #{msg.searchResultsTo} " />
+				<h:outputText value="#{searchController.toStop}" style="font-weight: bold;" />
+				
 				<rich:dataGrid value="#{searchController.resultsModel}" var="result"
 					columns="1" width="100%">
 					<rich:panel id="resultEntry" header="#{result.route.name}">
@@ -30,6 +32,7 @@
 						</a4j:repeat>
 					</rich:panel>
 				</rich:dataGrid>
+				<h:commandLink value="#{msg.backToSearchScreen}" action="#{searchController.toSearchScreen}" />
 			</h:form>
 		</f:view>
 	</ui:define>

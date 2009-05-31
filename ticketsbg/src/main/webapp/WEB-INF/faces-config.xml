@@ -55,6 +55,15 @@
         </navigation-case>
     </navigation-rule>
 
+
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>searchScreen</from-outcome>
+            <to-view-id>/search.jsp</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
     <navigation-rule>
         <navigation-case>
             <from-outcome>searchResults</from-outcome>

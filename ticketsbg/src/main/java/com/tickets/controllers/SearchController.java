@@ -1,5 +1,6 @@
 package com.tickets.controllers;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -53,13 +54,18 @@ public class SearchController extends BaseController {
         resultsModel = new ListDataModel(result);
 
         if (travelType.equals(TWO_WAY)) {
-            List<Run> returnResult = searchService.search(toStop, fromStop, returnDate,
-                    returnFromHour, returnToHour, returnTimeForDeparture);
+            List<Run> returnResult = searchService.search(toStop, fromStop,
+                    returnDate, returnFromHour, returnToHour,
+                    returnTimeForDeparture);
 
             resultsModel = new ListDataModel(returnResult);
         }
 
         return "searchResults";
+    }
+
+    public String toSearchScreen() {
+        return "searchScreen";
     }
 
     @PostConstruct
