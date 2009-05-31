@@ -13,29 +13,24 @@
 		<f:view>
 			<h:form id="searchResults">
 				<h:messages />
-				<rich:dataTable value="#{searchController.resultsModel}"
-					var="result">
-
-					<rich:column>
-						<f:facet name="header">
-							<h:outputText value="#{msg.routeName}" />
-						</f:facet>
-						<h:outputText value="#{result.route.name}">
-							<f:convertDateTime pattern="dd.MM.yyyy hh:mm" />
-						</h:outputText>
-					</rich:column>
-
-					<rich:column>
-						<f:facet name="header">
-							<h:outputText value="#{msg.dateTime}" />
-						</f:facet>
-						<h:outputText value="#{result.time.time}">
-							<f:convertDateTime pattern="dd.MM.yyyy hh:mm" />
-						</h:outputText>
-					</rich:column>
-				</rich:dataTable>
+				<h:outputText value="#{msg.searchResultsFor}">
+					<f:param value="#{searchController.fromStop}" />
+					<f:param value="#{searchController.toStop}" />
+				</h:outputText>
+				<rich:dataGrid value="#{searchController.resultsModel}" var="result"
+					columns="1" width="100%">
+					<rich:panel id="resultEntry" header="#{result.route.name}">
+						<a4j:repeat value="#{result.route.stops}" var="stop"
+							rowKeyVar="row">
+							<h:outputText value="→" rendered="#{row > 0}" />
+							<h:outputText value="#{stop.name}" style="font-weight: bold;"
+								rendered="#{searchController.fromStop == stop.name || searchController.toStop == stop.name}" />
+							<h:outputText value="#{stop.name}"
+								rendered="#{searchController.fromStop != stop.name &amp;&amp; searchController.toStop != stop.name}" />
+						</a4j:repeat>
+					</rich:panel>
+				</rich:dataGrid>
 			</h:form>
 		</f:view>
 	</ui:define>
 </ui:composition>
-

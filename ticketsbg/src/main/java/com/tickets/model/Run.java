@@ -32,12 +32,20 @@ import javax.persistence.TemporalType;
         ),
         /*
          * Performs the search for provided stops criteria.
+         * @Deprecated
          */
         @NamedQuery(
-                name = "Run.search",
+                name = "Run.searchStarTime",
                 query = "SELECT DISTINCT run FROM Run run, IN(run.route.stops) stop " +
                         "WHERE (stop.name=:fromStop OR stop.name=:toStop) " +
                         "AND run.time >= :fromTime AND run.time <= :toTime " +
+                        "ORDER BY run.time"
+        ),
+        @NamedQuery(
+                name = "Run.search",
+                query = "SELECT DISTINCT run FROM Run run, IN(run.route.prices) price " +
+                        "WHERE price.startStop.name=:fromStop AND price.endStop.name=:toStop " +
+                        "AND price.price > 0 " +
                         "ORDER BY run.time"
         )
 })

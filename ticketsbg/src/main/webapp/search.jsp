@@ -22,30 +22,32 @@
 	text-align: right;
 }
 </style>
-<script type="text/javascript">
-function toggleReturnPanel(travelType) {
-	var display = "none";
-	if (travelType == "twoWay")
-		display = "block";
-	
-	document.getElementById('searchForm:returnPanel').style.display=display;
-}
+		<script type="text/javascript">
+	//Couldn't do it with richfaces tags..
+	function toggleReturnPanel(travelType) {
+		var display = "none";
+		if (travelType == "twoWay")
+			display = "block";
+
+		document.getElementById('searchForm:returnPanel').style.display = display;
+	}
 </script>
 	</ui:define>
 	<ui:define name="body">
 		<f:view>
-			<h:form id="searchForm">
+			<a4j:form id="searchForm" ajaxSubmit="true">
 				<rich:panel header="#{msg.searchTitle}">
 					<h:messages />
 					<h:panelGrid columns="2" columnClasses="firstColumn,secondColumn">
 
 						<h:outputLabel value="#{msg.travelType}:" for="travelType" />
 						<h:selectOneRadio value="#{searchController.travelType}"
-							id="travelType" onclick="toggleReturnPanel(this.value);">
-							<f:selectItem itemLabel="#{msg.twoWay}" itemValue="twoWay"/>
+							id="travelType">
+							<a4j:support event="onclick" reRender="returnPanel"
+								ajaxSingle="true" />
+							<f:selectItem itemLabel="#{msg.twoWay}" itemValue="twoWay" />
 							<f:selectItem itemLabel="#{msg.oneWay}" itemValue="oneWay" />
 						</h:selectOneRadio>
-						
 					</h:panelGrid>
 					<h:panelGrid columns="2" columnClasses="firstColumn,secondColumn">
 						<h:outputLabel value="#{msg.fromStop}:" for="fromStop" />
@@ -96,43 +98,47 @@ function toggleReturnPanel(travelType) {
 						</h:panelGrid>
 
 					</rich:panel>
-
 					<!--  Return fields -->
-					<rich:panel id="returnPanel">
-						<h:panelGrid columns="2" columnClasses="firstColumn,secondColumn">
-							<h:outputLabel value="#{msg.date}:" for="returnDate" />
-							<rich:calendar id="returnDate" datePattern="dd.MM.yyyy"
-								firstWeekDay="1" value="#{searchController.returnDate}" />
+					<a4j:outputPanel ajaxRendered="true">
 
-							<h:panelGroup>
-								<h:selectOneMenu id="returnDepartureOrArival"
-									value="#{searchController.returnTimeForDeparture}"
-									converter="#{booleanConverter}">
+						<rich:panel id="returnPanel"
+							rendered="#{searchController.travelType == 'twoWay'}">
+							<h:panelGrid columns="2" columnClasses="firstColumn,secondColumn">
+								<h:outputLabel value="#{msg.date}:" for="returnDate" />
+								<rich:calendar id="returnDate" datePattern="dd.MM.yyyy"
+									firstWeekDay="1" value="#{searchController.returnDate}" />
 
-									<f:selectItem itemLabel="#{msg.departureTime}" itemValue="true" />
-									<f:selectItem itemLabel="#{msg.arrivalTime}" itemValue="false" />
-								</h:selectOneMenu>
-								<h:outputText value=":" />
-							</h:panelGroup>
-							<h:panelGroup>
-								<h:outputLabel value="#{msg.fromHour}&#160;"
-									for="returnFromHour" style="float:left;" />
-								<rich:comboBox suggestionValues="#{searchController.hoursFrom}"
-									value="#{searchController.returnFromHour}" id="returnFromHour"
-									width="50" style="float:left; margin-right: 5px;">
-									<f:convertNumber minIntegerDigits="2" />
-								</rich:comboBox>
+								<h:panelGroup>
+									<h:selectOneMenu id="returnDepartureOrArival"
+										value="#{searchController.returnTimeForDeparture}"
+										converter="#{booleanConverter}">
 
-								<h:outputLabel value="#{msg.toHour}&#160;" for="returnToHour"
-									style="float:left;" />
-								<rich:comboBox suggestionValues="#{searchController.hoursTo}"
-									value="#{searchController.returnToHour}" id="returnToHour"
-									width="50" style="float:left;">
-									<f:convertNumber minIntegerDigits="2" />
-								</rich:comboBox>
-							</h:panelGroup>
-						</h:panelGrid>
-					</rich:panel>
+										<f:selectItem itemLabel="#{msg.departureTime}"
+											itemValue="true" />
+										<f:selectItem itemLabel="#{msg.arrivalTime}" itemValue="false" />
+									</h:selectOneMenu>
+									<h:outputText value=":" />
+								</h:panelGroup>
+								<h:panelGroup>
+									<h:outputLabel value="#{msg.fromHour}&#160;"
+										for="returnFromHour" style="float:left;" />
+									<rich:comboBox suggestionValues="#{searchController.hoursFrom}"
+										value="#{searchController.returnFromHour}" id="returnFromHour"
+										width="50" style="float:left; margin-right: 5px;">
+										<f:convertNumber minIntegerDigits="2" />
+									</rich:comboBox>
+
+									<h:outputLabel value="#{msg.toHour}&#160;" for="returnToHour"
+										style="float:left;" />
+									<rich:comboBox suggestionValues="#{searchController.hoursTo}"
+										value="#{searchController.returnToHour}" id="returnToHour"
+										width="50" style="float:left;">
+										<f:convertNumber minIntegerDigits="2" />
+									</rich:comboBox>
+								</h:panelGroup>
+							</h:panelGrid>
+						</rich:panel>
+					</a4j:outputPanel>
 
 					<h:panelGrid columns="2" columnClasses="firstColumn,secondColumn">
 						<h:outputText></h:outputText>
@@ -140,7 +146,7 @@ function toggleReturnPanel(travelType) {
 							action="#{searchController.search}" />
 					</h:panelGrid>
 				</rich:panel>
-			</h:form>
+			</a4j:form>
 		</f:view>
 	</ui:define>
 </ui:composition>

@@ -21,7 +21,6 @@ public class SearchController extends BaseController {
     @Autowired
     private SearchService searchService;
 
-    private static final String ONE_WAY = "oneWay";
     private static final String TWO_WAY = "twoWay";
 
     private String fromStop;
@@ -38,6 +37,8 @@ public class SearchController extends BaseController {
     private boolean returnTimeForDeparture = true;
 
     private ListDataModel resultsModel;
+    private ListDataModel returnResultsModel;
+
     private List<String> stopNames;
     private Integer[] hoursFrom;
     private Integer[] hoursTo;
@@ -45,10 +46,18 @@ public class SearchController extends BaseController {
 
     @Action
     public String search() {
+
         List<Run> result = searchService.search(fromStop, toStop, date,
                 fromHour, toHour, timeForDeparture);
 
         resultsModel = new ListDataModel(result);
+
+        if (travelType.equals(TWO_WAY)) {
+            List<Run> returnResult = searchService.search(toStop, fromStop, returnDate,
+                    returnFromHour, returnToHour, returnTimeForDeparture);
+
+            resultsModel = new ListDataModel(returnResult);
+        }
 
         return "searchResults";
     }
@@ -184,5 +193,13 @@ public class SearchController extends BaseController {
 
     public void setReturnTimeForDeparture(boolean returnTimeForDeparture) {
         this.returnTimeForDeparture = returnTimeForDeparture;
+    }
+
+    public ListDataModel getReturnResultsModel() {
+        return returnResultsModel;
+    }
+
+    public void setReturnResultsModel(ListDataModel returnResultsModel) {
+        this.returnResultsModel = returnResultsModel;
     }
 }

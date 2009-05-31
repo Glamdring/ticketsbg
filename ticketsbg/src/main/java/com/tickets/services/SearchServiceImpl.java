@@ -14,7 +14,6 @@ import com.tickets.utils.GeneralUtils;
 @Service("searchService")
 public class SearchServiceImpl extends BaseService implements SearchService {
 
-
     @SuppressWarnings("unchecked")
     @Override
     public List<Run> search(String fromStop, String toStop, Date date,
@@ -27,18 +26,38 @@ public class SearchServiceImpl extends BaseService implements SearchService {
         Calendar toTime = GeneralUtils.createEmptyCalendar();
         toTime.setTime(date);
         toTime.add(Calendar.HOUR_OF_DAY, toHour);
-        //toTime.roll(Calendar.MINUTE, 1);
+        // toTime.roll(Calendar.MINUTE, 1);
 
         List<Run> result = getDao().findByNamedQuery("Run.search",
-                new String[] { "fromStop", "toStop", "fromTime", "toTime" },
-                new Object[] { fromStop, toStop, fromTime, toTime });
+                new String[] { "fromStop", "toStop"},
+                new Object[] { fromStop, toStop });
 
-        //Complexity n^2 in the worst case, but generally n (because of the limited number of stops)
+
+        // Complexity n^2 in the worst case, but generally n (because of the
+        // limited number of stops)
+        // This better go in the query, but such date + minutes calculations
+        // are hardly possible with JPAQL
         for (Iterator<Run> it = result.iterator(); it.hasNext();) {
             Run run = it.next();
-            int fromStopIdx = stopIndex(run.getRoute().getStops(), fromStop);
-            int toStopIdx = stopIndex(run.getRoute().getStops(), toStop);
-            if (fromStopIdx == -1 || toStopIdx == -1 || fromStopIdx > toStopIdx) {
+
+            Stop fromStopObj = findStop(run.getRoute().getStops(), fromStop);
+            Stop toStopObj = findStop(run.getRoute().getStops(), toStop);
+
+            int minutesFromStartToBeSought = 0;
+            if (isTimeForDeparture) {
+                minutesFromStartToBeSought = fromStopObj.getTimeToDeparture();
+            } else {
+                minutesFromStartToBeSought = toStopObj.getTimeToArrival();
+            }
+
+            // Cloning in order to avoid update queries, as the run object
+            // is still associated with the session
+            Calendar targetTime = (Calendar) run.getTime().clone();
+            targetTime.add(Calendar.MINUTE, minutesFromStartToBeSought);
+
+            //Filtering if the timing doesn't fit the selected
+            if (fromTime.compareTo(targetTime) > 0
+                    || toTime.compareTo(targetTime) < 0) {
                 it.remove();
             }
         }
@@ -46,16 +65,16 @@ public class SearchServiceImpl extends BaseService implements SearchService {
         return result;
     }
 
-    private int stopIndex(List<Stop> stops, String stopName) {
+    private Stop findStop(List<Stop> stops, String stopName) {
         if (stopName == null)
-            return -1;
+            return null;
 
         for (Stop stop : stops) {
             if (stopName.equals(stop.getName())) {
-                return stop.getIdx();
+                return stop;
             }
         }
-        return -1;
+        return null;
     }
 
     @SuppressWarnings("unchecked")

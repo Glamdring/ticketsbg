@@ -90,7 +90,7 @@
 										</f:facet>
 										<h:outputText value="#{stop.timeToArrival}" />
 									</rich:column>
-									<rich:column width="110">
+									<rich:column width="120">
 										<f:facet name="header">
 											<h:outputText value="#{msg.timeToDeparture}" id="col3" />
 										</f:facet>
