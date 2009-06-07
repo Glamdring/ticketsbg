@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.hibernate.Query;
 
-public interface Dao<E> {
+public interface Dao {
 
     /**
      * Deletes an object identified by the specified Id

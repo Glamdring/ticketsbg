@@ -23,13 +23,13 @@ public abstract class BaseService<E> implements Service<E> {
     protected static Logger log = Logger.getLogger(BaseService.class);
 
     @Resource(name="dao")
-    private Dao<E> dao;
+    private Dao dao;
 
-    public void setDao(Dao<E> dao){
+    public void setDao(Dao dao){
         this.dao = dao;
     }
 
-    public Dao<E> getDao(){
+    public Dao getDao(){
         return dao;
     }
 

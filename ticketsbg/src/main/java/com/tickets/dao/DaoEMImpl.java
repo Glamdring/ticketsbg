@@ -8,10 +8,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import org.springframework.stereotype.Repository;
-
-@Repository
-public class DaoEMImpl<E> implements Dao<E> {
+//@Repository
+public class DaoEMImpl implements Dao {
 
     @PersistenceContext
     private EntityManager entityManager;

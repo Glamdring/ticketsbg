@@ -3,7 +3,7 @@ package com.tickets.services;
 import java.util.Date;
 import java.util.List;
 
-import com.tickets.model.Run;
+import com.tickets.model.RunPriceHolder;
 
 public interface SearchService {
 
@@ -17,9 +17,9 @@ public interface SearchService {
      * @param toHour
      * @param isTimeForDeparture defines whether the selected time is
      * 	for departure (true) or for arrival(false)
-     * @return list of runs
+     * @return list of runs and prices
      */
-    List<Run> search(String startStop,
+    List<RunPriceHolder> search(String startStop,
             String endStop,
             Date date,
             int fromHour,

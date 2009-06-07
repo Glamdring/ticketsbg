@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.tickets.model.Run;
+import com.tickets.model.RunPriceHolder;
 import com.tickets.model.Stop;
 import com.tickets.utils.GeneralUtils;
 
@@ -16,7 +17,7 @@ public class SearchServiceImpl extends BaseService implements SearchService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<Run> search(String fromStop, String toStop, Date date,
+    public List<RunPriceHolder> search(String fromStop, String toStop, Date date,
             int fromHour, int toHour, boolean isTimeForDeparture) {
 
         Calendar fromTime = GeneralUtils.createEmptyCalendar();
@@ -28,7 +29,7 @@ public class SearchServiceImpl extends BaseService implements SearchService {
         toTime.add(Calendar.HOUR_OF_DAY, toHour);
         // toTime.roll(Calendar.MINUTE, 1);
 
-        List<Run> result = getDao().findByNamedQuery("Run.search",
+        List<RunPriceHolder> result = getDao().findByNamedQuery("Run.search",
                 new String[] { "fromStop", "toStop"},
                 new Object[] { fromStop, toStop });
 
@@ -37,8 +38,9 @@ public class SearchServiceImpl extends BaseService implements SearchService {
         // limited number of stops)
         // This better go in the query, but such date + minutes calculations
         // are hardly possible with JPAQL
-        for (Iterator<Run> it = result.iterator(); it.hasNext();) {
-            Run run = it.next();
+        for (Iterator<RunPriceHolder> it = result.iterator(); it.hasNext();) {
+            RunPriceHolder rph = it.next();
+            Run run = rph.getRun();
 
             Stop fromStopObj = findStop(run.getRoute().getStops(), fromStop);
             Stop toStopObj = findStop(run.getRoute().getStops(), toStop);

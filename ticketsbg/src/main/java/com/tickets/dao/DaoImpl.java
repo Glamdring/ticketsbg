@@ -14,10 +14,9 @@ import org.springframework.stereotype.Repository;
 /**
  * @author Bozhidar Bozhanov
  *
- * @param <E>
  */
 @Repository("dao")
-public class DaoImpl<E> implements Dao<E> {
+public class DaoImpl implements Dao {
 
     @Resource(name="sessionFactory")
     private SessionFactory sessionFactory;

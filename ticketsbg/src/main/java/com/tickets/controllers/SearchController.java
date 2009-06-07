@@ -1,18 +1,18 @@
 package com.tickets.controllers;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.model.ListDataModel;
 
+import org.richfaces.model.selection.SimpleSelection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.tickets.annotations.Action;
-import com.tickets.model.Run;
+import com.tickets.model.RunPriceHolder;
 import com.tickets.services.SearchService;
 
 @Controller("searchController")
@@ -45,20 +45,24 @@ public class SearchController extends BaseController {
     private Integer[] hoursTo;
     private String travelType = TWO_WAY;
 
+    private RunPriceHolder selectedRun;
+    private SimpleSelection selection;
+    private Long selectedRowId;
+
     @Action
     public String search() {
 
-        List<Run> result = searchService.search(fromStop, toStop, date,
+        List<RunPriceHolder> result = searchService.search(fromStop, toStop, date,
                 fromHour, toHour, timeForDeparture);
 
         resultsModel = new ListDataModel(result);
 
         if (travelType.equals(TWO_WAY)) {
-            List<Run> returnResult = searchService.search(toStop, fromStop,
+            List<RunPriceHolder> returnResult = searchService.search(toStop, fromStop,
                     returnDate, returnFromHour, returnToHour,
                     returnTimeForDeparture);
 
-            resultsModel = new ListDataModel(returnResult);
+            returnResultsModel = new ListDataModel(returnResult);
         }
 
         return "searchResults";
@@ -79,6 +83,13 @@ public class SearchController extends BaseController {
         for (int i = 0; i < hoursTo.length; i++) {
             hoursTo[i] = i + 1;
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    public void rowSelectionChanged() {
+        Integer selectedId = (Integer) selection.getKeys().next();
+        selectedRowId = new Long(selectedId);
+        selectedRun = ((List<RunPriceHolder>) resultsModel.getWrappedData()).get(selectedId);
     }
 
     public String getFromStop() {
@@ -207,5 +218,37 @@ public class SearchController extends BaseController {
 
     public void setReturnResultsModel(ListDataModel returnResultsModel) {
         this.returnResultsModel = returnResultsModel;
+    }
+
+    public RunPriceHolder getSelectedRun() {
+        return selectedRun;
+    }
+
+    public void setSelectedRun(RunPriceHolder selectedRun) {
+        this.selectedRun = selectedRun;
+    }
+
+    public SearchService getSearchService() {
+        return searchService;
+    }
+
+    public void setSearchService(SearchService searchService) {
+        this.searchService = searchService;
+    }
+
+    public SimpleSelection getSelection() {
+        return selection;
+    }
+
+    public void setSelection(SimpleSelection selection) {
+        this.selection = selection;
+    }
+
+    public Long getSelectedRowId() {
+        return selectedRowId;
+    }
+
+    public void setSelectedRowId(Long selectedRowId) {
+        this.selectedRowId = selectedRowId;
     }
 }

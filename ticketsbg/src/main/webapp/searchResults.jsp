@@ -9,31 +9,83 @@
 	xmlns:fmt="http://java.sun.com/jstl/fmt"
 	xmlns:t="http://myfaces.apache.org/tomahawk"
 	template="basic_template.jsp">
+
+	<ui:define name="header">
+		<style type="text/css">
+.tableHeader {
+	border-style: none;
+	background-color: white;
+}
+
+.columnClass {
+	border-style: none;
+	padding: 0px;
+	margin: 0px;
+}
+</style>
+	</ui:define>
 	<ui:define name="body">
 		<f:view>
-			<h:form id="searchResults">
+			<a4j:form id="searchResults">
 				<h:messages />
-				
-				<h:outputText value="#{msg.searchResultsFrom} " />
-				<h:outputText value="#{searchController.fromStop}" style="font-weight: bold;" />
-				<h:outputText value=" #{msg.searchResultsTo} " />
-				<h:outputText value="#{searchController.toStop}" style="font-weight: bold;" />
-				
-				<rich:dataGrid value="#{searchController.resultsModel}" var="result"
-					columns="1" width="100%">
-					<rich:panel id="resultEntry" header="#{result.route.name}">
-						<a4j:repeat value="#{result.route.stops}" var="stop"
-							rowKeyVar="row">
-							<h:outputText value="→" rendered="#{row > 0}" />
-							<h:outputText value="#{stop.name}" style="font-weight: bold;"
-								rendered="#{searchController.fromStop == stop.name || searchController.toStop == stop.name}" />
-							<h:outputText value="#{stop.name}"
-								rendered="#{searchController.fromStop != stop.name &amp;&amp; searchController.toStop != stop.name}" />
-						</a4j:repeat>
-					</rich:panel>
-				</rich:dataGrid>
-				<h:commandLink value="#{msg.backToSearchScreen}" action="#{searchController.toSearchScreen}" />
-			</h:form>
+				<rich:extendedDataTable value="#{searchController.resultsModel}"
+					var="result" rowKeyVar="rowId" selectionMode="single"
+					enableContextMenu="false" id="resultsTable"
+					selection="#{searchController.selection}" headerClass="tableHeader"
+					noDataLabel="#{msg.noSearchResults}" width="500px;"
+					columnClasses="columnClass">
+
+					<a4j:support event="onselectionchange" reRender="selectedRoute"
+						action="#{searchController.rowSelectionChanged}" />
+
+					<rich:column width="35px" sortable="false">
+						<!-- For presentational purposes only -->
+						<t:selectOneRow groupName="selectedRoute" id="selectedRoute"
+							value="#{searchController.selectedRowId}">
+							<!-- Dummy converter, doesn't work with no converter -->
+							<f:converter converterId="javax.faces.Integer" />
+						</t:selectOneRow>
+
+					</rich:column>
+
+					<rich:column sortable="false" width="466px">
+						<f:facet name="header">
+							<h:panelGroup style="font-weight: normal;">
+								<h:outputText value="#{msg.searchResultsFrom} " />
+								<h:outputText value="#{searchController.fromStop}"
+									style="font-weight: bold;" />
+								<h:outputText value=" #{msg.searchResultsTo} " />
+								<h:outputText value="#{searchController.toStop}"
+									style="font-weight: bold;" />
+							</h:panelGroup>
+						</f:facet>
+
+						<rich:panel id="resultEntry" header="#{result.run.route.name}">
+                            <a4j:repeat value="#{result.run.route.stops}" var="stop"
+                                rowKeyVar="stopId">
+                                <h:outputText value="→" rendered="#{stopId > 0}" />
+                                <h:outputText value="#{stop.name}" style="font-weight: bold;"
+                                    rendered="#{searchController.fromStop == stop.name || searchController.toStop == stop.name}" />
+                                <h:outputText value="#{stop.name}"
+                                    rendered="#{searchController.fromStop != stop.name &amp;&amp; searchController.toStop != stop.name}" />
+                            </a4j:repeat>
+
+                            <br />
+                            <h:outputText value="#{msg.oneWayPrice}:" />
+                            <h:outputText value="#{result.price.price}"
+                                rendered="#{returnResultsModel == null}">
+                                <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                            </h:outputText>
+                            <h:outputText value="#{result.price.twoWayPrice}"
+                                rendered="#{returnResultsModel != null}">
+                                <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                            </h:outputText>
+                        </rich:panel>
+					</rich:column>
+				</rich:extendedDataTable>
+				<h:commandLink value="#{msg.backToSearchScreen}"
+					action="#{searchController.toSearchScreen}" />
+			</a4j:form>
 		</f:view>
 	</ui:define>
 </ui:composition>

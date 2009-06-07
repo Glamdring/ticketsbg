@@ -30,20 +30,10 @@ import javax.persistence.TemporalType;
                 name = "Run.getLastRuns",
                 query = "SELECT DISTINCT new list(route, run, run.time) FROM Route AS route LEFT OUTER JOIN route.runs AS run GROUP BY route HAVING (SELECT MAX(time) FROM route.runs) = run.time OR (SELECT MAX(time) FROM route.runs) IS NULL "
         ),
-        /*
-         * Performs the search for provided stops criteria.
-         * @Deprecated
-         */
-        @NamedQuery(
-                name = "Run.searchStarTime",
-                query = "SELECT DISTINCT run FROM Run run, IN(run.route.stops) stop " +
-                        "WHERE (stop.name=:fromStop OR stop.name=:toStop) " +
-                        "AND run.time >= :fromTime AND run.time <= :toTime " +
-                        "ORDER BY run.time"
-        ),
+        //TODO optimize. Now does a query for each run (to match a price)
         @NamedQuery(
                 name = "Run.search",
-                query = "SELECT DISTINCT run FROM Run run, IN(run.route.prices) price " +
+                query = "SELECT DISTINCT new com.tickets.model.RunPriceHolder(run, price) FROM Run run, IN(run.route.prices) price " +
                         "WHERE price.startStop.name=:fromStop AND price.endStop.name=:toStop " +
                         "AND price.price > 0 " +
                         "ORDER BY run.time"
