@@ -3,7 +3,7 @@ package com.tickets.services;
 import java.util.Date;
 import java.util.List;
 
-import com.tickets.model.RunPriceHolder;
+import com.tickets.model.SearchResultEntry;
 
 public interface SearchService {
 
@@ -19,7 +19,7 @@ public interface SearchService {
      * 	for departure (true) or for arrival(false)
      * @return list of runs and prices
      */
-    List<RunPriceHolder> search(String startStop,
+    List<SearchResultEntry> search(String startStop,
             String endStop,
             Date date,
             int fromHour,

@@ -33,7 +33,7 @@ import javax.persistence.TemporalType;
         //TODO optimize. Now does a query for each run (to match a price)
         @NamedQuery(
                 name = "Run.search",
-                query = "SELECT DISTINCT new com.tickets.model.RunPriceHolder(run, price) FROM Run run, IN(run.route.prices) price " +
+                query = "SELECT DISTINCT new com.tickets.model.SearchResultEntry(run, price) FROM Run run, IN(run.route.prices) price " +
                         "WHERE price.startStop.name=:fromStop AND price.endStop.name=:toStop " +
                         "AND price.price > 0 " +
                         "ORDER BY run.time"

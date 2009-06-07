@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.tickets.annotations.Action;
-import com.tickets.model.RunPriceHolder;
+import com.tickets.model.SearchResultEntry;
 import com.tickets.services.SearchService;
 
 @Controller("searchController")
@@ -45,20 +45,20 @@ public class SearchController extends BaseController {
     private Integer[] hoursTo;
     private String travelType = TWO_WAY;
 
-    private RunPriceHolder selectedRun;
+    private SearchResultEntry selectedRun;
     private SimpleSelection selection;
     private Long selectedRowId;
 
     @Action
     public String search() {
 
-        List<RunPriceHolder> result = searchService.search(fromStop, toStop, date,
+        List<SearchResultEntry> result = searchService.search(fromStop, toStop, date,
                 fromHour, toHour, timeForDeparture);
 
         resultsModel = new ListDataModel(result);
 
         if (travelType.equals(TWO_WAY)) {
-            List<RunPriceHolder> returnResult = searchService.search(toStop, fromStop,
+            List<SearchResultEntry> returnResult = searchService.search(toStop, fromStop,
                     returnDate, returnFromHour, returnToHour,
                     returnTimeForDeparture);
 
@@ -89,7 +89,7 @@ public class SearchController extends BaseController {
     public void rowSelectionChanged() {
         Integer selectedId = (Integer) selection.getKeys().next();
         selectedRowId = new Long(selectedId);
-        selectedRun = ((List<RunPriceHolder>) resultsModel.getWrappedData()).get(selectedId);
+        selectedRun = ((List<SearchResultEntry>) resultsModel.getWrappedData()).get(selectedId);
     }
 
     public String getFromStop() {
@@ -220,11 +220,11 @@ public class SearchController extends BaseController {
         this.returnResultsModel = returnResultsModel;
     }
 
-    public RunPriceHolder getSelectedRun() {
+    public SearchResultEntry getSelectedRun() {
         return selectedRun;
     }
 
-    public void setSelectedRun(RunPriceHolder selectedRun) {
+    public void setSelectedRun(SearchResultEntry selectedRun) {
         this.selectedRun = selectedRun;
     }
 

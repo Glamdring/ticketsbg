@@ -12,11 +12,11 @@ import org.springframework.stereotype.Component;
 import com.tickets.dao.Dao;
 import com.tickets.model.Price;
 import com.tickets.model.Run;
-import com.tickets.model.RunPriceHolder;
+import com.tickets.model.SearchResultEntry;
 
-@Component("runPriceHolderConverter")
+@Component("searchResultEntryConverter")
 @Scope("singleton")
-public class RunPriceHolderConverter implements Converter {
+public class SearchResultEntryConverter implements Converter {
 
     @Autowired
     private Dao dao;
@@ -29,7 +29,7 @@ public class RunPriceHolderConverter implements Converter {
         Run run = dao.getById(Run.class, Integer.parseInt(parts[0]));
         Price price = dao.getById(Price.class, Integer.parseInt(parts[1]));
 
-        RunPriceHolder holder = new RunPriceHolder(run, price);
+        SearchResultEntry holder = new SearchResultEntry(run, price);
 
         return holder;
     }
@@ -37,10 +37,10 @@ public class RunPriceHolderConverter implements Converter {
     @Override
     public String getAsString(FacesContext facescontext,
             UIComponent uicomponent, Object obj) throws ConverterException {
-        if (!(obj instanceof RunPriceHolder))
+        if (!(obj instanceof SearchResultEntry))
             throw new ConverterException("Object is of class " + obj.getClass() + ", instead of RunPriceHolder");
 
-        RunPriceHolder holder = (RunPriceHolder) obj;
+        SearchResultEntry holder = (SearchResultEntry) obj;
 
         return holder.getRun().getRunId() + ":" + holder.getPrice().getPriceId();
     }

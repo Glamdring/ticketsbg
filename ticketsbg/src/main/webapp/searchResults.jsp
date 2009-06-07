@@ -32,7 +32,7 @@
 					var="result" rowKeyVar="rowId" selectionMode="single"
 					enableContextMenu="false" id="resultsTable"
 					selection="#{searchController.selection}" headerClass="tableHeader"
-					noDataLabel="#{msg.noSearchResults}" width="500px;"
+					noDataLabel="#{msg.noSearchResults}" width="800px;"
 					columnClasses="columnClass">
 
 					<a4j:support event="onselectionchange" reRender="selectedRoute"
@@ -48,15 +48,15 @@
 
 					</rich:column>
 
-					<rich:column sortable="false" width="466px">
+					<rich:column sortable="false" width="764px">
 						<f:facet name="header">
 							<h:panelGroup style="font-weight: normal;">
 								<h:outputText value="#{msg.searchResultsFrom} " />
 								<h:outputText value="#{searchController.fromStop}"
-									style="font-weight: bold;" />
+									styleClass="bold" />
 								<h:outputText value=" #{msg.searchResultsTo} " />
 								<h:outputText value="#{searchController.toStop}"
-									style="font-weight: bold;" />
+									styleClass="bold" />
 							</h:panelGroup>
 						</f:facet>
 
@@ -64,22 +64,35 @@
                             <a4j:repeat value="#{result.run.route.stops}" var="stop"
                                 rowKeyVar="stopId">
                                 <h:outputText value="→" rendered="#{stopId > 0}" />
-                                <h:outputText value="#{stop.name}" style="font-weight: bold;"
+                                <h:outputText value="#{stop.name}" styleClass="bold"
                                     rendered="#{searchController.fromStop == stop.name || searchController.toStop == stop.name}" />
                                 <h:outputText value="#{stop.name}"
                                     rendered="#{searchController.fromStop != stop.name &amp;&amp; searchController.toStop != stop.name}" />
                             </a4j:repeat>
 
-                            <br />
-                            <h:outputText value="#{msg.oneWayPrice}:" />
-                            <h:outputText value="#{result.price.price}"
-                                rendered="#{returnResultsModel == null}">
-                                <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-                            </h:outputText>
-                            <h:outputText value="#{result.price.twoWayPrice}"
-                                rendered="#{returnResultsModel != null}">
-                                <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-                            </h:outputText>
+                            <h:panelGrid columns="2">
+	                            <h:outputText value="#{msg.oneWayPrice}: " rendered="#{returnResultsModel == null}" />
+	                            <h:outputText value="#{result.price.price}"
+	                                rendered="#{returnResultsModel == null}" styleClass="bold">
+	                                <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+	                            </h:outputText>
+	                            <h:outputText value="#{msg.twoWayPrice}: " rendered="#{returnResultsModel != null}" />
+	                            <h:outputText value="#{result.price.twoWayPrice}"
+	                                rendered="#{returnResultsModel != null}" styleClass="bold">
+	                                <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+	                            </h:outputText>
+	                            
+	                            <h:outputText value="#{msg.departureTime}: " />
+	                            <h:outputText value="#{result.departureTime.time}" styleClass="bold">
+	                                <f:convertDateTime type="time" pattern="HH:mm" timeZone="#{timeZoneController.timeZone}" />
+	                            </h:outputText>
+	                            
+	                            <h:outputText value="#{msg.arrivalTime}: " />
+	                            <h:outputText value="#{result.arrivalTime.time}" styleClass="bold">
+	                                <f:convertDateTime type="time" pattern="HH:mm" timeZone="#{timeZoneController.timeZone}" />
+	                            </h:outputText>
+	                            
+                            </h:panelGrid>
                         </rich:panel>
 					</rich:column>
 				</rich:extendedDataTable>
