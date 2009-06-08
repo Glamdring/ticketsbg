@@ -69,7 +69,6 @@ public class SearchServiceImpl extends BaseService implements SearchService {
             }
 
             entry.setArrivalTime(arrivalTime);
-            System.out.println(arrivalTime.getTimeZone());
             entry.setDepartureTime(departureTime);
         }
 

@@ -29,18 +29,20 @@
 			<a4j:form id="searchResults">
 				<h:messages />
 				<rich:extendedDataTable value="#{searchController.resultsModel}"
+					height="#{searchController.resultsModel.rowCount * 138 + 30}"
 					var="result" rowKeyVar="rowId" selectionMode="single"
 					enableContextMenu="false" id="resultsTable"
 					selection="#{searchController.selection}" headerClass="tableHeader"
-					noDataLabel="#{msg.noSearchResults}" width="800px;"
-					columnClasses="columnClass">
+					noDataLabel="#{msg.noSearchResults}" width="500px;"
+					columnClasses="columnClass" style="float: left;">
 
-					<a4j:support event="onselectionchange" reRender="selectedRun"
+					<a4j:support event="onselectionchange"
+						reRender="selectedEntry,returnResultsTable"
 						action="#{searchController.rowSelectionChanged}" />
 
 					<rich:column width="35px" sortable="false">
 						<!-- For presentational purposes only -->
-						<t:selectOneRow groupName="selectedRun" id="selectedRun"
+						<t:selectOneRow groupName="selectedEntry" id="selectedEntry"
 							value="#{searchController.selectedRowId}">
 							<!-- Dummy converter, doesn't work with no converter -->
 							<f:converter converterId="javax.faces.Integer" />
@@ -48,7 +50,7 @@
 
 					</rich:column>
 
-					<rich:column sortable="false" width="764px">
+					<rich:column sortable="false" width="464px">
 						<f:facet name="header">
 							<h:panelGroup style="font-weight: normal;">
 								<h:outputText value="#{msg.searchResultsFrom} " />
@@ -57,13 +59,17 @@
 								<h:outputText value=" #{msg.searchResultsTo} " />
 								<h:outputText value="#{searchController.toStop}"
 									styleClass="bold" />
+								(<h:outputText value="#{searchController.date}">
+									<f:convertDateTime type="date" pattern="dd.MM.yyyy"
+										timeZone="#{timeZoneController.timeZone}" />
+								</h:outputText>)
 							</h:panelGroup>
 						</f:facet>
 
 						<rich:panel id="resultEntry" header="#{result.run.route.name}">
 							<a4j:repeat value="#{result.run.route.stops}" var="stop"
 								rowKeyVar="stopId">
-								<h:outputText value="→" rendered="#{stopId > 0}" />
+								<h:outputText value=" → " rendered="#{stopId > 0}" />
 								<h:outputText value="#{stop.name}" styleClass="bold"
 									rendered="#{searchController.fromStop == stop.name || searchController.toStop == stop.name}" />
 								<h:outputText value="#{stop.name}"
@@ -105,73 +111,85 @@
 
 				<!-- Returns -->
 
-				<rich:extendedDataTable
-					value="#{searchController.returnResultsModel}" var="result"
-					rowKeyVar="rowId" selectionMode="single" enableContextMenu="false"
-					id="returnResultsTable"
-					selection="#{searchController.returnSelection}"
-					headerClass="tableHeader" noDataLabel="#{msg.noSearchResults}"
-					width="800px;" columnClasses="columnClass"
-					rendered="#{searchController.returnResultsModel != null}">
+				<a4j:region>
+					<rich:extendedDataTable
+						height="#{searchController.returnResultsModel.rowCount * 100 + 30}"
+						value="#{searchController.returnResultsModel}" var="result"
+						rowKeyVar="rowId" selectionMode="single" enableContextMenu="false"
+						id="returnResultsTable"
+						selection="#{searchController.returnSelection}"
+						headerClass="tableHeader" noDataLabel="#{msg.noSearchResults}"
+						width="500px;" columnClasses="columnClass"
+						rendered="#{searchController.returnResultsModel != null}"
+						style="float: left; clear: right;">
 
-					<a4j:support event="onselectionchange" reRender="selectedReturnRun"
-						action="#{searchController.returnRowSelectionChanged}" />
+						<a4j:support event="onselectionchange"
+							reRender="selectedReturnEntry"
+							action="#{searchController.returnRowSelectionChanged}" />
 
-					<rich:column width="35px" sortable="false">
-						<!-- For presentational purposes only -->
-						<t:selectOneRow groupName="selectedReturnRun"
-							id="selectedReturnRun"
-							value="#{searchController.selectedReturnRowId}">
-							<!-- Dummy converter; doesn't work with no converter -->
-							<f:converter converterId="javax.faces.Integer" />
-						</t:selectOneRow>
+						<rich:column width="35px" sortable="false">
+							<!-- For presentational purposes only -->
+							<t:selectOneRow groupName="selectedReturnEntry"
+								id="selectedReturnEntry"
+								value="#{searchController.selectedReturnRowId}">
+								<!-- Dummy converter; doesn't work with no converter -->
+								<f:converter converterId="javax.faces.Integer" />
+							</t:selectOneRow>
 
-					</rich:column>
+						</rich:column>
 
-					<rich:column sortable="false" width="764px">
-						<f:facet name="header">
-							<h:panelGroup style="font-weight: normal;">
-								<h:outputText value="#{msg.searchResultsFrom} " />
-								<h:outputText value="#{searchController.toStop}"
-									styleClass="bold" />
+						<rich:column sortable="false" width="464px"
+							filterExpression="#{searchController.selectedEntry == null || result.run.route.firm.firmId == searchController.selectedEntry.run.route.firm.firmId}">
+							<f:facet name="header">
+								<h:panelGroup style="font-weight: normal;">
+									<h:outputText value="#{msg.searchResultsFrom} " />
+									<h:outputText value="#{searchController.toStop}"
+										styleClass="bold" />
 
-								<h:outputText value=" #{msg.searchResultsTo} " />
-								<h:outputText value="#{searchController.fromStop}"
-									styleClass="bold" />
+									<h:outputText value=" #{msg.searchResultsTo} " />
+									<h:outputText value="#{searchController.fromStop}"
+										styleClass="bold" />
+									
+								 (<h:outputText value="#{searchController.returnDate}">
+										<f:convertDateTime type="date" pattern="dd.MM.yyyy"
+											timeZone="#{timeZoneController.timeZone}" />
+									</h:outputText>)
 							</h:panelGroup>
-						</f:facet>
+							</f:facet>
 
-						<rich:panel id="resultEntry" header="#{result.run.route.name}">
-							<a4j:repeat value="#{result.run.route.stops}" var="stop"
-								rowKeyVar="stopId">
-								<h:outputText value="→" rendered="#{stopId > 0}" />
-								<h:outputText value="#{stop.name}" styleClass="bold"
-									rendered="#{searchController.fromStop == stop.name || searchController.toStop == stop.name}" />
-								<h:outputText value="#{stop.name}"
-									rendered="#{searchController.fromStop != stop.name &amp;&amp; searchController.toStop != stop.name}" />
-							</a4j:repeat>
+							<rich:panel id="resultEntry" header="#{result.run.route.name}">
+								<a4j:repeat value="#{result.run.route.stops}" var="stop"
+									rowKeyVar="stopId">
+									<h:outputText value=" → " rendered="#{stopId > 0}" />
+									<h:outputText value="#{stop.name}" styleClass="bold"
+										rendered="#{searchController.fromStop == stop.name || searchController.toStop == stop.name}" />
+									<h:outputText value="#{stop.name}"
+										rendered="#{searchController.fromStop != stop.name &amp;&amp; searchController.toStop != stop.name}" />
+								</a4j:repeat>
 
-							<h:panelGrid columns="2">
+								<h:panelGrid columns="2">
 
-								<h:outputText value="#{msg.departureTime}: " />
-								<h:outputText value="#{result.departureTime.time}"
-									styleClass="bold">
-									<f:convertDateTime type="time" pattern="HH:mm"
-										timeZone="#{timeZoneController.timeZone}" />
-								</h:outputText>
+									<h:outputText value="#{msg.departureTime}: " />
+									<h:outputText value="#{result.departureTime.time}"
+										styleClass="bold">
+										<f:convertDateTime type="time" pattern="HH:mm"
+											timeZone="#{timeZoneController.timeZone}" />
+									</h:outputText>
 
-								<h:outputText value="#{msg.arrivalTime}: " />
-								<h:outputText value="#{result.arrivalTime.time}"
-									styleClass="bold">
-									<f:convertDateTime type="time" pattern="HH:mm"
-										timeZone="#{timeZoneController.timeZone}" />
-								</h:outputText>
-							</h:panelGrid>
-						</rich:panel>
-					</rich:column>
-				</rich:extendedDataTable>
+									<h:outputText value="#{msg.arrivalTime}: " />
+									<h:outputText value="#{result.arrivalTime.time}"
+										styleClass="bold">
+										<f:convertDateTime type="time" pattern="HH:mm"
+											timeZone="#{timeZoneController.timeZone}" />
+									</h:outputText>
+								</h:panelGrid>
+							</rich:panel>
+						</rich:column>
+					</rich:extendedDataTable>
+				</a4j:region>
 				<h:commandLink value="#{msg.backToSearchScreen}"
-					action="#{searchController.toSearchScreen}" />
+					action="#{searchController.toSearchScreen}"
+					style="clear: both; float: left;" />
 			</a4j:form>
 		</f:view>
 	</ui:define>

@@ -45,17 +45,19 @@ public class SearchController extends BaseController {
     private Integer[] hoursTo;
     private String travelType = TWO_WAY;
 
-    private SearchResultEntry selectedRun;
+    private SearchResultEntry selectedEntry;
     private SimpleSelection selection;
     private Long selectedRowId;
 
-    private SearchResultEntry selectedReturnRun;
+    private SearchResultEntry selectedReturnEntry;
     private SimpleSelection returnSelection;
     private Long selectedReturnRowId;
 
 
     @Action
     public String search() {
+        //resetting, in case the conversation hasn't ended
+        resetSelections();
 
         List<SearchResultEntry> result = searchService.search(fromStop, toStop, date,
                 fromHour, toHour, timeForDeparture);
@@ -71,6 +73,12 @@ public class SearchController extends BaseController {
         }
 
         return "searchResults";
+    }
+
+    private void resetSelections() {
+        returnResultsModel = null;
+        selectedEntry = null;
+        selectedReturnEntry = null;
     }
 
     public String toSearchScreen() {
@@ -94,14 +102,14 @@ public class SearchController extends BaseController {
     public void rowSelectionChanged() {
         Integer selectedId = (Integer) selection.getKeys().next();
         selectedRowId = new Long(selectedId);
-        selectedRun = ((List<SearchResultEntry>) resultsModel.getWrappedData()).get(selectedId);
+        selectedEntry = ((List<SearchResultEntry>) resultsModel.getWrappedData()).get(selectedId);
     }
 
     @SuppressWarnings("unchecked")
     public void returnRowSelectionChanged() {
         Integer selectedId = (Integer) returnSelection.getKeys().next();
         selectedReturnRowId = new Long(selectedId);
-        selectedReturnRun = ((List<SearchResultEntry>) returnResultsModel.getWrappedData()).get(selectedId);
+        selectedReturnEntry = ((List<SearchResultEntry>) returnResultsModel.getWrappedData()).get(selectedId);
     }
 
     public String getFromStop() {
@@ -232,14 +240,6 @@ public class SearchController extends BaseController {
         this.returnResultsModel = returnResultsModel;
     }
 
-    public SearchResultEntry getSelectedRun() {
-        return selectedRun;
-    }
-
-    public void setSelectedRun(SearchResultEntry selectedRun) {
-        this.selectedRun = selectedRun;
-    }
-
     public SearchService getSearchService() {
         return searchService;
     }
@@ -264,14 +264,6 @@ public class SearchController extends BaseController {
         this.selectedRowId = selectedRowId;
     }
 
-    public SearchResultEntry getSelectedReturnRun() {
-        return selectedReturnRun;
-    }
-
-    public void setSelectedReturnRun(SearchResultEntry selectedReturnRun) {
-        this.selectedReturnRun = selectedReturnRun;
-    }
-
     public SimpleSelection getReturnSelection() {
         return returnSelection;
     }
@@ -286,5 +278,21 @@ public class SearchController extends BaseController {
 
     public void setSelectedReturnRowId(Long selectedReturnRowId) {
         this.selectedReturnRowId = selectedReturnRowId;
+    }
+
+    public SearchResultEntry getSelectedEntry() {
+        return selectedEntry;
+    }
+
+    public void setSelectedEntry(SearchResultEntry selectedEntry) {
+        this.selectedEntry = selectedEntry;
+    }
+
+    public SearchResultEntry getSelectedReturnEntry() {
+        return selectedReturnEntry;
+    }
+
+    public void setSelectedReturnEntry(SearchResultEntry selectedReturnEntry) {
+        this.selectedReturnEntry = selectedReturnEntry;
     }
 }
