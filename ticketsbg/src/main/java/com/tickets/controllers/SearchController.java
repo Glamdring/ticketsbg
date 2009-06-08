@@ -49,6 +49,11 @@ public class SearchController extends BaseController {
     private SimpleSelection selection;
     private Long selectedRowId;
 
+    private SearchResultEntry selectedReturnRun;
+    private SimpleSelection returnSelection;
+    private Long selectedReturnRowId;
+
+
     @Action
     public String search() {
 
@@ -90,6 +95,13 @@ public class SearchController extends BaseController {
         Integer selectedId = (Integer) selection.getKeys().next();
         selectedRowId = new Long(selectedId);
         selectedRun = ((List<SearchResultEntry>) resultsModel.getWrappedData()).get(selectedId);
+    }
+
+    @SuppressWarnings("unchecked")
+    public void returnRowSelectionChanged() {
+        Integer selectedId = (Integer) returnSelection.getKeys().next();
+        selectedReturnRowId = new Long(selectedId);
+        selectedReturnRun = ((List<SearchResultEntry>) returnResultsModel.getWrappedData()).get(selectedId);
     }
 
     public String getFromStop() {
@@ -250,5 +262,29 @@ public class SearchController extends BaseController {
 
     public void setSelectedRowId(Long selectedRowId) {
         this.selectedRowId = selectedRowId;
+    }
+
+    public SearchResultEntry getSelectedReturnRun() {
+        return selectedReturnRun;
+    }
+
+    public void setSelectedReturnRun(SearchResultEntry selectedReturnRun) {
+        this.selectedReturnRun = selectedReturnRun;
+    }
+
+    public SimpleSelection getReturnSelection() {
+        return returnSelection;
+    }
+
+    public void setReturnSelection(SimpleSelection returnSelection) {
+        this.returnSelection = returnSelection;
+    }
+
+    public Long getSelectedReturnRowId() {
+        return selectedReturnRowId;
+    }
+
+    public void setSelectedReturnRowId(Long selectedReturnRowId) {
+        this.selectedReturnRowId = selectedReturnRowId;
     }
 }
