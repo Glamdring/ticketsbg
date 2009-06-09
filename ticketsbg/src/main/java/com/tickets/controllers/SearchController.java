@@ -22,6 +22,9 @@ public class SearchController extends BaseController {
     @Autowired
     private SearchService searchService;
 
+    @Autowired
+    private CartController cartController;
+
     private static final String TWO_WAY = "twoWay";
 
     private String fromStop;
@@ -75,6 +78,11 @@ public class SearchController extends BaseController {
         return "searchResults";
     }
 
+    @Action
+    public String proceedToPersonalInformation() {
+        //cartController.set
+        return "personalInoformationScreen";
+    }
     private void resetSelections() {
         returnResultsModel = null;
         selectedEntry = null;

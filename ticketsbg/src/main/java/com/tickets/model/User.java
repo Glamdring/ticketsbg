@@ -51,12 +51,6 @@ public class User extends DataObject implements Serializable {
     private String repeatPassword;
 
     @Column
-    private String email;
-
-    @Column
-    private String name;
-
-    @Column
     private boolean active;
 
     @Column
@@ -86,6 +80,39 @@ public class User extends DataObject implements Serializable {
     @Column
     private boolean isStaff;
 
+    @Column
+    protected String email;
+
+    @Column
+    protected String name;
+
+    @Column
+    protected String contactPhone;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getContactPhone() {
+        return contactPhone;
+    }
+
+    public void setContactPhone(String contactPhone) {
+        this.contactPhone = contactPhone;
+    }
+
     public int getUserId() {
         return userId;
     }
@@ -108,22 +135,6 @@ public class User extends DataObject implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public boolean isActive() {
@@ -208,6 +219,6 @@ public class User extends DataObject implements Serializable {
 
     @Override
     public String toString() {
-        return super.toString() + " : " + username + " : " + name + " : " + password;
+        return super.toString() + " : " + username + " : " + getName() + " : " + password;
     }
 }

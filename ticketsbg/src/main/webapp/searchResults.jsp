@@ -190,6 +190,7 @@
 				<h:commandLink value="#{msg.backToSearchScreen}"
 					action="#{searchController.toSearchScreen}"
 					style="clear: both; float: left;" />
+				<h:commandButton action="#{searchController.proceedToPersonalInformation}" value="#{msg.buy}" />
 			</a4j:form>
 		</f:view>
 	</ui:define>
