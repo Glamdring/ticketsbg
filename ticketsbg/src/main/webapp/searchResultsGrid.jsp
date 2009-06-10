@@ -8,7 +8,7 @@
 	xmlns:c="http://java.sun.com/jstl/core"
 	xmlns:fmt="http://java.sun.com/jstl/fmt"
 	xmlns:t="http://myfaces.apache.org/tomahawk"
-	template="basic_template.jsp">
+	template="basicTemplate.jsp">
 	<ui:define name="body">
 		<f:view>
 			<a4j:form id="searchResults">

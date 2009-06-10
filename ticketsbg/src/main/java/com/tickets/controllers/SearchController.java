@@ -16,7 +16,7 @@ import com.tickets.model.SearchResultEntry;
 import com.tickets.services.SearchService;
 
 @Controller("searchController")
-@Scope("conversation.access")
+@Scope("conversation.access") //TODO manual, if 'back' button is to work
 public class SearchController extends BaseController {
 
     @Autowired

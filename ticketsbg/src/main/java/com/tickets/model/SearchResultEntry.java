@@ -1,8 +1,9 @@
 package com.tickets.model;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
-public class SearchResultEntry {
+public class SearchResultEntry implements Serializable {
 
     private Run run;
     private Price price;
