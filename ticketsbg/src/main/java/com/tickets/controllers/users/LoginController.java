@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import com.tickets.annotations.Action;
 import com.tickets.controllers.BaseController;
 import com.tickets.exceptions.UserException;
+import com.tickets.model.User;
 import com.tickets.services.UserService;
 
 @Controller("loginController")
@@ -22,16 +23,24 @@ public class LoginController extends BaseController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private LoggedUserHolder loggedUserHolder;
+
     @Action
     public String login() {
         //FacesContext.getCurrentInstance().getExternalContext().getRequest();
         System.out.println(username + ":" + password + ":" + admin);
         try {
-            userService.login(username,
+            User loggedUser = userService.login(username,
                     password.toCharArray(),
-                    (Boolean) admin.getValue(), false);
+                    false);
 
-            return "adminPanel";
+            loggedUserHolder.setLoggedUser(loggedUser);
+
+            if ((Boolean) admin.getValue()) {
+                return "adminPanel";
+            }
+            return "";
         } catch (UserException ex) {
             addError(ex.getMessageKey());
             return null;

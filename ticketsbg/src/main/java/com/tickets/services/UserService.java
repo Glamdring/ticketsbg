@@ -15,8 +15,9 @@ public interface UserService extends Service<User> {
      * Registers a new user
      *
      * @param user
+     * @return user
      */
-    void register(User user) throws UserException;
+    User register(User user) throws UserException;
 
 
     /**
@@ -25,11 +26,10 @@ public interface UserService extends Service<User> {
      * @param password
      * @param isStaff
      *
-     * @return the id of the user
+     * @return the logged user
      */
-    int login(String username,
+    User login(String username,
             char[] password,
-            boolean isStaff,
             boolean passwordAlreadyHashed)
         throws UserException;
 

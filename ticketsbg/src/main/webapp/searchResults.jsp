@@ -8,7 +8,7 @@
 	xmlns:c="http://java.sun.com/jstl/core"
 	xmlns:fmt="http://java.sun.com/jstl/fmt"
 	xmlns:t="http://myfaces.apache.org/tomahawk"
-	template="basicTemplate.jsp">
+	template="publicTemplate.jsp">
 
 	<ui:define name="header">
 		<style type="text/css">
@@ -187,10 +187,12 @@
 						</rich:column>
 					</rich:extendedDataTable>
 				</a4j:region>
-				<h:commandLink value="#{msg.backToSearchScreen}"
-					action="#{searchController.toSearchScreen}"
-					style="clear: both; float: left;" />
-				<h:commandButton action="#{searchController.proceedToPersonalInformation}" value="#{msg.buy}" />
+				<h:panelGroup style="clear: both; float: left;">
+					<h:commandLink value="#{msg.backToSearchScreen}"
+						action="#{searchController.toSearchScreen}"/>
+					<h:outputText value=" " />
+					<h:commandButton action="#{searchController.proceedToPersonalInformation}" value="#{msg.buy}" />
+				</h:panelGroup>
 			</a4j:form>
 		</f:view>
 	</ui:define>

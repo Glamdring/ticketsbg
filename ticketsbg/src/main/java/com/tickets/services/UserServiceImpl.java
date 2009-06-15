@@ -29,8 +29,8 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
     public static final String ENCODING = "ISO-8859-1";
 
     @SuppressWarnings("unchecked")
-    public int login(String username, char[] password,
-            boolean isStaff, boolean passwordAlreadyHashed) throws UserException {
+    public User login(String username, char[] password,
+            boolean passwordAlreadyHashed) throws UserException {
 
         String passParam = "";
         if (passwordAlreadyHashed)
@@ -38,13 +38,14 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
         else
             passParam = hash(new String(password));
 
-        List<User> result = getDao().findByNamedQuery("User.login", new String[] {
-                "username", "password"}, new Object[] {username, passParam});
+        List<User> result = getDao().findByNamedQuery("User.login",
+                new String[] { "username", "password" },
+                new Object[] { username, passParam });
 
         if (result == null || result.size() != 1) {
-            result = getDao().findByNamedQuery("User.tempLogin", new String[] {
-                    "username", "password"}, new Object[] {username,
-                    hash(new String(password))});
+            result = getDao().findByNamedQuery("User.tempLogin",
+                    new String[] { "username", "password" },
+                    new Object[] { username, hash(new String(password)) });
 
             if (result == null || result.size() != 1) {
                 throw UserException.INCORRECT_LOGIN_DATA;
@@ -53,13 +54,13 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
             } else {
                 User user = result.get(0);
                 user.setChangePasswordAfterLogin(true);
-                //getDao().save(user);
-                return user.getUserId();
+                // getDao().save(user);
+                return user;
             }
         } else if (!result.get(0).isActive()) {
             throw UserException.USER_INACTIVE;
         } else {
-            return result.get(0).getUserId();
+            return result.get(0);
         }
     }
 
@@ -70,7 +71,8 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
             PublicKey key = CertificateManager.getPublicKey();
             Cipher cipher = Cipher.getInstance("RSA");
             cipher.init(Cipher.ENCRYPT_MODE, key);
-            String base64String = Base64Encoder.toBase64String(cipher.doFinal(bytes));
+            String base64String = Base64Encoder.toBase64String(cipher
+                    .doFinal(bytes));
 
             return base64String;
         } catch (Exception ex) {
@@ -92,12 +94,13 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
         }
     }
 
-    public void register(User user) throws UserException {
+    public User register(User user) throws UserException {
         if (user == null)
-            return;
+            return null;
 
         user.setPassword(hash(user.getPassword()));
-        user.setActivationCode(getHexString(salt(user.getUsername())
+        user
+                .setActivationCode(getHexString(salt(user.getUsername())
                         .getBytes()));
 
         user.setRegisteredTimestamp(System.currentTimeMillis());
@@ -109,8 +112,8 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
             email.setFrom(Settings.getValue("confirmation.email.sender"));
             email.setSubject(Messages.getString("confirmation.email.subject"));
             email.setHtmlMsg(Messages.getString("confirmation.email.content",
-                    user.getName(), user.getUsername(), user.getRepeatPassword(),
-                    Settings.getValue("base.url")
+                    user.getName(), user.getUsername(), user
+                            .getRepeatPassword(), Settings.getValue("base.url")
                             + "/users.do?method=activate&code="
                             + user.getActivationCode()));
 
@@ -120,13 +123,15 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
             log.error("Mail problem", eex);
             throw UserException.EMAIL_PROBLEM;
         }
+
+        return user;
     }
 
     @SuppressWarnings("unchecked")
     public void activateUserWithCode(String code) throws UserException {
-        List<User> list = getDao().findByQuery("select u from User u "
-                + "where u.activationCode=:code", new String[] {"code"},
-                new Object[] {code});
+        List<User> list = getDao().findByQuery(
+                "select u from User u " + "where u.activationCode=:code",
+                new String[] { "code" }, new Object[] { code });
 
         if (list.size() == 1) {
             User user = list.get(0);
@@ -149,19 +154,20 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
     }
 
     public void clearNonActivatedUsers() {
-        int result = getDao().executeQuery("delete from User u "
-                + "WHERE u.registeredTimestamp < :treshold AND active=false",
-                new String[] {"treshold"}, new Object[] {System
-                        .currentTimeMillis()
-                        - Constants.ONE_DAY});
+        int result = getDao()
+                .executeQuery(
+                        "delete from User u "
+                                + "WHERE u.registeredTimestamp < :treshold AND active=false",
+                        new String[] { "treshold" },
+                        new Object[] { System.currentTimeMillis()
+                                - Constants.ONE_DAY });
 
         log.info("Cleaning inactive users : " + result);
     }
 
-    public void remindPassword(String email)
-            throws UserException {
+    public void remindPassword(String email) throws UserException {
         List list = getDao().findByNamedQuery("User.getByEmail",
-                new String[] {"email"}, new Object[] {email});
+                new String[] { "email" }, new Object[] { email });
 
         if (list.size() > 0) {
             User user = (User) list.get(0);
@@ -172,9 +178,11 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
                 HtmlEmail mail = getPreconfiguredMail();
                 mail.setFrom(Settings.getValue("temp.password.email.sender"));
                 mail.addTo(email);
-                mail.setSubject(Messages.getString("temp.password.email.subject"));
-                mail.setHtmlMsg(Messages.getString("temp.password.email.content",
-                        user.getName(), tempPassword));
+                mail.setSubject(Messages
+                        .getString("temp.password.email.subject"));
+                mail.setHtmlMsg(Messages.getString(
+                        "temp.password.email.content", user.getName(),
+                        tempPassword));
                 mail.send();
                 getDao().persist(user);
             } catch (EmailException eex) {
@@ -213,7 +221,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
         return new String(chars).trim();
     }
 
-    private char[] saltChars = new char[] {'!', 'b', '0', 'z', 'h', 'o'};
+    private char[] saltChars = new char[] { '!', 'b', '0', 'z', 'h', 'o' };
 
     private String salt(String password) {
         StringBuffer sb = new StringBuffer();

@@ -56,7 +56,6 @@ public class RouteController extends BaseController implements Serializable {
     @Autowired
     private StopService stopService;
 
-
     @Autowired
     private RouteService routeService;
 

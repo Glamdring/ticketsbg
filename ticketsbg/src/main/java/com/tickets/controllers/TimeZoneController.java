@@ -1,5 +1,6 @@
 package com.tickets.controllers;
 
+import java.io.Serializable;
 import java.util.TimeZone;
 
 import javax.annotation.PostConstruct;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Controller;
 
 @Controller("timeZoneController")
 @Scope("session")
-public class TimeZoneController {
+public class TimeZoneController implements Serializable {
 
     private TimeZone timeZone;
 

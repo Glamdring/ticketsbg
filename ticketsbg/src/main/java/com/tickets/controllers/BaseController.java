@@ -7,7 +7,9 @@ import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
+import com.tickets.constants.Constants;
 import com.tickets.constants.Messages;
+import com.tickets.model.User;
 import com.tickets.utils.SpringContext;
 
 public abstract class BaseController implements Serializable {
@@ -41,6 +43,7 @@ public abstract class BaseController implements Serializable {
     }
 
     public String restartCtx(){
+
         SpringContext.init(
                 ((ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getRealPath("/") + "WEB-INF/classes/");
         return "routesList";

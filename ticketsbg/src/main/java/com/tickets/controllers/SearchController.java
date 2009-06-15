@@ -6,17 +6,26 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.model.ListDataModel;
 
+import org.apache.myfaces.orchestra.conversation.annotations.ConversationName;
 import org.richfaces.model.selection.SimpleSelection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.tickets.annotations.Action;
+import com.tickets.controllers.users.LoggedUserHolder;
 import com.tickets.model.SearchResultEntry;
 import com.tickets.services.SearchService;
-
+/**
+ * Controller which handles the whole purchase process.
+ * Subcontrollers are included for different tasks
+ *
+ * @author Bozhidar Bozhanov
+ *
+ */
 @Controller("searchController")
-@Scope("conversation.access") //TODO manual, if 'back' button is to work
+@Scope("conversation.manual")
+@ConversationName("purchaseConversation")
 public class SearchController extends BaseController {
 
     @Autowired
@@ -24,6 +33,9 @@ public class SearchController extends BaseController {
 
     @Autowired
     private CartController cartController;
+
+    @Autowired
+    private LoggedUserHolder loggedUserHolder;
 
     private static final String TWO_WAY = "twoWay";
 
@@ -80,9 +92,9 @@ public class SearchController extends BaseController {
 
     @Action
     public String proceedToPersonalInformation() {
-        //cartController.set
-        return "personalInoformationScreen";
+        return "personalInformationScreen";
     }
+
     private void resetSelections() {
         returnResultsModel = null;
         selectedEntry = null;
