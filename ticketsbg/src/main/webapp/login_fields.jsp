@@ -17,7 +17,7 @@
 				<h:inputSecret id="password" value="#{loginController.password}" />
 
 				<h:inputHidden id="admin" converter="#{booleanConverter}"
-					value="#{admin}" binding="#{loginController.admin}" />
+					value="#{isAdmin}" binding="#{loginController.admin}" />
 				<h:commandButton action="#{loginController.login}" type="submit"
 					value="#{msg.login}" />
 			</h:panelGrid>

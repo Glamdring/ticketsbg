@@ -13,9 +13,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.tickets.annotations.Action;
-import com.tickets.controllers.users.LoggedUserHolder;
 import com.tickets.model.SearchResultEntry;
+import com.tickets.model.Ticket;
 import com.tickets.services.SearchService;
+import com.tickets.services.TicketService;
 /**
  * Controller which handles the whole purchase process.
  * Subcontrollers are included for different tasks
@@ -32,10 +33,10 @@ public class SearchController extends BaseController {
     private SearchService searchService;
 
     @Autowired
-    private CartController cartController;
+    private TicketService ticketService;
 
     @Autowired
-    private LoggedUserHolder loggedUserHolder;
+    private PurchaseController purchaseController;
 
     private static final String TWO_WAY = "twoWay";
 
@@ -87,11 +88,18 @@ public class SearchController extends BaseController {
             returnResultsModel = new ListDataModel(returnResult);
         }
 
+        purchaseController.setCurrentStep(Step.SEARCH_RESULTS);
+
         return "searchResults";
     }
 
     @Action
     public String proceedToPersonalInformation() {
+        //TODO client-side validate selectedEntry != null
+
+        Ticket ticket = ticketService.createTicket(selectedEntry, selectedReturnEntry);
+        purchaseController.setTicket(ticket);
+
         return "personalInformationScreen";
     }
 

@@ -28,15 +28,15 @@
 
 				<h:panelGrid columns="2" id="directInputFields">
 					<h:outputLabel for="name" value="#{msg.names}" />
-					<h:inputText value="#{personalInformationController.name}"
+					<h:inputText value="#{personalInformationController.customer.name}"
 						id="name" />
 
 					<h:outputLabel for="contactPhone" value="#{msg.contactPhone}" />
-					<h:inputText value="#{personalInformationController.name}"
+					<h:inputText value="#{personalInformationController.customer.name}"
 						id="contactPhone" />
 
 					<h:outputLabel for="email" value="#{msg.email}" />
-					<h:inputText value="#{personalInformationController.email}"
+					<h:inputText value="#{personalInformationController.customer.email}"
 						id="email" />
 
 				</h:panelGrid>
@@ -56,8 +56,9 @@
 				</h:panelGroup>
 			</f:facet>
 			<ui:include src="login_fields.jsp">
-			     <ui:param name="admin" value="false" />
+			     <ui:param name="isAdmin" value="false" />
 			</ui:include>
+			<a4j:support event="hide" action="#{personalInformationController.updateCustomer}"/>
 		</rich:modalPanel>
 		
 	</ui:define>

@@ -5,10 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -16,11 +14,10 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
-import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
-@Table(name="users")
+@DiscriminatorValue("1")
 @NamedQueries({
         @NamedQuery(
             name = "User.login",
@@ -35,11 +32,7 @@ import javax.persistence.Transient;
             query = "select u from User u where u.email=:email"
         )
 })
-public class User extends DataObject implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private int userId;
+public class User extends Customer implements Serializable {
 
     @Column(nullable = false, length = 40)
     private String username;
@@ -70,7 +63,7 @@ public class User extends DataObject implements Serializable {
     private Set<UsersHistory> history = new HashSet<UsersHistory>();
 
     @ManyToMany
-    @JoinTable(name="firmsUsers", joinColumns=@JoinColumn(name="userId", referencedColumnName="userId"),
+    @JoinTable(name="firmsUsers", joinColumns=@JoinColumn(name="userId", referencedColumnName="id"),
             inverseJoinColumns=@JoinColumn(name="firmId", referencedColumnName="firmId"))
     private Set<Firm> firms = new HashSet<Firm>();
 
@@ -79,47 +72,6 @@ public class User extends DataObject implements Serializable {
 
     @Column
     private boolean isStaff;
-
-    @Column
-    protected String email;
-
-    @Column
-    protected String name;
-
-    @Column
-    protected String contactPhone;
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getContactPhone() {
-        return contactPhone;
-    }
-
-    public void setContactPhone(String contactPhone) {
-        this.contactPhone = contactPhone;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int id) {
-        this.userId = id;
-    }
 
     public String getUsername() {
         return username;

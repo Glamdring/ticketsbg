@@ -8,7 +8,7 @@
 	xmlns:c="http://java.sun.com/jstl/core" template="basic_template.jsp">
 	<ui:define name="body">
 		<ui:include src="login_fields.jsp">
-            <ui:param name="admin" value="true" />
+            <ui:param name="isAdmin" value="true" />
         </ui:include>
 	</ui:define>
 </ui:composition>

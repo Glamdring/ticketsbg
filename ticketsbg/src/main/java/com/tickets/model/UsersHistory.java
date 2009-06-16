@@ -28,7 +28,7 @@ public class UsersHistory implements java.io.Serializable {
     private long dtm;
 
     @ManyToOne
-    @JoinColumn(name="userId", referencedColumnName="userId")
+    @JoinColumn(name="userId", referencedColumnName="id")
     private User user;
 
     public User getUser() {

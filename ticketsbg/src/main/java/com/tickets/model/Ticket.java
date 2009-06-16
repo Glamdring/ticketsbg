@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -28,8 +29,12 @@ public class Ticket implements java.io.Serializable {
 
 
     @ManyToOne
-    @JoinColumn(name="userId", referencedColumnName="userId")
+    @JoinColumn(name="userId", referencedColumnName="id")
     private User user;
+
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name="customerId", referencedColumnName="id")
+    private Customer customerInformation;
 
     @Column(length = 16)
     private String paymentCode;
@@ -40,12 +45,24 @@ public class Ticket implements java.io.Serializable {
     @Column
     private BigDecimal price;
 
+    @Column
+    private String startStop;
+
+    @Column
+    private String endStop;
+
+    @Column
+    private boolean isTwoWay;
+
     @ManyToOne
     @JoinColumn(name="runId", referencedColumnName="runId", insertable=false, updatable=false)
     private Run run;
 
     @Column
     private boolean committed;
+
+    @Column
+    private boolean paymentInProcess;
 
     public Run getRun() {
         return run;
@@ -106,5 +123,45 @@ public class Ticket implements java.io.Serializable {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public String getStartStop() {
+        return startStop;
+    }
+
+    public void setStartStop(String startStop) {
+        this.startStop = startStop;
+    }
+
+    public String getEndStop() {
+        return endStop;
+    }
+
+    public void setEndStop(String endStop) {
+        this.endStop = endStop;
+    }
+
+    public boolean isTwoWay() {
+        return isTwoWay;
+    }
+
+    public void setTwoWay(boolean isTwoWay) {
+        this.isTwoWay = isTwoWay;
+    }
+
+    public Customer getCustomerInformation() {
+        return customerInformation;
+    }
+
+    public void setCustomerInformation(Customer customerInformation) {
+        this.customerInformation = customerInformation;
+    }
+
+    public boolean isPaymentInProcess() {
+        return paymentInProcess;
+    }
+
+    public void setPaymentInProcess(boolean paymentInProcess) {
+        this.paymentInProcess = paymentInProcess;
     }
 }

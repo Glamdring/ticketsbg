@@ -1,35 +1,55 @@
 package com.tickets.controllers;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.myfaces.orchestra.conversation.annotations.ConversationName;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.tickets.controllers.users.LoggedUserHolder;
+import com.tickets.model.Customer;
+import com.tickets.model.User;
+
 @Component("personalInformationController")
-@Scope("conversation.access")
+@Scope("conversation.manual")
 @ConversationName("purchaseConversation")
 public class PersonalInformationController extends BaseController {
 
-    private String name;
-    private String contactPhone;
-    private String email;
+    @Autowired
+    private LoggedUserHolder loggedUserHolder;
 
+    @Autowired
+    private PurchaseController purchaseController;
 
-    public String getName() {
-        return name;
+    private Customer customer;
+
+    public Customer getCustomer() {
+        return customer;
     }
-    public void setName(String name) {
-        this.name = name;
+
+    @PostConstruct
+    public void init() {
+        customer = loggedUserHolder.getLoggedUser();
+        if (customer == null) {
+            customer = new Customer();
+        }
     }
-    public String getContactPhone() {
-        return contactPhone;
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
-    public void setContactPhone(String contactPhone) {
-        this.contactPhone = contactPhone;
+
+    public void updateCustomer() {
+        System.out.println("ASDf");
     }
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
+
+    public String proceedToPayment() {
+        if (customer instanceof User) {
+            purchaseController.getTicket().setUser((User) customer);
+        }
+        purchaseController.getTicket().setCustomerInformation(customer);
+
+        return "paymentScreen";
     }
 }
