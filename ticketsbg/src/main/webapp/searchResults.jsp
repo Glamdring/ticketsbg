@@ -38,6 +38,7 @@
 
 					<a4j:support event="onselectionchange"
 						reRender="selectedEntry,returnResultsTable"
+						eventsQueue="selectionSubmit"
 						action="#{searchController.rowSelectionChanged}" />
 
 					<rich:column width="35px" sortable="false">
@@ -125,6 +126,7 @@
 
 						<a4j:support event="onselectionchange"
 							reRender="selectedReturnEntry"
+							eventsQueue="returnSelectionSubmit"
 							action="#{searchController.returnRowSelectionChanged}" />
 
 						<rich:column width="35px" sortable="false">

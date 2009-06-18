@@ -71,6 +71,9 @@ public class Route extends DataObject implements Serializable {
     @Column
     private int publishedRunsPeriod = 30;
 
+    @Column
+    private boolean singleRun;
+
     public Route() {
     }
 
@@ -184,4 +187,11 @@ public class Route extends DataObject implements Serializable {
         runs.add(run);
     }
 
+    public boolean isSingleRun() {
+        return singleRun;
+    }
+
+    public void setSingleRun(boolean singleRun) {
+        this.singleRun = singleRun;
+    }
 }

@@ -99,13 +99,10 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
             return null;
 
         user.setPassword(hash(user.getPassword()));
-        user
-                .setActivationCode(getHexString(salt(user.getUsername())
-                        .getBytes()));
+        user.setActivationCode(getHexString(salt(user.getUsername()).getBytes()));
 
         user.setRegisteredTimestamp(System.currentTimeMillis());
 
-        getDao().persist(user);
         try {
             HtmlEmail email = getPreconfiguredMail();
             email.addTo(user.getEmail());
@@ -121,8 +118,10 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
 
         } catch (EmailException eex) {
             log.error("Mail problem", eex);
-            throw UserException.EMAIL_PROBLEM;
+            //throw UserException.EMAIL_PROBLEM; TODO throw
         }
+        //Save after a successful email
+        getDao().persist(user);
 
         return user;
     }

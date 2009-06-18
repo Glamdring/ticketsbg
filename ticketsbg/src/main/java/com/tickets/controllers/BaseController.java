@@ -7,9 +7,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
-import com.tickets.constants.Constants;
 import com.tickets.constants.Messages;
-import com.tickets.model.User;
 import com.tickets.utils.SpringContext;
 
 public abstract class BaseController implements Serializable {
@@ -26,16 +24,24 @@ public abstract class BaseController implements Serializable {
         ((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false)).setAttribute(key, value);
     }
 
-    protected void addMessage(String key, Object...params) {
+    protected void addMessage(String key, String componentId, Object... params) {
         String msg = getLocalizedMessage(key, params);
         FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, msg, msg);
-        FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+        FacesContext.getCurrentInstance().addMessage(componentId, facesMessage);
     }
 
-    protected void addError(String key, Object...params) {
+    protected void addMessage(String key, Object... params) {
+        addMessage(key, null, params);
+    }
+
+    protected void addError(String key, String componentId, Object...params) {
         String msg = getLocalizedMessage(key, params);
         FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg);
-        FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+        FacesContext.getCurrentInstance().addMessage(componentId, facesMessage);
+    }
+
+    protected void addError(String key, Object... params) {
+        addError(key, null, params);
     }
 
     protected String getLocalizedMessage(String key, Object...params) {

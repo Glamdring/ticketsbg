@@ -227,11 +227,6 @@
 			<scope>system</scope>
 			<systemPath>${basedir}/lib/j4j.jar</systemPath>
 		</dependency>
-		<!--
-			dependency> <groupId>com.ocpsoft</groupId>
-			<artifactId>ocpsoft-pretty-faces</artifactId>
-			<version>1.2.2</version> </dependency
-		-->
 		<dependency>
 			<groupId>org.apache.myfaces.tomahawk</groupId>
 			<artifactId>tomahawk</artifactId>
@@ -277,6 +272,11 @@
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
 			<version>1.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>3.1.0.ga</version>
 		</dependency>
 	</dependencies>
 

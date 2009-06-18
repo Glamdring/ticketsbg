@@ -16,6 +16,22 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Transient;
 
+import org.hibernate.validator.Length;
+import org.hibernate.validator.NotEmpty;
+
+/**
+ * The User object represents three types of registered users:
+ * - private customer
+ * - company (userType=Business, companyName != null)
+ * - bus company staff (isStaff=true)
+ *
+ * Inheritance is not used because there is no practical difference between
+ * the user types in terms of login. And flow permissions are identified by
+ * the privs variable.
+ *
+ * @author Bozhidar Bozhanov
+ *
+ */
 @Entity
 @DiscriminatorValue("1")
 @NamedQueries({
@@ -35,9 +51,12 @@ import javax.persistence.Transient;
 public class User extends Customer implements Serializable {
 
     @Column(nullable = false, length = 40)
+    @Length(max=40, min=6)
+    @NotEmpty
     private String username;
 
     @Column(length = 40)
+    @Length(max=40, min=4)
     private String password;
 
     @Transient
@@ -72,6 +91,18 @@ public class User extends Customer implements Serializable {
 
     @Column
     private boolean isStaff;
+
+    @Column
+    private UserType userType;
+
+    @Column
+    private String foundUsVia;
+
+    @Column
+    private boolean receiveNewsletter;
+
+    @Transient
+    private boolean agreedToTerms;
 
     public String getUsername() {
         return username;
@@ -167,6 +198,38 @@ public class User extends Customer implements Serializable {
 
     public void setRepeatPassword(String repeatPassword) {
         this.repeatPassword = repeatPassword;
+    }
+
+    public UserType getUserType() {
+        return userType;
+    }
+
+    public void setUserType(UserType userType) {
+        this.userType = userType;
+    }
+
+    public String getFoundUsVia() {
+        return foundUsVia;
+    }
+
+    public void setFoundUsVia(String foundUsVia) {
+        this.foundUsVia = foundUsVia;
+    }
+
+    public boolean isReceiveNewsletter() {
+        return receiveNewsletter;
+    }
+
+    public void setReceiveNewsletter(boolean receiveNewsletter) {
+        this.receiveNewsletter = receiveNewsletter;
+    }
+
+    public boolean isAgreedToTerms() {
+        return agreedToTerms;
+    }
+
+    public void setAgreedToTerms(boolean agreedToTerms) {
+        this.agreedToTerms = agreedToTerms;
     }
 
     @Override

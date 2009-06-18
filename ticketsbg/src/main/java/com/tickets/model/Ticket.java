@@ -4,12 +4,12 @@ package com.tickets.model;
 
 import java.math.BigDecimal;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -21,12 +21,9 @@ import javax.persistence.Table;
 @Table(name = "tickets")
 public class Ticket implements java.io.Serializable {
 
-    @EmbeddedId
-    @AttributeOverrides( {
-            @AttributeOverride(name = "runId", column = @Column(name = "runId", nullable = false)),
-            @AttributeOverride(name = "seat", column = @Column(name = "seat", nullable = false)) })
-    private TicketsId id;
-
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private int id;
 
     @ManyToOne
     @JoinColumn(name="userId", referencedColumnName="id")
@@ -64,6 +61,9 @@ public class Ticket implements java.io.Serializable {
     @Column
     private boolean paymentInProcess;
 
+    @Column
+    private PaymentMethod paymentMethod;
+
     public Run getRun() {
         return run;
     }
@@ -75,15 +75,13 @@ public class Ticket implements java.io.Serializable {
     public Ticket() {
     }
 
-
-    public TicketsId getId() {
-        return this.id;
+    public int getId() {
+        return id;
     }
 
-    public void setId(TicketsId id) {
+    public void setId(int id) {
         this.id = id;
     }
-
 
     public String getPaymentCode() {
         return this.paymentCode;
@@ -163,5 +161,13 @@ public class Ticket implements java.io.Serializable {
 
     public void setPaymentInProcess(boolean paymentInProcess) {
         this.paymentInProcess = paymentInProcess;
+    }
+
+    public PaymentMethod getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(PaymentMethod paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 }

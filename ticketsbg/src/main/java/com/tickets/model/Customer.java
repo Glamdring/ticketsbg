@@ -14,6 +14,9 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
+import org.hibernate.validator.Email;
+import org.hibernate.validator.NotEmpty;
+
 @Entity
 @Table(name="users")
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
@@ -26,13 +29,20 @@ public class Customer extends DataObject implements Serializable {
     private int id;
 
     @Column
+    @Email
+    @NotEmpty
     protected String email;
 
     @Column
+    @NotEmpty
     protected String name;
 
     @Column
+    @NotEmpty
     protected String contactPhone;
+
+    @Column
+    private String companyName;
 
     public String getEmail() {
         return email;
@@ -64,5 +74,13 @@ public class Customer extends DataObject implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 }

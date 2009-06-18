@@ -32,7 +32,8 @@ public class EntityConverter implements Converter {
             Field[] fields = clazz.getDeclaredFields();
             for (Field field : fields) {
                 if (field.isAnnotationPresent(Id.class)) {
-                    if (field.getType().equals(Integer.class)) {
+                    if (field.getType().equals(Integer.class) || field.getType().getName().equals("int")
+                            || field.getType().equals(Long.class) || field.getType().getName().equals("long")) {
                         return dao.getById(clazz, Integer.parseInt(parts[1]));
                     }
                 }
