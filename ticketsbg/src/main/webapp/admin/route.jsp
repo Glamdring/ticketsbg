@@ -49,23 +49,32 @@
 
 							<rich:panel header="#{msg.hours}" styleClass="internalPanel">
 								<t:inputDate type="short_time" value="#{routeController.hour}" />
-								<h:commandLink action="#{routeController.addHour}">
+								<a4j:commandLink action="#{routeController.addHour}" reRender="hoursList">
 									<h:graphicImage value="/images/add.png" title="#{msg.add}"
 										alt="#{msg.add}"
 										style="width: 15px; height:15px; border-style: none;" />
-								</h:commandLink>
+								</a4j:commandLink>
 								<br />
 								<h:selectOneListbox size="8" converter="javax.faces.Integer"
-									value="#{routeController.selectedHour}" style="width: 98px;">
-									<c:forEach var="hour"
+									value="#{routeController.selectedHour}" style="width: 98px;"
+									id="hoursList">
+									<c:forEach var="hour" varStatus="stat"
 										items="#{routeController.route.routeHours}">
-										<f:selectItem itemLabel="#{hour.displayLabel}"
-											itemValue="#{hour.id}" />
+										<c:choose>
+											<c:when test="#{hour.id > 0}">
+											  <f:selectItem itemLabel="#{hour.displayLabel}"
+												 itemValue="#{hour.id}" />
+											 </c:when>  
+											 <c:otherwise>
+											     <f:selectItem itemLabel="#{hour.displayLabel}"
+                                                    itemValue="#{-stat.index}" />
+											 </c:otherwise>  
+											 </c:choose>
 									</c:forEach>
 								</h:selectOneListbox>
 								<br />
-								<h:commandButton action="#{routeController.removeHour}"
-									value="#{msg.delete}" />
+								<a4j:commandButton action="#{routeController.removeHour}"
+									value="#{msg.delete}" reRender="hoursList" />
 							</rich:panel>
 
 							<rich:panel header="${msg.stops}" styleClass="internalPanel">

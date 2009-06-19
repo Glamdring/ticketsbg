@@ -63,7 +63,7 @@ public class RouteController extends BaseController implements Serializable {
     public String save() {
         routeService.save(route, Arrays.asList(daysPickList));
         refreshList();
-        return "routesList";
+        return Screen.ROUTES_LIST.getOutcome();
     }
 
     @Action
@@ -71,34 +71,39 @@ public class RouteController extends BaseController implements Serializable {
         route = (Route) routesModel.getRowData();
         daysPickList = routeService.getDaysList(route);
         refreshTreeModel();
-        return "routeScreen";
+        return Screen.ROUTE_SCREEN.getOutcome();
     }
 
     @Action
     public String delete() {
         routeService.delete((Route) routesModel.getRowData());
         refreshList();
-        return "routesList";
+        return Screen.ROUTES_LIST.getOutcome();
     }
 
     @Action
     public String newRoute() {
         daysPickList = new Integer[0];
         route = new Route();
-        return "routeScreen";
+        return Screen.ROUTE_SCREEN.getOutcome();
     }
 
     @Action
-    public String addHour() {
+    public void addHour() {
         routeService.addHourToRoute(hour, route);
-        return "routeScreen";
     }
 
     @Action
-    public String removeHour() {
-        routeService.removeHour(selectedHour, route);
+    public void removeHour() {
+        //If removing a persistent entity, call the service
+        //else, the supplied selection is a negative number,
+        //so just remove the .abs(..) position from the list
+        if (selectedHour > 0) {
+            routeService.removeHour(selectedHour, route);
+        } else {
+            route.getRouteHours().remove(Math.abs(selectedHour));
+        }
         selectedHour = 0;
-        return "routeScreen";
     }
 
     @Action
@@ -113,24 +118,21 @@ public class RouteController extends BaseController implements Serializable {
     }
 
     @Action
-    public String deleteStop() {
+    public void deleteStop() {
         Stop stop = (Stop) stopsTable.getRowData();
         stopService.delete(stop, route);
-
-        return "routeScreen";
     }
 
     @Action
     public String cancel() {
         endConversation();
-        return "routesList";
+        return Screen.ROUTES_LIST.getOutcome();
     }
 
     @Action
-    public String savePrice() {
+    public void savePrice() {
         price.setPrice(priceValue);
         price.setTwoWayPrice(twoWayPriceValue);
-        return null;
     }
 
     @Action

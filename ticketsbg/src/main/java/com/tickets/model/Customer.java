@@ -44,6 +44,9 @@ public class Customer extends DataObject implements Serializable {
     @Column
     private String companyName;
 
+    @Column
+    private CustomerType customerType;
+
     public String getEmail() {
         return email;
     }
@@ -82,5 +85,13 @@ public class Customer extends DataObject implements Serializable {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
+    }
+
+    public CustomerType getCustomerType() {
+        return customerType;
+    }
+
+    public void setCustomerType(CustomerType customerType) {
+        this.customerType = customerType;
     }
 }

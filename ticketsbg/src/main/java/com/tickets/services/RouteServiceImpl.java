@@ -87,7 +87,7 @@ public class RouteServiceImpl extends BaseService<Route> implements RouteService
 
     @Override
     public void removeHour(int hourId, Route route) {
-        if (hourId == 0)
+        if (hourId <= 0)
             return;
 
         List<RouteHour> list = route.getRouteHours();

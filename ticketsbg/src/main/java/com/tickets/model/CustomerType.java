@@ -1,6 +1,6 @@
 package com.tickets.model;
 
-public enum UserType {
+public enum CustomerType {
     Customer,
     Business
 }

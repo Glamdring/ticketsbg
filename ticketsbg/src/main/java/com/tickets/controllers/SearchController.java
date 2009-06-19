@@ -100,7 +100,7 @@ public class SearchController extends BaseController {
         Ticket ticket = ticketService.createTicket(selectedEntry, selectedReturnEntry);
         purchaseController.setTicket(ticket);
 
-        return "personalInformationScreen";
+        return Screen.PERSONAL_INFORMATION_SCREEN.getOutcome();
     }
 
     private void resetSelections() {
@@ -110,7 +110,7 @@ public class SearchController extends BaseController {
     }
 
     public String toSearchScreen() {
-        return "searchScreen";
+        return Screen.SEARCH_SCREEN.getOutcome();
     }
 
     @PostConstruct

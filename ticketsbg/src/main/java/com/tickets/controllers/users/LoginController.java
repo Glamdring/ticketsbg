@@ -43,13 +43,12 @@ public class LoginController extends BaseController {
 
             if ((Boolean) admin.getValue()) {
                 return "adminPanel";
-            } else if (purchaseController.getCurrentStep() != null){
+            } else if (purchaseController != null && purchaseController.getCurrentStep() != null){
                 return purchaseController.getCurrentStep().getOutcome();
             }
-            return ""; //TODO referer, or at least ahome
+            return "home"; //TODO referer
         } catch (UserException ex) {
             addError(ex.getMessageKey());
-            addError("asdf", "asdf", "asdf");
             return null;
         }
     }

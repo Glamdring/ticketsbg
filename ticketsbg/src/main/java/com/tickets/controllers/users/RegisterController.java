@@ -11,9 +11,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.tickets.controllers.BaseController;
+import com.tickets.controllers.PurchaseController;
 import com.tickets.exceptions.UserException;
 import com.tickets.model.User;
-import com.tickets.model.UserType;
+import com.tickets.model.CustomerType;
 import com.tickets.services.UserService;
 
 @Controller("registerController")
@@ -22,13 +23,16 @@ public class RegisterController extends BaseController {
 
     private User user = new User();
 
-    private List<SelectItem> userTypeItems = new ArrayList<SelectItem>();
+    private List<SelectItem> customerTypeItems = new ArrayList<SelectItem>();
 
     @Autowired
     private LoggedUserHolder loggedUserHolder;
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private PurchaseController purchaseController;
 
     public String register() {
 
@@ -43,16 +47,22 @@ public class RegisterController extends BaseController {
             return null;
         }
 
-        return "home";
-        //TODO or return to current step;
+        if (purchaseController != null && purchaseController.getCurrentStep() != null) {
+            return purchaseController.getCurrentStep().getOutcome();
+        }
+        return "home"; // TODO referer
     }
 
     @PostConstruct
     public void init() {
-        UserType[] userTypes = UserType.values();
-        for (UserType userType : userTypes) {
-            SelectItem si = new SelectItem(userType, getLocalizedMessage(userType.toString()));
-            userTypeItems.add(si);
+
+    }
+
+    public static void formcustomerTypeSelectItems(List<SelectItem> targetList) {
+        CustomerType[] customerTypes = CustomerType.values();
+        for (CustomerType customerType : customerTypes) {
+            SelectItem si = new SelectItem(customerType, getLocalizedMessage(customerType.toString()));
+            targetList.add(si);
         }
     }
 
@@ -79,11 +89,11 @@ public class RegisterController extends BaseController {
         this.user = user;
     }
 
-    public List<SelectItem> getUserTypeItems() {
-        return userTypeItems;
+    public List<SelectItem> getcustomerTypeItems() {
+        return customerTypeItems;
     }
 
-    public void setUserTypeItems(List<SelectItem> userTypeItems) {
-        this.userTypeItems = userTypeItems;
+    public void setcustomerTypeItems(List<SelectItem> customerTypeItems) {
+        this.customerTypeItems = customerTypeItems;
     }
 }

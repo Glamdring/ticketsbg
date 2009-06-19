@@ -13,7 +13,8 @@
 		<f:view>
 			<a4j:form id="personalInfoForm">
 				<h:messages />
-				<a4j:commandLink value="#{msg.loginNow}" onclick="#{rich:component('loginPanel')}.show()" />
+				<a4j:commandLink value="#{msg.loginNow}"
+					onclick="#{rich:component('loginPanel')}.show()" />
 				<br />
 				<h:outputText value="#{msg.orText}" />
 				<br />
@@ -26,18 +27,57 @@
 					<!-- a4j:include viewId="register.jsp" /-->
 				</h:panelGroup>
 
-				<h:panelGrid columns="2" id="directInputFields">
+				<h:panelGrid columns="3" id="directInputFields">
+
+					<h:outputLabel value="#{msg.customerType}" for="customerType" />
+					<h:selectOneMenu
+						value="#{personalInformationController.customer.customerType}"
+						id="customerType" style="width: 205px;">
+						<f:selectItems
+							value="#{personalInformationController.customerTypeItems}" />
+						<a4j:support event="onchange" ajaxSingle="true"
+							reRender="companyLabel,companyNamePanel,companyMessage" />
+					</h:selectOneMenu>
+					<rich:message for="customerType" errorClass="error" />
+
+					<a4j:outputPanel id="companyLabel">
+						<h:outputLabel value="#{msg.companyName}" for="companyName"
+							rendered="#{personalInformationController.customer.customerType == 'Business'}" />
+					</a4j:outputPanel>
+					<a4j:outputPanel id="companyNamePanel">
+						<h:inputText value="#{personalInformationController.customer.companyName}"
+							id="companyName" size="35"
+							rendered="#{personalInformationController.customer.customerType == 'Business'}" />
+					</a4j:outputPanel>
+					<a4j:outputPanel id="companyMessage">
+						<rich:message for="companyName" errorClass="error"
+							rendered="#{personalInformationController.customer.customerType == 'Business'} " />
+					</a4j:outputPanel>
+
 					<h:outputLabel for="name" value="#{msg.names}" />
 					<h:inputText value="#{personalInformationController.customer.name}"
-						id="name" />
+						id="name" size="35">
+						<rich:beanValidator />
+						<a4j:support event="onblur" ajaxSingle="true" />
+					</h:inputText>
+					<rich:message for="name" errorClass="error" />
 
 					<h:outputLabel for="contactPhone" value="#{msg.contactPhone}" />
 					<h:inputText value="#{personalInformationController.customer.name}"
-						id="contactPhone" />
+						id="contactPhone" size="35">
+						<rich:beanValidator />
+						<a4j:support event="onblur" ajaxSingle="true" />
+					</h:inputText>
+					<rich:message for="contactPhone" errorClass="error" />
 
 					<h:outputLabel for="email" value="#{msg.email}" />
-					<h:inputText value="#{personalInformationController.customer.email}"
-						id="email" />
+					<h:inputText
+						value="#{personalInformationController.customer.email}" 
+						id="email" size="35">
+						<rich:beanValidator />
+						<a4j:support event="onblur" ajaxSingle="true" />
+					</h:inputText>
+					<rich:message for="email" />
 
 				</h:panelGrid>
 			</a4j:form>
@@ -56,10 +96,11 @@
 				</h:panelGroup>
 			</f:facet>
 			<ui:include src="login_fields.jsp">
-			     <ui:param name="isAdmin" value="false" />
+				<ui:param name="isAdmin" value="false" />
 			</ui:include>
-			<a4j:support event="hide" action="#{personalInformationController.updateCustomer}"/>
+			<a4j:support event="hide"
+				action="#{personalInformationController.updateCustomer}" />
 		</rich:modalPanel>
-		
+
 	</ui:define>
 </ui:composition>

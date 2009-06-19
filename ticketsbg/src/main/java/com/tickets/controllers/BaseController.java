@@ -44,7 +44,7 @@ public abstract class BaseController implements Serializable {
         addError(key, null, params);
     }
 
-    protected String getLocalizedMessage(String key, Object...params) {
+    protected static String getLocalizedMessage(String key, Object...params) {
         return Messages.getString(key, params);
     }
 

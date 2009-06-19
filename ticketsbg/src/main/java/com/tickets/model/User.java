@@ -22,7 +22,7 @@ import org.hibernate.validator.NotEmpty;
 /**
  * The User object represents three types of registered users:
  * - private customer
- * - company (userType=Business, companyName != null)
+ * - company (customerType=Business, companyName != null)
  * - bus company staff (isStaff=true)
  *
  * Inheritance is not used because there is no practical difference between
@@ -91,9 +91,6 @@ public class User extends Customer implements Serializable {
 
     @Column
     private boolean isStaff;
-
-    @Column
-    private UserType userType;
 
     @Column
     private String foundUsVia;
@@ -198,14 +195,6 @@ public class User extends Customer implements Serializable {
 
     public void setRepeatPassword(String repeatPassword) {
         this.repeatPassword = repeatPassword;
-    }
-
-    public UserType getUserType() {
-        return userType;
-    }
-
-    public void setUserType(UserType userType) {
-        this.userType = userType;
     }
 
     public String getFoundUsVia() {

@@ -32,27 +32,27 @@
 						</h:inputSecret>
 						<rich:message for="password" errorClass="error" />
 
-						<h:outputLabel value="#{msg.userType}" for="userType" />
-						<h:selectOneMenu value="#{registerController.user.userType}"
-							id="userType" style="width: 205px;">
-							<f:selectItems value="#{registerController.userTypeItems}" />
+						<h:outputLabel value="#{msg.customerType}" for="customerType" />
+						<h:selectOneMenu value="#{registerController.user.customerType}"
+							id="customerType" style="width: 205px;">
+							<f:selectItems value="#{registerController.customerTypeItems}" />
 							<a4j:support event="onchange" ajaxSingle="true"
 								reRender="companyLabel,companyNamePanel,companyMessage" />
 						</h:selectOneMenu>
-						<rich:message for="userType" errorClass="error" />
+						<rich:message for="customerType" errorClass="error" />
 
 						<a4j:outputPanel id="companyLabel">
 							<h:outputLabel value="#{msg.companyName}" for="companyName"
-								rendered="#{registerController.user.userType == 'Business'}" />
+								rendered="#{registerController.user.customerType == 'Business'}" />
 						</a4j:outputPanel>
 						<a4j:outputPanel id="companyNamePanel">
 							<h:inputText value="#{registerController.user.companyName}"
 								id="companyName" size="35"
-								rendered="#{registerController.user.userType == 'Business'}" />
+								rendered="#{registerController.user.customerType == 'Business'}" />
 						</a4j:outputPanel>
 						<a4j:outputPanel id="companyMessage">
 							<rich:message for="companyName" errorClass="error"
-								rendered="#{registerController.user.userType == 'Business'} " />
+								rendered="#{registerController.user.customerType == 'Business'} " />
 						</a4j:outputPanel>
 
 						<h:outputLabel value="#{msg.names}" for="names" />

@@ -1,6 +1,10 @@
 package com.tickets.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.PostConstruct;
+import javax.faces.model.SelectItem;
 
 import org.apache.myfaces.orchestra.conversation.annotations.ConversationName;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +12,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.tickets.controllers.users.LoggedUserHolder;
+import com.tickets.controllers.users.RegisterController;
 import com.tickets.model.Customer;
 import com.tickets.model.User;
 
@@ -24,9 +29,7 @@ public class PersonalInformationController extends BaseController {
 
     private Customer customer;
 
-    public Customer getCustomer() {
-        return customer;
-    }
+    private List<SelectItem> customerTypeItems = new ArrayList<SelectItem>();
 
     @PostConstruct
     public void init() {
@@ -34,11 +37,10 @@ public class PersonalInformationController extends BaseController {
         if (customer == null) {
             customer = new Customer();
         }
+
+        RegisterController.formcustomerTypeSelectItems(customerTypeItems);
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
 
     public void updateCustomer() {
         System.out.println("ASDf");
@@ -50,6 +52,22 @@ public class PersonalInformationController extends BaseController {
         }
         purchaseController.getTicket().setCustomerInformation(customer);
 
-        return "paymentScreen";
+        return Screen.PAYMENT_SCREEN.getOutcome();
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public List<SelectItem> getcustomerTypeItems() {
+        return customerTypeItems;
+    }
+
+    public void setcustomerTypeItems(List<SelectItem> customerTypeItems) {
+        this.customerTypeItems = customerTypeItems;
     }
 }
