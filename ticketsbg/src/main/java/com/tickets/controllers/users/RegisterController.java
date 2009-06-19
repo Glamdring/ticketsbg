@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 
 import com.tickets.controllers.BaseController;
 import com.tickets.controllers.PurchaseController;
+import com.tickets.controllers.Screen;
 import com.tickets.exceptions.UserException;
 import com.tickets.model.User;
 import com.tickets.model.CustomerType;
@@ -50,7 +51,7 @@ public class RegisterController extends BaseController {
         if (purchaseController != null && purchaseController.getCurrentStep() != null) {
             return purchaseController.getCurrentStep().getOutcome();
         }
-        return "home"; // TODO referer
+        return Screen.HOME.getOutcome(); // TODO referer
     }
 
     @PostConstruct

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import com.tickets.annotations.Action;
 import com.tickets.controllers.BaseController;
 import com.tickets.controllers.PurchaseController;
+import com.tickets.controllers.Screen;
 import com.tickets.exceptions.UserException;
 import com.tickets.model.User;
 import com.tickets.services.UserService;
@@ -32,7 +33,6 @@ public class LoginController extends BaseController {
 
     @Action
     public String login() {
-        //FacesContext.getCurrentInstance().getExternalContext().getRequest();
         System.out.println(username + ":" + password + ":" + admin);
         try {
             User loggedUser = userService.login(username,
@@ -46,7 +46,7 @@ public class LoginController extends BaseController {
             } else if (purchaseController != null && purchaseController.getCurrentStep() != null){
                 return purchaseController.getCurrentStep().getOutcome();
             }
-            return "home"; //TODO referer
+            return Screen.HOME.getOutcome(); //TODO referer
         } catch (UserException ex) {
             addError(ex.getMessageKey());
             return null;
