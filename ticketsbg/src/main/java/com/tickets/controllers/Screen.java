@@ -3,9 +3,10 @@ package com.tickets.controllers;
 public enum Screen {
     PAYMENT_SCREEN("paymentScreen"),
     SEARCH_SCREEN("searchScreen"),
-    SEARCH_RESULT("searchResultScreen"),
+    SEARCH_RESULTS("searchResultScreen"),
     HOME("home"),
     PERSONAL_INFORMATION_SCREEN("personalInformationScreen"),
+    REGISTRATION_SCREEN("registrationScreen"),
 
     ROUTE_SCREEN("routeScreen"),
     ROUTES_LIST("routesList")

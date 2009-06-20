@@ -95,6 +95,14 @@
             <redirect />
         </navigation-case>
     </navigation-rule>
+    
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>registrationScreen</from-outcome>
+            <to-view-id>/register.jsp</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
 
 
 	<component>

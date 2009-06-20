@@ -7,8 +7,8 @@
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:c="http://java.sun.com/jstl/core">
 	<f:view>
-		<h:messages />
-		<h:form>
+		<a4j:form ajaxSubmit="true">
+		    <rich:messages errorClass="error" />
 			<h:panelGrid columns="2">
 				<h:outputLabel value="#{msg.username}" for="username" />
 				<h:inputText id="username" value="#{loginController.username}" />
@@ -18,9 +18,9 @@
 
 				<h:inputHidden id="admin" converter="#{booleanConverter}"
 					value="#{isAdmin}" binding="#{loginController.admin}" />
-				<h:commandButton action="#{loginController.login}" type="submit"
+				<a4j:commandButton action="#{loginController.login}" type="submit"
 					value="#{msg.login}" />
 			</h:panelGrid>
-		</h:form>
+		</a4j:form>
 	</f:view>
 </ui:composition>

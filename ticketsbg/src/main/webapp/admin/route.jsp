@@ -20,6 +20,10 @@
 	height: 230px;
 	text-align: center;
 }
+.subInternalPanel {
+    height: 190px;
+    text-align: center;
+}
 </style>
 	</ui:define>
 	<ui:define name="body">
@@ -131,70 +135,107 @@
 							</rich:panel>
 						</h:panelGrid>
 					</rich:panel>
-
-					<rich:panel header="#{msg.prices}"
-						rendered="#{routeController.route.id > 0}">
-						<h:panelGrid columns="3" columnClasses="gridContent">
-							<rich:panel styleClass="internalPanel">
-								<rich:tree switchType="client" ajaxSubmitSelection="true"
-									style="width:300px;" value="#{routeController.pricesTreeData}"
-									var="data" nodeFace="#{data.leaf ? 'end' : 'start'}"
-									id="pricesTree"
-									nodeSelectListener="#{routeController.nodeSelected}"
-									adviseNodeOpened="#{routeController.getExpandedNodes}">
-
-									<rich:treeNode type="start"
-										reRender="priceField,twoWayPriceField">
-										<div style="font-size: 11px;"><h:outputText
-											value="#{msg.fromStop} " /> <h:outputText
-											value="#{data.stop.name}" /></div>
-									</rich:treeNode>
-									<rich:treeNode type="end"
-										reRender="priceField,twoWayPriceField">
-										<div style="font-size: 11px;"><h:outputText
-											value="#{msg.toStop} " /> <h:outputText
-											value="#{data.stop.name}" /> <h:outputText value=" (" /> <h:outputText
-											value="#{data.price.price}" converter="#{currencyConverter}" />
-										<h:outputText value=")" /></div>
-									</rich:treeNode>
-								</rich:tree>
-							</rich:panel>
-							<rich:panel styleClass="internalPanel">
-								<h:panelGrid columns="2" styleClass="dr-pnl-b"
-									style="padding:0px; margin:0px;">
-									<a4j:outputPanel>
-										<h:outputLabel value="#{msg.oneWay}:" for="priceField" />
-										<rich:toolTip value="#{msg.zeroPriceTip}" followMouse="true" />
-									</a4j:outputPanel>
-									<h:inputText value="#{routeController.priceValue}"
-										id="priceField">
-										<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-									</h:inputText>
-
-									<a4j:outputPanel>
-										<h:outputLabel value="#{msg.twoWay}:" for="twoWayPriceField" />
-										<rich:toolTip value="#{msg.zeroPriceTip}" followMouse="true" />
-									</a4j:outputPanel>
-									<h:inputText value="#{routeController.twoWayPriceValue}"
-										id="twoWayPriceField">
-										<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-									</h:inputText>
-
-									<h:outputText />
-									<a4j:commandButton value="#{msg.save}"
-										action="#{routeController.savePrice}" />
-
-								</h:panelGrid>
-							</rich:panel>
-							<rich:panel styleClass="internalPanel">
+                    
+                    <h:panelGrid columns="2" columnClasses="gridContent">
+						<rich:panel header="#{msg.prices}"
+							rendered="#{routeController.route.id > 0}" styleClass="internalPanel">
+							<h:panelGrid columns="2" columnClasses="gridContent">
+								<rich:panel styleClass="subInternalPanel">
+									<rich:tree switchType="client" ajaxSubmitSelection="true"
+										style="width:300px;" value="#{routeController.pricesTreeData}"
+										var="data" nodeFace="#{data.leaf ? 'end' : 'start'}"
+										id="pricesTree"
+										nodeSelectListener="#{routeController.nodeSelected}"
+										adviseNodeOpened="#{routeController.getExpandedNodes}">
+	
+										<rich:treeNode type="start"
+											reRender="priceField,twoWayPriceField">
+											<div style="font-size: 11px;"><h:outputText
+												value="#{msg.fromStop} " /> <h:outputText
+												value="#{data.stop.name}" /></div>
+										</rich:treeNode>
+										<rich:treeNode type="end"
+											reRender="priceField,twoWayPriceField">
+											<div style="font-size: 11px;"><h:outputText
+												value="#{msg.toStop} " /> <h:outputText
+												value="#{data.stop.name}" /> <h:outputText value=" (" /> <h:outputText
+												value="#{data.price.price}" converter="#{currencyConverter}" />
+											<h:outputText value=")" /></div>
+										</rich:treeNode>
+									</rich:tree>
+								</rich:panel>
+								<rich:panel styleClass="subInternalPanel">
+									<h:panelGrid columns="2" styleClass="dr-pnl-b"
+										style="padding:0px; margin:0px;">
+										<a4j:outputPanel>
+											<h:outputLabel value="#{msg.oneWay}:" for="priceField" />
+											<rich:toolTip value="#{msg.zeroPriceTip}" followMouse="true" />
+										</a4j:outputPanel>
+										<h:inputText value="#{routeController.priceValue}"
+											id="priceField">
+											<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+										</h:inputText>
+	
+										<a4j:outputPanel>
+											<h:outputLabel value="#{msg.twoWay}:" for="twoWayPriceField" />
+											<rich:toolTip value="#{msg.zeroPriceTip}" followMouse="true" />
+										</a4j:outputPanel>
+										<h:inputText value="#{routeController.twoWayPriceValue}"
+											id="twoWayPriceField">
+											<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+										</h:inputText>
+	
+										<h:outputText />
+										<a4j:commandButton value="#{msg.save}"
+											action="#{routeController.savePrice}" />
+	
+									</h:panelGrid>
+								</rich:panel>
+							</h:panelGrid>
+						</rich:panel>
+	
+	
+						<rich:panel styleClass="internalPanel"
+							header="#{msg.routeSettings}">
+							<h:panelGrid columns="2" styleClass="dr-pnl-b"
+								style="padding:0px; margin:0px;">
 								<h:outputLabel for="seats" value="#{msg.seats}: " />
-								<h:inputText value="#{routeController.route.seats}" id="seats">
+								<h:inputText value="#{routeController.route.seats}"
+								    id="seats" size="15">
 									<f:convertNumber maxFractionDigits="0" />
 								</h:inputText>
-							</rich:panel>
-						</h:panelGrid>
-					</rich:panel>
 
+								<h:outputLabel for="allowSeatChoice"
+									value="#{msg.allowSeatChoice}: " />
+								<h:selectBooleanCheckbox
+									value="#{routeController.route.allowSeatChoice}"
+									id="allowSeatChoice" />
+	
+								<h:outputLabel for="singleRun" value="#{msg.singleRun}: " />
+								<h:selectBooleanCheckbox
+									value="#{routeController.route.singleRun}" id="singleRun">
+									<a4j:support event="onchange" ajaxSingle="true"
+										reRender="singleRunDateTimeLabel,singleRunDateTimeCalendar" />
+								</h:selectBooleanCheckbox>
+	
+								<a4j:outputPanel id="singleRunDateTimeLabel">
+									<h:outputLabel for="singleRunDateTime"
+										value="#{msg.singleRunDateTime}: "
+										rendered="#{routeController.route.singleRun == true}" />
+								</a4j:outputPanel>
+								<a4j:outputPanel id="singleRunDateTimeCalendar">
+									<rich:calendar id="singleRunDateTime" datePattern="dd.MM.yyyy"
+										firstWeekDay="1" inputSize="11"
+										value="#{routeController.route.singleRunDateTime.time}"
+										rendered="#{routeController.route.singleRun == true}">
+										
+									</rich:calendar>
+								</a4j:outputPanel>
+	
+							</h:panelGrid>
+						</rich:panel>
+                    </h:panelGrid>
+                    
 					<rich:panel>
 						<h:commandButton action="#{routeController.save}"
 							value="#{msg.save}">

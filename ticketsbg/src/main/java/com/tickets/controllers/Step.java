@@ -2,21 +2,21 @@ package com.tickets.controllers;
 
 public enum Step {
 
-    SEARCH_RESULTS("searchResults"),
-    PERSONAL_INFORMATION("personalInformationScreen"),
-    PAYMENT("paymentScreen");
+    SEARCH_RESULTS(Screen.SEARCH_RESULTS),
+    PERSONAL_INFORMATION(Screen.PERSONAL_INFORMATION_SCREEN),
+    PAYMENT(Screen.PAYMENT_SCREEN);
 
-    private String outcome;
+    private Screen screen;
 
-    private Step(String outcome) {
-        this.outcome = outcome;
+    private Step(Screen screen) {
+        this.screen = screen;
     }
 
-    public String getOutcome() {
-        return outcome;
+    public Screen getScreen() {
+        return screen;
     }
 
-    public void setOutcome(String outcome) {
-        this.outcome = outcome;
+    public void setScreen(Screen screen) {
+        this.screen = screen;
     }
 }

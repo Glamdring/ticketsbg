@@ -47,6 +47,12 @@ public class PersonalInformationController extends BaseController {
     }
 
     public String proceedToPayment() {
+        //In case the user has come directly to this page
+        //without choosing route
+        if (purchaseController.getTicket() == null) {
+            return Screen.SEARCH_SCREEN.getOutcome();
+        }
+
         if (customer instanceof User) {
             purchaseController.getTicket().setUser((User) customer);
         }

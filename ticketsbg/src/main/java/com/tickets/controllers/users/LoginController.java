@@ -44,7 +44,7 @@ public class LoginController extends BaseController {
             if ((Boolean) admin.getValue()) {
                 return "adminPanel";
             } else if (purchaseController != null && purchaseController.getCurrentStep() != null){
-                return purchaseController.getCurrentStep().getOutcome();
+                return purchaseController.getCurrentStep().getScreen().getOutcome();
             }
             return Screen.HOME.getOutcome(); //TODO referer
         } catch (UserException ex) {

@@ -49,7 +49,7 @@ public class RegisterController extends BaseController {
         }
 
         if (purchaseController != null && purchaseController.getCurrentStep() != null) {
-            return purchaseController.getCurrentStep().getOutcome();
+            return purchaseController.getCurrentStep().getScreen().getOutcome();
         }
         return Screen.HOME.getOutcome(); // TODO referer
     }

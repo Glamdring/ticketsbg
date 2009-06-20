@@ -2,6 +2,7 @@ package com.tickets.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -14,11 +15,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+
+import com.tickets.utils.GeneralUtils;
 
 @Entity
 @Table(name = "routes")
@@ -73,6 +78,15 @@ public class Route extends DataObject implements Serializable {
 
     @Column
     private boolean singleRun;
+
+    //Creating an empty calendar, so that the UI can interact
+    //directly with the model
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar singleRunDateTime = GeneralUtils.createEmptyCalendar();
+
+    @Column
+    private boolean allowSeatChoice;
 
     public Route() {
     }
@@ -193,5 +207,21 @@ public class Route extends DataObject implements Serializable {
 
     public void setSingleRun(boolean singleRun) {
         this.singleRun = singleRun;
+    }
+
+    public boolean isAllowSeatChoice() {
+        return allowSeatChoice;
+    }
+
+    public void setAllowSeatChoice(boolean allowSeatChoice) {
+        this.allowSeatChoice = allowSeatChoice;
+    }
+
+    public Calendar getSingleRunDateTime() {
+        return singleRunDateTime;
+    }
+
+    public void setSingleRunDateTime(Calendar singleRunDateTime) {
+        this.singleRunDateTime = singleRunDateTime;
     }
 }

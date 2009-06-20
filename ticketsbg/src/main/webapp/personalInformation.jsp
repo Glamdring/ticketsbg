@@ -13,16 +13,20 @@
 		<f:view>
 			<a4j:form id="personalInfoForm">
 				<h:messages />
-				<a4j:commandLink value="#{msg.loginNow}"
-					onclick="#{rich:component('loginPanel')}.show()" />
+				<h:panelGroup layout="block" rendered="#{loggedUserHolder.loggedUser == null}">
+				    <a4j:commandLink value="#{msg.loginNow}"
+					   onclick="#{rich:component('loginPanel')}.show()" ajaxSingle="true" />
+					<br />
+					<h:outputText value="#{msg.orText}" />
+					<br />
+				</h:panelGroup>
+				
+				<h:panelGroup layout="block" rendered="#{loggedUserHolder.loggedUser == null}">
+				<h:commandLink value="#{msg.registerNow}" immediate="true" action="registerScreen"/>
 				<br />
 				<h:outputText value="#{msg.orText}" />
-				<br />
-				<h:commandLink value="#{msg.registerNow}" />
-				<br />
-				<h:outputText value="#{msg.orText}" />
-				<br />
-
+                </h:panelGroup>
+                
 				<h:panelGroup>
 					<!-- a4j:include viewId="register.jsp" /-->
 				</h:panelGroup>
@@ -63,7 +67,7 @@
 					<rich:message for="name" errorClass="error" />
 
 					<h:outputLabel for="contactPhone" value="#{msg.contactPhone}" />
-					<h:inputText value="#{personalInformationController.customer.name}"
+					<h:inputText value="#{personalInformationController.customer.contactPhone}"
 						id="contactPhone" size="35">
 						<rich:beanValidator />
 						<a4j:support event="onblur" ajaxSingle="true" />
@@ -78,7 +82,12 @@
 						<a4j:support event="onblur" ajaxSingle="true" />
 					</h:inputText>
 					<rich:message for="email" />
-
+                    
+                    <h:outputText />
+					<a4j:commandButton value="#{msg.proceed}"
+						action="#{personalInformationController.proceedToPayment}" />
+					<h:outputText />
+                    
 				</h:panelGrid>
 			</a4j:form>
 		</f:view>
@@ -95,9 +104,9 @@
 						operation="hide" event="onclick" />
 				</h:panelGroup>
 			</f:facet>
-			<ui:include src="login_fields.jsp">
-				<ui:param name="isAdmin" value="false" />
-			</ui:include>
+			
+			<a4j:include viewId="login_fields.jsp" />
+			
 			<a4j:support event="hide"
 				action="#{personalInformationController.updateCustomer}" />
 		</rich:modalPanel>

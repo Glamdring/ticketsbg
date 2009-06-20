@@ -5,6 +5,7 @@ import java.io.Serializable;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import com.tickets.controllers.Screen;
 import com.tickets.model.User;
 
 @Controller("loggedUserHolder")
@@ -19,5 +20,10 @@ public class LoggedUserHolder implements Serializable {
 
     public void setLoggedUser(User loggedUser) {
         this.loggedUser = loggedUser;
+    }
+
+    public String logout() {
+        loggedUser = null;
+        return Screen.HOME.getOutcome();
     }
 }

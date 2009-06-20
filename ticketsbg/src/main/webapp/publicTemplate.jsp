@@ -14,5 +14,10 @@
   <body style="margin-left: 0px; margin-top: 0px; margin-right: 0px">
     <f:loadBundle var="msg" basename="com.tickets.constants.messages" />
     <ui:insert name="body" />
+    <h:form id="commonForm">
+		<h:commandLink value="#{msg.logout}"
+			action="#{loggedUserHolder.logout}"
+			rendered="#{loggedUserHolder.loggedUser != null}" />
+    </h:form>
   </body>
 </html>

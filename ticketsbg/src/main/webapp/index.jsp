@@ -5,10 +5,16 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich"
-	xmlns:c="http://java.sun.com/jstl/core" template="admin_template.jsp">
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fmt="http://java.sun.com/jstl/fmt"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="publicTemplate.jsp">
 	<ui:define name="body">
-		<ui:include src="../login_fields.jsp">
-            <ui:param name="isAdmin" value="true" />
-        </ui:include>
+		<f:view>
+			<a4j:form id="indexForm">
+				<h:messages />
+				
+			</a4j:form>
+		</f:view>
 	</ui:define>
 </ui:composition>
