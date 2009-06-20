@@ -140,13 +140,13 @@
 						</h:panelGrid>
 					</rich:panel>
                     
-                    <h:panelGrid columns="2" columnClasses="gridContent">
+                    <h:panelGrid columns="3" columnClasses="gridContent">
 						<rich:panel header="#{msg.prices}"
 							rendered="#{routeController.route.id > 0}" styleClass="internalPanel">
 							<h:panelGrid columns="2" columnClasses="gridContent">
 								<rich:panel styleClass="subInternalPanel">
 									<rich:tree switchType="client" ajaxSubmitSelection="true"
-										style="width:300px;" value="#{routeController.pricesTreeData}"
+										style="width:230px;" value="#{routeController.pricesTreeData}"
 										var="data" nodeFace="#{data.leaf ? 'end' : 'start'}"
 										id="pricesTree"
 										nodeSelectListener="#{routeController.nodeSelected}"
@@ -176,7 +176,7 @@
 											<rich:toolTip value="#{msg.zeroPriceTip}" followMouse="true" />
 										</a4j:outputPanel>
 										<h:inputText value="#{routeController.priceValue}"
-											id="priceField">
+											id="priceField" size="10">
 											<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 										</h:inputText>
 	
@@ -185,22 +185,26 @@
 											<rich:toolTip value="#{msg.zeroPriceTip}" followMouse="true" />
 										</a4j:outputPanel>
 										<h:inputText value="#{routeController.twoWayPriceValue}"
-											id="twoWayPriceField">
+											id="twoWayPriceField" size="10">
 											<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 										</h:inputText>
 	
 										<h:outputText />
 										<a4j:commandButton value="#{msg.save}"
 											action="#{routeController.savePrice}" />
-	
 									</h:panelGrid>
 								</rich:panel>
 							</h:panelGrid>
 						</rich:panel>
 	
+	                   <rich:panel styleClass="internalPanel" header="#{msg.discounts}"
+                            id="discountsPanel">
+
+                       </rich:panel>
+                        
 	
 						<rich:panel styleClass="internalPanel"
-							header="#{msg.routeSettings}">
+							header="#{msg.routeSettings}" id="routeSettingsPanel">
 							<h:panelGrid columns="2" styleClass="dr-pnl-b"
 								style="padding:0px; margin:0px;">
 								<h:outputLabel for="seats" value="#{msg.seats}: " />
@@ -238,7 +242,7 @@
 	
 							</h:panelGrid>
 						</rich:panel>
-                    </h:panelGrid>
+					</h:panelGrid>
                     
 					<rich:panel>
 						<h:commandButton action="#{routeController.save}"

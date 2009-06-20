@@ -38,7 +38,7 @@ public class PersonalInformationController extends BaseController {
             customer = new Customer();
         }
 
-        RegisterController.formcustomerTypeSelectItems(customerTypeItems);
+        RegisterController.formCustomerTypeSelectItems(customerTypeItems);
     }
 
 

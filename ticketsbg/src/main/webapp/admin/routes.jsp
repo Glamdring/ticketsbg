@@ -32,17 +32,23 @@
 						</rich:columnGroup>
 					</f:facet>
 
-					<rich:column>
+					<rich:column> <!-- TODO make sortable.. -->
 						<h:outputText value="#{route.name}" />
 					</rich:column>
 
-					<rich:column>
+					<rich:column rendered="#{!route.singleRun}">
 						<a4j:repeat var="routeDay" value="#{route.routeDays}">
 							<h:outputText
 								value="#{routeController.dayNames[routeDay.day.name]}" />
 							<h:outputText value="&#160;" />
 						</a4j:repeat>
 					</rich:column>
+					
+					<rich:column rendered="#{route.singleRun}">
+                        <h:outputText value="#{route.singleRunDateTime.time}">
+                            <f:convertDateTime pattern="dd.MM.yyyy HH:mm"/>
+                        </h:outputText>
+                    </rich:column>					
 
 					<rich:column>
 						<h:commandLink action="#{routeController.edit}" title="#{msg.edit}">

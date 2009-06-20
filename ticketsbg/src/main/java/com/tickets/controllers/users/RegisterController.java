@@ -59,7 +59,7 @@ public class RegisterController extends BaseController {
 
     }
 
-    public static void formcustomerTypeSelectItems(List<SelectItem> targetList) {
+    public static void formCustomerTypeSelectItems(List<SelectItem> targetList) {
         CustomerType[] customerTypes = CustomerType.values();
         for (CustomerType customerType : customerTypes) {
             SelectItem si = new SelectItem(customerType, getLocalizedMessage(customerType.toString()));

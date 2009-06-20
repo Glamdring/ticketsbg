@@ -18,6 +18,9 @@ public class Discount extends DataObject implements Serializable {
     private int discountId;
 
     @Column
+    private String name;
+
+    @Column
     private DiscountType discountType;
 
     @Column
@@ -25,6 +28,9 @@ public class Discount extends DataObject implements Serializable {
 
     @ManyToOne
     private Route route;
+
+    @Column
+    private String description;
 
     public int getDiscountId() {
         return discountId;
@@ -58,4 +64,19 @@ public class Discount extends DataObject implements Serializable {
         this.route = route;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }
