@@ -27,9 +27,9 @@
 	<ui:define name="body">
 		<f:view>
 			<a4j:form id="searchResults">
-				<h:messages />
+				<h:messages errorClass="error" />
 				<rich:extendedDataTable value="#{searchController.resultsModel}"
-					height="#{searchController.resultsModel.rowCount * 138 + 30}"
+					height="#{searchController.resultsModel.rowCount == 0 ? 50 : searchController.resultsModel.rowCount * 155 + 30}"
 					var="result" rowKeyVar="rowId" selectionMode="single"
 					enableContextMenu="false" id="resultsTable"
 					selection="#{searchController.selection}" headerClass="tableHeader"
@@ -104,6 +104,13 @@
 									<f:convertDateTime type="time" pattern="HH:mm"
 										timeZone="#{timeZoneController.timeZone}" />
 								</h:outputText>
+								
+								<h:outputText value="#{msg.vacantSeats}: " />
+								<h:outputText value="#{result.run.vacantSeats}"
+									style="#{result.run.vacantSeats &lt; 5 ? 'color: red;' : 'color: black;'};font-weight: bold;" />
+									
+								<h:outputText value="#{msg.transportCompany}: " />
+                                <h:outputText value="#{result.run.route.firm.name}" />
 							</h:panelGrid>
 						</rich:panel>
 					</rich:column>

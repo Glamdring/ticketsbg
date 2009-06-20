@@ -68,6 +68,12 @@ public class SearchServiceImpl extends BaseService implements SearchService {
                 continue;
             }
 
+            //Filtering the ones with no seats remaining
+            if (run.getVacantSeats() == 0) {
+                it.remove();
+                continue;
+            }
+
             entry.setArrivalTime(arrivalTime);
             entry.setDepartureTime(departureTime);
         }

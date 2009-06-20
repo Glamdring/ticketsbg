@@ -73,6 +73,12 @@ public class Route extends DataObject implements Serializable {
     @Cascade({CascadeType.ALL})
     private List<Run> runs = new ArrayList<Run>();
 
+
+    @OneToMany(mappedBy="route")
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @Cascade({CascadeType.ALL})
+    private List<Discount> discounts;
+
     @Column
     private int publishedRunsPeriod = 30;
 
@@ -223,5 +229,13 @@ public class Route extends DataObject implements Serializable {
 
     public void setSingleRunDateTime(Calendar singleRunDateTime) {
         this.singleRunDateTime = singleRunDateTime;
+    }
+
+    public List<Discount> getDiscounts() {
+        return discounts;
+    }
+
+    public void setDiscounts(List<Discount> discounts) {
+        this.discounts = discounts;
     }
 }

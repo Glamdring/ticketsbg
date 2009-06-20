@@ -49,14 +49,14 @@ public class PersonalInformationController extends BaseController {
     public String proceedToPayment() {
         //In case the user has come directly to this page
         //without choosing route
-        if (purchaseController.getTicket() == null) {
+        if (purchaseController.getTickets().size() == 0) {
             return Screen.SEARCH_SCREEN.getOutcome();
         }
 
         if (customer instanceof User) {
-            purchaseController.getTicket().setUser((User) customer);
+            purchaseController.setUser((User) customer);
         }
-        purchaseController.getTicket().setCustomerInformation(customer);
+        purchaseController.setCustomerInformation(customer);
 
         return Screen.PAYMENT_SCREEN.getOutcome();
     }

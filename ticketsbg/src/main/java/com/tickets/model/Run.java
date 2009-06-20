@@ -19,6 +19,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 @Entity
 @Table(name = "runs")
 @NamedQueries( {
@@ -36,7 +39,7 @@ import javax.persistence.TemporalType;
                 query = "SELECT DISTINCT new com.tickets.model.SearchResultEntry(run, price) FROM Run run, IN(run.route.prices) price " +
                         "WHERE price.startStop.name=:fromStop AND price.endStop.name=:toStop " +
                         "AND price.price > 0 " +
-                        "ORDER BY run.time"
+                        "ORDER BY run.time, price.price"
         )
 })
 public class Run implements Serializable {
@@ -46,7 +49,12 @@ public class Run implements Serializable {
     private int runId;
 
     @OneToMany(mappedBy = "run")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private Set<Ticket> tickets = new HashSet<Ticket>();
+
+    @OneToMany(mappedBy = "returnRun")
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private Set<Ticket> returnTickets = new HashSet<Ticket>();
 
     @ManyToOne
     @JoinColumn(name = "routeId", nullable = false)
@@ -56,6 +64,9 @@ public class Run implements Serializable {
     @Temporal(value = TemporalType.TIMESTAMP)
     private Calendar time;
 
+    public Run() {
+    }
+
     public Set<Ticket> getTickets() {
         return tickets;
     }
@@ -64,8 +75,6 @@ public class Run implements Serializable {
         this.tickets = tickets;
     }
 
-    public Run() {
-    }
 
     public int getRunId() {
         return runId;
@@ -89,5 +98,17 @@ public class Run implements Serializable {
 
     public void setRoute(Route route) {
         this.route = route;
+    }
+
+    public Set<Ticket> getReturnTickets() {
+        return returnTickets;
+    }
+
+    public void setReturnTickets(Set<Ticket> returnTickets) {
+        this.returnTickets = returnTickets;
+    }
+
+    public int getVacantSeats() {
+        return getRoute().getSeats() - (getTickets().size() + getReturnTickets().size());
     }
 }

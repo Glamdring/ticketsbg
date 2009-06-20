@@ -15,7 +15,8 @@
                 <class>com.tickets.model.Ticket</class>
                 <class>com.tickets.model.User</class>
                 <class>com.tickets.model.UsersHistory</class>
-
+                <class>com.tickets.model.UsersHistory</class>
+                <class>com.tickets.model.Discount</class>
 		<properties>
 			<property name="hibernate.cache.use_second_level_cache" value="true" />
 			<property name="hibernate.max_fetch_depth"              value="3" />

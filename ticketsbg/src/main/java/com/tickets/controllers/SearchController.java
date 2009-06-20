@@ -90,7 +90,7 @@ public class SearchController extends BaseController {
 
         purchaseController.setCurrentStep(Step.SEARCH_RESULTS);
 
-        return "searchResults";
+        return Screen.SEARCH_RESULTS.getOutcome();
     }
 
     @Action
@@ -98,8 +98,15 @@ public class SearchController extends BaseController {
         //TODO client-side validate selectedEntry != null
 
         Ticket ticket = ticketService.createTicket(selectedEntry, selectedReturnEntry);
-        purchaseController.setTicket(ticket);
 
+        //If the ticket isn't created - i.e. another user has just
+        //taken the final ticket, redo the search and display an error message
+        if (ticket == null) {
+            addError("lastTicketBoughtByAnotherUser");
+            return search();
+        }
+
+        purchaseController.addTicket(ticket);
         return Screen.PERSONAL_INFORMATION_SCREEN.getOutcome();
     }
 

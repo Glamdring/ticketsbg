@@ -31,7 +31,21 @@ public class RunServiceImpl extends BaseService<Run> implements RunService<Run> 
             } else {
                 time = run.getTime();
             }
-            createRunsForRoute(route, time);
+            if (route.isSingleRun()) {
+                createSingleRunForRoute(route);
+            } else {
+                createRunsForRoute(route, time);
+            }
+        }
+    }
+
+    private void createSingleRunForRoute(Route route) {
+        //Only if no other runs exist for this route
+        if (route.getRuns().size() == 0) {
+            Run run = new Run();
+            run.setTime(route.getSingleRunDateTime());
+            //automatically saving because attached to session
+            route.addRun(run);
         }
     }
 
@@ -86,6 +100,7 @@ public class RunServiceImpl extends BaseService<Run> implements RunService<Run> 
                 runTime.set(Calendar.MINUTE, rh.getMinutes() % 60);
                 runTime.set(Calendar.SECOND, 0);
                 run.setTime(runTime);
+                //Saving automatically, because attached to session ?
                 route.addRun(run);
             }
         }

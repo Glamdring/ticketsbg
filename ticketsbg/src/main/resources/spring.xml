@@ -62,6 +62,7 @@
                 <value>com.tickets.model.Ticket</value>
                 <value>com.tickets.model.User</value>
                 <value>com.tickets.model.UsersHistory</value>
+                <value>com.tickets.model.Discount</value>
             </list>
         </property>
 

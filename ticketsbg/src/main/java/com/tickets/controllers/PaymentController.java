@@ -33,7 +33,7 @@ public class PaymentController extends BaseController {
     public void buy() {
         try {
             PaymentMethod paymentMethod = PaymentMethod.valueOf(selectedPaymentMethod);
-            purchaseController.getTicket().setPaymentMethod(paymentMethod);
+            purchaseController.setPaymentMethod(paymentMethod);
 
             // TODO submit the payment. The "buy" method should be called as an
             // action listener, before a form is submitted to the payment

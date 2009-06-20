@@ -39,21 +39,24 @@
 						<h:inputText value="#{routeController.route.name}" id="routeName" />
 					</rich:panel>
 
-					<rich:panel header="#{msg.routeDetailsHeader}">
+					<rich:panel header="#{msg.routeDetailsHeader}" id="routeDetails">
 						<h:panelGrid columns="3" columnClasses="gridContent">
-							<rich:panel header="#{msg.daysOfWeek}" styleClass="internalPanel">
+							<rich:panel header="#{msg.daysOfWeek}" styleClass="internalPanel" id="daysPanel">
 								<rich:pickList showButtonsLabel="false" id="daysPickList"
 									value="#{routeController.daysPickList}"
-									converter="javax.faces.Integer">
+									converter="javax.faces.Integer"
+									disabled="#{routeController.route.singleRun == true}">
 									<c:forEach var="day" items="${routeController.days}">
 										<f:selectItem itemLabel="#{day.label}" itemValue="${day.id}" />
 									</c:forEach>
 								</rich:pickList>
 							</rich:panel>
 
-							<rich:panel header="#{msg.hours}" styleClass="internalPanel">
+							<rich:panel header="#{msg.hours}" styleClass="internalPanel" id="hoursPanel">
 								<t:inputDate type="short_time" value="#{routeController.hour}" />
-								<a4j:commandLink action="#{routeController.addHour}" reRender="hoursList">
+								<a4j:commandLink action="#{routeController.addHour}"
+									reRender="hoursList"
+									rendered="#{!routeController.route.singleRun}">
 									<h:graphicImage value="/images/add.png" title="#{msg.add}"
 										alt="#{msg.add}"
 										style="width: 15px; height:15px; border-style: none;" />
@@ -78,7 +81,8 @@
 								</h:selectOneListbox>
 								<br />
 								<a4j:commandButton action="#{routeController.removeHour}"
-									value="#{msg.delete}" reRender="hoursList" />
+									value="#{msg.delete}" reRender="hoursList"
+									disabled="#{routeController.route.singleRun == true}" />
 							</rich:panel>
 
 							<rich:panel header="${msg.stops}" styleClass="internalPanel">
@@ -201,7 +205,7 @@
 								style="padding:0px; margin:0px;">
 								<h:outputLabel for="seats" value="#{msg.seats}: " />
 								<h:inputText value="#{routeController.route.seats}"
-								    id="seats" size="15">
+								    id="seats" size="18">
 									<f:convertNumber maxFractionDigits="0" />
 								</h:inputText>
 
@@ -215,7 +219,7 @@
 								<h:selectBooleanCheckbox
 									value="#{routeController.route.singleRun}" id="singleRun">
 									<a4j:support event="onchange" ajaxSingle="true"
-										reRender="singleRunDateTimeLabel,singleRunDateTimeCalendar" />
+										reRender="singleRunDateTimeLabel,singleRunDateTimeCalendar,hoursPanel,daysPanel" />
 								</h:selectBooleanCheckbox>
 	
 								<a4j:outputPanel id="singleRunDateTimeLabel">
@@ -224,11 +228,11 @@
 										rendered="#{routeController.route.singleRun == true}" />
 								</a4j:outputPanel>
 								<a4j:outputPanel id="singleRunDateTimeCalendar">
-									<rich:calendar id="singleRunDateTime" datePattern="dd.MM.yyyy"
-										firstWeekDay="1" inputSize="11"
+									<rich:calendar id="singleRunDateTime" datePattern="dd.MM.yyyy HH:mm"
+										firstWeekDay="1" inputSize="14" 
 										value="#{routeController.route.singleRunDateTime.time}"
-										rendered="#{routeController.route.singleRun == true}">
-										
+										rendered="#{routeController.route.singleRun == true}"
+										showApplyButton="true" direction="top-right">
 									</rich:calendar>
 								</a4j:outputPanel>
 	
