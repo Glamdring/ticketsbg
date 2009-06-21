@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?> 
+<?xml version="1.0" encoding="UTF-8" ?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
@@ -20,9 +20,14 @@
 	height: 230px;
 	text-align: center;
 }
-.subInternalPanel {
-    height: 190px;
+
+.downInternalPanel {
+    height: 270px;
     text-align: center;
+}
+.subInternalPanel {
+	height: 230px;
+	text-align: center;
 }
 </style>
 	</ui:define>
@@ -41,7 +46,8 @@
 
 					<rich:panel header="#{msg.routeDetailsHeader}" id="routeDetails">
 						<h:panelGrid columns="3" columnClasses="gridContent">
-							<rich:panel header="#{msg.daysOfWeek}" styleClass="internalPanel" id="daysPanel">
+							<rich:panel header="#{msg.daysOfWeek}" styleClass="internalPanel"
+								id="daysPanel">
 								<rich:pickList showButtonsLabel="false" id="daysPickList"
 									value="#{routeController.daysPickList}"
 									converter="javax.faces.Integer"
@@ -52,7 +58,8 @@
 								</rich:pickList>
 							</rich:panel>
 
-							<rich:panel header="#{msg.hours}" styleClass="internalPanel" id="hoursPanel">
+							<rich:panel header="#{msg.hours}" styleClass="internalPanel"
+								id="hoursPanel">
 								<t:inputDate type="short_time" value="#{routeController.hour}" />
 								<a4j:commandLink action="#{routeController.addHour}"
 									reRender="hoursList"
@@ -69,14 +76,14 @@
 										items="#{routeController.route.routeHours}">
 										<c:choose>
 											<c:when test="#{hour.id > 0}">
-											  <f:selectItem itemLabel="#{hour.displayLabel}"
-												 itemValue="#{hour.id}" />
-											 </c:when>  
-											 <c:otherwise>
-											     <f:selectItem itemLabel="#{hour.displayLabel}"
-                                                    itemValue="#{-stat.index}" />
-											 </c:otherwise>  
-											 </c:choose>
+												<f:selectItem itemLabel="#{hour.displayLabel}"
+													itemValue="#{hour.id}" />
+											</c:when>
+											<c:otherwise>
+												<f:selectItem itemLabel="#{hour.displayLabel}"
+													itemValue="#{-stat.index}" />
+											</c:otherwise>
+										</c:choose>
 									</c:forEach>
 								</h:selectOneListbox>
 								<br />
@@ -85,10 +92,12 @@
 									disabled="#{routeController.route.singleRun == true}" />
 							</rich:panel>
 
-							<rich:panel header="${msg.stops}" styleClass="internalPanel" id="stopsPanel">
+							<rich:panel header="${msg.stops}" styleClass="internalPanel"
+								id="stopsPanel">
 								<a4j:commandButton value="#{msg.addStop}"
-									action="#{routeController.addStop}" oncomplete="#{rich:component('stopPanel')}.show()" />
-									
+									action="#{routeController.addStop}"
+									oncomplete="#{rich:component('stopPanel')}.show()" />
+
 								<rich:orderingList binding="#{routeController.stopsTable}"
 									var="stop" value="#{routeController.route.stops}"
 									converter="#{stopListConverter}" showButtonLabels="false"
@@ -139,166 +148,240 @@
 							</rich:panel>
 						</h:panelGrid>
 					</rich:panel>
-                    
-                    <h:panelGrid columns="3" columnClasses="gridContent" id="pricesAndSettingsPanel">
-						<rich:panel header="#{msg.prices}" id="pricesPanel"
-							rendered="#{routeController.route.id > 0}" styleClass="internalPanel">
-							<h:panelGrid columns="2" columnClasses="gridContent">
-								<rich:panel styleClass="subInternalPanel">
-									<rich:tree switchType="client" ajaxSubmitSelection="true"
-										style="width:230px;" value="#{routeController.pricesTreeData}"
-										var="data" nodeFace="#{data.leaf ? 'end' : 'start'}"
-										id="pricesTree"
-										nodeSelectListener="#{routeController.nodeSelected}"
-										adviseNodeOpened="#{routeController.getExpandedNodes}">
-	
-										<rich:treeNode type="start"
-											reRender="priceField,twoWayPriceField">
-											<div style="font-size: 11px;"><h:outputText
-												value="#{msg.fromStop} " /> <h:outputText
-												value="#{data.stop.name}" /></div>
-										</rich:treeNode>
-										<rich:treeNode type="end"
-											reRender="priceField,twoWayPriceField">
-											<div style="font-size: 11px;"><h:outputText
-												value="#{msg.toStop} " /> <h:outputText
-												value="#{data.stop.name}" /> <h:outputText value=" (" /> <h:outputText
-												value="#{data.price.price}" converter="#{currencyConverter}" />
-											<h:outputText value=")" /></div>
-										</rich:treeNode>
-									</rich:tree>
-								</rich:panel>
-								<rich:panel styleClass="subInternalPanel">
-									<h:panelGrid columns="2" styleClass="dr-pnl-b"
-										style="padding:0px; margin:0px;">
-										<a4j:outputPanel>
-											<h:outputLabel value="#{msg.oneWay}:" for="priceField" />
-											<rich:toolTip value="#{msg.zeroPriceTip}" followMouse="true" />
-										</a4j:outputPanel>
-										<h:inputText value="#{routeController.priceValue}"
-											id="priceField" size="10">
-											<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-										</h:inputText>
-	
-										<a4j:outputPanel>
-											<h:outputLabel value="#{msg.twoWay}:" for="twoWayPriceField" />
-											<rich:toolTip value="#{msg.zeroPriceTip}" followMouse="true" />
-										</a4j:outputPanel>
-										<h:inputText value="#{routeController.twoWayPriceValue}"
-											id="twoWayPriceField" size="10">
-											<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-										</h:inputText>
-	
-										<h:outputText />
-										<a4j:commandButton value="#{msg.save}"
-											action="#{routeController.savePrice}" />
-									</h:panelGrid>
-								</rich:panel>
-							</h:panelGrid>
-						</rich:panel>
-	
-	                   <rich:panel styleClass="internalPanel" header="#{msg.discounts}"
-                            id="discountsPanel">
-                            <a4j:commandButton value="#{msg.addDiscount}"
-                                    action="#{routeController.addDiscount}" oncomplete="#{rich:component('discountPanel')}.show()" />
-                            <rich:dataTable value="#{routeController.route.discounts}"
-                            var="discount" onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
-                            onRowMouseOut="this.style.backgroundColor='white'" cellpadding="0"
-                            cellspacing="0" border="0" id="discountsTable" width="310px">
-                                <rich:column>
-                                    <f:facet name="header">
-                                        #{msg.discountName}
-                                       </f:facet>
-                                    #{discount.name}       
-                                </rich:column>
-                                
-                                <rich:column>
-                                    <f:facet name="header">
-                                        #{msg.discountType}
-                                       </f:facet>
-                                    <h:outputText value="-" rendered="#{discount.discountType == 'FIXED'}" />       
-                                    <h:outputText value="%" rendered="#{discount.discountType == 'PERCENTAGE'}" />
-                                </rich:column>
-                                
-                                <rich:column>
-                                    <f:facet name="header">
-                                        #{msg.discountValue}
-                                    </f:facet>
-                                    <h:outputText value="#{discount.value}">
-                                        <f:convertNumber maxFractionDigits="2" 
-                                            minFractionDigits="2" />
-                                    </h:outputText>
-                                </rich:column>
 
-								<rich:column>
-									<f:facet name="header">
-									</f:facet>
-									<a4j:commandLink
-										oncomplete="#{rich:component('discountPanel')}.show()"
-										title="#{msg.edit}">
-										<h:graphicImage value="/images/edit.png"
-											style="width:16; height:16; border-style: none;"
-											alt="#{msg.edit}" title="#{msg.edit}" />
+					<rich:panel id="pricesAndSettingsPanel">
+						<h:panelGrid columns="3" columnClasses="gridContent">
+							<rich:panel header="#{msg.prices}" id="pricesPanel"
+								rendered="#{routeController.route.id > 0}"
+								styleClass="downInternalPanel">
+								<h:panelGrid columns="2" columnClasses="gridContent">
+									<rich:panel styleClass="subInternalPanel">
+										<rich:tree switchType="client" ajaxSubmitSelection="true"
+											style="width:230px;"
+											value="#{routeController.pricesTreeData}" var="data"
+											nodeFace="#{data.leaf ? 'end' : 'start'}" id="pricesTree"
+											nodeSelectListener="#{routeController.nodeSelected}"
+											adviseNodeOpened="#{routeController.getExpandedNodes}">
 
-										<f:setPropertyActionListener value="#{discount}"
-											target="#{routeController.discount}" />
-									</a4j:commandLink>
-									<h:outputText value="&#160;" />
-									<a4j:commandLink action="#{routeController.deleteDiscount}"
-										title="#{msg.remove}" reRender="discountsPanel">
-										<h:graphicImage value="/images/delete.png"
-											style="width:16; height:16; border-style: none;"
-											alt="#{msg.remove}" title="#{msg.remove}" />
-										<f:setPropertyActionListener value="#{discount}"
-                                            target="#{routeController.discount}" />
-									</a4j:commandLink>
-								</rich:column>
+											<rich:treeNode type="start"
+												reRender="priceField,twoWayPriceField">
+												<div style="font-size: 11px;"><h:outputText
+													value="#{msg.fromStop} " /> <h:outputText
+													value="#{data.stop.name}" /></div>
+											</rich:treeNode>
+											<rich:treeNode type="end"
+												reRender="priceField,twoWayPriceField">
+												<div style="font-size: 11px;"><h:outputText
+													value="#{msg.toStop} " /> <h:outputText
+													value="#{data.stop.name}" /> <h:outputText value=" (" />
+												<h:outputText value="#{data.price.price}"
+													converter="#{currencyConverter}" /> <h:outputText
+													value=")" /></div>
+											</rich:treeNode>
+										</rich:tree>
+									</rich:panel>
+									<rich:panel styleClass="subInternalPanel">
+										<h:panelGrid columns="2" styleClass="dr-pnl-b"
+											style="padding:0px; margin:0px;">
+											<a4j:outputPanel>
+												<h:outputLabel value="#{msg.oneWay}:" for="priceField" />
+												<rich:toolTip value="#{msg.zeroPriceTip}" followMouse="true" />
+											</a4j:outputPanel>
+											<h:inputText value="#{routeController.priceValue}"
+												id="priceField" size="10">
+												<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+											</h:inputText>
 
-							</rich:dataTable>
-                       </rich:panel>
-                        
-	
-						<rich:panel styleClass="internalPanel"
-							header="#{msg.routeSettings}" id="routeSettingsPanel">
-							<h:panelGrid columns="2" styleClass="dr-pnl-b"
-								style="padding:0px; margin:0px;">
-								<h:outputLabel for="seats" value="#{msg.seats}: " />
-								<h:inputText value="#{routeController.route.seats}"
-								    id="seats" size="18">
-									<f:convertNumber maxFractionDigits="0" />
-								</h:inputText>
+											<a4j:outputPanel>
+												<h:outputLabel value="#{msg.twoWay}:" for="twoWayPriceField" />
+												<rich:toolTip value="#{msg.zeroPriceTip}" followMouse="true" />
+											</a4j:outputPanel>
+											<h:inputText value="#{routeController.twoWayPriceValue}"
+												id="twoWayPriceField" size="10">
+												<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+											</h:inputText>
 
-								<h:outputLabel for="allowSeatChoice"
-									value="#{msg.allowSeatChoice}: " />
-								<h:selectBooleanCheckbox
-									value="#{routeController.route.allowSeatChoice}"
-									id="allowSeatChoice" />
-	
-								<h:outputLabel for="singleRun" value="#{msg.singleRun}: " />
-								<h:selectBooleanCheckbox
-									value="#{routeController.route.singleRun}" id="singleRun">
-									<a4j:support event="onchange" ajaxSingle="true"
-										reRender="singleRunDateTimeLabel,singleRunDateTimeCalendar,hoursPanel,daysPanel" />
-								</h:selectBooleanCheckbox>
-	
-								<a4j:outputPanel id="singleRunDateTimeLabel">
-									<h:outputLabel for="singleRunDateTime"
-										value="#{msg.singleRunDateTime}: "
-										rendered="#{routeController.route.singleRun == true}" />
-								</a4j:outputPanel>
-								<a4j:outputPanel id="singleRunDateTimeCalendar">
-									<rich:calendar id="singleRunDateTime" datePattern="dd.MM.yyyy HH:mm"
-										firstWeekDay="1" inputSize="14" 
-										value="#{routeController.route.singleRunDateTime.time}"
-										rendered="#{routeController.route.singleRun == true}"
-										showApplyButton="true" direction="top-right">
-									</rich:calendar>
-								</a4j:outputPanel>
-	
-							</h:panelGrid>
-						</rich:panel>
-					</h:panelGrid>
-                    
+											<h:outputText />
+											<a4j:commandButton value="#{msg.save}"
+												action="#{routeController.savePrice}" />
+										</h:panelGrid>
+									</rich:panel>
+								</h:panelGrid>
+							</rich:panel>
+
+							<rich:panel styleClass="downInternalPanel" header="#{msg.discounts}"
+								id="discountsPanel">
+								<a4j:commandButton value="#{msg.addDiscount}"
+									action="#{routeController.addDiscount}"
+									oncomplete="#{rich:component('discountPanel')}.show()" />
+								<rich:dataTable value="#{routeController.route.discounts}"
+									var="discount"
+									onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+									onRowMouseOut="this.style.backgroundColor='white'"
+									cellpadding="0" cellspacing="0" border="0" id="discountsTable"
+									width="310px">
+									<rich:column>
+										<f:facet name="header">
+	                                        #{msg.discountName}
+	                                       </f:facet>
+	                                    #{discount.name}       
+	                                </rich:column>
+
+									<rich:column>
+										<f:facet name="header">
+	                                        #{msg.discountType}
+	                                       </f:facet>
+										<h:outputText value="-"
+											rendered="#{discount.discountType == 'FIXED'}" />
+										<h:outputText value="%"
+											rendered="#{discount.discountType == 'PERCENTAGE'}" />
+									</rich:column>
+
+									<rich:column>
+										<f:facet name="header">
+	                                        #{msg.discountValueShort}
+	                                    </f:facet>
+										<h:outputText value="#{discount.value}">
+											<f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
+										</h:outputText>
+									</rich:column>
+									
+									<rich:column>
+                                        <f:facet name="header">
+                                            #{msg.discountTwoWayValueShort}
+                                        </f:facet>
+                                        <h:outputText value="#{discount.twoWayValue}">
+                                            <f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
+                                        </h:outputText>
+                                    </rich:column>
+
+									<rich:column>
+										<f:facet name="header">
+										</f:facet>
+										<a4j:commandLink
+											oncomplete="#{rich:component('discountPanel')}.show()"
+											title="#{msg.edit}">
+											<h:graphicImage value="/images/edit.png"
+												style="width:16; height:16; border-style: none;"
+												alt="#{msg.edit}" title="#{msg.edit}" />
+
+											<f:setPropertyActionListener value="#{discount}"
+												target="#{routeController.discount}" />
+										</a4j:commandLink>
+										<h:outputText value="&#160;" />
+										<a4j:commandLink action="#{routeController.deleteDiscount}"
+											title="#{msg.remove}" reRender="discountsPanel">
+											<h:graphicImage value="/images/delete.png"
+												style="width:16; height:16; border-style: none;"
+												alt="#{msg.remove}" title="#{msg.remove}" />
+											<f:setPropertyActionListener value="#{discount}"
+												target="#{routeController.discount}" />
+										</a4j:commandLink>
+									</rich:column>
+
+								</rich:dataTable>
+							</rich:panel>
+
+
+							<rich:panel styleClass="downInternalPanel"
+								header="#{msg.routeSettings}" id="routeSettingsPanel">
+								<h:panelGrid columns="2" styleClass="dr-pnl-b"
+									style="padding:0px; margin:0px;">
+									<h:outputLabel for="seats" value="#{msg.seats}: " />
+									<h:inputText value="#{routeController.route.seats}" id="seats"
+										size="18">
+										<f:convertNumber maxFractionDigits="0" />
+									</h:inputText>
+
+									<h:outputLabel for="allowSeatChoice"
+										value="#{msg.allowSeatChoice}: " />
+									<h:selectBooleanCheckbox
+										value="#{routeController.route.allowSeatChoice}"
+										id="allowSeatChoice" />
+
+                                    <h:outputText><hr /></h:outputText>
+                                    <h:outputText><hr /></h:outputText>
+                                    
+                                    <a4j:outputPanel>
+                                        <h:outputLabel for="publishedRunsPeriod" value="#{msg.publishedRunsPeriod}: " />
+                                        <rich:toolTip value="#{msg.publishedRunsPeriodInfo}" followMouse="true" />
+                                    </a4j:outputPanel>
+                                    <h:inputText value="#{routeController.route.publishedRunsPeriod}" id="publishedRunsPeriod"
+                                        size="18">
+                                        <f:convertNumber maxFractionDigits="0" />
+                                    </h:inputText>
+                                    
+                                    <h:outputText><hr /></h:outputText>
+                                    <h:outputText><hr /></h:outputText>
+                                    
+									<h:outputLabel for="singleRun" value="#{msg.singleRun}: " />
+									<h:selectBooleanCheckbox
+										value="#{routeController.route.singleRun}" id="singleRun">
+										<a4j:support event="onchange" ajaxSingle="true"
+											reRender="singleRunDateTimeLabel,singleRunDateTimeCalendar,hoursPanel,daysPanel" />
+									</h:selectBooleanCheckbox>
+
+									<a4j:outputPanel id="singleRunDateTimeLabel">
+										<h:outputLabel for="singleRunDateTime"
+											value="#{msg.singleRunDateTime}: "
+											rendered="#{routeController.route.singleRun == true}" />
+									</a4j:outputPanel>
+									<a4j:outputPanel id="singleRunDateTimeCalendar">
+										<rich:calendar id="singleRunDateTime"
+											datePattern="dd.MM.yyyy HH:mm" firstWeekDay="1"
+											inputSize="14"
+											value="#{routeController.route.singleRunDateTime.time}"
+											rendered="#{routeController.route.singleRun == true}"
+											showApplyButton="true" direction="top-left">
+										</rich:calendar>
+									</a4j:outputPanel>
+									
+									<h:outputText><hr /></h:outputText>
+                                    <h:outputText><hr /></h:outputText>
+                                    
+                                    <!-- TODO: not allow both 'seasonal' and 'singleRun' at the same time -->
+                                    <h:outputLabel for="seasonal" value="#{msg.seasonal}: " />
+                                    <h:selectBooleanCheckbox
+                                        value="#{routeController.route.seasonal}" id="seasonal">
+                                        <a4j:support event="onchange" ajaxSingle="true"
+                                            reRender="seasonStartLabel,seasonStartCalendar,seasonEndLabel,seasonEndCalendar" />
+                                    </h:selectBooleanCheckbox>
+
+                                    <a4j:outputPanel id="seasonStartLabel">
+                                        <h:outputLabel for="seasonStart"
+                                            value="#{msg.seasonStart}: "
+                                            rendered="#{routeController.route.seasonal == true}" />
+                                    </a4j:outputPanel>
+                                    <a4j:outputPanel id="seasonStartCalendar">
+                                        <rich:calendar id="seasonStart"
+                                            datePattern="dd.MM.yyyy" firstWeekDay="1"
+                                            inputSize="14"
+                                            value="#{routeController.route.seasonStart.time}"
+                                            rendered="#{routeController.route.seasonal == true}"
+                                            direction="top-left">
+                                        </rich:calendar>
+                                    </a4j:outputPanel>
+                                    
+                                    <a4j:outputPanel id="seasonEndLabel">
+                                        <h:outputLabel for="seasonEnd"
+                                            value="#{msg.seasonEnd}: "
+                                            rendered="#{routeController.route.seasonal == true}" />
+                                    </a4j:outputPanel>
+                                    <a4j:outputPanel id="seasonEndCalendar">
+                                        <rich:calendar id="seasonEnd"
+                                            datePattern="dd.MM.yyyy" firstWeekDay="1"
+                                            inputSize="14"
+                                            value="#{routeController.route.seasonEnd.time}"
+                                            rendered="#{routeController.route.seasonal == true}"
+                                            direction="top-left">
+                                        </rich:calendar>
+                                    </a4j:outputPanel>
+
+								</h:panelGrid>
+							</rich:panel>
+						</h:panelGrid>
+					</rich:panel>
+
 					<rich:panel id="buttonsPanel">
 						<h:commandButton action="#{routeController.save}"
 							value="#{msg.save}">
@@ -325,20 +408,20 @@
 			</f:facet>
 			<a4j:include viewId="stop.jsp" />
 		</rich:modalPanel>
-		
-        <rich:modalPanel id="discountPanel" autosized="true" width="250">
-            <f:facet name="header">
-                <h:outputText value="#{msg.addOrModifyStop}" />
-            </f:facet>
-            <f:facet name="controls">
-                <h:panelGroup>
-                    <h:graphicImage value="/images/close.png" id="hidelink1"
-                        styleClass="hidelink" />
-                    <rich:componentControl for="discountPanel" attachTo="hidelink1"
-                        operation="hide" event="onclick" />
-                </h:panelGroup>
-            </f:facet>
-            <a4j:include viewId="discount.jsp" />
-        </rich:modalPanel>
+
+		<rich:modalPanel id="discountPanel" autosized="true" width="250">
+			<f:facet name="header">
+				<h:outputText value="#{msg.addOrModifyDiscount}" />
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="/images/close.png" id="hidelink1"
+						styleClass="hidelink" />
+					<rich:componentControl for="discountPanel" attachTo="hidelink1"
+						operation="hide" event="onclick" />
+				</h:panelGroup>
+			</f:facet>
+			<a4j:include viewId="discount.jsp" />
+		</rich:modalPanel>
 	</ui:define>
 </ui:composition>

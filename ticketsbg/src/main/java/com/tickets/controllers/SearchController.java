@@ -1,10 +1,12 @@
 package com.tickets.controllers;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.model.ListDataModel;
+import javax.faces.model.SelectItem;
 
 import org.apache.myfaces.orchestra.conversation.annotations.ConversationName;
 import org.richfaces.model.selection.SimpleSelection;
@@ -13,10 +15,12 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.tickets.annotations.Action;
+import com.tickets.model.Route;
 import com.tickets.model.SearchResultEntry;
 import com.tickets.model.Ticket;
 import com.tickets.services.SearchService;
 import com.tickets.services.TicketService;
+import com.tickets.utils.SelectItemUtils;
 /**
  * Controller which handles the whole purchase process.
  * Subcontrollers are included for different tasks
@@ -69,6 +73,7 @@ public class SearchController extends BaseController {
     private SimpleSelection returnSelection;
     private Long selectedReturnRowId;
 
+    private List<SelectItem> discountItems = new ArrayList<SelectItem>();
 
     @Action
     public String search() {
@@ -138,6 +143,9 @@ public class SearchController extends BaseController {
         Integer selectedId = (Integer) selection.getKeys().next();
         selectedRowId = new Long(selectedId);
         selectedEntry = ((List<SearchResultEntry>) resultsModel.getWrappedData()).get(selectedId);
+        Route route = selectedEntry.getRun().getRoute();
+        discountItems = SelectItemUtils.formSelectItems(route.getDiscounts(),
+                returnTimeForDeparture);
     }
 
     @SuppressWarnings("unchecked")
@@ -329,5 +337,13 @@ public class SearchController extends BaseController {
 
     public void setSelectedReturnEntry(SearchResultEntry selectedReturnEntry) {
         this.selectedReturnEntry = selectedReturnEntry;
+    }
+
+    public List<SelectItem> getDiscountItems() {
+        return discountItems;
+    }
+
+    public void setDiscountItems(List<SelectItem> discountItems) {
+        this.discountItems = discountItems;
     }
 }

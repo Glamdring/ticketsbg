@@ -15,7 +15,7 @@ import com.tickets.controllers.users.LoggedUserHolder;
 import com.tickets.model.Customer;
 import com.tickets.model.CustomerType;
 import com.tickets.model.User;
-import com.tickets.utils.EnumUtils;
+import com.tickets.utils.SelectItemUtils;
 
 @Component("personalInformationController")
 @Scope("conversation.manual")
@@ -39,7 +39,7 @@ public class PersonalInformationController extends BaseController {
             customer = new Customer();
         }
 
-        EnumUtils.formSelectItems(CustomerType.class, customerTypeItems);
+        SelectItemUtils.formSelectItems(CustomerType.class, customerTypeItems);
     }
 
 

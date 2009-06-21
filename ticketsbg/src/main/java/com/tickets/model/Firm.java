@@ -53,6 +53,9 @@ public class Firm implements java.io.Serializable {
     @JoinTable(name="firmsStaff")
     private Set<User> staff = new HashSet<User>();
 
+    @Column
+    private boolean allowDiscounts;
+
     public Set<User> getStaff() {
         return staff;
     }
@@ -137,4 +140,11 @@ public class Firm implements java.io.Serializable {
         this.bic = bic;
     }
 
+    public boolean isAllowDiscounts() {
+        return allowDiscounts;
+    }
+
+    public void setAllowDiscounts(boolean allowDiscounts) {
+        this.allowDiscounts = allowDiscounts;
+    }
 }

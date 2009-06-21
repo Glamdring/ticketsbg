@@ -37,7 +37,7 @@
 					columnClasses="columnClass" style="float: left;">
 
 					<a4j:support event="onselectionchange"
-						reRender="selectedEntry,returnResultsTable"
+						reRender="selectedEntry,returnResultsTable,discount"
 						eventsQueue="selectionSubmit"
 						action="#{searchController.rowSelectionChanged}" />
 
@@ -196,6 +196,14 @@
 						</rich:column>
 					</rich:extendedDataTable>
 				</a4j:region>
+				
+				<h:panelGroup>
+                    <h:outputLabel value="#{msg.discount}" />
+                    <h:selectOneMenu id="discount"> <!-- TODO rendered="#{searchController.selectedEntry.run.route.firm.allowDiscounts}" -->
+                        <f:selectItems value="#{searchController.discountItems}"/>
+                    </h:selectOneMenu>		
+				</h:panelGroup>
+				
 				<h:panelGroup style="clear: both; float: left;">
 					<h:commandLink value="#{msg.backToSearchScreen}"
 						action="#{searchController.toSearchScreen}"/>

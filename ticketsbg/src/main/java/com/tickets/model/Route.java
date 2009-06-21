@@ -94,6 +94,17 @@ public class Route extends DataObject implements Serializable {
     @Column
     private boolean allowSeatChoice;
 
+    @Column
+    private boolean seasonal;
+
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar seasonStart = GeneralUtils.createEmptyCalendar();
+
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar seasonEnd = GeneralUtils.createEmptyCalendar();
+
     public Route() {
     }
 
@@ -243,5 +254,29 @@ public class Route extends DataObject implements Serializable {
     public void addDiscount(Discount discount) {
         discount.setRoute(this);
         discounts.add(discount);
+    }
+
+    public boolean isSeasonal() {
+        return seasonal;
+    }
+
+    public void setSeasonal(boolean seasonal) {
+        this.seasonal = seasonal;
+    }
+
+    public Calendar getSeasonStart() {
+        return seasonStart;
+    }
+
+    public void setSeasonStart(Calendar seasonStart) {
+        this.seasonStart = seasonStart;
+    }
+
+    public Calendar getSeasonEnd() {
+        return seasonEnd;
+    }
+
+    public void setSeasonEnd(Calendar seasonEnd) {
+        this.seasonEnd = seasonEnd;
     }
 }

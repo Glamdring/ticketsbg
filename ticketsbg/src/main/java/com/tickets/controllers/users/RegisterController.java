@@ -14,10 +14,10 @@ import com.tickets.controllers.BaseController;
 import com.tickets.controllers.PurchaseController;
 import com.tickets.controllers.Screen;
 import com.tickets.exceptions.UserException;
-import com.tickets.model.User;
 import com.tickets.model.CustomerType;
+import com.tickets.model.User;
 import com.tickets.services.UserService;
-import com.tickets.utils.EnumUtils;
+import com.tickets.utils.SelectItemUtils;
 
 @Controller("registerController")
 @Scope("request")
@@ -57,7 +57,7 @@ public class RegisterController extends BaseController {
 
     @PostConstruct
     public void init() {
-        EnumUtils.formSelectItems(CustomerType.class, customerTypeItems);
+        SelectItemUtils.formSelectItems(CustomerType.class, customerTypeItems);
     }
 
     private boolean validate() {

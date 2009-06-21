@@ -38,7 +38,7 @@ import com.tickets.model.Stop;
 import com.tickets.model.StopPriceHolder;
 import com.tickets.services.RouteService;
 import com.tickets.services.StopService;
-import com.tickets.utils.EnumUtils;
+import com.tickets.utils.SelectItemUtils;
 
 @Controller("routeController")
 @Scope("conversation.manual")
@@ -229,7 +229,7 @@ public class RouteController extends BaseController implements Serializable {
             dayNames.put(day.getName(), day.getLabel());
         }
 
-        EnumUtils.formSelectItems(DiscountType.class, discountTypeSelectItems);
+        SelectItemUtils.formSelectItems(DiscountType.class, discountTypeSelectItems);
     }
 
     private void refreshList() {

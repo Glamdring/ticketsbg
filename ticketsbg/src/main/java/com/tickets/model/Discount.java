@@ -11,7 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Discount extends DataObject implements Serializable {
+public class Discount extends DataObject implements Serializable, Selectable {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -25,6 +25,9 @@ public class Discount extends DataObject implements Serializable {
 
     @Column
     private BigDecimal value = BigDecimal.ZERO;
+
+    @Column
+    private BigDecimal twoWayValue = BigDecimal.ZERO;
 
     @ManyToOne
     private Route route;
@@ -78,5 +81,18 @@ public class Discount extends DataObject implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public BigDecimal getTwoWayValue() {
+        return twoWayValue;
+    }
+
+    public void setTwoWayValue(BigDecimal twoWayValue) {
+        this.twoWayValue = twoWayValue;
+    }
+
+    @Override
+    public String getLabel() {
+        return getName();
     }
 }

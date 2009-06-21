@@ -27,6 +27,11 @@
                         <f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
                     </h:inputText>
                     
+                    <h:outputLabel value="#{msg.discountValue}" for="discountTwoWayValue" />
+                    <h:inputText value="#{routeController.discount.twoWayValue}" id="discountTwoWayValue">
+                        <f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
+                    </h:inputText>
+                    
                     <h:outputLabel value="#{msg.description}" for="description" />
 					<h:inputTextarea value="#{routeController.discount.description}"
 						id="description" rows="5" cols="20" />
