@@ -31,7 +31,7 @@
 			<h:messages />
 			<h:form id="routeForm">
 				<div align="center"><h:panelGrid columns="1">
-					<rich:panel>
+					<rich:panel id="mainInfoPanel">
 						<a4j:outputPanel>
 							<h:outputLabel value="#{msg.routeName}: " for="routeName" />
 							<rich:toolTip value="#{msg.routeNameHint}" followMouse="true" />
@@ -85,7 +85,7 @@
 									disabled="#{routeController.route.singleRun == true}" />
 							</rich:panel>
 
-							<rich:panel header="${msg.stops}" styleClass="internalPanel">
+							<rich:panel header="${msg.stops}" styleClass="internalPanel" id="stopsPanel">
 								<a4j:commandButton value="#{msg.addStop}"
 									action="#{routeController.addStop}" oncomplete="#{rich:component('stopPanel')}.show()" />
 									
@@ -128,20 +128,20 @@
 												target="#{routeController.stop}" />
 										</a4j:commandLink>
 										<h:outputText value="&#160;" />
-										<h:commandLink action="#{routeController.deleteStop}"
-											title="#{msg.remove}">
+										<a4j:commandLink action="#{routeController.deleteStop}"
+											title="#{msg.remove}" reRender="stopsPanel">
 											<h:graphicImage value="/images/delete.png"
 												style="width:16; height:16; border-style: none;"
 												alt="#{msg.remove}" title="#{msg.remove}" />
-										</h:commandLink>
+										</a4j:commandLink>
 									</rich:column>
 								</rich:orderingList>
 							</rich:panel>
 						</h:panelGrid>
 					</rich:panel>
                     
-                    <h:panelGrid columns="3" columnClasses="gridContent">
-						<rich:panel header="#{msg.prices}"
+                    <h:panelGrid columns="3" columnClasses="gridContent" id="pricesAndSettingsPanel">
+						<rich:panel header="#{msg.prices}" id="pricesPanel"
 							rendered="#{routeController.route.id > 0}" styleClass="internalPanel">
 							<h:panelGrid columns="2" columnClasses="gridContent">
 								<rich:panel styleClass="subInternalPanel">
@@ -199,7 +199,62 @@
 	
 	                   <rich:panel styleClass="internalPanel" header="#{msg.discounts}"
                             id="discountsPanel">
+                            <a4j:commandButton value="#{msg.addDiscount}"
+                                    action="#{routeController.addDiscount}" oncomplete="#{rich:component('discountPanel')}.show()" />
+                            <rich:dataTable value="#{routeController.route.discounts}"
+                            var="discount" onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+                            onRowMouseOut="this.style.backgroundColor='white'" cellpadding="0"
+                            cellspacing="0" border="0" id="discountsTable" width="310px">
+                                <rich:column>
+                                    <f:facet name="header">
+                                        #{msg.discountName}
+                                       </f:facet>
+                                    #{discount.name}       
+                                </rich:column>
+                                
+                                <rich:column>
+                                    <f:facet name="header">
+                                        #{msg.discountType}
+                                       </f:facet>
+                                    <h:outputText value="-" rendered="#{discount.discountType == 'FIXED'}" />       
+                                    <h:outputText value="%" rendered="#{discount.discountType == 'PERCENTAGE'}" />
+                                </rich:column>
+                                
+                                <rich:column>
+                                    <f:facet name="header">
+                                        #{msg.discountValue}
+                                    </f:facet>
+                                    <h:outputText value="#{discount.value}">
+                                        <f:convertNumber maxFractionDigits="2" 
+                                            minFractionDigits="2" />
+                                    </h:outputText>
+                                </rich:column>
 
+								<rich:column>
+									<f:facet name="header">
+									</f:facet>
+									<a4j:commandLink
+										oncomplete="#{rich:component('discountPanel')}.show()"
+										title="#{msg.edit}">
+										<h:graphicImage value="/images/edit.png"
+											style="width:16; height:16; border-style: none;"
+											alt="#{msg.edit}" title="#{msg.edit}" />
+
+										<f:setPropertyActionListener value="#{discount}"
+											target="#{routeController.discount}" />
+									</a4j:commandLink>
+									<h:outputText value="&#160;" />
+									<a4j:commandLink action="#{routeController.deleteDiscount}"
+										title="#{msg.remove}" reRender="discountsPanel">
+										<h:graphicImage value="/images/delete.png"
+											style="width:16; height:16; border-style: none;"
+											alt="#{msg.remove}" title="#{msg.remove}" />
+										<f:setPropertyActionListener value="#{discount}"
+                                            target="#{routeController.discount}" />
+									</a4j:commandLink>
+								</rich:column>
+
+							</rich:dataTable>
                        </rich:panel>
                         
 	
@@ -244,7 +299,7 @@
 						</rich:panel>
 					</h:panelGrid>
                     
-					<rich:panel>
+					<rich:panel id="buttonsPanel">
 						<h:commandButton action="#{routeController.save}"
 							value="#{msg.save}">
 							<cust:defaultAction />
@@ -270,5 +325,20 @@
 			</f:facet>
 			<a4j:include viewId="stop.jsp" />
 		</rich:modalPanel>
+		
+        <rich:modalPanel id="discountPanel" autosized="true" width="250">
+            <f:facet name="header">
+                <h:outputText value="#{msg.addOrModifyStop}" />
+            </f:facet>
+            <f:facet name="controls">
+                <h:panelGroup>
+                    <h:graphicImage value="/images/close.png" id="hidelink1"
+                        styleClass="hidelink" />
+                    <rich:componentControl for="discountPanel" attachTo="hidelink1"
+                        operation="hide" event="onclick" />
+                </h:panelGroup>
+            </f:facet>
+            <a4j:include viewId="discount.jsp" />
+        </rich:modalPanel>
 	</ui:define>
 </ui:composition>

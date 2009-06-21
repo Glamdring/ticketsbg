@@ -17,6 +17,7 @@ import com.tickets.exceptions.UserException;
 import com.tickets.model.User;
 import com.tickets.model.CustomerType;
 import com.tickets.services.UserService;
+import com.tickets.utils.EnumUtils;
 
 @Controller("registerController")
 @Scope("request")
@@ -56,15 +57,7 @@ public class RegisterController extends BaseController {
 
     @PostConstruct
     public void init() {
-
-    }
-
-    public static void formCustomerTypeSelectItems(List<SelectItem> targetList) {
-        CustomerType[] customerTypes = CustomerType.values();
-        for (CustomerType customerType : customerTypes) {
-            SelectItem si = new SelectItem(customerType, getLocalizedMessage(customerType.toString()));
-            targetList.add(si);
-        }
+        EnumUtils.formSelectItems(CustomerType.class, customerTypeItems);
     }
 
     private boolean validate() {

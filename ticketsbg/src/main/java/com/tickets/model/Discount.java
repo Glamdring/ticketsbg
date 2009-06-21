@@ -24,7 +24,7 @@ public class Discount extends DataObject implements Serializable {
     private DiscountType discountType;
 
     @Column
-    private BigDecimal value;
+    private BigDecimal value = BigDecimal.ZERO;
 
     @ManyToOne
     private Route route;

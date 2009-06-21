@@ -14,22 +14,27 @@
         <h:form id="discountForm">
             <a4j:outputPanel ajaxRendered="true">
                 <h:panelGrid columns="2" columnClasses="rich-panel">
-                    <h:outputLabel value="#{msg.discountName}" for="stopName" />
-                    <h:inputText value="#{routeController.discount.name}" id="stopName" />
+                    <h:outputLabel value="#{msg.discountName}" for="discountName" />
+                    <h:inputText value="#{routeController.discount.name}" id="discountName" />
                     
+                    <h:outputLabel value="#{msg.discountType}" for="discountType" />
+                    <h:selectOneMenu value="#{routeController.discount.discountType}" id="discountType">
+                        <f:selectItems value="#{routeController.discountTypeSelectItems}" />
+                    </h:selectOneMenu>
+                    
+                    <h:outputLabel value="#{msg.discountValue}" for="discountValue" />
+                    <h:inputText value="#{routeController.discount.value}" id="discountValue">
+                        <f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
+                    </h:inputText>
+                    
+                    <h:outputLabel value="#{msg.description}" for="description" />
+					<h:inputTextarea value="#{routeController.discount.description}"
+						id="description" rows="5" cols="20" />
 
-                    <h:outputLabel value="#{msg.timeToArrival}" for="timeToArrival" />
-                    <rich:inputNumberSpinner maxValue="1000"
-                        value="${routeController.stop.timeToArrival}" id="timeToArrival" />
 
-                    <h:outputLabel value="#{msg.timeToDeparture}" for="timeToDeparture" />
-                    <rich:inputNumberSpinner maxValue="1000"
-                        value="${routeController.stop.timeToDeparture}"
-                        id="timeToDeparture" />
-
-                    <a4j:commandButton action="#{routeController.saveStop}"
-                        value="#{msg.save}" reRender="stopsTable,pricesTree"
-                        oncomplete="#{rich:component('stopPanel')}.hide();">
+					<a4j:commandButton action="#{routeController.saveDiscount}"
+                        value="#{msg.save}" reRender="discountsPanel"
+                        oncomplete="#{rich:component('discountPanel')}.hide();">
                         <cust:defaultAction />
                     </a4j:commandButton>
                     <h:outputText></h:outputText>

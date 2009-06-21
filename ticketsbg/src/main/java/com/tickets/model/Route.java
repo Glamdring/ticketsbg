@@ -235,7 +235,13 @@ public class Route extends DataObject implements Serializable {
         return discounts;
     }
 
+    @Deprecated
     public void setDiscounts(List<Discount> discounts) {
         this.discounts = discounts;
+    }
+
+    public void addDiscount(Discount discount) {
+        discount.setRoute(this);
+        discounts.add(discount);
     }
 }

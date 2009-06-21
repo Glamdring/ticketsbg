@@ -12,9 +12,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.tickets.controllers.users.LoggedUserHolder;
-import com.tickets.controllers.users.RegisterController;
 import com.tickets.model.Customer;
+import com.tickets.model.CustomerType;
 import com.tickets.model.User;
+import com.tickets.utils.EnumUtils;
 
 @Component("personalInformationController")
 @Scope("conversation.manual")
@@ -38,7 +39,7 @@ public class PersonalInformationController extends BaseController {
             customer = new Customer();
         }
 
-        RegisterController.formCustomerTypeSelectItems(customerTypeItems);
+        EnumUtils.formSelectItems(CustomerType.class, customerTypeItems);
     }
 
 

@@ -3,6 +3,7 @@ package com.tickets.controllers;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,6 +13,7 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.ListDataModel;
+import javax.faces.model.SelectItem;
 
 import org.apache.myfaces.orchestra.conversation.Conversation;
 import org.richfaces.component.UITree;
@@ -28,12 +30,15 @@ import org.springframework.stereotype.Controller;
 import com.tickets.annotations.Action;
 import com.tickets.constants.Messages;
 import com.tickets.model.Day;
+import com.tickets.model.Discount;
+import com.tickets.model.DiscountType;
 import com.tickets.model.Price;
 import com.tickets.model.Route;
 import com.tickets.model.Stop;
 import com.tickets.model.StopPriceHolder;
 import com.tickets.services.RouteService;
 import com.tickets.services.StopService;
+import com.tickets.utils.EnumUtils;
 
 @Controller("routeController")
 @Scope("conversation.manual")
@@ -47,11 +52,13 @@ public class RouteController extends BaseController implements Serializable {
     private Date hour;
     private int selectedHour;
     private Stop stop = new Stop();
+    private Discount discount = new Discount();
     private HtmlOrderingList stopsTable;
     private TreeNode<StopPriceHolder> pricesTreeData;
     private Price price;
     private BigDecimal priceValue;
     private BigDecimal twoWayPriceValue;
+    private List<SelectItem> discountTypeSelectItems = new ArrayList<SelectItem>();
 
     @Autowired
     private StopService stopService;
@@ -121,6 +128,21 @@ public class RouteController extends BaseController implements Serializable {
     public void deleteStop() {
         Stop stop = (Stop) stopsTable.getRowData();
         stopService.delete(stop, route);
+    }
+
+    @Action
+    public void addDiscount() {
+        discount = new Discount();
+    }
+
+    @Action
+    public void saveDiscount() {
+        route.addDiscount(discount);
+    }
+
+    @Action
+    public void deleteDiscount() {
+        route.getDiscounts().remove(discount);
     }
 
     @Action
@@ -206,6 +228,8 @@ public class RouteController extends BaseController implements Serializable {
             day.setLabel(Messages.getString(day.getName()));
             dayNames.put(day.getName(), day.getLabel());
         }
+
+        EnumUtils.formSelectItems(DiscountType.class, discountTypeSelectItems);
     }
 
     private void refreshList() {
@@ -323,5 +347,21 @@ public class RouteController extends BaseController implements Serializable {
 
     public void setPricesTreeData(TreeNode<StopPriceHolder> pricesTreeData) {
         this.pricesTreeData = pricesTreeData;
+    }
+
+    public Discount getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Discount discount) {
+        this.discount = discount;
+    }
+
+    public List<SelectItem> getDiscountTypeSelectItems() {
+        return discountTypeSelectItems;
+    }
+
+    public void setDiscountTypeSelectItems(List<SelectItem> discountTypeSelectItems) {
+        this.discountTypeSelectItems = discountTypeSelectItems;
     }
 }
