@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.model.ListDataModel;
-import javax.faces.model.SelectItem;
 
 import org.apache.myfaces.orchestra.conversation.annotations.ConversationName;
 import org.richfaces.model.selection.SimpleSelection;
@@ -15,15 +14,14 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.tickets.annotations.Action;
-import com.tickets.model.Route;
+import com.tickets.model.Discount;
 import com.tickets.model.SearchResultEntry;
 import com.tickets.model.Ticket;
+import com.tickets.model.TicketCount;
 import com.tickets.services.SearchService;
 import com.tickets.services.TicketService;
-import com.tickets.utils.SelectItemUtils;
 /**
- * Controller which handles the whole purchase process.
- * Subcontrollers are included for different tasks
+ * Controller which handles the search process.
  *
  * @author Bozhidar Bozhanov
  *
@@ -66,14 +64,21 @@ public class SearchController extends BaseController {
     private String travelType = TWO_WAY;
 
     private SearchResultEntry selectedEntry;
+
     private SimpleSelection selection;
+
     private Long selectedRowId;
 
     private SearchResultEntry selectedReturnEntry;
     private SimpleSelection returnSelection;
     private Long selectedReturnRowId;
 
-    private List<SelectItem> discountItems = new ArrayList<SelectItem>();
+    private List<TicketCount> ticketCounts = new ArrayList<TicketCount>();
+    // defaults to 1 for user-friendliness, as this is the most common case
+    private int regularTicketsCount = 1;
+
+    private List<Ticket> tickets;
+    private boolean proposeCancellation;
 
     @Action
     public String search() {
@@ -100,18 +105,74 @@ public class SearchController extends BaseController {
 
     @Action
     public String proceedToPersonalInformation() {
-        //TODO client-side validate selectedEntry != null
+        // Validation in the controller, because custom validators
+        // for the complex UI would be an overhead
 
-        Ticket ticket = ticketService.createTicket(selectedEntry, selectedReturnEntry);
-
-        //If the ticket isn't created - i.e. another user has just
-        //taken the final ticket, redo the search and display an error message
-        if (ticket == null) {
-            addError("lastTicketBoughtByAnotherUser");
-            return search();
+        // If nothing is chosen, return to the results page
+        if (selectedEntry == null) {
+            addError("mustSelectEntry");
+            return null;
         }
 
-        purchaseController.addTicket(ticket);
+        // Creating many ticket instances
+        tickets = new ArrayList<Ticket>();
+
+        int nullsCount = 0;
+        int total = 0;
+
+        for (int i = 0; i < regularTicketsCount; i ++) {
+            Ticket ticket = ticketService.createTicket(selectedEntry, selectedReturnEntry);
+            total ++;
+            if (ticket == null) {
+                nullsCount ++;
+            } else {
+                tickets.add(ticket);
+            }
+        }
+
+        for (TicketCount tc : ticketCounts) {
+            for (int i = 0; i < tc.getNumberOfTickets(); i++) {
+                Ticket tmpTicket = ticketService.createTicket(selectedEntry, selectedReturnEntry, tc.getDiscount());
+                total ++;
+                if (tmpTicket == null) {
+                    nullsCount ++;
+                } else {
+                    tickets.add(tmpTicket);
+                }
+            }
+        }
+
+        // Validate selected ticket counts
+        if (total == 0) {
+            addError("mustChooseNonZeroTicketCounts");
+            return null;
+        }
+
+        // If the ticket isn't created - i.e. another user has just
+        // taken the final ticket, redo the search and display an error message
+        // else, if there are some failures in ticket purchases, offer an option
+        // to either cancel all or continue
+        if (nullsCount == total) {
+            addError("lastTicketBoughtByAnotherUser");
+            return search();
+        } else if (nullsCount > 0) {
+            addError("someTicketsWerentReserved", new Integer(nullsCount));
+            return null;
+        }
+
+        purchaseController.getTickets().addAll(tickets);
+        purchaseController.setCurrentStep(Step.PERSONAL_INFORMATION);
+
+        return Screen.PERSONAL_INFORMATION_SCREEN.getOutcome();
+    }
+
+    public String cancelTickets() {
+        return Screen.SEARCH_SCREEN.getOutcome();
+    }
+
+    public String confirmPartialPurchase() {
+        purchaseController.getTickets().addAll(tickets);
+        tickets = null;
         return Screen.PERSONAL_INFORMATION_SCREEN.getOutcome();
     }
 
@@ -143,9 +204,15 @@ public class SearchController extends BaseController {
         Integer selectedId = (Integer) selection.getKeys().next();
         selectedRowId = new Long(selectedId);
         selectedEntry = ((List<SearchResultEntry>) resultsModel.getWrappedData()).get(selectedId);
-        Route route = selectedEntry.getRun().getRoute();
-        discountItems = SelectItemUtils.formSelectItems(route.getDiscounts(),
-                returnTimeForDeparture);
+
+        ticketCounts = new ArrayList<TicketCount>(selectedEntry.getRun().getRoute().getDiscounts().size());
+
+        for (Discount discount : selectedEntry.getRun().getRoute().getDiscounts()) {
+            TicketCount pd = new TicketCount();
+            pd.setDiscount(discount);
+            pd.setNumberOfTickets(0);
+            ticketCounts.add(pd);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -339,11 +406,43 @@ public class SearchController extends BaseController {
         this.selectedReturnEntry = selectedReturnEntry;
     }
 
-    public List<SelectItem> getDiscountItems() {
-        return discountItems;
+    public List<TicketCount> getPurchaseDiscounts() {
+        return ticketCounts;
     }
 
-    public void setDiscountItems(List<SelectItem> discountItems) {
-        this.discountItems = discountItems;
+    public void setPurchaseDiscounts(List<TicketCount> purchaseDiscounts) {
+        this.ticketCounts = purchaseDiscounts;
+    }
+
+    public List<TicketCount> getTicketCounts() {
+        return ticketCounts;
+    }
+
+    public void setTicketCounts(List<TicketCount> ticketCounts) {
+        this.ticketCounts = ticketCounts;
+    }
+
+    public int getRegularTicketsCount() {
+        return regularTicketsCount;
+    }
+
+    public void setRegularTicketsCount(int regularTicketsCount) {
+        this.regularTicketsCount = regularTicketsCount;
+    }
+
+    public List<Ticket> getTickets() {
+        return tickets;
+    }
+
+    public void setTickets(List<Ticket> tickets) {
+        this.tickets = tickets;
+    }
+
+    public boolean isProposeCancellation() {
+        return proposeCancellation;
+    }
+
+    public void setProposeCancellation(boolean proposeCancellation) {
+        this.proposeCancellation = proposeCancellation;
     }
 }

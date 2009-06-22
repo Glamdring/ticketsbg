@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 import org.springframework.stereotype.Service;
 
+import com.tickets.model.Discount;
 import com.tickets.model.Run;
 import com.tickets.model.SearchResultEntry;
 import com.tickets.model.Ticket;
@@ -12,9 +13,10 @@ import com.tickets.utils.GeneralUtils;
 @Service("ticketService")
 public class TicketServiceImpl extends BaseService<Ticket> implements TicketService {
 
+
     @Override
     public Ticket createTicket(SearchResultEntry selectedEntry,
-            SearchResultEntry selectedReturnEntry) {
+            SearchResultEntry selectedReturnEntry, Discount discount) {
 
         //Allow only one user per run at a time, to avoid collisions
         String runIdIntern = "run" + String.valueOf(selectedEntry.getRun().getRunId()).intern();
@@ -25,19 +27,28 @@ public class TicketServiceImpl extends BaseService<Ticket> implements TicketServ
         synchronized (runIdIntern) {
             if (returnRunIdIntern != null) {
                 synchronized(returnRunIdIntern) {
-                    return doCreateTicket(selectedEntry, selectedReturnEntry);
+                    return doCreateTicket(selectedEntry, selectedReturnEntry, discount);
                 }
             }
 
-            return doCreateTicket(selectedEntry, selectedReturnEntry);
+            return doCreateTicket(selectedEntry, selectedReturnEntry, discount);
         }
     }
 
-    private Ticket doCreateTicket(SearchResultEntry selectedEntry,
+    @Override
+    public Ticket createTicket(SearchResultEntry selectedEntry,
             SearchResultEntry selectedReturnEntry) {
+
+        return createTicket(selectedEntry, selectedReturnEntry, null);
+    }
+
+    private Ticket doCreateTicket(SearchResultEntry selectedEntry,
+            SearchResultEntry selectedReturnEntry, Discount discount) {
         if (selectedEntry.getRun().getVacantSeats() > 0) {
             Ticket ticket = new Ticket();
             ticket.setRun(selectedEntry.getRun());
+            ticket.setDiscount(discount);
+
             if (selectedReturnEntry == null) {
                 ticket.setTwoWay(false);
                 ticket.setPrice(selectedEntry.getPrice().getPrice());
@@ -68,7 +79,12 @@ public class TicketServiceImpl extends BaseService<Ticket> implements TicketServ
     }
 
     public String generateTicketCode(Run run) {
-        String code = "" + run.getRoute().getFirm().getFirmId();
+        String code = "";
+        try {
+            code += run.getRoute().getFirm().getFirmId();
+        } catch (Exception ex) {
+            //Ignore - only occurs in test environment
+        }
         code += run.getRoute().getId();
         code += run.getRunId();
         code += ("" + run.getTime().getTimeInMillis()).substring(6); //after the 5th digit

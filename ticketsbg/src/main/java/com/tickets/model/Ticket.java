@@ -2,6 +2,7 @@ package com.tickets.model;
 
 // Generated 2008-1-20 22:59:52 by Hibernate Tools 3.2.0.b9
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Calendar;
 
@@ -22,7 +23,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "tickets")
-public class Ticket implements java.io.Serializable {
+public class Ticket implements Serializable {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -39,7 +40,7 @@ public class Ticket implements java.io.Serializable {
     @Column(length = 16)
     private String paymentCode;
 
-    @Column(length = 16)
+    @Column(length = 30)
     private String ticketCode;
 
     @Column
@@ -74,6 +75,9 @@ public class Ticket implements java.io.Serializable {
     @Column
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar creationTime;
+
+    @ManyToOne
+    private Discount discount;
 
     public Run getRun() {
         return run;
@@ -196,5 +200,13 @@ public class Ticket implements java.io.Serializable {
 
     public void setReturnRun(Run returnRun) {
         this.returnRun = returnRun;
+    }
+
+    public Discount getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Discount discount) {
+        this.discount = discount;
     }
 }

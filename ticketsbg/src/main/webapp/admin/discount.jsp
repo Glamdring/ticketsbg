@@ -21,13 +21,19 @@
                     <h:selectOneMenu value="#{routeController.discount.discountType}" id="discountType">
                         <f:selectItems value="#{routeController.discountTypeSelectItems}" />
                     </h:selectOneMenu>
-                    
-                    <h:outputLabel value="#{msg.discountValue}" for="discountValue" />
+
+                    <a4j:outputPanel>
+	                    <h:outputLabel value="#{msg.discountValue}" for="discountValue" />
+	                    <rich:toolTip followMouse="true" value="#{msg.discountValueHint}"/>
+                    </a4j:outputPanel>
                     <h:inputText value="#{routeController.discount.value}" id="discountValue">
                         <f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
                     </h:inputText>
                     
-                    <h:outputLabel value="#{msg.discountValue}" for="discountTwoWayValue" />
+                    <a4j:outputPanel>
+	                    <h:outputLabel value="#{msg.discountTwoWayValue}" for="discountTwoWayValue" />
+	                    <rich:toolTip followMouse="true" value="#{msg.discountValueHint}"/>
+                    </a4j:outputPanel>
                     <h:inputText value="#{routeController.discount.twoWayValue}" id="discountTwoWayValue">
                         <f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
                     </h:inputText>

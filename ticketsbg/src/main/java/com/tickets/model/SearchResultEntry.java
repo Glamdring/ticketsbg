@@ -3,6 +3,8 @@ package com.tickets.model;
 import java.io.Serializable;
 import java.util.Calendar;
 
+import com.tickets.constants.Constants;
+
 public class SearchResultEntry implements Serializable {
 
     private Run run;
@@ -46,5 +48,10 @@ public class SearchResultEntry implements Serializable {
 
     public void setArrivalTime(Calendar arrivalTime) {
         this.arrivalTime = arrivalTime;
+    }
+
+    public int getDuration() {
+        return (int) ((arrivalTime.getTimeInMillis() - departureTime
+                .getTimeInMillis()) / Constants.ONE_MINUTE);
     }
 }

@@ -34,6 +34,7 @@ public class RunServiceImpl extends BaseService<Run> implements RunService<Run> 
             if (route.isSingleRun()) {
                 createSingleRunForRoute(route);
             } else {
+                //TODO optimize skipping seasonal
                 createRunsForRoute(route, time);
             }
         }

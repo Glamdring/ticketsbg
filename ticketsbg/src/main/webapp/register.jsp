@@ -43,16 +43,16 @@
 
 						<a4j:outputPanel id="companyLabel">
 							<h:outputLabel value="#{msg.companyName}" for="companyName"
-								rendered="#{registerController.user.customerType == 'Business'}" />
+								rendered="#{registerController.user.customerType == 'BUSINESS'}" />
 						</a4j:outputPanel>
 						<a4j:outputPanel id="companyNamePanel">
 							<h:inputText value="#{registerController.user.companyName}"
 								id="companyName" size="35"
-								rendered="#{registerController.user.customerType == 'Business'}" />
+								rendered="#{registerController.user.customerType == 'BUSINESS'}" />
 						</a4j:outputPanel>
 						<a4j:outputPanel id="companyMessage">
 							<rich:message for="companyName" errorClass="error"
-								rendered="#{registerController.user.customerType == 'Business'} " />
+								rendered="#{registerController.user.customerType == 'BUSINESS'} " />
 						</a4j:outputPanel>
 
 						<h:outputLabel value="#{msg.names}" for="names" />

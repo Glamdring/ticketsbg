@@ -409,7 +409,7 @@
 			<a4j:include viewId="stop.jsp" />
 		</rich:modalPanel>
 
-		<rich:modalPanel id="discountPanel" autosized="true" width="250">
+		<rich:modalPanel id="discountPanel" autosized="true" width="300">
 			<f:facet name="header">
 				<h:outputText value="#{msg.addOrModifyDiscount}" />
 			</f:facet>

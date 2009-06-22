@@ -57,7 +57,9 @@ public class PersonalInformationController extends BaseController {
         if (customer instanceof User) {
             purchaseController.setUser((User) customer);
         }
+
         purchaseController.setCustomerInformation(customer);
+        purchaseController.setCurrentStep(Step.PAYMENT);
 
         return Screen.PAYMENT_SCREEN.getOutcome();
     }

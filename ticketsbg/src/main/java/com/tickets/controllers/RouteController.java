@@ -137,7 +137,9 @@ public class RouteController extends BaseController implements Serializable {
 
     @Action
     public void saveDiscount() {
-        route.addDiscount(discount);
+        if (!route.getDiscounts().contains(discount)) {
+            route.addDiscount(discount);
+        }
     }
 
     @Action
