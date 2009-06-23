@@ -11,6 +11,11 @@ public class GeneralUtils {
         return c;
     }
 
+    /**
+     * Creates a new calendar, which is set to the current date/time
+     *
+     * @return calendar
+     */
     public static Calendar createEmptyCalendar() {
         return Calendar.getInstance(getLocale());
     }

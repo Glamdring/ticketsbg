@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.myfaces.orchestra.conversation.annotations.ConversationName;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
@@ -11,6 +12,7 @@ import com.tickets.model.Customer;
 import com.tickets.model.PaymentMethod;
 import com.tickets.model.Ticket;
 import com.tickets.model.User;
+import com.tickets.services.TicketService;
 
 @Controller("purchaseController")
 @Scope("conversation.manual")
@@ -19,6 +21,9 @@ public class PurchaseController extends BaseController {
 
     private List<Ticket> tickets = new ArrayList<Ticket>();
     private Step currentStep;
+
+    @Autowired
+    private TicketService service;
 
     public Step getCurrentStep() {
         return currentStep;
@@ -48,9 +53,16 @@ public class PurchaseController extends BaseController {
         }
 
     }
+
     public void setCustomerInformation(Customer customer) {
         for (Ticket ticket : tickets) {
             ticket.setCustomerInformation(customer);
         }
+    }
+
+    public void finalizePurchase(User user) {
+        service.finalizePurchase(tickets, user);
+        setCurrentStep(null);
+        setTickets(new ArrayList<Ticket>());
     }
 }

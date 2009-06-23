@@ -32,6 +32,14 @@
 						</h:inputSecret>
 						<rich:message for="password" errorClass="error" />
 
+
+                        <h:outputLabel value="#{msg.email}" for="email" />
+                        <h:inputText value="#{registerController.user.email}" id="email"
+                            size="35">
+                            <a4j:support event="onblur" ajaxSingle="true" />
+                        </h:inputText>
+                        <rich:message for="email" errorClass="error" />
+                        
 						<h:outputLabel value="#{msg.customerType}" for="customerType" />
 						<h:selectOneMenu value="#{registerController.user.customerType}"
 							id="customerType" style="width: 205px;">
@@ -66,12 +74,10 @@
 							id="contactPhone" size="35" />
 						<rich:message for="contactPhone" errorClass="error" />
 
-						<h:outputLabel value="#{msg.email}" for="email" />
-						<h:inputText value="#{registerController.user.email}" id="email"
-							size="35">
-							<a4j:support event="onblur" ajaxSingle="true" />
-						</h:inputText>
-						<rich:message for="email" errorClass="error" />
+                        <h:outputLabel value="#{msg.city}" for="city" />
+                        <h:inputText value="#{registerController.user.city}"
+                            id="city" size="35" />
+                        <rich:message for="city" errorClass="error" />
 
 						<h:outputLabel value="#{msg.foundUsVia}" for="foundUsVia" />
 						<h:selectOneMenu value="#{registerController.user.foundUsVia}"

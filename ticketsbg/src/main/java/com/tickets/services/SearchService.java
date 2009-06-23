@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.tickets.model.SearchResultEntry;
+import com.tickets.model.User;
 
 public interface SearchService {
 
@@ -29,8 +30,20 @@ public interface SearchService {
 
     /**
      * Lists all available stop names
+     * @param user the logged user (needed in case of staff members)
      *
      * @return list of stop names
      */
-    List<String> listAllStops();
+    List<String> listAllStops(User user);
+
+
+    /**
+     * Lists all available stops which are destinations from
+     * the specified start stop
+     *
+     * @param startStopName
+     * @param user the logged user (needed in case of staff members)
+     * @return list of stop names
+     */
+    List<String> listAllEndStops(String startStopName, User user);
 }

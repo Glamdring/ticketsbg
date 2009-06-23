@@ -266,7 +266,7 @@
 					<h:commandLink value="#{msg.backToSearchScreen}"
 						action="#{searchController.toSearchScreen}"/>
 					<h:outputText value=" " />
-					<a4j:commandButton action="#{searchController.proceedToPersonalInformation}" value="#{msg.buy}" />
+					<a4j:commandButton action="#{searchController.proceed}" value="#{msg.buy}" />
 				</h:panelGroup>
 			</a4j:form>
 		</f:view>

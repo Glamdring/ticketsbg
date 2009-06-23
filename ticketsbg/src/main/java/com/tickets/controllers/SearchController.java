@@ -14,12 +14,15 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.tickets.annotations.Action;
+import com.tickets.controllers.users.LoggedUserHolder;
 import com.tickets.model.Discount;
 import com.tickets.model.SearchResultEntry;
 import com.tickets.model.Ticket;
 import com.tickets.model.TicketCount;
+import com.tickets.model.User;
 import com.tickets.services.SearchService;
 import com.tickets.services.TicketService;
+import com.tickets.utils.GeneralUtils;
 /**
  * Controller which handles the search process.
  *
@@ -38,6 +41,9 @@ public class SearchController extends BaseController {
     private TicketService ticketService;
 
     @Autowired
+    private LoggedUserHolder loggedUserHolder;
+
+    @Autowired
     private PurchaseController purchaseController;
 
     private static final String TWO_WAY = "twoWay";
@@ -47,7 +53,7 @@ public class SearchController extends BaseController {
 
     private int fromHour = 0;
     private int toHour = 24;
-    private Date date;
+    private Date date = GeneralUtils.createEmptyCalendar().getTime();
     private boolean timeForDeparture = true;
 
     private int returnFromHour = 0;
@@ -59,6 +65,8 @@ public class SearchController extends BaseController {
     private ListDataModel returnResultsModel;
 
     private List<String> stopNames;
+    private List<String> toStopNames;
+
     private Integer[] hoursFrom;
     private Integer[] hoursTo;
     private String travelType = TWO_WAY;
@@ -90,12 +98,16 @@ public class SearchController extends BaseController {
 
         resultsModel = new ListDataModel(result);
 
-        if (travelType.equals(TWO_WAY)) {
+        if (travelType.equals(TWO_WAY) && returnDate != null) {
             List<SearchResultEntry> returnResult = searchService.search(toStop, fromStop,
                     returnDate, returnFromHour, returnToHour,
                     returnTimeForDeparture);
 
             returnResultsModel = new ListDataModel(returnResult);
+        }
+
+        if (travelType.equals(TWO_WAY) && returnDate == null) {
+            addError("choseReturnDate");
         }
 
         purchaseController.setCurrentStep(Step.SEARCH_RESULTS);
@@ -104,7 +116,16 @@ public class SearchController extends BaseController {
     }
 
     @Action
-    public String proceedToPersonalInformation() {
+    public void filterToStops() {
+        System.out.println(fromStop);
+        if (fromStop != null && fromStop.length() > 0) {
+            toStopNames = searchService.listAllEndStops(fromStop,
+                    loggedUserHolder.getLoggedUser());
+        }
+    }
+
+    @Action
+    public String proceed() {
         // Validation in the controller, because custom validators
         // for the complex UI would be an overhead
 
@@ -161,8 +182,15 @@ public class SearchController extends BaseController {
         }
 
         purchaseController.getTickets().addAll(tickets);
-        purchaseController.setCurrentStep(Step.PERSONAL_INFORMATION);
 
+        // If the user is staff-member, just mark the tickets as sold
+        User user = loggedUserHolder.getLoggedUser();
+        if (user != null && user.isStaff()) {
+            purchaseController.finalizePurchase(user);
+            return Screen.ADMIN_HOME.getOutcome();
+        }
+
+        purchaseController.setCurrentStep(Step.PERSONAL_INFORMATION);
         return Screen.PERSONAL_INFORMATION_SCREEN.getOutcome();
     }
 
@@ -188,7 +216,16 @@ public class SearchController extends BaseController {
 
     @PostConstruct
     public void init() {
-        stopNames = searchService.listAllStops();
+        //Setting a default origin
+        User user = loggedUserHolder.getLoggedUser();
+        if (user != null) {
+            fromStop = loggedUserHolder.getLoggedUser().getCity();
+            filterToStops();
+        }
+
+        stopNames = searchService.listAllStops(user);
+        toStopNames = searchService.listAllStops(user);
+
         hoursFrom = new Integer[24];
         for (int i = 0; i < hoursFrom.length; i++) {
             hoursFrom[i] = i;
@@ -444,5 +481,13 @@ public class SearchController extends BaseController {
 
     public void setProposeCancellation(boolean proposeCancellation) {
         this.proposeCancellation = proposeCancellation;
+    }
+
+    public List<String> getToStopNames() {
+        return toStopNames;
+    }
+
+    public void setToStopNames(List<String> toStopNames) {
+        this.toStopNames = toStopNames;
     }
 }

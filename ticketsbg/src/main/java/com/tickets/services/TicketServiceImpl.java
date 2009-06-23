@@ -1,13 +1,15 @@
 package com.tickets.services;
 
-import java.util.Calendar;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.tickets.model.Discount;
+import com.tickets.model.PaymentMethod;
 import com.tickets.model.Run;
 import com.tickets.model.SearchResultEntry;
 import com.tickets.model.Ticket;
+import com.tickets.model.User;
 import com.tickets.utils.GeneralUtils;
 
 @Service("ticketService")
@@ -67,9 +69,7 @@ public class TicketServiceImpl extends BaseService<Ticket> implements TicketServ
 
             // Creation time set in order to remove it after a certain
             // idle time without payment
-            Calendar creationTime = GeneralUtils.createEmptyCalendar();
-            creationTime.setTimeInMillis(System.currentTimeMillis());
-            ticket.setCreationTime(creationTime);
+            ticket.setCreationTime(GeneralUtils.createEmptyCalendar());
             ticket.setTicketCode(generateTicketCode(selectedEntry.getRun()));
             save(ticket);
             return ticket;
@@ -99,5 +99,19 @@ public class TicketServiceImpl extends BaseService<Ticket> implements TicketServ
             sb.insert(i + (i-2)/2, '-');
         }
         return sb.toString();
+    }
+
+    @Override
+    public void finalizePurchase(List<Ticket> tickets, User user) {
+        for (Ticket ticket : tickets) {
+            ticket.setCommitted(true);
+            if (ticket.getPaymentMethod() == null) {
+                ticket.setPaymentMethod(PaymentMethod.CASH_DESK);
+            }
+            if (ticket.getUser() == null) {
+                ticket.setUser(user);
+            }
+            save(ticket);
+        }
     }
 }

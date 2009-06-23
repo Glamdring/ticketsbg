@@ -2,6 +2,7 @@ package com.tickets.utils;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 import javax.faces.model.SelectItem;
@@ -32,12 +33,18 @@ public class SelectItemUtils {
     }
 
     public static void formSelectItems(Class<? extends Enum> clazz, List<SelectItem> targetList) {
+        formSelectItems(clazz, targetList, null);
+    }
+
+    public static void formSelectItems(Class<? extends Enum> clazz, List<SelectItem> targetList, EnumSet<? extends Enum> exclusions) {
         try {
             Method method = clazz.getDeclaredMethod("values");
             Enum[] values = (Enum[]) method.invoke(null);
             for (Enum en : values) {
-                SelectItem si = new SelectItem(en, Messages.getString(en.toString()));
-                targetList.add(si);
+                if (exclusions == null || !exclusions.contains(en)) {
+                    SelectItem si = new SelectItem(en, Messages.getString(en.toString()));
+                    targetList.add(si);
+                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();

@@ -53,10 +53,16 @@
 						<h:outputLabel value="#{msg.fromStop}:" for="fromStop" />
 						<rich:comboBox suggestionValues="#{searchController.stopNames}"
 							directInputSuggestions="false" required="true"
-							value="#{searchController.fromStop}" id="fromStop" />
+							value="#{searchController.fromStop}" id="fromStop">
+
+							<a4j:support event="onselect" reRender="toStop"
+								action="#{searchController.filterToStops}" ajaxSingle="true" />
+							<a4j:support event="onchange" reRender="toStop" eventsQueue="fromStopOnchange"
+                                action="#{searchController.filterToStops}" ajaxSingle="true" requestDelay="1000"/>
+						</rich:comboBox>
 
 						<h:outputLabel value="#{msg.toStop}:" for="toStop" />
-						<rich:comboBox suggestionValues="#{searchController.stopNames}"
+						<rich:comboBox suggestionValues="#{searchController.toStopNames}"
 							directInputSuggestions="false" required="true"
 							value="#{searchController.toStop}" id="toStop" />
 					</h:panelGrid>

@@ -1,33 +1,33 @@
 package com.tickets.controllers;
 
-import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.model.SelectItem;
 
 import org.apache.myfaces.orchestra.conversation.annotations.ConversationName;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.tickets.model.PaymentMethod;
+import com.tickets.utils.SelectItemUtils;
 
 @Component("paymentController")
 @Scope("conversation.manual")
 @ConversationName("purchaseConversation")
 public class PaymentController extends BaseController {
 
-    private List<String> paymentMethods;
+    private List<SelectItem> paymentMethods;
     private String selectedPaymentMethod;
 
     private PurchaseController purchaseController;
 
     @PostConstruct
     public void init() {
-        PaymentMethod[] pms = PaymentMethod.values();
-        paymentMethods = new ArrayList<String>(pms.length);
-        for (PaymentMethod pm : pms) {
-            paymentMethods.add(pm.toString());
-        }
+        //List all except the CASH_DESK option
+        SelectItemUtils.formSelectItems(PaymentMethod.class, paymentMethods,
+                EnumSet.of(PaymentMethod.CASH_DESK));
     }
 
     public void buy() {
@@ -44,11 +44,11 @@ public class PaymentController extends BaseController {
 
     }
 
-    public List<String> getPaymentMethods() {
+    public List<SelectItem> getPaymentMethods() {
         return paymentMethods;
     }
 
-    public void setPaymentMethods(List<String> paymentMethods) {
+    public void setPaymentMethods(List<SelectItem> paymentMethods) {
         this.paymentMethods = paymentMethods;
     }
 

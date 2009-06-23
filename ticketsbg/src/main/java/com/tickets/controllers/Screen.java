@@ -9,7 +9,8 @@ public enum Screen {
     REGISTRATION_SCREEN("registrationScreen"),
 
     ROUTE_SCREEN("routeScreen"),
-    ROUTES_LIST("routesList")
+    ROUTES_LIST("routesList"),
+    ADMIN_HOME("adminPanel")
     ;
 
 

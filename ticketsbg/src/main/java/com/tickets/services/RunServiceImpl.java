@@ -75,7 +75,6 @@ public class RunServiceImpl extends BaseService<Run> implements RunService<Run> 
             return; // no day found
 
         Calendar now = GeneralUtils.createEmptyCalendar();
-        now.setTimeInMillis(System.currentTimeMillis());
 
         int daysToGenerate = route.getPublishedRunsPeriod() -
             (day - now.get(Calendar.DAY_OF_YEAR));

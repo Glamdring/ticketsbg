@@ -101,6 +101,9 @@ public class User extends Customer implements Serializable {
     @Transient
     private boolean agreedToTerms;
 
+    @Column
+    private String city;
+
     public String getUsername() {
         return username;
     }
@@ -219,6 +222,14 @@ public class User extends Customer implements Serializable {
 
     public void setAgreedToTerms(boolean agreedToTerms) {
         this.agreedToTerms = agreedToTerms;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
     @Override

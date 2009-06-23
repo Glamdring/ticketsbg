@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.tickets.model.Run;
 import com.tickets.model.SearchResultEntry;
 import com.tickets.model.Stop;
+import com.tickets.model.User;
 import com.tickets.utils.GeneralUtils;
 
 @Service("searchService")
@@ -95,8 +96,30 @@ public class SearchServiceImpl extends BaseService implements SearchService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<String> listAllStops() {
-        List<String> stops = getDao().findByNamedQuery("Stop.listAllStopNames");
+    public List<String> listAllStops(User user) {
+        List<String> stops = null;
+        if (user != null && user.isStaff()) {
+            stops = getDao().findByNamedQuery("Stop.listAlStopNamesForUser",
+                    new String[]{"user"}, new Object[]{user});
+        } else {
+            stops = getDao().findByNamedQuery("Stop.listAllStopNames");
+        }
+
+        return stops;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<String> listAllEndStops(String startStopName, User user) {
+        List<String> stops = null;
+        if (user != null && user.isStaff()) {
+            stops = getDao().findByNamedQuery("Stop.listAllEndStopNamesForUser",
+                    new String[]{"startStopName", "user"}, new Object[]{startStopName, user});
+        } else {
+            stops = getDao().findByNamedQuery("Stop.listAllEndStopNames",
+                new String[]{"startStopName"}, new Object[]{startStopName});
+        }
+
         return stops;
     }
 
