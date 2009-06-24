@@ -49,27 +49,29 @@
 
 
 <rich:panel id="seatsView" style="display: none;">
-	<rich:dataTable value="#{seatHandler.rows}" var="row">
-		<t:selectManyCheckbox layout="spread" id="selectedSeats">
-			<f:selectItems value="#{seatHandler.seatSelectItems}" />
-		</t:selectManyCheckbox>
-		
-		<rich:column styleClass="seat">
-				<t:checkbox index="#{row.first.number - 1}" for="selectedSeats" />
-		</rich:column>
-	    <rich:column styleClass="seat">
-			<t:checkbox index="#{row.second.number - 1}" for="selectedSeats" />
-		</rich:column>
-	    <rich:column styleClass="isle">
-			<t:checkbox index="#{row.middleSeat.number - 1}" for="selectedSeats"
-				rendered="#{row.middleSeat != null}" />
-		</rich:column>
-	    <rich:column styleClass="seat">
-	        <t:checkbox index="#{row.third.number - 1}" for="selectedSeats" />
-	    </rich:column>
-	    <rich:column styleClass="seat">
-	        <t:checkbox index="#{row.fourth.number - 1}" for="selectedSeats" />
-	    </rich:column>
-	</rich:dataTable>
+	<a4j:outputPanel id="seatsViewInner" ajaxRendered="true">
+		<rich:dataTable value="#{seatHandler.rows}" var="row">
+			<t:selectManyCheckbox layout="spread" id="selectedSeats">
+				<f:selectItems value="#{seatHandler.seatSelectItems}" />
+			</t:selectManyCheckbox>
+			
+			<rich:column styleClass="seat">
+					<t:checkbox index="#{row.first.number - 1}" for="selectedSeats" />
+			</rich:column>
+		    <rich:column styleClass="seat">
+				<t:checkbox index="#{row.second.number - 1}" for="selectedSeats" />
+			</rich:column>
+		    <rich:column styleClass="isle">
+				<t:checkbox index="#{row.middleSeat.number - 1}" for="selectedSeats"
+					rendered="#{row.middleSeat != null}" />
+			</rich:column>
+		    <rich:column styleClass="seat">
+		        <t:checkbox index="#{row.third.number - 1}" for="selectedSeats" />
+		    </rich:column>
+		    <rich:column styleClass="seat">
+		        <t:checkbox index="#{row.fourth.number - 1}" for="selectedSeats" />
+		    </rich:column>
+		</rich:dataTable>
+	</a4j:outputPanel>
 </rich:panel>
 </ui:composition>

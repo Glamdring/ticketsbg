@@ -383,10 +383,10 @@
 					</rich:panel>
 					
 					<!-- Seats positioning -->
-                    <rich:panel id="seatsPanel">
+                    <rich:panel id="seatsPanel" header="#{msg.seatsSettings}">
                         <h:selectBooleanCheckbox value="#{routeController.route.seatSettings.startRight}" id="startRight">
 							<a4j:support event="onchange" ajaxSingle="true"
-								reRender="seatsView"
+								reRender="seatsViewInner"
 								action="#{routeController.seatHandler.refreshRows}" />
 						</h:selectBooleanCheckbox>
                         <h:outputLabel for="startRight" value="#{msg.startRight}" />
@@ -395,7 +395,7 @@
                         
                         <h:selectBooleanCheckbox value="#{routeController.route.seatSettings.lastRowHasFourSeats}" id="lastRowHasFourSeats">
                             <a4j:support event="onchange" ajaxSingle="true"
-                                reRender="seatsView"
+                                reRender="seatsViewInner"
                                 action="#{routeController.seatHandler.refreshRows}" />
                         </h:selectBooleanCheckbox>
                         <h:outputLabel for="lastRowHasFourSeats" value="#{msg.lastRowHasFourSeats}" />
@@ -404,7 +404,7 @@
                         
                         <h:selectBooleanCheckbox value="#{routeController.route.seatSettings.doubleDecker}" id="doubleDecker">
                             <a4j:support event="onchange" ajaxSingle="true"
-                                reRender="seatsView, downstairsPanel"
+                                reRender="seatsViewInner,downstairsPanel"
                                 action="#{routeController.seatHandler.refreshRows}" />
                         </h:selectBooleanCheckbox>
                         <h:outputLabel for="doubleDecker" value="#{msg.doubleDecker}" />
