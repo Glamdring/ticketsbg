@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -104,6 +105,9 @@ public class Route extends DataObject implements Serializable {
     @Column
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar seasonEnd = GeneralUtils.createEmptyCalendar();
+
+    @Embedded
+    private SeatSettings seatSettings = new SeatSettings();
 
     public Route() {
     }
@@ -278,5 +282,13 @@ public class Route extends DataObject implements Serializable {
 
     public void setSeasonEnd(Calendar seasonEnd) {
         this.seasonEnd = seasonEnd;
+    }
+
+    public SeatSettings getSeatSettings() {
+        return seatSettings;
+    }
+
+    public void setSeatSettings(SeatSettings seatSettings) {
+        this.seatSettings = seatSettings;
     }
 }

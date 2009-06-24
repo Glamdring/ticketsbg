@@ -60,6 +60,8 @@ public class RouteController extends BaseController implements Serializable {
     private BigDecimal twoWayPriceValue;
     private List<SelectItem> discountTypeSelectItems = new ArrayList<SelectItem>();
 
+    private SeatHandler seatHandler;
+
     @Autowired
     private StopService stopService;
 
@@ -77,6 +79,7 @@ public class RouteController extends BaseController implements Serializable {
     public String edit(){
         route = (Route) routesModel.getRowData();
         daysPickList = routeService.getDaysList(route);
+        seatHandler = new SeatHandler(route);
         refreshTreeModel();
         return Screen.ROUTE_SCREEN.getOutcome();
     }
@@ -365,5 +368,13 @@ public class RouteController extends BaseController implements Serializable {
 
     public void setDiscountTypeSelectItems(List<SelectItem> discountTypeSelectItems) {
         this.discountTypeSelectItems = discountTypeSelectItems;
+    }
+
+    public SeatHandler getSeatHandler() {
+        return seatHandler;
+    }
+
+    public void setSeatHandler(SeatHandler seatHandler) {
+        this.seatHandler = seatHandler;
     }
 }

@@ -381,7 +381,50 @@
 							</rich:panel>
 						</h:panelGrid>
 					</rich:panel>
-
+					
+					<!-- Seats positioning -->
+                    <rich:panel id="seatsPanel">
+                        <h:selectBooleanCheckbox value="#{routeController.route.seatSettings.startRight}" id="startRight">
+							<a4j:support event="onchange" ajaxSingle="true"
+								reRender="seatsView"
+								action="#{routeController.seatHandler.refreshRows}" />
+						</h:selectBooleanCheckbox>
+                        <h:outputLabel for="startRight" value="#{msg.startRight}" />
+                        
+                        <h:outputText value=",&#160;" />
+                        
+                        <h:selectBooleanCheckbox value="#{routeController.route.seatSettings.lastRowHasFourSeats}" id="lastRowHasFourSeats">
+                            <a4j:support event="onchange" ajaxSingle="true"
+                                reRender="seatsView"
+                                action="#{routeController.seatHandler.refreshRows}" />
+                        </h:selectBooleanCheckbox>
+                        <h:outputLabel for="lastRowHasFourSeats" value="#{msg.lastRowHasFourSeats}" />
+                        
+                        <h:outputText value=",&#160;" />
+                        
+                        <h:selectBooleanCheckbox value="#{routeController.route.seatSettings.doubleDecker}" id="doubleDecker">
+                            <a4j:support event="onchange" ajaxSingle="true"
+                                reRender="seatsView, downstairsPanel"
+                                action="#{routeController.seatHandler.refreshRows}" />
+                        </h:selectBooleanCheckbox>
+                        <h:outputLabel for="doubleDecker" value="#{msg.doubleDecker}" />
+                        
+                        <h:outputText value=",&#160;" />
+                        
+                        <h:panelGroup id="downstairsPanel">
+							<h:outputLabel value="#{msg.numberOfSeatsDownstairs}: "
+								for="numberOfSeatsDownstairs"
+								rendered="#{routeController.route.seatSettings.doubleDecker}" />
+							<h:inputText
+								value="#{routeController.route.seatSettings.numberOfSeatsDownstairs}"
+								rendered="#{routeController.route.seatSettings.doubleDecker}"
+								id="numberOfSeatsDownstairs" />
+						</h:panelGroup>
+						
+						<c:set var="seatHandler" value="#{routeController.seatHandler}" />
+                        <a4j:include viewId="../seats.jsp"/>
+                        
+                    </rich:panel>
 					<rich:panel id="buttonsPanel">
 						<h:commandButton action="#{routeController.save}"
 							value="#{msg.save}">
