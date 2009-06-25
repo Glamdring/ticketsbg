@@ -386,8 +386,8 @@
                     <rich:panel id="seatsPanel" header="#{msg.seatsSettings}">
                         <h:selectBooleanCheckbox value="#{routeController.route.seatSettings.startRight}" id="startRight">
 							<a4j:support event="onchange" ajaxSingle="true"
-								reRender="seatsViewInner"
-								action="#{routeController.seatHandler.refreshRows}" />
+								reRender="seatsViewInner1"
+								action="#{seatController.seatHandler.refreshRows}" />
 						</h:selectBooleanCheckbox>
                         <h:outputLabel for="startRight" value="#{msg.startRight}" />
                         
@@ -395,8 +395,8 @@
                         
                         <h:selectBooleanCheckbox value="#{routeController.route.seatSettings.lastRowHasFourSeats}" id="lastRowHasFourSeats">
                             <a4j:support event="onchange" ajaxSingle="true"
-                                reRender="seatsViewInner"
-                                action="#{routeController.seatHandler.refreshRows}" />
+                                reRender="seatsViewInner1"
+                                action="#{seatController.seatHandler.refreshRows}" />
                         </h:selectBooleanCheckbox>
                         <h:outputLabel for="lastRowHasFourSeats" value="#{msg.lastRowHasFourSeats}" />
                         
@@ -404,8 +404,8 @@
                         
                         <h:selectBooleanCheckbox value="#{routeController.route.seatSettings.doubleDecker}" id="doubleDecker">
                             <a4j:support event="onchange" ajaxSingle="true"
-                                reRender="seatsViewInner,downstairsPanel"
-                                action="#{routeController.seatHandler.refreshRows}" />
+                                reRender="seatsViewInner1,downstairsPanel"
+                                action="#{seatController.seatHandler.refreshRows}" />
                         </h:selectBooleanCheckbox>
                         <h:outputLabel for="doubleDecker" value="#{msg.doubleDecker}" />
                         
@@ -416,13 +416,18 @@
 								for="numberOfSeatsDownstairs"
 								rendered="#{routeController.route.seatSettings.doubleDecker}" />
 							<h:inputText
-								value="#{routeController.route.seatSettings.numberOfSeatsDownstairs}"
-								rendered="#{routeController.route.seatSettings.doubleDecker}"
-								id="numberOfSeatsDownstairs" />
+                                value="#{routeController.route.seatSettings.numberOfSeatsDownstairs}"
+                                rendered="#{routeController.route.seatSettings.doubleDecker}"
+                                id="numberOfSeatsDownstairs">
+                                <a4j:support event="onchange" ajaxSingle="true" action="#{seatController.seatHandler.refreshRows}"
+                                    reRender="seatsViewInner1" eventsQueue="seatsDownstairsQueue" requestDelay="200"/>
+                            </h:inputText>
 						</h:panelGroup>
-						
-						<c:set var="seatHandler" value="#{routeController.seatHandler}" />
-                        <a4j:include viewId="../seats.jsp"/>
+						<br />
+                        <a4j:include viewId="../seats.jsp">
+                            <ui:param name="return" value="false" />
+                            <ui:param name="modifier" value="1" />
+                        </a4j:include>
                         
                     </rich:panel>
 					<rich:panel id="buttonsPanel">
@@ -431,7 +436,7 @@
 							<cust:defaultAction />
 						</h:commandButton>
 						<h:commandButton action="#{routeController.cancel}"
-							value="#{msg.cancel}" />
+							value="#{msg.cancel}" immediate="true" />
 					</rich:panel>
 				</h:panelGrid></div>
 			</h:form>

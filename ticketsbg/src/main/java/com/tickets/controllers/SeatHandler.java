@@ -12,6 +12,14 @@ import com.tickets.model.Ticket;
 
 public class SeatHandler {
 
+    private Run run;
+    private Route route;
+    private Integer[] used;
+
+    private List<Row> rows;
+    private List<SelectItem> seatSelectItems;
+    private List<Seat> selectedSeats;
+
     public SeatHandler(Route route) {
         this.route = route;
         refreshRows();
@@ -24,12 +32,6 @@ public class SeatHandler {
         refreshRows();
     }
 
-    private Run run;
-    private Route route;
-    private Integer[] used;
-
-    private List<Row> rows;
-    private List<SelectItem> seatSelectItems;
 
     public void refreshRows() {
         rows = new ArrayList<Row>(route.getSeats());
@@ -179,5 +181,13 @@ public class SeatHandler {
 
     public void setSeatSelectItems(List<SelectItem> seatSelectItems) {
         this.seatSelectItems = seatSelectItems;
+    }
+
+    public List<Seat> getSelectedSeats() {
+        return selectedSeats;
+    }
+
+    public void setSelectedSeats(List<Seat> selectedSeats) {
+        this.selectedSeats = selectedSeats;
     }
 }

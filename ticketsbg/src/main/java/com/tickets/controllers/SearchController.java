@@ -46,6 +46,9 @@ public class SearchController extends BaseController {
     @Autowired
     private PurchaseController purchaseController;
 
+    @Autowired
+    private SeatController seatController;
+
     private static final String TWO_WAY = "twoWay";
 
     private String fromStop;
@@ -250,6 +253,7 @@ public class SearchController extends BaseController {
             pd.setNumberOfTickets(0);
             ticketCounts.add(pd);
         }
+        seatController.setSeatHandler(new SeatHandler(selectedEntry.getRun()));
     }
 
     @SuppressWarnings("unchecked")
@@ -257,6 +261,8 @@ public class SearchController extends BaseController {
         Integer selectedId = (Integer) returnSelection.getKeys().next();
         selectedReturnRowId = new Long(selectedId);
         selectedReturnEntry = ((List<SearchResultEntry>) returnResultsModel.getWrappedData()).get(selectedId);
+
+        seatController.setReturnSeatHandler(new SeatHandler(selectedReturnEntry.getRun()));
     }
 
     public String getFromStop() {
