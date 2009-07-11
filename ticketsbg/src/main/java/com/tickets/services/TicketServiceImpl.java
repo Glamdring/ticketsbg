@@ -18,7 +18,7 @@ public class TicketServiceImpl extends BaseService<Ticket> implements TicketServ
 
     @Override
     public Ticket createTicket(SearchResultEntry selectedEntry,
-            SearchResultEntry selectedReturnEntry, Discount discount) {
+            SearchResultEntry selectedReturnEntry, int seat, int returnSeat, Discount discount) {
 
         //Allow only one user per run at a time, to avoid collisions
         String runIdIntern = "run" + String.valueOf(selectedEntry.getRun().getRunId()).intern();
@@ -29,25 +29,27 @@ public class TicketServiceImpl extends BaseService<Ticket> implements TicketServ
         synchronized (runIdIntern) {
             if (returnRunIdIntern != null) {
                 synchronized(returnRunIdIntern) {
-                    return doCreateTicket(selectedEntry, selectedReturnEntry, discount);
+                    return doCreateTicket(selectedEntry, selectedReturnEntry, seat, returnSeat, discount);
                 }
             }
 
-            return doCreateTicket(selectedEntry, selectedReturnEntry, discount);
+            return doCreateTicket(selectedEntry, selectedReturnEntry, seat, returnSeat, discount);
         }
     }
 
     @Override
     public Ticket createTicket(SearchResultEntry selectedEntry,
-            SearchResultEntry selectedReturnEntry) {
+            SearchResultEntry selectedReturnEntry, int seat, int returnSeat) {
 
-        return createTicket(selectedEntry, selectedReturnEntry, null);
+        return createTicket(selectedEntry, selectedReturnEntry, seat, returnSeat, null);
     }
 
     private Ticket doCreateTicket(SearchResultEntry selectedEntry,
-            SearchResultEntry selectedReturnEntry, Discount discount) {
+            SearchResultEntry selectedReturnEntry, int seat, int returnSeat, Discount discount) {
         if (selectedEntry.getRun().getVacantSeats() > 0) {
             Ticket ticket = new Ticket();
+            ticket.setSeat(seat);
+            ticket.setReturnSeat(returnSeat);
             ticket.setRun(selectedEntry.getRun());
             ticket.setDiscount(discount);
 

@@ -96,8 +96,8 @@ public class RunServiceImpl extends BaseService<Run> implements RunService<Run> 
             // Check is runs should be generated in case
             // the route is marked as seasonal
             if (route.isSeasonal()
-                    && now.compareTo(route.getSeasonStart()) >= 0
-                    && now.compareTo(route.getSeasonEnd()) <=0) {
+                    && (now.compareTo(route.getSeasonStart()) <= 0
+                    || now.compareTo(route.getSeasonEnd()) >= 0)) {
                 continue;
             }
 

@@ -144,8 +144,23 @@ public class SearchController extends BaseController {
         int nullsCount = 0;
         int total = 0;
 
+        List<Seat> selectedSeats = seatController.getSeatHandler().getSelectedSeats();
+        List<Seat> selectedReturnSeats = null;
+        if (seatController.getReturnSeatHandler() != null) {
+            selectedReturnSeats = seatController.getReturnSeatHandler().getSelectedSeats();
+        }
+
         for (int i = 0; i < regularTicketsCount; i ++) {
-            Ticket ticket = ticketService.createTicket(selectedEntry, selectedReturnEntry);
+            int seat = -1;
+            int returnSeat = -1;
+            if (selectedSeats.size() > i) {
+                seat = selectedSeats.get(i).getNumber();
+            }
+            if (selectedReturnSeats != null && selectedReturnSeats.size() > i) {
+                returnSeat = selectedReturnSeats.get(i).getNumber();
+            }
+
+            Ticket ticket = ticketService.createTicket(selectedEntry, selectedReturnEntry, seat, returnSeat);
             total ++;
             if (ticket == null) {
                 nullsCount ++;
@@ -156,7 +171,7 @@ public class SearchController extends BaseController {
 
         for (TicketCount tc : ticketCounts) {
             for (int i = 0; i < tc.getNumberOfTickets(); i++) {
-                Ticket tmpTicket = ticketService.createTicket(selectedEntry, selectedReturnEntry, tc.getDiscount());
+                Ticket tmpTicket = ticketService.createTicket(selectedEntry, selectedReturnEntry, -1, -1, tc.getDiscount());
                 total ++;
                 if (tmpTicket == null) {
                     nullsCount ++;

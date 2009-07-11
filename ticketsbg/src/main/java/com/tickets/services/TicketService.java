@@ -10,10 +10,10 @@ import com.tickets.model.User;
 public interface TicketService extends Service<Ticket> {
 
     Ticket createTicket(SearchResultEntry selectedEntry,
-            SearchResultEntry selectedReturnEntry);
+            SearchResultEntry selectedReturnEntry, int seat, int returnSeat);
 
     Ticket createTicket(SearchResultEntry selectedEntry,
-            SearchResultEntry selectedReturnEntry, Discount discount);
+            SearchResultEntry selectedReturnEntry, int seat, int returnSeat, Discount discount);
 
     /**
      * Finalizes the purchase
