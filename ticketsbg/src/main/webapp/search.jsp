@@ -36,10 +36,9 @@
 	<ui:define name="body">
 		<f:view>
 			<a4j:form id="searchForm" ajaxSubmit="true">
-				<rich:panel header="#{msg.searchTitle}">
+				<rich:panel header="#{msg.searchTitle}" headerClass="rich-panel-header-main">
 					<h:messages />
 					<h:panelGrid columns="2" columnClasses="firstColumn,secondColumn">
-
 						<h:outputLabel value="#{msg.travelType}:" for="travelType" />
 						<h:selectOneRadio value="#{searchController.travelType}"
 							id="travelType">
@@ -68,9 +67,9 @@
 					</h:panelGrid>
 
 					<!-- One way firelds -->
-					<rich:panel id="oneWayPanel">
+					<rich:panel id="oneWayPanel" style="border-style: none;">
 						<h:panelGrid columns="2" columnClasses="firstColumn,secondColumn">
-							<h:outputLabel value="#{msg.date}:" for="date" />
+							<h:outputLabel value="#{msg.departureDate}:" for="date" />
 							<rich:calendar id="date" datePattern="dd.MM.yyyy"
 								firstWeekDay="1" value="#{searchController.date}" />
 
@@ -106,11 +105,10 @@
 					</rich:panel>
 					<!--  Return fields -->
 					<a4j:outputPanel ajaxRendered="true">
-
-						<rich:panel id="returnPanel"
+						<rich:panel id="returnPanel" style="border-style: none;"
 							rendered="#{searchController.travelType == 'twoWay'}">
 							<h:panelGrid columns="2" columnClasses="firstColumn,secondColumn">
-								<h:outputLabel value="#{msg.date}:" for="returnDate" />
+								<h:outputLabel value="#{msg.returnDate}:" for="returnDate" />
 								<rich:calendar id="returnDate" datePattern="dd.MM.yyyy"
 									firstWeekDay="1" value="#{searchController.returnDate}" />
 

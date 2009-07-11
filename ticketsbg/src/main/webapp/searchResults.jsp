@@ -40,15 +40,14 @@
 							<h:outputText value=" #{msg.searchResultsTo} " />
 							<h:outputText value="#{searchController.toStop}"
 								styleClass="bold" />
-                                        (<h:outputText
-								value="#{searchController.date}">
+                                        (<h:outputText value="#{searchController.date}">
 								<f:convertDateTime type="date" pattern="dd.MM.yyyy"
 									timeZone="#{timeZoneController.timeZone}" />
 							</h:outputText>)
-                                    </h:panelGroup>
+                        </h:panelGroup>
 					</f:facet>
-					
-					
+
+
 					<rich:messages errorClass="error" ajaxRendered="true" />
 					<!-- show this button below the messages only if the message is 
 				    asking the question whether tickets are to be cancelled -->
@@ -64,12 +63,13 @@
 						cellpadding="0" cellspacing="0">
 						<h:panelGroup id="oneWay" style="border-style: none;">
 							<rich:extendedDataTable value="#{searchController.resultsModel}"
-								height="#{searchController.resultsModel.rowCount == 0 ? 50 : searchController.resultsModel.rowCount * 176 + 30}"
+								height="#{searchController.resultsModel.rowCount == 0 ? 50 : searchController.resultsModel.rowCount * 196 + 30}"
 								var="result" rowKeyVar="rowId" selectionMode="single"
 								enableContextMenu="false" id="resultsTable"
 								selection="#{searchController.selection}"
 								headerClass="tableHeader" noDataLabel="#{msg.noSearchResults}"
-								width="380px;" columnClasses="columnClass" border="0" style="border-style: none;">
+								width="380px;" columnClasses="columnClass" border="0"
+								style="border-style: none;">
 
 								<a4j:support event="onselectionchange"
 									reRender="selectedEntry,returnResultsTable,ticketCounts,seatChoices"
@@ -87,6 +87,9 @@
 								</rich:column>
 
 								<rich:column sortable="false" width="345px">
+									<f:facet name="header">
+								        ${msg.oneWayHeaderLabel}
+								    </f:facet>
 									<rich:panel id="resultEntry" header="#{result.run.route.name}">
 										<a4j:repeat value="#{result.run.route.stops}" var="stop"
 											rowKeyVar="stopId">
@@ -159,7 +162,8 @@
 									selection="#{searchController.returnSelection}"
 									headerClass="tableHeader" noDataLabel="#{msg.noSearchResults}"
 									width="380px;" columnClasses="columnClass"
-									rendered="#{searchController.returnResultsModel != null}">
+									rendered="#{searchController.returnResultsModel != null}"
+									style="border-style: none;" border="0">
 
 									<a4j:support event="onselectionchange"
 										reRender="selectedReturnEntry,ticketCounts,returnSeatChoices"
@@ -177,23 +181,10 @@
 
 									</rich:column>
 
-									<rich:column sortable="false" width="464px"
+									<rich:column sortable="false" width="345px"
 										filterExpression="#{searchController.selectedEntry == null || result.run.route.firm.firmId == searchController.selectedEntry.run.route.firm.firmId}">
 										<f:facet name="header">
-											<h:panelGroup style="font-weight: normal;">
-												<h:outputText value="#{msg.searchResultsFrom} " />
-												<h:outputText value="#{searchController.toStop}"
-													styleClass="bold" />
-
-												<h:outputText value=" #{msg.searchResultsTo} " />
-												<h:outputText value="#{searchController.fromStop}"
-													styleClass="bold" />
-											
-										 (<h:outputText value="#{searchController.returnDate}">
-													<f:convertDateTime type="date" pattern="dd.MM.yyyy"
-														timeZone="#{timeZoneController.timeZone}" />
-												</h:outputText>)
-									</h:panelGroup>
+											#{msg.returnHeaderLabel}
 										</f:facet>
 
 										<rich:panel id="resultEntry" header="#{result.run.route.name}">
@@ -257,7 +248,8 @@
 	width: 40px;
 }
 </style>
-					<rich:panel header="#{msg.tickets}" id="ticketCounts" width="380">
+					<rich:panel header="#{msg.tickets}" id="ticketCounts"
+						style="width: 380px; margin-top: 15px;">
 						<h:panelGrid columns="2"
 							columnClasses="firstTicketColumn,secondTicketColumn">
 							<h:panelGroup>
@@ -300,7 +292,7 @@
 
 
 					<h:panelGroup>
-						<h:commandLink value="#{msg.backToSearchScreen}"
+						<h:commandButton value="#{msg.backToSearchScreen}"
 							action="#{searchController.toSearchScreen}" />
 						<h:outputText value=" " />
 						<h:commandButton action="#{searchController.proceed}"

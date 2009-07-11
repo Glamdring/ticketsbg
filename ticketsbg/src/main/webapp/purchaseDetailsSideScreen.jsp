@@ -17,7 +17,7 @@
 						<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 						<f:converter binding="#{currencyConverter}"
 							converterId="currencyConverter" />
-					</h:outputText>) <h:outputText value="(#{msg.twoWay})" rendered="#{ticket.twoWay}" />
+					</h:outputText>)<h:outputText value=" (#{msg.twoWay})" rendered="#{ticket.twoWay}" />
 					<br />
 					<br />
 				</a4j:repeat>
