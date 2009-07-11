@@ -10,7 +10,7 @@
 	xmlns:t="http://myfaces.apache.org/tomahawk"
 	template="publicTemplate.jsp">
 
-	<ui:define name="header">
+	<ui:define name="head">
 		<style type="text/css">
 .firstColumn {
 	text-align: right;

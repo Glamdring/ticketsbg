@@ -12,11 +12,16 @@
 	<ui:define name="body">
 		<f:view>
 			<a4j:form id="paymentForm">
-				<h:messages />
-				<rich:comboBox
-					suggestionValues="#{paymentController.paymentMethods}"
-					value="#{paymentController.selectedPaymentMethod}" />
-					
+				<rich:panel header="#{msg.payment}" headerClass="rich-panel-header-main">
+					<h:messages />
+
+					<a4j:include viewId="personalInformation.jsp" />
+
+					<rich:comboBox
+						suggestionValues="#{paymentController.paymentMethods}"
+						value="#{paymentController.selectedPaymentMethod}" />
+
+				</rich:panel>
 			</a4j:form>
 		</f:view>
 	</ui:define>

@@ -5,7 +5,6 @@ public enum Screen {
     SEARCH_SCREEN("searchScreen"),
     SEARCH_RESULTS("searchResults"),
     HOME("home"),
-    PERSONAL_INFORMATION_SCREEN("personalInformationScreen"),
     REGISTRATION_SCREEN("registrationScreen"),
 
     ROUTE_SCREEN("routeScreen"),

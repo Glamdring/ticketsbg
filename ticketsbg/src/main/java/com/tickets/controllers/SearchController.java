@@ -120,7 +120,6 @@ public class SearchController extends BaseController {
 
     @Action
     public void filterToStops() {
-        System.out.println(fromStop);
         if (fromStop != null && fromStop.length() > 0) {
             toStopNames = searchService.listAllEndStops(fromStop,
                     loggedUserHolder.getLoggedUser());
@@ -208,8 +207,8 @@ public class SearchController extends BaseController {
             return Screen.ADMIN_HOME.getOutcome();
         }
 
-        purchaseController.setCurrentStep(Step.PERSONAL_INFORMATION);
-        return Screen.PERSONAL_INFORMATION_SCREEN.getOutcome();
+        purchaseController.setCurrentStep(Step.PAYMENT);
+        return Screen.PAYMENT_SCREEN.getOutcome();
     }
 
     public String cancelTickets() {
@@ -219,7 +218,7 @@ public class SearchController extends BaseController {
     public String confirmPartialPurchase() {
         purchaseController.getTickets().addAll(tickets);
         tickets = null;
-        return Screen.PERSONAL_INFORMATION_SCREEN.getOutcome();
+        return Screen.PAYMENT_SCREEN.getOutcome();
     }
 
     private void resetSelections() {

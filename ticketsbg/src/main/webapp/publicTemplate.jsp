@@ -9,11 +9,23 @@
     <title>Tickets</title>
     <link href="css/main.css" type="text/css" rel="stylesheet" />
     
-    <ui:insert name="header" />
+    <ui:insert name="head" />
   </head>
   <body style="margin-left: 0px; margin-top: 0px; margin-right: 0px">
+    <a4j:poll action="#{keepAliveController.poll}" interval="240000"/>
     <f:loadBundle var="msg" basename="com.tickets.constants.messages" />
-    <ui:insert name="body" />
+    
+    
+    <img src="images/logo.jpg" alt="bus.bg" width="1005" height="100" />
+    <h:panelGrid columns="5">
+        <!-- menu items -->
+    </h:panelGrid>    
+    <h:panelGrid columns="2" columnClasses="side,main">
+        <h:panelGroup>
+            <ui:include src="purchaseDetailsSideScreen.jsp" />
+        </h:panelGroup>
+        <ui:insert name="body" />
+    </h:panelGrid>
     <h:form id="commonForm">
 		<h:commandLink value="#{msg.logout}"
 			action="#{loggedUserHolder.logout}"

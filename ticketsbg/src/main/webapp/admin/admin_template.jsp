@@ -13,6 +13,8 @@
     <ui:insert name="header" />
   </head>
   <body style="margin-left: 0px; margin-top: 0px; margin-right: 0px">
+    <a4j:poll action="#{keepAliveController.poll}" interval="240000"/>
+    
     <f:loadBundle var="msg" basename="com.tickets.constants.messages" />
     
     <h:form>

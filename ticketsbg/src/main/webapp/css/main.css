@@ -4,11 +4,33 @@ td {
 }
 
 .bold {
-    font-weight: bold;
+  font-weight: bold;
 }
+
 .error {
-    color: darkred;
+  color: darkred;
 }
+
 .rich-calendar-spinner-input {
-    font-size: 8px;
+  font-size: 8px;
+}
+
+.side {
+  vertical-align: top;
+  width: 200px;
+}
+
+.main {
+  vertical-align: top;
+  width: 800px;
+}
+
+.rich-panel-header-main {
+  font-size: 15px;
+  height: 25px;
+  vertical-align: middle;
+}
+
+.rich-panel-body { /* background-color: #ebf3fd; */
+
 }
