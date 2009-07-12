@@ -102,8 +102,8 @@ public interface Dao {
     List findByQuery(Query query);
 
     /**
-     * Re-attaches the entity to the session (via session.update)
+     * Re-attaches the entity to the session
      * @param entity
      */
-    void attach(Object entity);
+    Object attach(Object entity);
 }

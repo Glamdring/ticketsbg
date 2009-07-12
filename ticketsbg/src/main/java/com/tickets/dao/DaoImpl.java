@@ -9,13 +9,12 @@ import javax.annotation.Resource;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.stereotype.Repository;
 
 /**
  * @author Bozhidar Bozhanov
  *
  */
-@Repository("dao")
+//@Repository("dao")
 public class DaoImpl implements Dao {
 
     @Resource(name="sessionFactory")
@@ -105,8 +104,9 @@ public class DaoImpl implements Dao {
         return query.list();
     }
 
-    public void attach(Object entity) {
+    public Object attach(Object entity) {
         getSession().update(entity);
+        return entity;
     }
 
     private Session getSession() {

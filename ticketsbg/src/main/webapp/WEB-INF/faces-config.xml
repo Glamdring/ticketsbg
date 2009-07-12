@@ -104,6 +104,13 @@
         </navigation-case>
     </navigation-rule>
 
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>runsList</from-outcome>
+            <to-view-id>/admin/runs.jsp</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
 
 	<component>
 		<description />

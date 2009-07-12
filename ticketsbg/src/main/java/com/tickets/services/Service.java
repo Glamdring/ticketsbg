@@ -16,4 +16,6 @@ public interface Service<E> {
      void saveObject(Object entity);
 
      <T> T get(Class<T> clazz, Serializable id);
+
+     Object attach(Object object);
 }

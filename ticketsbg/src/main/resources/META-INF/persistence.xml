@@ -1,26 +1,30 @@
 <persistence xmlns="http://java.sun.com/xml/ns/persistence"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
-             version="1.0">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
+	version="1.0">
 
 	<persistence-unit name="tickets" transaction-type="RESOURCE_LOCAL">
-                <class>com.tickets.model.Day</class>
-                <class>com.tickets.model.Firm</class>
-                <class>com.tickets.model.Price</class>
-                <class>com.tickets.model.Route</class>
-                <class>com.tickets.model.RouteDay</class>
-                <class>com.tickets.model.RouteHour</class>
-                <class>com.tickets.model.Run</class>
-                <class>com.tickets.model.Stop</class>
-                <class>com.tickets.model.Ticket</class>
-                <class>com.tickets.model.User</class>
-                <class>com.tickets.model.UsersHistory</class>
-                <class>com.tickets.model.UsersHistory</class>
-                <class>com.tickets.model.Discount</class>
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<class>com.tickets.model.Day</class>
+		<class>com.tickets.model.Firm</class>
+		<class>com.tickets.model.Price</class>
+		<class>com.tickets.model.Route</class>
+		<class>com.tickets.model.RouteDay</class>
+		<class>com.tickets.model.RouteHour</class>
+		<class>com.tickets.model.Run</class>
+		<class>com.tickets.model.Stop</class>
+		<class>com.tickets.model.Ticket</class>
+		<class>com.tickets.model.User</class>
+		<class>com.tickets.model.UsersHistory</class>
+		<class>com.tickets.model.UsersHistory</class>
+		<class>com.tickets.model.Discount</class>
+
 		<properties>
-			<property name="hibernate.cache.use_second_level_cache" value="true" />
-			<property name="hibernate.max_fetch_depth"              value="3" />
-			<property name="hibernate.hbm2ddl.auto"                 value="update" />
+			<property name="hibernate.cache.use_second_level_cache"
+				value="true" />
+			<property name="hibernate.max_fetch_depth" value="3" />
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+			<property name="hibernate.connection.release_mode" value="after_transaction" />
 		</properties>
 	</persistence-unit>
 </persistence>

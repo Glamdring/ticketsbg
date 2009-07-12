@@ -8,7 +8,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-//@Repository
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Repository;
+
+@Repository("dao")
+@Scope("singleton")
 public class DaoEMImpl implements Dao {
 
     @PersistenceContext
@@ -101,7 +105,7 @@ public class DaoEMImpl implements Dao {
 
     public void persist(Object e) {
         //TODO make work
-        if (entityManager.contains(e))
+        if (!entityManager.contains(e))
             e = entityManager.merge(e);
         else
             entityManager.persist(e);
@@ -119,7 +123,7 @@ public class DaoEMImpl implements Dao {
     }
 
     @Override
-    public void attach(Object entity) {
-        entityManager.persist(entity);
+    public Object attach(Object entity) {
+        return entityManager.merge(entity);
     }
 }

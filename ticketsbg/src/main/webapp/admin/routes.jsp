@@ -54,7 +54,16 @@
 						<h:commandLink action="#{routeController.edit}" title="#{msg.edit}">
                             <h:graphicImage value="/images/edit.png" style="width:16; height:16; border-style: none;" alt="#{msg.edit}" title="#{msg.edit}" />						
 						</h:commandLink>
+						
 						<h:outputText value="&#160;" />
+						
+                        <h:commandLink action="#{runController.view}" title="#{msg.runs}">
+                            <f:setPropertyActionListener value="#{route}" target="#{runController.route}" />
+                            <h:graphicImage value="/images/runs.png" style="width:16; height:16; border-style: none;" alt="#{msg.remove}" title="#{msg.runs}" />                       
+                        </h:commandLink>
+                        
+						<h:outputText value="&#160;" />
+						
 						<h:commandLink action="#{routeController.delete}" title="#{msg.remove}">
                             <h:graphicImage value="/images/delete.png" style="width:16; height:16; border-style: none;" alt="#{msg.remove}" title="#{msg.remove}" />                       
                         </h:commandLink>

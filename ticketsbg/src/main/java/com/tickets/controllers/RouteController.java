@@ -16,6 +16,7 @@ import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
 import org.apache.myfaces.orchestra.conversation.Conversation;
+import org.apache.myfaces.orchestra.conversation.annotations.ConversationName;
 import org.richfaces.component.UITree;
 import org.richfaces.component.html.HtmlOrderingList;
 import org.richfaces.component.html.HtmlTree;
@@ -42,6 +43,7 @@ import com.tickets.utils.SelectItemUtils;
 
 @Controller("routeController")
 @Scope("conversation.manual")
+@ConversationName("routesAndRuns")
 public class RouteController extends BaseController implements Serializable {
 
     private Route route;

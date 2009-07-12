@@ -82,4 +82,8 @@ public abstract class BaseService<E> implements Service<E> {
             log.error("Error saving", ex);
         }
     }
+
+    public Object attach(Object obj) {
+        return getDao().attach(obj);
+    }
 }
