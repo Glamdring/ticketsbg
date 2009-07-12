@@ -7,7 +7,7 @@
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:j4j="http://javascript4jsf.dev.java.net/"
 	xmlns:c="http://java.sun.com/jstl/core"
-	xmlns:cust="http://tickets.com/cust"
+	xmlns:tc="http://tickets.com/tc"
 	xmlns:t="http://myfaces.apache.org/tomahawk">
 	<f:view>
 		<h:messages />
@@ -31,7 +31,7 @@
 					<a4j:commandButton action="#{routeController.saveStop}"
 						value="#{msg.save}" reRender="stopsTable,pricesTree"
 						oncomplete="#{rich:component('stopPanel')}.hide();">
-						<cust:defaultAction />
+						<tc:defaultAction />
 					</a4j:commandButton>
 					<h:outputText></h:outputText>
 				</h:panelGrid>

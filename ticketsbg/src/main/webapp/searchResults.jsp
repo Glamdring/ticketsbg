@@ -8,6 +8,7 @@
 	xmlns:c="http://java.sun.com/jstl/core"
 	xmlns:fmt="http://java.sun.com/jstl/fmt"
 	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:tc="http://tickets.com/tc"
 	template="publicTemplate.jsp">
 
 	<ui:define name="head">
@@ -40,7 +41,8 @@
 							<h:outputText value=" #{msg.searchResultsTo} " />
 							<h:outputText value="#{searchController.toStop}"
 								styleClass="bold" />
-                                        (<h:outputText value="#{searchController.date}">
+                                        (<h:outputText
+								value="#{searchController.date}">
 								<f:convertDateTime type="date" pattern="dd.MM.yyyy"
 									timeZone="#{timeZoneController.timeZone}" />
 							</h:outputText>)
@@ -63,7 +65,7 @@
 						cellpadding="0" cellspacing="0">
 						<h:panelGroup id="oneWay" style="border-style: none;">
 							<rich:extendedDataTable value="#{searchController.resultsModel}"
-								height="#{searchController.resultsModel.rowCount == 0 ? 50 : searchController.resultsModel.rowCount * 196 + 30}"
+								height="#{searchController.resultsModel.rowCount == 0 ? 50 : searchController.resultsModel.rowCount * (searchController.returnResultsModel == null ? 176 : 196) + 30}"
 								var="result" rowKeyVar="rowId" selectionMode="single"
 								enableContextMenu="false" id="resultsTable"
 								selection="#{searchController.selection}"
@@ -88,8 +90,9 @@
 
 								<rich:column sortable="false" width="345px">
 									<f:facet name="header">
-								        ${msg.oneWayHeaderLabel}
-								    </f:facet>
+										<h:outputText value="${msg.oneWayHeaderLabel}"
+											rendered="#{searchController.returnResultsModel != null}" />
+									</f:facet>
 									<rich:panel id="resultEntry" header="#{result.run.route.name}">
 										<a4j:repeat value="#{result.run.route.stops}" var="stop"
 											rowKeyVar="stopId">
@@ -137,11 +140,12 @@
 												<h:outputText value="#{result.duration / 60}">
 													<f:convertNumber maxFractionDigits="0" />
 												</h:outputText>:#{result.duration % 60} 
-										</h:panelGroup>
+										    </h:panelGroup>
 
 											<h:outputText value="#{msg.vacantSeats}: " />
-											<h:outputText value="#{result.run.vacantSeats}"
-												style="#{result.run.vacantSeats &lt; 5 ? 'color: red;' : 'color: black;'};font-weight: bold;" />
+											<h:outputText
+												value="#{tc:getVacantSeats(result.run, searchController.fromStop, searchController.toStop)}"
+												style="#{tc:getVacantSeats(result.run, searchController.fromStop, searchController.toStop) &lt; 5 ? 'color: red;' : 'color: black;'};font-weight: bold;" />
 
 											<h:outputText value="#{msg.transportCompany}: " />
 											<h:outputText value="#{result.run.route.firm.name}" />
@@ -155,7 +159,7 @@
 						<h:panelGroup id="return" style="border-style: none;">
 							<a4j:region>
 								<rich:extendedDataTable
-									height="#{searchController.returnResultsModel.rowCount * 100 + 30}"
+									height="#{searchController.returnResultsModel.rowCount * 119 + 30}"
 									value="#{searchController.returnResultsModel}" var="result"
 									rowKeyVar="rowId" selectionMode="single"
 									enableContextMenu="false" id="returnResultsTable"
@@ -187,7 +191,7 @@
 											#{msg.returnHeaderLabel}
 										</f:facet>
 
-										<rich:panel id="resultEntry" header="#{result.run.route.name}">
+										<rich:panel id="resultEntry" header="#{result.run.route.name}" style="width: 100%;">
 											<a4j:repeat value="#{result.run.route.stops}" var="stop"
 												rowKeyVar="stopId">
 												<h:outputText value=" → " rendered="#{stopId > 0}" />
@@ -212,6 +216,11 @@
 													<f:convertDateTime type="time" pattern="HH:mm"
 														timeZone="#{timeZoneController.timeZone}" />
 												</h:outputText>
+
+												<h:outputText value="#{msg.vacantSeats}: " />
+												<h:outputText
+													value="#{tc:getVacantSeats(result.run, searchController.fromStop, searchController.toStop)}"
+													style="#{tc:getVacantSeats(result.run, searchController.fromStop, searchController.toStop)} &lt; 5 ? 'color: red;' : 'color: black;'};font-weight: bold;" />
 											</h:panelGrid>
 										</rich:panel>
 									</rich:column>
@@ -261,7 +270,7 @@
 
 							<rich:inputNumberSpinner
 								value="#{searchController.regularTicketsCount}" minValue="0"
-								maxValue="#{searchController.selectedEntry == null ? 50 : searchController.selectedEntry.run.vacantSeats}"
+								maxValue="#{searchController.selectedEntry == null ? 50 : tc:getVacantSeats(searchController.selectedEntry.run, searchController.fromStop, searchController.toStop)}"
 								inputSize="3">
 								<a4j:support event="onchange" ajaxSingle="true" />
 							</rich:inputNumberSpinner>
@@ -282,7 +291,7 @@
 
 									<rich:inputNumberSpinner value="#{tc.numberOfTickets}"
 										minValue="0" inputSize="3"
-										maxValue="#{searchController.selectedEntry.run.vacantSeats}">
+										maxValue="#{tc:getVacantSeats(searchController.selectedEntry.run, searchController.fromStop, searchController.toStop)}">
 										<a4j:support event="onchange" ajaxSingle="true" />
 									</rich:inputNumberSpinner>
 								</h:panelGrid>
@@ -296,7 +305,7 @@
 							action="#{searchController.toSearchScreen}" />
 						<h:outputText value=" " />
 						<h:commandButton action="#{searchController.proceed}"
-							value="#{msg.buy}" />
+							value="#{msg.toPayment}" />
 					</h:panelGroup>
 				</rich:panel>
 			</a4j:form>

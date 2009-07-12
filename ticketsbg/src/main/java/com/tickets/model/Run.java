@@ -3,6 +3,7 @@ package com.tickets.model;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -106,9 +107,5 @@ public class Run implements Serializable {
 
     public void setReturnTickets(Set<Ticket> returnTickets) {
         this.returnTickets = returnTickets;
-    }
-
-    public int getVacantSeats() {
-        return getRoute().getSeats() - (getTickets().size() + getReturnTickets().size());
     }
 }

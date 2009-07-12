@@ -15,7 +15,7 @@ public class BooleanConverter implements Converter {
     @Override
     public Object getAsObject(FacesContext ctx, UIComponent c, String value)
             throws ConverterException {
-        return Boolean.getBoolean(value);
+        return Boolean.parseBoolean(value);
     }
 
     @Override

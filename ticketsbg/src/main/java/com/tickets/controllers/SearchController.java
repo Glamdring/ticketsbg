@@ -91,6 +91,8 @@ public class SearchController extends BaseController {
     private List<Ticket> tickets;
     private boolean proposeCancellation;
 
+    private int currentRunVacantSeats;
+
     @Action
     public String search() {
         //resetting, in case the conversation hasn't ended
@@ -509,5 +511,13 @@ public class SearchController extends BaseController {
 
     public void setToStopNames(List<String> toStopNames) {
         this.toStopNames = toStopNames;
+    }
+
+    public int getCurrentRunVacantSeats() {
+        return currentRunVacantSeats;
+    }
+
+    public void setCurrentRunVacantSeats(int currentRunVacantSeats) {
+        this.currentRunVacantSeats = currentRunVacantSeats;
     }
 }

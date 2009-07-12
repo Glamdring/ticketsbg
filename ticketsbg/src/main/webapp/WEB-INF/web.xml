@@ -47,7 +47,7 @@
 	</context-param>
 	<context-param>
 		<param-name>facelets.LIBRARIES</param-name>
-		<param-value>/WEB-INF/facelets/custom.taglib.xml
+		<param-value>/WEB-INF/facelets/tickets.taglib.xml
 		</param-value>
 	</context-param>
 	<context-param>

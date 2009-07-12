@@ -70,7 +70,7 @@ public class SearchServiceImpl extends BaseService implements SearchService {
             }
 
             //Filtering the ones with no seats remaining
-            if (run.getVacantSeats() == 0) {
+            if (ServiceFunctions.getVacantSeats(run, fromStop, toStop) == 0) {
                 it.remove();
                 continue;
             }

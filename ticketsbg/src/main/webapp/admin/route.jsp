@@ -7,7 +7,7 @@
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:j4j="http://javascript4jsf.dev.java.net/"
 	xmlns:c="http://java.sun.com/jstl/core"
-	xmlns:cust="http://tickets.com/cust"
+	xmlns:tc="http://tickets.com/tc"
 	xmlns:t="http://myfaces.apache.org/tomahawk"
 	template="admin_template.jsp">
 	<ui:define name="header">
@@ -433,7 +433,7 @@
 					<rich:panel id="buttonsPanel">
 						<h:commandButton action="#{routeController.save}"
 							value="#{msg.save}">
-							<cust:defaultAction />
+							<tc:defaultAction />
 						</h:commandButton>
 						<h:commandButton action="#{routeController.cancel}"
 							value="#{msg.cancel}" immediate="true" />

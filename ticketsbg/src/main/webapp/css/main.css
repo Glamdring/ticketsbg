@@ -34,3 +34,12 @@ td {
 .rich-panel-body { /* background-color: #ebf3fd; */
 
 }
+
+.label {
+    width: 140px;
+}
+
+.asterisk {
+    color: red;
+    margin-left: 5px;
+}

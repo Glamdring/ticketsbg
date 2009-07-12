@@ -46,7 +46,10 @@ public class TicketServiceImpl extends BaseService<Ticket> implements TicketServ
 
     private Ticket doCreateTicket(SearchResultEntry selectedEntry,
             SearchResultEntry selectedReturnEntry, int seat, int returnSeat, Discount discount) {
-        if (selectedEntry.getRun().getVacantSeats() > 0) {
+        if (ServiceFunctions.getVacantSeats(selectedEntry.getRun(),
+                selectedEntry.getPrice().getStartStop().getName(),
+                selectedEntry.getPrice().getEndStop().getName()) < 0) {
+
             Ticket ticket = new Ticket();
             ticket.setSeat(seat);
             ticket.setReturnSeat(returnSeat);
@@ -59,9 +62,12 @@ public class TicketServiceImpl extends BaseService<Ticket> implements TicketServ
             } else {
                 // In case there are no more seats available, quit
                 // the creation process
-                if (selectedReturnEntry.getRun().getVacantSeats() < 0) {
+                if (ServiceFunctions.getVacantSeats(selectedReturnEntry.getRun(),
+                        selectedReturnEntry.getPrice().getStartStop().getName(),
+                        selectedReturnEntry.getPrice().getEndStop().getName()) < 0) {
                     return null;
                 }
+
                 ticket.setTwoWay(true);
                 ticket.setPrice(selectedEntry.getPrice().getTwoWayPrice());
                 ticket.setReturnRun(selectedReturnEntry.getRun());

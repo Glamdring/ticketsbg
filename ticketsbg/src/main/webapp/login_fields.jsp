@@ -18,7 +18,7 @@
 
 				<h:inputHidden id="admin" converter="#{booleanConverter}"
 					value="#{isAdmin}" binding="#{loginController.admin}" />
-				<a4j:commandButton action="#{loginController.login}" type="submit"
+				<h:commandButton action="#{loginController.login}" type="submit"
 					value="#{msg.login}" />
 			</h:panelGrid>
 		</a4j:form>

@@ -44,8 +44,8 @@
 							id="travelType">
 							<a4j:support event="onclick" reRender="returnPanel"
 								ajaxSingle="true" />
-							<f:selectItem itemLabel="#{msg.twoWay}" itemValue="twoWay" />
-							<f:selectItem itemLabel="#{msg.oneWay}" itemValue="oneWay" />
+							<f:selectItem itemLabel="#{msg.twoWayTravelType}" itemValue="twoWay" />
+							<f:selectItem itemLabel="#{msg.oneWayTravelType}" itemValue="oneWay" />
 						</h:selectOneRadio>
 					</h:panelGrid>
 					<h:panelGrid columns="2" columnClasses="firstColumn,secondColumn">
@@ -79,7 +79,6 @@
 									converter="#{booleanConverter}">
 									<f:selectItem itemLabel="#{msg.departureTime}" itemValue="true" />
 									<f:selectItem itemLabel="#{msg.arrivalTime}" itemValue="false" />
-
 								</h:selectOneMenu>
 								<h:outputText value=":" />
 							</h:panelGroup>

@@ -1,5 +1,6 @@
 package com.tickets.controllers;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -18,7 +19,7 @@ import com.tickets.utils.SelectItemUtils;
 @ConversationName("purchaseConversation")
 public class PaymentController extends BaseController {
 
-    private List<SelectItem> paymentMethods;
+    private List<SelectItem> paymentMethods = new ArrayList<SelectItem>();
     private String selectedPaymentMethod;
 
     private PurchaseController purchaseController;

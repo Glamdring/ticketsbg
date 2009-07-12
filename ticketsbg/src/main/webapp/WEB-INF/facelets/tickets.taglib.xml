@@ -3,7 +3,7 @@
   "-//Sun Microsystems, Inc.//DTD Facelet Taglib 1.0//EN"
   "https://facelets.dev.java.net/source/browse/*checkout*/facelets/src/etc/facelet-taglib_1_0.dtd">
 <facelet-taglib xmlns="http://java.sun.com/JSF/Facelet">
-	<namespace>http://tickets.com/cust</namespace>
+	<namespace>http://tickets.com/tc</namespace>
 
 	<tag>
 		<tag-name>repeat</tag-name>
@@ -19,4 +19,9 @@
         </component>
     </tag>
 	
+	<function>
+        <function-name>getVacantSeats</function-name>
+        <function-class>com.tickets.services.ServiceFunctions</function-class>
+        <function-signature>int getVacantSeats(com.tickets.model.Run, java.lang.String, java.lang.String)</function-signature>
+    </function>
 </facelet-taglib>
