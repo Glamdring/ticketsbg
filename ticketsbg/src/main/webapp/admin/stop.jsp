@@ -15,9 +15,11 @@
 			<a4j:outputPanel ajaxRendered="true">
 				<h:panelGrid columns="2" columnClasses="rich-panel">
 					<h:outputLabel value="#{msg.stopName}" for="stopName" />
-					<!-- TODO : combo with all cities + autocomplete? or suggestion box -->
-					<h:inputText value="#{routeController.stop.name}" id="stopName" />
-					
+					<h:panelGroup>
+						<tc:autocompleteBox value="#{routeController.stop.name}" id="stopName"
+							suggestionValues="#{routeController.existingStopNames}" />
+					</h:panelGroup>
+
 
 					<h:outputLabel value="#{msg.timeToArrival}" for="timeToArrival" />
 					<rich:inputNumberSpinner maxValue="1000"

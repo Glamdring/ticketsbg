@@ -154,4 +154,11 @@ public class StopServiceImpl extends BaseService<Stop> implements StopService {
         }
         return null;
     }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<String> getExistingStopNames() {
+        List<String> result = getDao().findByQuery("SELECT stop.name FROM Stop stop GROUP BY stop.name ORDER BY stop.name");
+        return result;
+    }
 }

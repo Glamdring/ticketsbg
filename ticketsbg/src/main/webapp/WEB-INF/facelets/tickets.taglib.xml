@@ -12,6 +12,15 @@
 			<renderer-type>org.ajax4jsf.components.RepeatRenderer</renderer-type>
 		</component>
 	</tag>
+	
+	<tag>
+        <tag-name>autocompleteBox</tag-name>
+        <component>
+            <component-type>com.tickets.AutocompleteBox</component-type>
+            <renderer-type>com.tickets.components.renderers.AutocompleteRenderer</renderer-type>
+        </component>
+    </tag>
+    
 	<tag>
         <tag-name>defaultAction</tag-name>
         <component>

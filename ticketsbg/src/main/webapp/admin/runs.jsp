@@ -13,19 +13,23 @@
 		<f:view>
 			<h:form id="runsForm">
 				<h:messages />
-				<a4j:outputPanel>
+				<rich:panel style="border-style: none;">
 					<h:outputText value="#{msg.runsForRoute} " />
-					<h:outputText value="#{runController.route.name}" style="font-weight: bold;" />
-				</a4j:outputPanel>
+					<h:outputText value="#{runController.route.name}"
+						style="font-weight: bold;" />
+				</rich:panel>
 
 				<rich:dataTable
 					onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
-					onRowMouseOut="this.style.backgroundColor='white'" cellpadding="0"
-					cellspacing="0" width="300" border="0" var="run"
-					value="#{runController.route.runs}">
+					id="runsTable" onRowMouseOut="this.style.backgroundColor='white'"
+					cellpadding="0" cellspacing="0" width="300" border="0" var="run"
+					value="#{runController.route.runs}" rows="20">
 
 					<f:facet name="header">
 						<rich:columnGroup>
+							<rich:column>
+								<h:outputText value="#" />
+							</rich:column>
 							<rich:column>
 								<h:outputText value="#{msg.dateTime}" />
 							</rich:column>
@@ -33,12 +37,16 @@
 						</rich:columnGroup>
 					</f:facet>
 
+                    <rich:column>
+                        <h:outputText value="#{run.runId}" />
+                    </rich:column>
+                    
 					<rich:column>
 						<h:outputText value="#{run.time.time}">
 							<f:convertDateTime pattern="dd.MM.yyyy hh:mm" />
 						</h:outputText>
 					</rich:column>
-					
+
 					<rich:column>
 						<h:commandLink action="#{runController.delete}"
 							title="#{msg.remove}">
@@ -49,6 +57,11 @@
 								alt="#{msg.remove}" title="#{msg.remove}" />
 						</h:commandLink>
 					</rich:column>
+					<f:facet name="footer">
+						<rich:datascroller align="center" maxPages="20"
+							page="#{runController.page}" id="scroller" />
+
+					</f:facet>
 				</rich:dataTable>
 			</h:form>
 		</f:view>

@@ -16,6 +16,8 @@ public class RunController extends BaseController {
     private Route route;
     private Run run;
 
+    private int page;
+
     @Autowired
     private RunService<Run> service;
 
@@ -44,4 +46,13 @@ public class RunController extends BaseController {
     public void setRun(Run run) {
         this.run = run;
     }
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
 }

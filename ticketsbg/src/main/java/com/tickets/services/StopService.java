@@ -1,5 +1,7 @@
 package com.tickets.services;
 
+import java.util.List;
+
 import org.richfaces.model.ListRowKey;
 
 import com.tickets.model.Price;
@@ -49,4 +51,12 @@ public interface StopService extends Service<Stop> {
      * @return price
      */
     Price getPrice(int startStopId, int endStopId, Route route);
+
+    /**
+     * Lists names of stops already entered in the system,
+     * for the purpose of suggestion
+     *
+     * @return list of names
+     */
+    List<String> getExistingStopNames();
 }
