@@ -94,7 +94,7 @@ public class RouteServiceImpl extends BaseService<Route> implements RouteService
 
         for (int i = 0; i < list.size(); i ++) {
             if (list.get(i).getId() == hourId) {
-                list.remove(i); //TODO check behaviour (Not removing by index, so that DELETE_ORPHAN is triggered)
+                list.remove(i);
                 break;
             }
         }
