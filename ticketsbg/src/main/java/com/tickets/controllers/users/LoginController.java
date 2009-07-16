@@ -33,7 +33,6 @@ public class LoginController extends BaseController {
 
     @Action
     public String login() {
-        System.out.println(username + ":" + password + ":" + admin);
         try {
             User loggedUser = userService.login(username,
                     password.toCharArray(),
@@ -46,7 +45,7 @@ public class LoginController extends BaseController {
             } else if (purchaseController != null && purchaseController.getCurrentStep() != null){
                 return purchaseController.getCurrentStep().getScreen().getOutcome();
             }
-            return Screen.HOME.getOutcome(); //TODO referer
+            return Screen.HOME.getOutcome(); //TODO referer, or at least the active step
         } catch (UserException ex) {
             addError(ex.getMessageKey());
             return null;

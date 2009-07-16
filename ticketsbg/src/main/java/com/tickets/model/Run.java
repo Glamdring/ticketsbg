@@ -40,6 +40,26 @@ import org.hibernate.annotations.LazyCollectionOption;
                         "WHERE price.startStop.name=:fromStop AND price.endStop.name=:toStop " +
                         "AND price.price > 0 " +
                         "ORDER BY run.time, price.price"
+        ),
+
+        @NamedQuery(
+                name = "Run.adminSearch",
+                query = "SELECT DISTINCT new com.tickets.model.SearchResultEntry(run, price) FROM Run run, User user, IN(run.route.prices) price, IN (user.firms) firm " +
+                        "WHERE price.startStop.name=:fromStop AND price.endStop.name=:toStop " +
+                        "AND price.price > 0 " +
+                        "AND run.route.firm=firm " +
+                        "AND user=:user " +
+                        "ORDER BY run.time, price.price"
+        ),
+
+        @NamedQuery(
+                name = "Run.adminSearchNoEndStop",
+                query = "SELECT DISTINCT new com.tickets.model.SearchResultEntry(run, price) FROM Run run, User user, IN(run.route.prices) price, IN (user.firms) firm " +
+                        "WHERE price.startStop.name=:fromStop " +
+                        "AND price.price > 0 " +
+                        "AND run.route.firm=firm " +
+                        "AND user=:user " +
+                        "ORDER BY run.time, price.price"
         )
 })
 public class Run implements Serializable {

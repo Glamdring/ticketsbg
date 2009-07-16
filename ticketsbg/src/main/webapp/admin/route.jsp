@@ -9,7 +9,7 @@
 	xmlns:c="http://java.sun.com/jstl/core"
 	xmlns:tc="http://tickets.com/tc"
 	xmlns:t="http://myfaces.apache.org/tomahawk"
-	template="admin_template.jsp">
+	template="adminTemplate.jsp">
 	<ui:define name="header">
 		<style>
 .gridContent {

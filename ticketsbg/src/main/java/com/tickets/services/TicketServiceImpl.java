@@ -48,7 +48,7 @@ public class TicketServiceImpl extends BaseService<Ticket> implements TicketServ
             SearchResultEntry selectedReturnEntry, int seat, int returnSeat, Discount discount) {
         if (ServiceFunctions.getVacantSeats(selectedEntry.getRun(),
                 selectedEntry.getPrice().getStartStop().getName(),
-                selectedEntry.getPrice().getEndStop().getName()) < 0) {
+                selectedEntry.getPrice().getEndStop().getName()) > 0) {
 
             Ticket ticket = new Ticket();
             ticket.setSeat(seat);

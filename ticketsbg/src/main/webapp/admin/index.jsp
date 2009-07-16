@@ -6,7 +6,7 @@
   xmlns:a4j="http://richfaces.org/a4j"
   xmlns:rich="http://richfaces.org/rich"
   xmlns:c="http://java.sun.com/jstl/core"
-  template="admin_template.jsp">
+  template="adminTemplate.jsp">
   <ui:define name="body">
     <f:view>
       <h:messages />

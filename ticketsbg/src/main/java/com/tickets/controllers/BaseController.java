@@ -4,11 +4,9 @@ import java.io.Serializable;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 import com.tickets.constants.Messages;
-import com.tickets.utils.SpringContext;
 
 public abstract class BaseController implements Serializable {
 
@@ -46,12 +44,5 @@ public abstract class BaseController implements Serializable {
 
     protected static String getLocalizedMessage(String key, Object...params) {
         return Messages.getString(key, params);
-    }
-
-    public String restartCtx(){
-
-        SpringContext.init(
-                ((ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getRealPath("/") + "WEB-INF/classes/");
-        return "routesList";
     }
 }

@@ -5,10 +5,14 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich"
-	xmlns:c="http://java.sun.com/jstl/core" template="admin_template.jsp">
+	xmlns:c="http://java.sun.com/jstl/core" template="adminTemplate.jsp">
 	<ui:define name="body">
-		<ui:include src="../login_fields.jsp">
-            <ui:param name="isAdmin" value="true" />
-        </ui:include>
+		<a4j:form ajaxSubmit="true">
+			<ui:include src="../loginFields.jsp">
+				<ui:param name="isAdmin" value="true" />
+			</ui:include>
+			<h:inputHidden id="admin" converter="#{booleanConverter}"
+                value="true" binding="#{loginController.admin}" />
+		</a4j:form>
 	</ui:define>
 </ui:composition>

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.component.UIInput;
 import javax.faces.model.ListDataModel;
 
 import org.apache.myfaces.orchestra.conversation.annotations.ConversationName;
@@ -93,8 +94,18 @@ public class SearchController extends BaseController {
 
     private int currentRunVacantSeats;
 
+    private UIInput admin;
+
     @Action
     public String search() {
+        if (admin.getValue() != null && admin.getValue().equals(Boolean.TRUE)) {
+            return adminSearch();
+        }
+
+        return publicSearch();
+    }
+
+    private String publicSearch() {
         //resetting, in case the conversation hasn't ended
         resetSelections();
 
@@ -119,6 +130,16 @@ public class SearchController extends BaseController {
 
         return Screen.SEARCH_RESULTS.getOutcome();
     }
+
+    private String adminSearch() {
+        List<SearchResultEntry> result = searchService.adminSearch(loggedUserHolder.getLoggedUser(),
+                fromStop, toStop, date, fromHour, toHour, timeForDeparture);
+
+        resultsModel = new ListDataModel(result);
+
+        return Screen.ADMIN_SEARCH_RESULTS.getOutcome();
+    }
+
 
     @Action
     public void filterToStops() {
@@ -519,5 +540,13 @@ public class SearchController extends BaseController {
 
     public void setCurrentRunVacantSeats(int currentRunVacantSeats) {
         this.currentRunVacantSeats = currentRunVacantSeats;
+    }
+
+    public UIInput getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(UIInput admin) {
+        this.admin = admin;
     }
 }

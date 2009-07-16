@@ -21,6 +21,44 @@ public class SearchServiceImpl extends BaseService implements SearchService {
     public List<SearchResultEntry> search(String fromStop, String toStop, Date date,
             int fromHour, int toHour, boolean isTimeForDeparture) {
 
+        List<SearchResultEntry> result = getDao().findByNamedQuery("Run.search",
+                new String[] { "fromStop", "toStop"},
+                new Object[] { fromStop, toStop });
+
+        filterSearchResults(fromStop, toStop, date, fromHour, toHour, isTimeForDeparture,
+                result);
+
+        return result;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<SearchResultEntry> adminSearch(User user, String startStop,
+            String endStop, Date date, int fromHour, int toHour,
+            boolean isTimeForDeparture) {
+
+        List<SearchResultEntry> result = null;
+
+        if (endStop == null || endStop.length() == 0) {
+            result = getDao().findByNamedQuery("Run.adminSearchNoEndStop",
+                    new String[] { "fromStop", "user"},
+                    new Object[] { startStop, user});
+        } else {
+            result = getDao().findByNamedQuery("Run.adminSearch",
+                    new String[] { "fromStop", "user"},
+                    new Object[] { startStop, user});
+        }
+
+        filterSearchResults(startStop, endStop, date, fromHour, toHour,
+                isTimeForDeparture, result);
+
+        return result;
+
+    }
+
+    private void filterSearchResults(String fromStop, String toStop, Date date,
+            int fromHour, int toHour, boolean isTimeForDeparture,
+            List<SearchResultEntry> result) {
         Calendar fromTime = GeneralUtils.createEmptyCalendar();
         fromTime.setTime(date);
         fromTime.add(Calendar.HOUR_OF_DAY, fromHour);
@@ -29,10 +67,6 @@ public class SearchServiceImpl extends BaseService implements SearchService {
         toTime.setTime(date);
         toTime.add(Calendar.HOUR_OF_DAY, toHour);
         // toTime.roll(Calendar.MINUTE, 1);
-
-        List<SearchResultEntry> result = getDao().findByNamedQuery("Run.search",
-                new String[] { "fromStop", "toStop"},
-                new Object[] { fromStop, toStop });
 
 
         // Complexity n^2 in the worst case, but generally n (because of the
@@ -78,8 +112,6 @@ public class SearchServiceImpl extends BaseService implements SearchService {
             entry.setArrivalTime(arrivalTime);
             entry.setDepartureTime(departureTime);
         }
-
-        return result;
     }
 
     private Stop findStop(List<Stop> stops, String stopName) {
@@ -122,5 +154,4 @@ public class SearchServiceImpl extends BaseService implements SearchService {
 
         return stops;
     }
-
 }
