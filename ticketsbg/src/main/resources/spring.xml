@@ -1,183 +1,181 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
-	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
             http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
             http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
 
-	<!-- Loading MyFaces Orchestra modules -->
-	<import resource="classpath*:/META-INF/spring-orchestra-init.xml" />
+    <!-- Loading MyFaces Orchestra modules -->
+    <import resource="classpath*:/META-INF/spring-orchestra-init.xml" />
 
-	<context:annotation-config />
-	<context:component-scan base-package="com.tickets" />
+    <context:annotation-config />
+    <context:component-scan base-package="com.tickets" />
 
-	<context:property-placeholder location="classpath:application.properties" />
+    <context:property-placeholder location="classpath:application.properties" />
 
-	<!-- Generic Hibernate beans (for use with both DAO implementations -->
-	<bean id="namingStrategy" class="org.hibernate.cfg.DefaultNamingStrategy" />
+    <!-- Generic Hibernate beans (for use with both DAO implementations -->
+    <bean id="namingStrategy" class="org.hibernate.cfg.DefaultNamingStrategy" />
 
-	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
-		destroy-method="close">
-		<property name="jdbcUrl" value="${database.url}" />
-		<property name="user" value="${database.username}" />
-		<property name="password" value="${database.password}" />
-		<property name="driverClass" value="com.mysql.jdbc.Driver" />
-		<property name="testConnectionOnCheckin" value="true"></property>
-		<property name="testConnectionOnCheckout" value="true"></property>
-		<property name="properties">
-			<props>
-				<prop key="c3p0.min_size">10</prop>
-				<prop key="c3p0.max_size">100</prop>
-				<prop key="c3p0.timeout">540</prop>
-				<prop key="c3p0.acquireRetryAttempts">10</prop>
-				<prop key="c3p0.acquireIncrement">5</prop>
-				<prop key="c3p0.idleConnectionTestPeriod">540</prop>
-				<prop key="c3p0.initialPoolSize">20</prop>
-				<prop key="c3p0.maxPoolSize">100</prop>
-				<prop key="c3p0.maxIdleTime">30</prop>
-				<prop key="c3p0.maxStatements">50</prop>
-				<prop key="c3p0.minPoolSize">10</prop>
-				<prop key="user">${database.username}</prop>
-				<prop key="password">${database.password}</prop>
-			</props>
-		</property>
-	</bean>
-	<!-- End of generic Hibernate-related beans -->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+        destroy-method="close">
+        <property name="jdbcUrl" value="${database.url}" />
+        <property name="user" value="${database.username}" />
+        <property name="password" value="${database.password}" />
+        <property name="driverClass" value="com.mysql.jdbc.Driver" />
+        <property name="testConnectionOnCheckin" value="true"></property>
+        <property name="testConnectionOnCheckout" value="true"></property>
+        <property name="properties">
+            <props>
+                <prop key="c3p0.min_size">10</prop>
+                <prop key="c3p0.max_size">100</prop>
+                <prop key="c3p0.timeout">540</prop>
+                <prop key="c3p0.acquireRetryAttempts">10</prop>
+                <prop key="c3p0.acquireIncrement">5</prop>
+                <prop key="c3p0.idleConnectionTestPeriod">540</prop>
+                <prop key="c3p0.initialPoolSize">20</prop>
+                <prop key="c3p0.maxPoolSize">100</prop>
+                <prop key="c3p0.maxIdleTime">30</prop>
+                <prop key="c3p0.maxStatements">50</prop>
+                <prop key="c3p0.minPoolSize">10</prop>
+                <prop key="user">${database.username}</prop>
+                <prop key="password">${database.password}</prop>
+            </props>
+        </property>
+    </bean>
+    <!-- End of generic Hibernate-related beans -->
 
-	<!-- Use the following beans for HibernateDaoTemplate -->
-	<bean id="sessionFactory"
-		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
-		<property name="annotatedClasses">
-			<list>
-				<value>com.tickets.model.Day</value>
-				<value>com.tickets.model.Firm</value>
-				<value>com.tickets.model.Price</value>
-				<value>com.tickets.model.Route</value>
-				<value>com.tickets.model.RouteDay</value>
-				<value>com.tickets.model.RouteHour
-				</value>
-				<value>com.tickets.model.Run</value>
-				<value>com.tickets.model.Stop</value>
-				<value>com.tickets.model.Ticket</value>
-				<value>com.tickets.model.User</value>
-				<value>com.tickets.model.UsersHistory
-				</value>
-				<value>com.tickets.model.Discount</value>
-			</list>
-		</property>
+    <!-- Use the following beans for HibernateDaoTemplate -->
+    <!-- bean id="sessionFactory"
+        class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+        <property name="annotatedClasses">
+            <list>
+                <value>com.tickets.model.Day</value>
+                <value>com.tickets.model.Firm</value>
+                <value>com.tickets.model.Price</value>
+                <value>com.tickets.model.Route</value>
+                <value>com.tickets.model.RouteDay</value>
+                <value>com.tickets.model.RouteHour
+                </value>
+                <value>com.tickets.model.Run</value>
+                <value>com.tickets.model.Stop</value>
+                <value>com.tickets.model.Ticket</value>
+                <value>com.tickets.model.User</value>
+                <value>com.tickets.model.UsersHistory</value>
+                <value>com.tickets.model.Discount</value>
+            </list>
+        </property>
 
-		<property name="dataSource" ref="dataSource" />
-		<property name="namingStrategy" ref="namingStrategy" />
-		<property name="schemaUpdate" value="${jdbc.generateDDL}" />
+        <property name="dataSource" ref="dataSource" />
+        <property name="namingStrategy" ref="namingStrategy" />
+        <property name="schemaUpdate" value="${jdbc.generateDDL}" />
 
-		<property name="hibernateProperties">
-			<props>
-				<prop key="hibernate.dialect">${jdbc.dialect}</prop>
-				<prop key="hibernate.show_sql">${jdbc.showSql}</prop>
-				<!-- prop key="hibernate.current_session_context_class">thread</prop-->
-			</props>
-		</property>
-	</bean>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">${jdbc.dialect}</prop>
+                <prop key="hibernate.show_sql">${jdbc.showSql}</prop>
+            </props>
+        </property>
+    </bean-->
 
-	<!--
-		bean id="dao" class="com.tickets.dao.DaoImpl" scope="prototype">
-		<property name="sessionFactory" ref="sessionFactory"></property>
-		</bean
-	-->
+    <!--
+        bean id="dao" class="com.tickets.dao.DaoImpl" scope="prototype">
+        <property name="sessionFactory" ref="sessionFactory"></property>
+        </bean
+    -->
 
-	<!-- End of HibernateDaoTemplate specific beans -->
+    <!-- End of HibernateDaoTemplate specific beans -->
 
 
-	<!-- Use the following beans with EntityManager DAO implementation -->
+    <!-- Use the following beans with EntityManager DAO implementation -->
 
-	<!--
-		This is the convenient way to set up an EntityManagerFactory and
-		inject it into the DAO's afterwards. JNDI Lookup can also be used
-		here. By default configuration file in META-INF/persistence.xml is
-		used. Parameters are located in application.properties file.
-	-->
-	<bean id="entityManagerFactory"
-		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-		<property name="persistenceUnitName" value="tickets" />
-		<property name="dataSource" ref="dataSource" />
-		<property name="jpaVendorAdapter">
-			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-				<property name="showSql" value="${jdbc.showSql}" />
-				<property name="databasePlatform" value="${jdbc.dialect}" />
-				<property name="generateDdl" value="${jdbc.generateDDL}" />
-			</bean>
-		</property>
-	</bean>
+    <!--
+        This is the convenient way to set up an EntityManagerFactory and
+        inject it into the DAO's afterwards. JNDI Lookup can also be used
+        here. By default configuration file in META-INF/persistence.xml is
+        used. Parameters are located in application.properties file.
+    -->
+    <bean id="entityManagerFactory"
+        class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="persistenceUnitName" value="tickets" />
+        <property name="dataSource" ref="dataSource" />
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="showSql" value="${jdbc.showSql}" />
+                <property name="databasePlatform" value="${jdbc.dialect}" />
+                <property name="generateDdl" value="${jdbc.generateDDL}" />
+            </bean>
+        </property>
+    </bean>
 
 
-	<!--
-		This binds an entity manager from the specified entityManagerFactory
-		to the thread for transactional data access.
-	-->
-	<bean id="jpaTransactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-		<property name="entityManagerFactory" ref="entityManagerFactory" />
-	</bean>
+    <!--
+        This binds an entity manager from the specified entityManagerFactory
+        to the thread for transactional data access.
+    -->
+    <bean id="jpaTransactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+    </bean>
 
-	<!--
-		This class translates native resource exceptions to Spring's
-		DataAccessException hierarchy. It's applied to any bean that carries
-		the Repository annotation, hence all our DAO classes.
-	-->
-	<bean
-		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+    <!--
+        This class translates native resource exceptions to Spring's
+        DataAccessException hierarchy. It's applied to any bean that carries
+        the Repository annotation, hence all our DAO classes.
+    -->
+    <bean
+        class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
 
-	<!-- End of EntityManager DAO implementation beans -->
+    <!-- End of EntityManager DAO implementation beans -->
 
     <aop:aspectj-autoproxy />
-    
-	<!--
-		This two bean definition below handles the creation and lookup of
-		beans that has the conversational scopes as listed in the 'scopes'
-		map.
-	-->
-	<bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
-		<property name="scopes">
-			<map>
-				<entry key="conversation.access">
-					<bean
-						class="org.apache.myfaces.orchestra.conversation.spring.SpringConversationScope">
-						<property name="timeout" value="30" />
-						<property name="lifetime" value="access" />
-						<property name="advices">
-							<list>
-								<ref bean="persistentContextConversationInterceptor" />
-							</list>
-						</property>
-					</bean>
-				</entry>
-				<entry key="conversation.manual">
-					<bean
-						class="org.apache.myfaces.orchestra.conversation.spring.SpringConversationScope">
-						<property name="timeout" value="30" />
-						<property name="lifetime" value="manual" />
-						<property name="advices">
-							<list>
-								<ref bean="persistentContextConversationInterceptor" />
-							</list>
-						</property>
-					</bean>
-				</entry>
-			</map>
-		</property>
-	</bean>
 
-	<bean id="persistentContextConversationInterceptor"
-		class="org.apache.myfaces.orchestra.conversation.spring.PersistenceContextConversationInterceptor">
-		<property name="persistenceContextFactory" ref="jpaPersistentContextFactory" />
-	</bean>
+    <!--
+        This two bean definition below handles the creation and lookup of
+        beans that has the conversational scopes as listed in the 'scopes'
+        map.
+    -->
+    <bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
+        <property name="scopes">
+            <map>
+                <entry key="conversation.access">
+                    <bean
+                        class="org.apache.myfaces.orchestra.conversation.spring.SpringConversationScope">
+                        <property name="timeout" value="30" />
+                        <property name="lifetime" value="access" />
+                        <property name="advices">
+                            <list>
+                                <ref bean="persistentContextConversationInterceptor" />
+                            </list>
+                        </property>
+                    </bean>
+                </entry>
+                <entry key="conversation.manual">
+                    <bean
+                        class="org.apache.myfaces.orchestra.conversation.spring.SpringConversationScope">
+                        <property name="timeout" value="30" />
+                        <property name="lifetime" value="manual" />
+                        <property name="advices">
+                            <list>
+                                <ref bean="persistentContextConversationInterceptor" />
+                            </list>
+                        </property>
+                    </bean>
+                </entry>
+            </map>
+        </property>
+    </bean>
 
-	<bean id="jpaPersistentContextFactory"
-		class="org.apache.myfaces.orchestra.conversation.spring.JpaPersistenceContextFactory">
-		<property name="entityManagerFactory" ref="entityManagerFactory" />
-	</bean>
+    <bean id="persistentContextConversationInterceptor"
+        class="org.apache.myfaces.orchestra.conversation.spring.PersistenceContextConversationInterceptor">
+        <property name="persistenceContextFactory" ref="jpaPersistentContextFactory" />
+    </bean>
+
+    <bean id="jpaPersistentContextFactory"
+        class="org.apache.myfaces.orchestra.conversation.spring.JpaPersistenceContextFactory">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+    </bean>
 
     <!--
         This class processes the PersistenceUnit/PersistenceContext
@@ -186,45 +184,45 @@
     -->
     <bean
         class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
-        
-        
+
+
     <!--
         Transaction manager for a single Hibernate SessionFactory (alternative
         to JTA)
     -->
-    <bean id="transactionManager"
+    <!-- bean id="transactionManager"
         class="org.springframework.orm.hibernate3.HibernateTransactionManager">
         <property name="sessionFactory">
             <ref local="sessionFactory" />
         </property>
+    </bean-->
+
+    <bean id="scheduledTask" class="org.springframework.scheduling.timer.ScheduledTimerTask"
+        lazy-init="false">
+        <!-- wait 10 seconds before starting repeated execution -->
+        <property name="delay" value="10000" />
+        <!-- run every day -->
+        <property name="period" value="86400000" />
+        <property name="timerTask" ref="runCreatorTask" />
     </bean>
-    
-	<bean id="scheduledTask" class="org.springframework.scheduling.timer.ScheduledTimerTask"
-		lazy-init="false">
-		<!-- wait 10 seconds before starting repeated execution -->
-		<property name="delay" value="10000" />
-		<!-- run every day -->
-		<property name="period" value="86400000" />
-		<property name="timerTask" ref="runCreatorTask" />
-	</bean>
 
-	<bean id="timerFactory" class="org.springframework.scheduling.timer.TimerFactoryBean">
-		<property name="scheduledTimerTasks">
-			<list>
-				<ref bean="scheduledTask" />
-			</list>
-		</property>
-	</bean>
-    
-	<aop:config>
-		<aop:pointcut id="serviceMethods"
-			expression="execution(* com.tickets.services.*.*(..))" />
-		<aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethods" />
-	</aop:config>
+    <bean id="timerFactory" class="org.springframework.scheduling.timer.TimerFactoryBean">
+        <property name="scheduledTimerTasks">
+            <list>
+                <ref bean="scheduledTask" />
+            </list>
+        </property>
+    </bean>
 
-	<tx:advice id="txAdvice" transaction-manager="jpaTransactionManager">
-		<tx:attributes>
-			<tx:method name="*" propagation="REQUIRED" />
-		</tx:attributes>
-	</tx:advice>
+    <aop:config>
+        <aop:pointcut id="serviceMethods"
+            expression="execution(* com.tickets.services.*.*(..))" />
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethods" />
+    </aop:config>
+
+    <tx:advice id="txAdvice" transaction-manager="jpaTransactionManager">
+        <tx:attributes>
+            <tx:method name="*" propagation="REQUIRED" />
+        </tx:attributes>
+    </tx:advice>
 </beans>

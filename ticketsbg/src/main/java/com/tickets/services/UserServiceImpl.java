@@ -17,6 +17,7 @@ import com.tickets.constants.Constants;
 import com.tickets.constants.Messages;
 import com.tickets.constants.Settings;
 import com.tickets.exceptions.UserException;
+import com.tickets.model.Firm;
 import com.tickets.model.User;
 import com.tickets.utils.CertificateManager;
 import com.tickets.utils.base64.Base64Decoder;
@@ -36,7 +37,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
         if (passwordAlreadyHashed)
             passParam = new String(password);
         else
-            passParam = hash(new String(password));
+            passParam = saltAndHashPassword(new String(password));
 
         List<User> result = getDao().findByNamedQuery("User.login",
                 new String[] { "username", "password" },
@@ -45,7 +46,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
         if (result == null || result.size() != 1) {
             result = getDao().findByNamedQuery("User.tempLogin",
                     new String[] { "username", "password" },
-                    new Object[] { username, hash(new String(password)) });
+                    new Object[] { username, saltAndHashPassword(new String(password)) });
 
             if (result == null || result.size() != 1) {
                 throw UserException.INCORRECT_LOGIN_DATA;
@@ -98,7 +99,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
         if (user == null)
             return null;
 
-        user.setPassword(hash(user.getPassword()));
+        user.setPassword(saltAndHashPassword(user.getPassword()));
         user.setActivationCode(getHexString(salt(user.getUsername()).getBytes()));
 
         user.setRegisteredTimestamp(System.currentTimeMillis());
@@ -171,7 +172,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
         if (list.size() > 0) {
             User user = (User) list.get(0);
             String tempPassword = generateTemporaryPassword();
-            user.setTemporaryPassword(hash(tempPassword));
+            user.setTemporaryPassword(saltAndHashPassword(tempPassword));
 
             try {
                 HtmlEmail mail = getPreconfiguredMail();
@@ -194,7 +195,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
     }
 
     public void changePassword(String password, User user) {
-        user.setPassword(hash(password));
+        user.setPassword(saltAndHashPassword(password));
         user.setTemporaryPassword("");
         getDao().persist(user);
     }
@@ -235,7 +236,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
         return sb.toString();
     }
 
-    private String hash(String password) {
+    public String saltAndHashPassword(String password) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA");
             password = salt(password);
@@ -265,4 +266,31 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
         return listOrdered(User.class, orderColumn);
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public User findUserByUserName(String userName) {
+        List<User> result = getDao().findByNamedQuery("User.getByUsername", new String[] {
+                "username"}, new Object[] {userName});
+
+        if(result != null && result.size() > 0) {
+            return result.get(0);
+        }
+
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<User> fetchUsers(Firm firm) {
+        List result = getDao().findByNamedQuery("User.getByFirm",
+                new String[] { "firm" },
+                new Object[] { firm });
+
+        return result;
+    }
+
+    @Override
+    public boolean isHash(String password) {
+        return password.length() == 37 && password.matches("[0-9abcdef]+");
+    }
 }

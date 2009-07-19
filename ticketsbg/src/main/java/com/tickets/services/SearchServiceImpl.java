@@ -45,8 +45,8 @@ public class SearchServiceImpl extends BaseService implements SearchService {
                     new Object[] { startStop, user});
         } else {
             result = getDao().findByNamedQuery("Run.adminSearch",
-                    new String[] { "fromStop", "user"},
-                    new Object[] { startStop, user});
+                    new String[] { "fromStop", "toStop", "user"},
+                    new Object[] { startStop, endStop, user});
         }
 
         filterSearchResults(startStop, endStop, date, fromHour, toHour,

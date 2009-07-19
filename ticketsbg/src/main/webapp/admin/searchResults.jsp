@@ -8,7 +8,7 @@
     xmlns:c="http://java.sun.com/jstl/core"
     xmlns:fmt="http://java.sun.com/jstl/fmt"
     xmlns:t="http://myfaces.apache.org/tomahawk"
-    xmlns:tc="http://tickets.com/tc" template="publicTemplate.jsp">
+    xmlns:tc="http://tickets.com/tc" template="adminTemplate.jsp">
 
     <ui:define name="head">
         <style type="text/css">
@@ -49,7 +49,9 @@
                     </f:facet>
 
                     <rich:panel>
-                        <ui:include src="../searchFields.jsp" />
+                        <ui:include src="../searchFields.jsp">
+                            <ui:param name="isAdmin" value="true" />
+                        </ui:include>
                         <h:inputHidden id="admin" binding="#{searchController.admin}"
                             value="true" converter="#{booleanConverter}" />
                     </rich:panel>
@@ -68,12 +70,8 @@
                     <h:panelGrid columns="2" columnClasses="gridContent,gridContent"
                         cellpadding="0" cellspacing="0">
                         <h:panelGroup id="oneWay" style="border-style: none;">
-                            <rich:extendedDataTable value="#{searchController.resultsModel}"
-                                height="#{searchController.resultsModel.rowCount == 0 ? 50 : searchController.resultsModel.rowCount * (searchController.returnResultsModel == null ? 176 : 196) + 30}"
-                                var="result" rowKeyVar="rowId" selectionMode="single"
-                                enableContextMenu="false" id="resultsTable"
-                                selection="#{searchController.selection}"
-                                headerClass="tableHeader" noDataLabel="#{msg.noSearchResults}"
+                            <rich:dataTable value="#{searchController.resultsModel}"
+                                var="result" id="resultsTable" headerClass="tableHeader"
                                 width="380px;" columnClasses="columnClass" border="0"
                                 style="border-style: none;">
 
@@ -82,81 +80,53 @@
                                     eventsQueue="selectionSubmit"
                                     action="#{searchController.rowSelectionChanged}" />
 
-                                <rich:column width="35px" sortable="false">
-                                    <!-- For presentational purposes only -->
-                                    <t:selectOneRow groupName="selectedEntry" id="selectedEntry"
-                                        value="#{searchController.selectedRowId}">
-                                        <!-- Dummy converter, doesn't work with no converter -->
-                                        <f:converter converterId="javax.faces.Integer" />
-                                    </t:selectOneRow>
 
-                                </rich:column>
-
-                                <rich:column sortable="false" width="345px">
+                                <rich:column sortable="true">
                                     <f:facet name="header">
-                                        <h:outputText value="${msg.oneWayHeaderLabel}"
-                                            rendered="#{searchController.returnResultsModel != null}" />
+                                        <h:outputText value="#{msg.id}" />
                                     </f:facet>
-                                    <rich:panel id="resultEntry" header="#{result.run.route.name}">
-                                        <a4j:repeat value="#{result.run.route.stops}" var="stop"
-                                            rowKeyVar="stopId">
-                                            <h:outputText value=" → " rendered="#{stopId > 0}" />
-                                            <h:outputText value="#{stop.name}" styleClass="bold"
-                                                rendered="#{searchController.fromStop == stop.name || searchController.toStop == stop.name}" />
-                                            <h:outputText value="#{stop.name}"
-                                                rendered="#{searchController.fromStop != stop.name &amp;&amp; searchController.toStop != stop.name}" />
-                                        </a4j:repeat>
-
-                                        <h:panelGrid columns="2">
-                                            <!-- Always render the oneWay price - in case no return options are available, or the user choses not to select one -->
-                                            <h:outputText value="#{msg.oneWayPrice}: " />
-                                            <h:outputText value="#{result.price.price}" styleClass="bold">
-                                                <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-                                                <f:converter binding="#{currencyConverter}"
-                                                    converterId="currencyConverter" />
-                                            </h:outputText>
-                                            <h:outputText value="#{msg.twoWayPrice}: "
-                                                rendered="#{searchController.returnResultsModel != null}" />
-                                            <h:outputText value="#{result.price.twoWayPrice}"
-                                                rendered="#{searchController.returnResultsModel != null}"
-                                                styleClass="bold">
-                                                <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-                                                <f:converter binding="#{currencyConverter}"
-                                                    converterId="currencyConverter" />
-                                            </h:outputText>
-
-                                            <h:outputText value="#{msg.departureTime}: " />
-                                            <h:outputText value="#{result.departureTime.time}"
-                                                styleClass="bold">
-                                                <f:convertDateTime type="time" pattern="HH:mm"
-                                                    timeZone="#{timeZoneController.timeZone}" />
-                                            </h:outputText>
-
-                                            <h:outputText value="#{msg.arrivalTime}: " />
-                                            <h:outputText value="#{result.arrivalTime.time}"
-                                                styleClass="bold">
-                                                <f:convertDateTime type="time" pattern="HH:mm"
-                                                    timeZone="#{timeZoneController.timeZone}" />
-                                            </h:outputText>
-
-                                            <h:outputText value="#{msg.duration}: " />
-                                            <h:panelGroup>
-                                                <h:outputText value="#{result.duration / 60}">
-                                                    <f:convertNumber maxFractionDigits="0" />
-                                                </h:outputText>:#{result.duration % 60}
-                                            </h:panelGroup>
-
-                                            <h:outputText value="#{msg.vacantSeats}: " />
-                                            <h:outputText
-                                                value="#{tc:getVacantSeats(result.run, searchController.fromStop, searchController.toStop)}"
-                                                style="#{tc:getVacantSeats(result.run, searchController.fromStop, searchController.toStop) &lt; 5 ? 'color: red;' : 'color: black;'};font-weight: bold;" />
-
-                                            <h:outputText value="#{msg.transportCompany}: " />
-                                            <h:outputText value="#{result.run.route.firm.name}" />
-                                        </h:panelGrid>
-                                    </rich:panel>
+                                    <h:outputText value="#{result.run.id}" />
                                 </rich:column>
-                            </rich:extendedDataTable>
+
+
+                                <rich:column sortable="true">
+                                    <f:facet name="header">
+                                        <h:outputText value="#{msg.date}" />
+                                    </f:facet>
+                                    <h:outputText value="#{result.run.time}">
+                                        <f:convertDateTime pattern="dd.MM.yyyy" />
+                                    </h:outputText>
+                                </rich:column>
+
+                                <rich:column sortable="true">
+                                    <f:facet name="header">
+                                        <h:outputText value="#{msg.routeName}" />
+                                    </f:facet>
+                                    <h:outputText value="#{result.run.route.name}" />
+                                </rich:column>
+
+                                <rich:column sortable="true">
+                                    <f:facet name="header">
+                                        <h:outputText value="#{msg.departureTime}" />
+                                    </f:facet>
+                                    <h:outputText value="#{result.run.time}">
+                                        <f:convertDateTime pattern="hh:mm" />
+                                    </h:outputText>
+                                </rich:column>
+
+                                <rich:column sortable="true">
+                                    <f:facet name="header">
+                                        <h:outputText value="#{msg.soldSeats}" />
+                                    </f:facet>
+                                    <h:outputText value="#{tc:getSize(result.run.tickets)}" />
+                                </rich:column>
+
+                                <rich:column sortable="true">
+                                    <a4j:commandButton value="#{msg.oneWay}" />
+                                    <h:outputText value="&#160;" />
+                                    <a4j:commandButton value="#{msg.twoWay}" />
+                                </rich:column>
+                            </rich:dataTable>
                         </h:panelGroup>
 
                         <!-- Returns -->
@@ -235,7 +205,7 @@
 
                         <h:panelGroup id="seatChoices">
                             <a4j:region rendered="#{seatController.seatHandler != null}">
-                                <a4j:include viewId="seats.jsp">
+                                <a4j:include viewId="../seats.jsp">
                                     <ui:param name="modifier" value="1" />
                                     <ui:param name="return" value="falase" />
                                 </a4j:include>
@@ -245,7 +215,7 @@
                         <h:panelGroup id="returnSeatChoices">
                             <a4j:region
                                 rendered="#{seatController.returnSeatHandler != null}">
-                                <a4j:include viewId="seats.jsp">
+                                <a4j:include viewId="../seats.jsp">
                                     <ui:param name="modifier" value="2" />
                                     <ui:param name="return" value="true" />
                                 </a4j:include>

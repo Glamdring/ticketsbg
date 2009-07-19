@@ -1,6 +1,9 @@
 package com.tickets.services;
 
+import java.util.List;
+
 import com.tickets.exceptions.UserException;
+import com.tickets.model.Firm;
 import com.tickets.model.User;
 
 /**
@@ -32,5 +35,38 @@ public interface UserService extends Service<User> {
             char[] password,
             boolean passwordAlreadyHashed)
         throws UserException;
+
+
+    /**
+     * First salts and then hashes the provided password
+     *
+     * @param password
+     * @return the salted and hashed password
+     */
+    String saltAndHashPassword(String password);
+
+    /**
+     * TODO DOC
+     * @param userName
+     * @return user
+     */
+    User findUserByUserName(String userName);
+
+    /**
+     * Checks whether the argument is a hash, or a normal password
+     *
+     * @param password
+     * @return true if the argument is a hash
+     */
+    boolean isHash(String password);
+
+
+    /**
+     * Lists all users assigned to the specified administration
+     *
+     * @param administration
+     * @return list of users
+     */
+    List<User> fetchUsers(Firm firm);
 
 }

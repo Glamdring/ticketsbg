@@ -1,7 +1,9 @@
 package com.tickets.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -16,6 +18,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.validator.Length;
 import org.hibernate.validator.NotEmpty;
 
@@ -46,7 +50,15 @@ import org.hibernate.validator.NotEmpty;
         @NamedQuery(
             name = "User.getByEmail",
             query = "select u from User u where u.email=:email"
-        )
+        ),
+        @NamedQuery(
+            name = "User.getByUsername",
+            query = "select u from User u where u.username=:username"
+        ),
+        @NamedQuery(
+                name = "User.getByFirm",
+                query = "select u from User u, IN (u.firms) firm WHERE firm=:firm"
+            )
 })
 public class User extends Customer implements Serializable {
 
@@ -84,7 +96,8 @@ public class User extends Customer implements Serializable {
     @ManyToMany
     @JoinTable(name="firmsUsers", joinColumns=@JoinColumn(name="userId", referencedColumnName="id"),
             inverseJoinColumns=@JoinColumn(name="firmId", referencedColumnName="firmId"))
-    private Set<Firm> firms = new HashSet<Firm>();
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Firm> firms = new ArrayList<Firm>();
 
     @Column
     private byte privs;
@@ -103,6 +116,11 @@ public class User extends Customer implements Serializable {
 
     @Column
     private String city;
+
+    @ManyToMany
+    @JoinTable
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Role> roles = new ArrayList<Role>();
 
     public String getUsername() {
         return username;
@@ -136,11 +154,11 @@ public class User extends Customer implements Serializable {
         this.history = history;
     }
 
-    public Set<Firm> getFirms() {
+    public List<Firm> getFirms() {
         return firms;
     }
 
-    public void setFirms(Set<Firm> firms) {
+    public void setFirms(List<Firm> firms) {
         this.firms = firms;
     }
 
@@ -230,6 +248,14 @@ public class User extends Customer implements Serializable {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 
     @Override

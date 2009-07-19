@@ -3,34 +3,40 @@
   "-//Sun Microsystems, Inc.//DTD Facelet Taglib 1.0//EN"
   "https://facelets.dev.java.net/source/browse/*checkout*/facelets/src/etc/facelet-taglib_1_0.dtd">
 <facelet-taglib xmlns="http://java.sun.com/JSF/Facelet">
-	<namespace>http://tickets.com/tc</namespace>
+    <namespace>http://tickets.com/tc</namespace>
 
-	<tag>
-		<tag-name>repeat</tag-name>
-		<component>
-			<component-type>com.tickets.Iterator</component-type>
-			<renderer-type>org.ajax4jsf.components.RepeatRenderer</renderer-type>
-		</component>
-	</tag>
-	
-	<tag>
+    <tag>
+        <tag-name>repeat</tag-name>
+        <component>
+            <component-type>com.tickets.Iterator</component-type>
+            <renderer-type>org.ajax4jsf.components.RepeatRenderer</renderer-type>
+        </component>
+    </tag>
+
+    <tag>
         <tag-name>autocompleteBox</tag-name>
         <component>
             <component-type>com.tickets.AutocompleteBox</component-type>
             <renderer-type>com.tickets.components.renderers.AutocompleteRenderer</renderer-type>
         </component>
     </tag>
-    
-	<tag>
+
+    <tag>
         <tag-name>defaultAction</tag-name>
         <component>
             <component-type>org.j4j.defaultAction</component-type>
         </component>
     </tag>
-	
-	<function>
+
+    <function>
         <function-name>getVacantSeats</function-name>
         <function-class>com.tickets.services.ServiceFunctions</function-class>
-        <function-signature>int getVacantSeats(com.tickets.model.Run, java.lang.String, java.lang.String)</function-signature>
+        <function-signature>int getVacantSeats(com.tickets.model.Run,
+            java.lang.String, java.lang.String)</function-signature>
+    </function>
+    <function>
+        <function-name>getSize</function-name>
+        <function-class>com.tickets.services.ServiceFunctions</function-class>
+        <function-signature>int getSize(java.util.Collection)</function-signature>
     </function>
 </facelet-taglib>

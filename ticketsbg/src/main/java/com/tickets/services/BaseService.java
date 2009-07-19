@@ -18,7 +18,8 @@ import com.tickets.dao.Dao;
  * Note that the service can use other classes as well, by supplying them
  * as arguments to the DAO
  */
-public abstract class BaseService<E> implements Service<E> {
+@org.springframework.stereotype.Service("baseService")
+public class BaseService<E> implements Service<E> {
 
     protected static Logger log = Logger.getLogger(BaseService.class);
 

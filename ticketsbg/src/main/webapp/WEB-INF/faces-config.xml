@@ -23,6 +23,60 @@
         <message-bundle>com.tickets.constants.messages</message-bundle>
     </application>
 
+
+    <component>
+        <description />
+        <display-name>Iterator</display-name>
+        <component-type>com.tickets.Iterator</component-type>
+        <component-class>com.tickets.components.UIIterator</component-class>
+
+        <component-extension>
+            <component-family>javax.faces.Data</component-family>
+            <renderer-type>org.ajax4jsf.components.RepeatRenderer</renderer-type>
+        </component-extension>
+    </component>
+
+    <component>
+        <description />
+        <display-name>AutocompleteBox</display-name>
+        <component-type>com.tickets.AutocompleteBox</component-type>
+        <component-class>com.tickets.components.AutocompleteBox</component-class>
+
+        <component-extension>
+            <component-family>org.richfaces.ComboBox</component-family>
+            <renderer-type>com.tickets.components.renderers.AutocompleteRenderer</renderer-type>
+        </component-extension>
+    </component>
+
+    <render-kit>
+        <render-kit-id>HTML_BASIC</render-kit-id>
+        <renderer>
+            <component-family>org.richfaces.ComboBox</component-family>
+            <renderer-type>com.tickets.components.renderers.AutocompleteRenderer</renderer-type>
+            <renderer-class>
+                com.tickets.components.renderers.AutocompleteRenderer</renderer-class>
+        </renderer>
+
+        <renderer>
+            <component-family>javax.faces.SelectBoolean</component-family>
+            <renderer-type>org.apache.myfaces.Checkbox</renderer-type>
+            <renderer-class>
+                com.tickets.components.renderers.AdvancedHtmlCheckboxRenderer</renderer-class>
+        </renderer>
+        <renderer>
+            <component-family>javax.faces.SelectMany</component-family>
+            <renderer-type>org.apache.myfaces.Checkbox</renderer-type>
+            <renderer-class>
+                com.tickets.components.renderers.AdvancedHtmlCheckboxRenderer</renderer-class>
+        </renderer>
+        <renderer>
+            <component-family>org.apache.myfaces.Checkbox</component-family>
+            <renderer-type>org.apache.myfaces.Checkbox</renderer-type>
+            <renderer-class>
+                com.tickets.components.renderers.AdvancedHtmlCheckboxRenderer</renderer-class>
+        </renderer>
+    </render-kit>
+
     <navigation-rule>
         <navigation-case>
             <from-outcome>adminPanel</from-outcome>
@@ -128,56 +182,53 @@
         </navigation-case>
     </navigation-rule>
 
-    <component>
-        <description />
-        <display-name>Iterator</display-name>
-        <component-type>com.tickets.Iterator</component-type>
-        <component-class>com.tickets.components.UIIterator</component-class>
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>rolesList</from-outcome>
+            <to-view-id>/admin/roles.jsp</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
 
-        <component-extension>
-            <component-family>javax.faces.Data</component-family>
-            <renderer-type>org.ajax4jsf.components.RepeatRenderer</renderer-type>
-        </component-extension>
-    </component>
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>roleScreen</from-outcome>
+            <to-view-id>/admin/role.jsp</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
 
-    <component>
-        <description />
-        <display-name>AutocompleteBox</display-name>
-        <component-type>com.tickets.AutocompleteBox</component-type>
-        <component-class>com.tickets.components.AutocompleteBox</component-class>
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>usersList</from-outcome>
+            <to-view-id>/admin/users.jsp</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
 
-        <component-extension>
-            <component-family>org.richfaces.ComboBox</component-family>
-            <renderer-type>com.tickets.components.renderers.AutocompleteRenderer</renderer-type>
-        </component-extension>
-    </component>
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>usersScreen</from-outcome>
+            <to-view-id>/admin/user.jsp</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
 
-    <render-kit>
-        <render-kit-id>HTML_BASIC</render-kit-id>
-        <renderer>
-            <component-family>org.richfaces.ComboBox</component-family>
-            <renderer-type>com.tickets.components.renderers.AutocompleteRenderer</renderer-type>
-            <renderer-class>
-                com.tickets.components.renderers.AutocompleteRenderer</renderer-class>
-        </renderer>
 
-        <renderer>
-            <component-family>javax.faces.SelectBoolean</component-family>
-            <renderer-type>org.apache.myfaces.Checkbox</renderer-type>
-            <renderer-class>
-                com.tickets.components.renderers.AdvancedHtmlCheckboxRenderer</renderer-class>
-        </renderer>
-        <renderer>
-            <component-family>javax.faces.SelectMany</component-family>
-            <renderer-type>org.apache.myfaces.Checkbox</renderer-type>
-            <renderer-class>
-                com.tickets.components.renderers.AdvancedHtmlCheckboxRenderer</renderer-class>
-        </renderer>
-        <renderer>
-            <component-family>org.apache.myfaces.Checkbox</component-family>
-            <renderer-type>org.apache.myfaces.Checkbox</renderer-type>
-            <renderer-class>
-                com.tickets.components.renderers.AdvancedHtmlCheckboxRenderer</renderer-class>
-        </renderer>
-    </render-kit>
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>firmsList</from-outcome>
+            <to-view-id>/admin/firms.jsp</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>firmScreen</from-outcome>
+            <to-view-id>/admin/firm.jsp</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+
 </faces-config>

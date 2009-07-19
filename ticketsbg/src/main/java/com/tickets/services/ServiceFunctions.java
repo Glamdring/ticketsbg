@@ -1,5 +1,6 @@
 package com.tickets.services;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,6 +66,7 @@ public class ServiceFunctions {
 
         return seats;
     }
+
     private static Stop getStopByName(String name, List<Stop> stops) {
         for (Stop stop : stops) {
             if (stop.getName().equals(name)) {
@@ -72,5 +74,9 @@ public class ServiceFunctions {
             }
         }
         return null;
+    }
+
+    public static int getSize(Collection collection) {
+        return collection.size();
     }
 }
