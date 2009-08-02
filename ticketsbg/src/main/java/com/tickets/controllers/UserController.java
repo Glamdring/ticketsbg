@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.tickets.model.Firm;
-import com.tickets.model.Role;
 import com.tickets.model.User;
 import com.tickets.services.Service;
 import com.tickets.services.UserService;
@@ -44,7 +43,7 @@ public class UserController extends BaseCRUDController<User> {
     @Override
     protected void refreshList() {
         usersModel = new ListDataModel(userService.list(User.class));
-        roleSelectItems = SelectItemUtils.formSelectItems(userService.list(Role.class), false);
+        roleSelectItems = SelectItemUtils.formSelectItems(userService.listNonAdminRoles(), false);
         administrationSelectItems = SelectItemUtils.formSelectItems(userService.list(Firm.class));
 
         // End the current conversation in case the list of roles

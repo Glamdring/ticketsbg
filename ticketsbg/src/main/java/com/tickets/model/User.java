@@ -9,9 +9,9 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -57,7 +57,7 @@ import org.hibernate.validator.NotEmpty;
         ),
         @NamedQuery(
                 name = "User.getByFirm",
-                query = "select u from User u, IN (u.firms) firm WHERE firm=:firm"
+                query = "select u from User u WHERE u.firm=:firm"
             )
 })
 public class User extends Customer implements Serializable {
@@ -93,11 +93,11 @@ public class User extends Customer implements Serializable {
     @OrderBy("dtm DESC")
     private Set<UsersHistory> history = new HashSet<UsersHistory>();
 
-    @ManyToMany
-    @JoinTable(name="firmsUsers", joinColumns=@JoinColumn(name="userId", referencedColumnName="id"),
-            inverseJoinColumns=@JoinColumn(name="firmId", referencedColumnName="firmId"))
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Firm> firms = new ArrayList<Firm>();
+    @ManyToOne
+    private Firm firm;
+
+    @ManyToOne
+    private Agent agent;
 
     @Column
     private byte privs;
@@ -154,12 +154,12 @@ public class User extends Customer implements Serializable {
         this.history = history;
     }
 
-    public List<Firm> getFirms() {
-        return firms;
+    public Firm getFirm() {
+        return firm;
     }
 
-    public void setFirms(List<Firm> firms) {
-        this.firms = firms;
+    public void setFirm(Firm firm) {
+        this.firm = firm;
     }
 
     public byte getPrivs() {
@@ -256,6 +256,14 @@ public class User extends Customer implements Serializable {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public Agent getAgent() {
+        return agent;
+    }
+
+    public void setAgent(Agent agent) {
+        this.agent = agent;
     }
 
     @Override

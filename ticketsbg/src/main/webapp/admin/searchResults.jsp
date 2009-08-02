@@ -72,7 +72,7 @@
                         <h:panelGroup id="oneWay" style="border-style: none;">
                             <rich:dataTable value="#{searchController.resultsModel}"
                                 var="result" id="resultsTable" headerClass="tableHeader"
-                                width="380px;" columnClasses="columnClass" border="0"
+                                width="800px;" columnClasses="columnClass" border="0"
                                 style="border-style: none;">
 
                                 <a4j:support event="onselectionchange"
@@ -85,7 +85,7 @@
                                     <f:facet name="header">
                                         <h:outputText value="#{msg.id}" />
                                     </f:facet>
-                                    <h:outputText value="#{result.run.id}" />
+                                    <h:outputText value="#{result.run.runId}" />
                                 </rich:column>
 
 
@@ -93,7 +93,7 @@
                                     <f:facet name="header">
                                         <h:outputText value="#{msg.date}" />
                                     </f:facet>
-                                    <h:outputText value="#{result.run.time}">
+                                    <h:outputText value="#{result.run.time.time}">
                                         <f:convertDateTime pattern="dd.MM.yyyy" />
                                     </h:outputText>
                                 </rich:column>
@@ -109,7 +109,7 @@
                                     <f:facet name="header">
                                         <h:outputText value="#{msg.departureTime}" />
                                     </f:facet>
-                                    <h:outputText value="#{result.run.time}">
+                                    <h:outputText value="#{result.run.time.time}">
                                         <f:convertDateTime pattern="hh:mm" />
                                     </h:outputText>
                                 </rich:column>
@@ -122,9 +122,9 @@
                                 </rich:column>
 
                                 <rich:column sortable="true">
-                                    <a4j:commandButton value="#{msg.oneWay}" />
+                                    <a4j:commandButton value="#{msg.oneWayTicket}" />
                                     <h:outputText value="&#160;" />
-                                    <a4j:commandButton value="#{msg.twoWay}" />
+                                    <a4j:commandButton value="#{msg.twoWayTicket}" />
                                 </rich:column>
                             </rich:dataTable>
                         </h:panelGroup>

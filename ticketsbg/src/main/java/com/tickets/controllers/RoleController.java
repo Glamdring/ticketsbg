@@ -3,9 +3,11 @@ package com.tickets.controllers;
 import javax.annotation.Resource;
 import javax.faces.model.ListDataModel;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import com.tickets.controllers.users.LoggedUserHolder;
 import com.tickets.model.Role;
 import com.tickets.services.Service;
 
@@ -16,6 +18,9 @@ public class RoleController extends BaseCRUDController<Role> {
 
     @Resource(name="baseService")
     private Service service;
+
+    @Autowired
+    private LoggedUserHolder loggedUserHolder;
 
     private Role role = new Role();
 
@@ -50,7 +55,12 @@ public class RoleController extends BaseCRUDController<Role> {
 
     @Override
     protected Role createEntity() {
-        return new Role();
+        Role role = new Role();
+        // Important: setting the first firm in the list, because
+        // firm administrators logically have only one firm -
+        // the one they are administering
+        role.setFirm(loggedUserHolder.getLoggedUser().getFirm());
+        return role;
     }
 
     @Override

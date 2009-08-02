@@ -256,15 +256,16 @@ public class SearchController extends BaseController {
 
     @PostConstruct
     public void init() {
-        //Setting a default origin
         User user = loggedUserHolder.getLoggedUser();
+
+        stopNames = searchService.listAllStops(user);
+        //toStopNames = searchService.listAllStops(user);
+
+        //Setting a default origin
         if (user != null) {
             fromStop = loggedUserHolder.getLoggedUser().getCity();
             filterToStops();
         }
-
-        stopNames = searchService.listAllStops(user);
-        toStopNames = searchService.listAllStops(user);
 
         hoursFrom = new Integer[24];
         for (int i = 0; i < hoursFrom.length; i++) {

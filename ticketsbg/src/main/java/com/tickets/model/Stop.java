@@ -34,11 +34,22 @@ import javax.persistence.Table;
 
     @NamedQuery(
             name = "Stop.listAllStopNamesForUser",
-            query = "SELECT s.name FROM Stop s, Price p, User u, IN(u.firms) userfirm WHERE u=:user AND s.route.firm=userfirm AND p.startStop = s GROUP BY s.name ORDER BY s.name"
+            query = "SELECT s.name FROM Stop s, Price p, User u, Firm firm LEFT OUTER JOIN firm.agents agent " +
+		    		"WHERE u=:user " +
+		    		"AND s.route.firm=firm " +
+		    		"AND (u.firm = firm OR u.agent=agent)" +
+            		"AND p.startStop = s " +
+            		"GROUP BY s.name ORDER BY s.name"
     ),
     @NamedQuery(
             name = "Stop.listAllEndStopNamesForUser",
-            query = "SELECT s.name FROM Stop s, Price p, User u, IN(u.firms) userfirm WHERE u=:user AND s.route.firm=userfirm AND p.endStop = s AND p.startStop.name=:startStopName GROUP BY s.name ORDER BY s.name"
+            query = "SELECT s.name FROM Stop s, Price p, User u, Firm firm LEFT OUTER JOIN firm.agents agent " +
+            		"WHERE u=:user " +
+            		"AND s.route.firm=firm " +
+            		"AND (u.firm=firm OR u.agent=agent)" +
+            		"AND p.endStop = s " +
+            		"AND p.startStop.name=:startStopName " +
+            		"GROUP BY s.name ORDER BY s.name"
     )
 })
 public class Stop implements Serializable, Comparable<Stop> {

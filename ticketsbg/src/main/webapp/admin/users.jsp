@@ -50,7 +50,7 @@
                         <h:outputText value="#{user.name}" />
                     </rich:column>
                     <rich:column>
-                        <h:outputText value="#{user.firms[0].name}" />
+                        <h:outputText value="#{user.firm.name}" />
                     </rich:column>
 
                     <rich:column>

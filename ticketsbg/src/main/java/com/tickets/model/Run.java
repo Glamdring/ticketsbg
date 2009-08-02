@@ -44,21 +44,23 @@ import org.hibernate.annotations.LazyCollectionOption;
 
         @NamedQuery(
                 name = "Run.adminSearch",
-                query = "SELECT DISTINCT new com.tickets.model.SearchResultEntry(run, price) FROM Run run, User user, IN(run.route.prices) price, IN (user.firms) firm " +
+                query = "SELECT DISTINCT new com.tickets.model.SearchResultEntry(run, price) FROM Run run, User user, IN(run.route.prices) price, Firm firm LEFT OUTER JOIN firm.agents agent " +
                         "WHERE price.startStop.name=:fromStop AND price.endStop.name=:toStop " +
                         "AND price.price > 0 " +
-                        "AND run.route.firm=firm " +
+                        "AND run.route.firm = firm " +
                         "AND user=:user " +
+                        "AND (user.firm=firm OR user.agent=agent OR agent IS NULL)" +
                         "ORDER BY run.time, price.price"
         ),
 
         @NamedQuery(
                 name = "Run.adminSearchNoEndStop",
-                query = "SELECT DISTINCT new com.tickets.model.SearchResultEntry(run, price) FROM Run run, User user, IN(run.route.prices) price, IN (user.firms) firm " +
+                query = "SELECT DISTINCT new com.tickets.model.SearchResultEntry(run, price) FROM Run run, User user, IN(run.route.prices) price, Firm firm LEFT OUTER JOIN firm.agents agent " +
                         "WHERE price.startStop.name=:fromStop " +
                         "AND price.price > 0 " +
-                        "AND run.route.firm=firm " +
+                        "AND run.route.firm = firm " +
                         "AND user=:user " +
+                        "AND (user.firm=firm OR user.agent=agent)" +
                         "ORDER BY run.time, price.price"
         )
 })

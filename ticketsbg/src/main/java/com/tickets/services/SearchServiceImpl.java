@@ -48,7 +48,7 @@ public class SearchServiceImpl extends BaseService implements SearchService {
                     new String[] { "fromStop", "toStop", "user"},
                     new Object[] { startStop, endStop, user});
         }
-
+        
         filterSearchResults(startStop, endStop, date, fromHour, toHour,
                 isTimeForDeparture, result);
 
@@ -131,7 +131,7 @@ public class SearchServiceImpl extends BaseService implements SearchService {
     public List<String> listAllStops(User user) {
         List<String> stops = null;
         if (user != null && user.isStaff()) {
-            stops = getDao().findByNamedQuery("Stop.listAlStopNamesForUser",
+            stops = getDao().findByNamedQuery("Stop.listAllStopNamesForUser",
                     new String[]{"user"}, new Object[]{user});
         } else {
             stops = getDao().findByNamedQuery("Stop.listAllStopNames");

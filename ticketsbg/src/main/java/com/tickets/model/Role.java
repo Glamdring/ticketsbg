@@ -10,8 +10,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "roles")
 public class Role implements Serializable, Selectable {
 
     @Id
@@ -29,6 +31,9 @@ public class Role implements Serializable, Selectable {
 
     @ManyToOne
     private Firm firm;
+
+    @Column
+    private boolean admin;
 
     public Integer getRoleId() {
         return roleId;
@@ -69,6 +74,14 @@ public class Role implements Serializable, Selectable {
 
     public void setFirm(Firm firm) {
         this.firm = firm;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 
     @Override

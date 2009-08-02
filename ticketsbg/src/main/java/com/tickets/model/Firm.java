@@ -3,7 +3,9 @@ package com.tickets.model;
 // Generated 2008-1-20 22:59:52 by Hibernate Tools 3.2.0.b9
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -11,9 +13,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
 @Table(name = "firms")
@@ -56,6 +62,12 @@ public class Firm implements Serializable, Selectable {
 
     @Column
     private boolean allowDiscounts;
+
+    @ManyToMany
+    @JoinTable(name="firmsAgents", joinColumns=@JoinColumn(name="firmId", referencedColumnName="firmId"),
+            inverseJoinColumns=@JoinColumn(name="agentId", referencedColumnName="agentId"))
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Agent> agents = new ArrayList<Agent>();
 
     public Set<User> getStaff() {
         return staff;
@@ -155,6 +167,14 @@ public class Firm implements Serializable, Selectable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<Agent> getAgents() {
+        return agents;
+    }
+
+    public void setAgents(List<Agent> agents) {
+        this.agents = agents;
     }
 
     @Override
