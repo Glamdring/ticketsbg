@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface Service<E> {
 
-     void save(E entity);
+     E save(E entity);
 
      void delete(E e);
 
@@ -13,7 +13,7 @@ public interface Service<E> {
 
      <T> List<T> listOrdered(Class<T> clazz, String orderColumn);
 
-     void saveObject(Object entity);
+     Object saveObject(Object entity);
 
      <T> T get(Class<T> clazz, Serializable id);
 

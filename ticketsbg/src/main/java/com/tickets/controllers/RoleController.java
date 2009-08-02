@@ -56,9 +56,6 @@ public class RoleController extends BaseCRUDController<Role> {
     @Override
     protected Role createEntity() {
         Role role = new Role();
-        // Important: setting the first firm in the list, because
-        // firm administrators logically have only one firm -
-        // the one they are administering
         role.setFirm(loggedUserHolder.getLoggedUser().getFirm());
         return role;
     }

@@ -123,7 +123,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
             //throw UserException.EMAIL_PROBLEM; TODO throw
         }
         //Save after a successful email
-        getDao().persist(user);
+        user = (User) getDao().persist(user);
 
         return user;
     }

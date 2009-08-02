@@ -9,25 +9,25 @@
     xmlns:fmt="http://java.sun.com/jstl/fmt"
     xmlns:t="http://myfaces.apache.org/tomahawk">
 
-	<style type="text/css">
+    <style type="text/css">
 .seat {
-	width: 38px;
-	height: 38px;
-	text-align: center;
-	vertical-align: middle;
+    width: 38px;
+    height: 38px;
+    text-align: center;
+    vertical-align: middle;
 }
 
 .isle {
-	width: 20px;
-	height: 38px;
-	text-align: center;
-	vertical-align: middle;
+    width: 20px;
+    height: 38px;
+    text-align: center;
+    vertical-align: middle;
 }
 
 .hyperlink {
-	color: darkblue;
-	text-decoration: underline;
-	cursor: pointer;
+    color: darkblue;
+    text-decoration: underline;
+    cursor: pointer;
 }
 </style>
 
@@ -48,40 +48,41 @@
 
 
 <rich:panel id="seatsView#{modifier}" style="display: none;">
-	<a4j:outputPanel id="seatsViewInner#{modifier}" ajaxRendered="true">
-	<c:set var="handler" value="seatHandler"/>
-	<c:if test="#{return}">
-	   <c:set var="handler" value="returnSeatHandler"/>
-	</c:if>
-		<rich:dataTable value="#{seatController[handler].rows}" var="row">
-			<t:selectManyCheckbox layout="spread" id="selectedSeats#{modifier}"
-				value="#{seatController[handler].selectedSeats}" converter="#{seatConverter}">
-				<f:selectItems value="#{seatController[handler].seatSelectItems}" />
-				<a4j:support event="onchange" ajaxSingle="true" />
-			</t:selectManyCheckbox>
+    <a4j:outputPanel id="seatsViewInner#{modifier}" ajaxRendered="true">
+    <c:set var="handler" value="seatHandler"/>
+    <c:if test="#{return}">
+       <c:set var="handler" value="returnSeatHandler"/>
+    </c:if>
+        <rich:dataTable value="#{seatController[handler].rows}" var="row">
+            <t:selectManyCheckbox layout="spread" id="selectedSeats#{modifier}"
+                value="#{seatController[handler].selectedSeats}" converter="#{seatConverter}">
+                <f:selectItems value="#{seatController[handler].seatSelectItems}" />
+                <a4j:support event="onchange" ajaxSingle="true" />
+            </t:selectManyCheckbox>
 
-			<rich:column styleClass="seat">
-		        <rich:separator rendered="#{seatController[handler].route.seatSettings.doubleDecker and row.first.number == seatController[handler].route.seatSettings.numberOfSeatsDownstairs + 1}"/>	
-				<t:checkbox index="#{row.first.number - 1}" for="selectedSeats#{modifier}" />
-			</rich:column>
-		    <rich:column styleClass="seat">
-		        <rich:separator rendered="#{seatController[handler].route.seatSettings.doubleDecker and row.first.number == seatController[handler].route.seatSettings.numberOfSeatsDownstairs + 1}"/>
-				<t:checkbox index="#{row.second.number - 1}" for="selectedSeats#{modifier}" />
-			</rich:column>
-		    <rich:column styleClass="isle">
-		        <rich:separator rendered="#{seatController[handler].route.seatSettings.doubleDecker and row.first.number == seatController[handler].route.seatSettings.numberOfSeatsDownstairs + 1}"/>
-				<t:checkbox index="#{row.middleSeat.number - 1}" for="selectedSeats#{modifier}"
-					rendered="#{row.middleSeat != null}" />
-			</rich:column>
-		    <rich:column styleClass="seat">
-		        <rich:separator rendered="#{seatController[handler].route.seatSettings.doubleDecker and row.first.number == seatController[handler].route.seatSettings.numberOfSeatsDownstairs + 1}"/>
-		        <t:checkbox index="#{row.third.number - 1}" for="selectedSeats#{modifier}" />
-		    </rich:column>
-		    <rich:column styleClass="seat">
-		        <rich:separator rendered="#{seatController[handler].route.seatSettings.doubleDecker and row.first.number == seatController[handler].route.seatSettings.numberOfSeatsDownstairs + 1}"/>
-		        <t:checkbox index="#{row.fourth.number - 1}" for="selectedSeats#{modifier}" />
-		    </rich:column>
-		</rich:dataTable>
-	</a4j:outputPanel>
+            <rich:column styleClass="seat">
+                <rich:separator rendered="#{seatController[handler].route.seatSettings.doubleDecker and row.first.number == seatController[handler].route.seatSettings.numberOfSeatsDownstairs + 1}"/>
+                <t:checkbox index="#{row.first.number - 1}" for="selectedSeats#{modifier}" />
+            </rich:column>
+            <rich:column styleClass="seat">
+                <rich:separator rendered="#{seatController[handler].route.seatSettings.doubleDecker and row.first.number == seatController[handler].route.seatSettings.numberOfSeatsDownstairs + 1}"/>
+                <t:checkbox index="#{row.second.number - 1}" for="selectedSeats#{modifier}" />
+            </rich:column>
+            <rich:column styleClass="isle">
+                <rich:separator rendered="#{seatController[handler].route.seatSettings.doubleDecker and row.first.number == seatController[handler].route.seatSettings.numberOfSeatsDownstairs + 1}"/>
+                <t:checkbox index="#{row.middleSeat.number - 1}" for="selectedSeats#{modifier}"
+                    rendered="#{row.middleSeat != null}" />
+            </rich:column>
+
+            <rich:column styleClass="seat" rendered="#{seatController[handler].route.seatSettings.secondDoorRow != row.id}">
+                <rich:separator rendered="#{seatController[handler].route.seatSettings.doubleDecker and row.first.number == seatController[handler].route.seatSettings.numberOfSeatsDownstairs + 1}"/>
+                <t:checkbox index="#{row.third.number - 1}" for="selectedSeats#{modifier}" />
+            </rich:column>
+            <rich:column styleClass="seat" rendered="#{seatController[handler].route.seatSettings.secondDoorRow != row.id}">
+                <rich:separator rendered="#{seatController[handler].route.seatSettings.doubleDecker and row.first.number == seatController[handler].route.seatSettings.numberOfSeatsDownstairs + 1}"/>
+                <t:checkbox index="#{row.fourth.number - 1}" for="selectedSeats#{modifier}" />
+            </rich:column>
+        </rich:dataTable>
+    </a4j:outputPanel>
 </rich:panel>
 </ui:composition>

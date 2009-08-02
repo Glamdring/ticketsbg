@@ -30,8 +30,9 @@ public class DaoImpl implements Dao {
         return (T) getSession().get(clazz, id);
     }
 
-    public void persist(Object o) {
+    public Object persist(Object o) {
         getSession().saveOrUpdate(o);
+        return o;
     }
 
     public List findByQuery(String query, String[] names, Object[] args) {

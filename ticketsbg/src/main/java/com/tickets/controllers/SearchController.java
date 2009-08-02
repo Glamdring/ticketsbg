@@ -17,11 +17,14 @@ import org.springframework.stereotype.Controller;
 import com.tickets.annotations.Action;
 import com.tickets.controllers.users.LoggedUserHolder;
 import com.tickets.model.Discount;
+import com.tickets.model.Price;
+import com.tickets.model.Route;
 import com.tickets.model.SearchResultEntry;
 import com.tickets.model.Ticket;
 import com.tickets.model.TicketCount;
 import com.tickets.model.User;
 import com.tickets.services.SearchService;
+import com.tickets.services.ServiceFunctions;
 import com.tickets.services.TicketService;
 import com.tickets.utils.GeneralUtils;
 /**
@@ -54,6 +57,10 @@ public class SearchController extends BaseController {
 
     private String fromStop;
     private String toStop;
+
+    // A variable holding the selected stop in case
+    // a purchase is made from the administration panel
+    private String toStopPerPurchase;
 
     private int fromHour = 0;
     private int toHour = 24;
@@ -94,15 +101,21 @@ public class SearchController extends BaseController {
 
     private int currentRunVacantSeats;
 
+    private List<String> currentAvailableTargetStopNames = new ArrayList<String>();
+
     private UIInput admin;
 
     @Action
     public String search() {
-        if (admin.getValue() != null && admin.getValue().equals(Boolean.TRUE)) {
+        if (isAdmin()) {
             return adminSearch();
         }
 
         return publicSearch();
+    }
+
+    private boolean isAdmin() {
+        return admin.getValue() != null && admin.getValue().equals(Boolean.TRUE);
     }
 
     private String publicSearch() {
@@ -132,6 +145,13 @@ public class SearchController extends BaseController {
     }
 
     private String adminSearch() {
+        //Clear the vacant seats cache so that it is recalculated
+        ServiceFunctions.clearCache();
+
+        if (toStop != null && toStop.equals("")) {
+            toStop = null;
+        }
+
         List<SearchResultEntry> result = searchService.adminSearch(loggedUserHolder.getLoggedUser(),
                 fromStop, toStop, date, fromHour, toHour, timeForDeparture);
 
@@ -159,6 +179,10 @@ public class SearchController extends BaseController {
             addError("mustSelectEntry");
             return null;
         }
+
+        // If the search has been from the admin panel,
+        // and no target stop has been chosen, locate the appropriate price
+        selectedEntry.setPrice(findPrice(fromStop, toStopPerPurchase, selectedEntry.getRun().getRoute()));
 
         // Creating many ticket instances
         tickets = new ArrayList<Ticket>();
@@ -227,11 +251,35 @@ public class SearchController extends BaseController {
         User user = loggedUserHolder.getLoggedUser();
         if (user != null && user.isStaff()) {
             purchaseController.finalizePurchase(user);
-            return Screen.ADMIN_HOME.getOutcome();
+            //redo the search
+            adminSearch();
+            return null; // returning null, because the action is
+                         // called from modal window with ajax
         }
 
         purchaseController.setCurrentStep(Step.PAYMENT);
         return Screen.PAYMENT_SCREEN.getOutcome();
+    }
+
+    private Price findPrice(String fromStop, String toStopPerPurchase, Route route) {
+        for (Price price : route.getPrices()) {
+            if (price.getStartStop().getName().equals(fromStop)
+                    && price.getEndStop().getName().equals(toStopPerPurchase)) {
+
+                return price;
+            }
+        }
+
+        return null;
+    }
+
+    @Action
+    public void purchaseOneWayTicket() {
+        currentAvailableTargetStopNames = searchService
+                .listAllEndStopsForRoute(fromStop, selectedEntry.getRun()
+                        .getRoute());
+
+        seatController.setSeatHandler(new SeatHandler(selectedEntry.getRun()));
     }
 
     public String cancelTickets() {
@@ -549,5 +597,22 @@ public class SearchController extends BaseController {
 
     public void setAdmin(UIInput admin) {
         this.admin = admin;
+    }
+
+    public List<String> getCurrentAvailableTargetStopNames() {
+        return currentAvailableTargetStopNames;
+    }
+
+    public void setCurrentAvailableTargetStopNames(
+            List<String> currentAvailableTargetStopNames) {
+        this.currentAvailableTargetStopNames = currentAvailableTargetStopNames;
+    }
+
+    public String getToStopPerPurchase() {
+        return toStopPerPurchase;
+    }
+
+    public void setToStopPerPurchase(String toStopPerPurchase) {
+        this.toStopPerPurchase = toStopPerPurchase;
     }
 }

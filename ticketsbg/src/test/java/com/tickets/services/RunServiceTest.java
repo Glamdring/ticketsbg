@@ -1,12 +1,7 @@
 package com.tickets.services;
 
-import java.util.List;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import com.tickets.dao.Dao;
-import com.tickets.model.Run;
 
 public class RunServiceTest extends BaseServiceTest {
 
@@ -20,18 +15,18 @@ public class RunServiceTest extends BaseServiceTest {
     @Test
     public void testCreateRoutes() {
         if (true) return;
-        service.createRuns();
+        //service.createRuns();
     }
 
     @Test
     public void testFetchQuery() {
         if (true) return;
-        List result =((Dao) getBean("dao")).findByNamedQuery("Run.getLastRuns");
-
-        for (Object obj : result) {
-            Run run = (Run) obj;
-            System.out.println(run.getRoute());
-        }
+//        List result =((Dao) getBean("dao")).findByNamedQuery("Run.getLastRuns");
+//
+//        for (Object obj : result) {
+//            Run run = (Run) obj;
+//            System.out.println(run.getRoute());
+//        }
     }
 
     @Override

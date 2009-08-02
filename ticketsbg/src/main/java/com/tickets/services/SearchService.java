@@ -3,6 +3,7 @@ package com.tickets.services;
 import java.util.Date;
 import java.util.List;
 
+import com.tickets.model.Route;
 import com.tickets.model.SearchResultEntry;
 import com.tickets.model.User;
 
@@ -67,4 +68,13 @@ public interface SearchService {
      * @return list of stop names
      */
     List<String> listAllEndStops(String startStopName, User user);
+
+
+    /**
+     * Lists all possible end stops for a given start stop and route
+     * @param fromStop
+     * @param route
+     * @return the list of names
+     */
+    List<String> listAllEndStopsForRoute(String fromStop, Route route);
 }

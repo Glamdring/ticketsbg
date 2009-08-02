@@ -18,6 +18,9 @@ public class SeatSettings {
     @Column
     private int numberOfSeatsDownstairs;
 
+    @Column
+    private int secondDoorRow;
+
     public boolean isStartRight() {
         return startRight;
     }
@@ -49,4 +52,13 @@ public class SeatSettings {
     public void setNumberOfSeatsDownstairs(int numberOfSeatsDownstairs) {
         this.numberOfSeatsDownstairs = numberOfSeatsDownstairs;
     }
+
+    public int getSecondDoorRow() {
+        return secondDoorRow;
+    }
+
+    public void setSecondDoorRow(int secondDoorRow) {
+        this.secondDoorRow = secondDoorRow;
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.tickets.services;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
@@ -7,6 +8,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.tickets.model.Route;
 import com.tickets.model.Run;
 import com.tickets.model.SearchResultEntry;
 import com.tickets.model.Stop;
@@ -48,7 +50,7 @@ public class SearchServiceImpl extends BaseService implements SearchService {
                     new String[] { "fromStop", "toStop", "user"},
                     new Object[] { startStop, endStop, user});
         }
-        
+
         filterSearchResults(startStop, endStop, date, fromHour, toHour,
                 isTimeForDeparture, result);
 
@@ -80,6 +82,11 @@ public class SearchServiceImpl extends BaseService implements SearchService {
             Stop fromStopObj = findStop(run.getRoute().getStops(), fromStop);
             Stop toStopObj = findStop(run.getRoute().getStops(), toStop);
 
+            // if no target stop chosen, assume the final stop of the route;
+            if (toStopObj == null) {
+                toStopObj = run.getRoute().getStops().get(run.getRoute().getStops().size() - 1);
+            }
+
             // Cloning in order to avoid update queries, as the run object
             // is still associated with the session
             Calendar departureTime = (Calendar) run.getTime().clone();
@@ -90,6 +97,7 @@ public class SearchServiceImpl extends BaseService implements SearchService {
 
 
             Calendar targetTime = null;
+
             if (isTimeForDeparture) {
                 targetTime = departureTime;
             } else {
@@ -99,6 +107,7 @@ public class SearchServiceImpl extends BaseService implements SearchService {
             //Filtering if the timing doesn't fit the selected
             if (fromTime.compareTo(targetTime) > 0
                     || toTime.compareTo(targetTime) < 0) {
+
                 it.remove();
                 continue;
             }
@@ -153,5 +162,20 @@ public class SearchServiceImpl extends BaseService implements SearchService {
         }
 
         return stops;
+    }
+
+    @Override
+    public List<String> listAllEndStopsForRoute(String fromStop, Route route) {
+        List<String> names = new ArrayList<String>(route.getStops().size());
+        boolean insertionStarted = false;
+        for (Stop stop : route.getStops()) {
+            if (insertionStarted) {
+                names.add(stop.getName());
+            }
+            if (stop.getName().equals(fromStop)) {
+                insertionStarted = true;
+            }
+        }
+        return names;
     }
 }

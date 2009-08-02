@@ -30,6 +30,7 @@ import org.springframework.stereotype.Controller;
 
 import com.tickets.annotations.Action;
 import com.tickets.constants.Messages;
+import com.tickets.controllers.users.LoggedUserHolder;
 import com.tickets.model.Day;
 import com.tickets.model.Discount;
 import com.tickets.model.DiscountType;
@@ -73,6 +74,9 @@ public class RouteController extends BaseController implements Serializable {
     @Autowired
     private RouteService routeService;
 
+    @Autowired
+    private LoggedUserHolder loggedUserHolder;
+
     @Action
     public String save() {
         routeService.save(route, Arrays.asList(daysPickList));
@@ -100,6 +104,7 @@ public class RouteController extends BaseController implements Serializable {
     public String newRoute() {
         daysPickList = new Integer[0];
         route = new Route();
+        route.setFirm(loggedUserHolder.getLoggedUser().getFirm());
         return Screen.ROUTE_SCREEN.getOutcome();
     }
 

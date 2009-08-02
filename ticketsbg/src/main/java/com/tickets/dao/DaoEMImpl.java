@@ -95,7 +95,7 @@ public class DaoEMImpl implements Dao {
                 "Connection not available via EntityManager");
     }
 
-    public void persist(Object e) {
+    public Object persist(Object e) {
         // if e is already in the persistence context (session), no action is
         // taken, except for cascades
         // if e is detached, a copy (e') is returned, which is attached
@@ -104,11 +104,12 @@ public class DaoEMImpl implements Dao {
         // managed) copy is returned
 
         e = entityManager.merge(e);
+
+        return e;
     }
 
     public Object saveObject(Object o) {
         o = entityManager.merge(o);
-        entityManager.persist(o);
         return o;
     }
 

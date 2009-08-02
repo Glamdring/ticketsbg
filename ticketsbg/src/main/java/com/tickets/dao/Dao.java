@@ -39,8 +39,9 @@ public interface Dao {
      * If it is detatched, attaches it.
      *
      * @param entity
+     * @return the persistent entity
      */
-    void persist(Object e);
+    Object persist(Object e);
 
     /**
      * Removes the specified object from the session

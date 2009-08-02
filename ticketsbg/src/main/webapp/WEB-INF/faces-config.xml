@@ -231,4 +231,8 @@
         </navigation-case>
     </navigation-rule>
 
+    <lifecycle>
+        <phase-listener>com.tickets.controllers.SecurityPhaseListener</phase-listener>
+    </lifecycle>
+
 </faces-config>

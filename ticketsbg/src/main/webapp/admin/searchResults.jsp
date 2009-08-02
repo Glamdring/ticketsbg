@@ -14,6 +14,7 @@
         <style type="text/css">
 .tableHeader {
     border-style: none;
+    text-align: left;
     background-color: white;
 }
 
@@ -40,7 +41,10 @@
                             <h:outputText value=" #{msg.searchResultsTo} " />
                             <h:outputText value="#{searchController.toStop}"
                                 styleClass="bold" />
-                                        (<h:outputText
+                            <h:outputText value="#{msg.allStops}"
+                                rendered="#{searchController.toStop == null}" styleClass="bold" />
+
+                           (<h:outputText
                                 value="#{searchController.date}">
                                 <f:convertDateTime type="date" pattern="dd.MM.yyyy"
                                     timeZone="#{timeZoneController.timeZone}" />
@@ -67,12 +71,12 @@
                             rendered="#{searchController.confirmPartialPurchase}" />
                     </a4j:outputPanel>
 
-                    <h:panelGrid columns="2" columnClasses="gridContent,gridContent"
-                        cellpadding="0" cellspacing="0">
-                        <h:panelGroup id="oneWay" style="border-style: none;">
+
+                    <h:panelGroup id="resultsPanel" style="border-style: none; width: 100%;">
+                        <rich:panel style="width: 100%">
                             <rich:dataTable value="#{searchController.resultsModel}"
                                 var="result" id="resultsTable" headerClass="tableHeader"
-                                width="800px;" columnClasses="columnClass" border="0"
+                                width="100%" columnClasses="columnClass" border="0"
                                 style="border-style: none;">
 
                                 <a4j:support event="onselectionchange"
@@ -122,108 +126,25 @@
                                 </rich:column>
 
                                 <rich:column sortable="true">
-                                    <a4j:commandButton value="#{msg.oneWayTicket}" />
+                                    <a4j:commandButton value="#{msg.oneWayTicket}"
+                                        ajaxSingle="true"
+                                        oncomplete="#{rich:component('oneWayPanel')}.show()"
+                                        action="#{searchController.purchaseOneWayTicket}"
+                                        reRender="oneWayPanel">
+                                        <f:setPropertyActionListener value="${result}"
+                                            target="#{searchController.selectedEntry}" />
+                                    </a4j:commandButton>
                                     <h:outputText value="&#160;" />
                                     <a4j:commandButton value="#{msg.twoWayTicket}" />
                                 </rich:column>
                             </rich:dataTable>
-                        </h:panelGroup>
+                        </rich:panel>
+                    </h:panelGroup>
+                </rich:panel>
+            </a4j:form>
 
-                        <!-- Returns -->
-                        <h:panelGroup id="return" style="border-style: none;">
-                            <a4j:region>
-                                <rich:extendedDataTable
-                                    height="#{searchController.returnResultsModel.rowCount * 119 + 30}"
-                                    value="#{searchController.returnResultsModel}" var="result"
-                                    rowKeyVar="rowId" selectionMode="single"
-                                    enableContextMenu="false" id="returnResultsTable"
-                                    selection="#{searchController.returnSelection}"
-                                    headerClass="tableHeader" noDataLabel="#{msg.noSearchResults}"
-                                    width="380px;" columnClasses="columnClass"
-                                    rendered="#{searchController.returnResultsModel != null}"
-                                    style="border-style: none;" border="0">
-
-                                    <a4j:support event="onselectionchange"
-                                        reRender="selectedReturnEntry,ticketCounts,returnSeatChoices"
-                                        eventsQueue="returnSelectionSubmit"
-                                        action="#{searchController.returnRowSelectionChanged}" />
-
-                                    <rich:column width="35px" sortable="false">
-                                        <!-- For presentational purposes only -->
-                                        <t:selectOneRow groupName="selectedReturnEntry"
-                                            id="selectedReturnEntry"
-                                            value="#{searchController.selectedReturnRowId}">
-                                            <!-- Dummy converter; doesn't work with no converter -->
-                                            <f:converter converterId="javax.faces.Integer" />
-                                        </t:selectOneRow>
-
-                                    </rich:column>
-
-                                    <rich:column sortable="false" width="345px"
-                                        filterExpression="#{searchController.selectedEntry == null || result.run.route.firm.firmId == searchController.selectedEntry.run.route.firm.firmId}">
-                                        <f:facet name="header">
-                                            #{msg.returnHeaderLabel}
-                                        </f:facet>
-
-                                        <rich:panel id="resultEntry" header="#{result.run.route.name}"
-                                            style="width: 100%;">
-                                            <a4j:repeat value="#{result.run.route.stops}" var="stop"
-                                                rowKeyVar="stopId">
-                                                <h:outputText value=" → " rendered="#{stopId > 0}" />
-                                                <h:outputText value="#{stop.name}" styleClass="bold"
-                                                    rendered="#{searchController.fromStop == stop.name || searchController.toStop == stop.name}" />
-                                                <h:outputText value="#{stop.name}"
-                                                    rendered="#{searchController.fromStop != stop.name &amp;&amp; searchController.toStop != stop.name}" />
-                                            </a4j:repeat>
-
-                                            <h:panelGrid columns="2">
-
-                                                <h:outputText value="#{msg.departureTime}: " />
-                                                <h:outputText value="#{result.departureTime.time}"
-                                                    styleClass="bold">
-                                                    <f:convertDateTime type="time" pattern="HH:mm"
-                                                        timeZone="#{timeZoneController.timeZone}" />
-                                                </h:outputText>
-
-                                                <h:outputText value="#{msg.arrivalTime}: " />
-                                                <h:outputText value="#{result.arrivalTime.time}"
-                                                    styleClass="bold">
-                                                    <f:convertDateTime type="time" pattern="HH:mm"
-                                                        timeZone="#{timeZoneController.timeZone}" />
-                                                </h:outputText>
-
-                                                <h:outputText value="#{msg.vacantSeats}: " />
-                                                <h:outputText
-                                                    value="#{tc:getVacantSeats(result.run, searchController.fromStop, searchController.toStop)}"
-                                                    style="#{tc:getVacantSeats(result.run, searchController.fromStop, searchController.toStop)} &lt; 5 ? 'color: red;' : 'color: black;'};font-weight: bold;" />
-                                            </h:panelGrid>
-                                        </rich:panel>
-                                    </rich:column>
-                                </rich:extendedDataTable>
-                            </a4j:region>
-                        </h:panelGroup>
-
-                        <h:panelGroup id="seatChoices">
-                            <a4j:region rendered="#{seatController.seatHandler != null}">
-                                <a4j:include viewId="../seats.jsp">
-                                    <ui:param name="modifier" value="1" />
-                                    <ui:param name="return" value="falase" />
-                                </a4j:include>
-                            </a4j:region>
-                        </h:panelGroup>
-
-                        <h:panelGroup id="returnSeatChoices">
-                            <a4j:region
-                                rendered="#{seatController.returnSeatHandler != null}">
-                                <a4j:include viewId="../seats.jsp">
-                                    <ui:param name="modifier" value="2" />
-                                    <ui:param name="return" value="true" />
-                                </a4j:include>
-                            </a4j:region>
-                        </h:panelGroup>
-                    </h:panelGrid>
-                    <!-- Ticket counts & discounts -->
-                    <style type="text/css">
+            <!-- Ticket counts & discounts -->
+            <style type="text/css">
 .firstTicketColumn {
     width: 340px;
 }
@@ -232,27 +153,60 @@
     width: 40px;
 }
 </style>
-                    <rich:panel header="#{msg.tickets}" id="ticketCounts"
-                        style="width: 380px; margin-top: 15px;">
-                        <h:panelGrid columns="2"
-                            columnClasses="firstTicketColumn,secondTicketColumn">
-                            <h:panelGroup>
-                                <h:outputText value="#{msg.regularTicket}" styleClass="bold" />
-                                <br />
-                                <!-- TODO per-firm setting with this description -->
-                                <h:outputText value="#{msg.regularTicketDescription}" />
-                            </h:panelGroup>
 
-                            <rich:inputNumberSpinner
-                                value="#{searchController.regularTicketsCount}" minValue="0"
-                                maxValue="#{searchController.selectedEntry == null ? 50 : tc:getVacantSeats(searchController.selectedEntry.run, searchController.fromStop, searchController.toStop)}"
-                                inputSize="3">
-                                <a4j:support event="onchange" ajaxSingle="true" />
-                            </rich:inputNumberSpinner>
+            <rich:modalPanel id="oneWayPanel" autosized="true" width="200"
+                height="120" moveable="true" resizeable="false">
+                <f:facet name="controls">
+                    <h:panelGroup>
+                        <h:graphicImage value="/images/close.png" styleClass="hidelink"
+                            id="hidelink" onclick="#{rich:component('oneWayPanel')}.hide()" />
+                        <rich:componentControl for="oneWayPanel" attachTo="hidelink"
+                            operation="hide" event="onclick" />
+                    </h:panelGroup>
+                </f:facet>
+                <f:facet name="header">
+                    <h:outputText value="#{msg.oneWayTicket}" />
+                </f:facet>
+                <a4j:form>
+                    <a4j:outputPanel ajaxRendered="true">
+                        <h:panelGrid columns="2">
+                            <h:outputLabel for="purchaseStartStop" value="#{msg.fromStop}" />
+                            <h:inputText value="#{searchController.fromStop}"
+                                id="purchaseStartStop" readonly="true" />
+
+                            <h:outputLabel for="purchaseStartStop" value="#{msg.toStop}" />
+                            <rich:comboBox
+                                suggestionValues="#{searchController.currentAvailableTargetStopNames}"
+                                value="#{searchController.toStopPerPurchase}" />
                         </h:panelGrid>
+                        <h:panelGroup id="seatChoices">
+                            <a4j:region rendered="#{seatController.seatHandler != null}">
+                                <a4j:include viewId="../seats.jsp">
+                                    <ui:param name="modifier" value="1" />
+                                    <ui:param name="return" value="false" />
+                                </a4j:include>
+                            </a4j:region>
+                        </h:panelGroup>
 
-                        <a4j:outputPanel
-                            rendered="#{searchController.selectedEntry != null}">
+                        <rich:panel header="#{msg.tickets}" id="ticketCounts"
+                            style="width: 380px; margin-top: 15px;">
+                            <h:panelGrid columns="2"
+                                columnClasses="firstTicketColumn,secondTicketColumn">
+                                <h:panelGroup>
+                                    <h:outputText value="#{msg.regularTicket}" styleClass="bold" />
+                                    <br />
+                                    <!-- TODO per-firm setting with this description -->
+                                    <h:outputText value="#{msg.regularTicketDescription}" />
+                                </h:panelGroup>
+
+                                <rich:inputNumberSpinner
+                                    value="#{searchController.regularTicketsCount}" minValue="0"
+                                    maxValue="#{searchController.selectedEntry == null ? 50 : tc:getVacantSeats(searchController.selectedEntry.run, searchController.fromStop, searchController.toStop)}"
+                                    inputSize="3">
+                                    <a4j:support event="onchange" ajaxSingle="true" />
+                                </rich:inputNumberSpinner>
+                            </h:panelGrid>
+
                             <!-- TODO rendered="#{searchController.selectedEntry.run.route.firm.allowDiscounts}" -->
                             <a4j:repeat value="#{searchController.ticketCounts}" var="tc">
 
@@ -271,19 +225,15 @@
                                     </rich:inputNumberSpinner>
                                 </h:panelGrid>
                             </a4j:repeat>
-                        </a4j:outputPanel>
-                    </rich:panel>
+                        </rich:panel>
 
+                        <a4j:commandButton
+                            oncomplete="#{rich:component('oneWayPanel')}.hide()"
+                            action="#{searchController.proceed}" value="#{msg.markPurchased}" reRender="resultsPanel" />
 
-                    <h:panelGroup>
-                        <h:commandButton value="#{msg.backToSearchScreen}"
-                            action="#{searchController.toSearchScreen}" />
-                        <h:outputText value=" " />
-                        <h:commandButton action="#{searchController.proceed}"
-                            value="#{msg.toPayment}" />
-                    </h:panelGroup>
-                </rich:panel>
-            </a4j:form>
+                    </a4j:outputPanel>
+                </a4j:form>
+            </rich:modalPanel>
         </f:view>
     </ui:define>
 </ui:composition>

@@ -34,11 +34,13 @@ public class BaseService<E> implements Service<E> {
         return dao;
     }
 
-    public void save(E e) throws RuntimeException {
+    @SuppressWarnings("unchecked")
+    public E save(E e) throws RuntimeException {
         try {
-            getDao().persist(e);
+            return (E) getDao().persist(e);
         } catch (Exception ex) {
             log.error("Error saving", ex);
+            return null;
         }
     }
 
@@ -76,11 +78,12 @@ public class BaseService<E> implements Service<E> {
         return result;
     }
 
-    public void saveObject(Object e) throws RuntimeException {
+    public Object saveObject(Object e) throws RuntimeException {
         try {
-            getDao().persist(e);
+            return getDao().persist(e);
         } catch (Exception ex) {
             log.error("Error saving", ex);
+            return null;
         }
     }
 

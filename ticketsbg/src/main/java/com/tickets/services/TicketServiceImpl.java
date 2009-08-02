@@ -79,7 +79,9 @@ public class TicketServiceImpl extends BaseService<Ticket> implements TicketServ
             // idle time without payment
             ticket.setCreationTime(GeneralUtils.createEmptyCalendar());
             ticket.setTicketCode(generateTicketCode(selectedEntry.getRun()));
-            save(ticket);
+
+            ticket = save(ticket);
+
             return ticket;
         }
 
@@ -119,7 +121,7 @@ public class TicketServiceImpl extends BaseService<Ticket> implements TicketServ
             if (ticket.getUser() == null) {
                 ticket.setUser(user);
             }
-            save(ticket);
+            ticket = save(ticket);
         }
     }
 }

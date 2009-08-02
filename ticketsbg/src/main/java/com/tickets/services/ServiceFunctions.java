@@ -16,11 +16,11 @@ public class ServiceFunctions {
     private static ThreadLocal<Map<Run, Integer>> cache = new ThreadLocal<Map<Run, Integer>>();
 
     public static int getVacantSeats(Run run, String fromStop, String toStop) {
-        if (run == null || fromStop == null || toStop == null) {
+        if (run == null || fromStop == null) {
             return 0;
         }
 
-        //lazy initialize the cache
+        //lazily initialize the cache
         if (cache.get() == null)
             cache.set(new HashMap<Run, Integer>());
 
@@ -36,6 +36,11 @@ public class ServiceFunctions {
         List<Stop> stops = run.getRoute().getStops();
         Stop startStop = getStopByName(fromStop, stops);
         Stop endStop = getStopByName(toStop, stops);
+
+        //if no end stop selected, assume final stop (TODO: sum all??)
+        if (endStop == null) {
+            endStop = stops.get(stops.size() - 1);
+        }
 
         // Iterating all tickets and removing those whose stops
         // don't intersect with the current criteria
@@ -78,5 +83,9 @@ public class ServiceFunctions {
 
     public static int getSize(Collection collection) {
         return collection.size();
+    }
+
+    public static void clearCache() {
+        cache.set(null);
     }
 }
