@@ -72,7 +72,8 @@
                     </a4j:outputPanel>
 
 
-                    <h:panelGroup id="resultsPanel" style="border-style: none; width: 100%;">
+                    <h:panelGroup id="resultsPanel"
+                        style="border-style: none; width: 100%;">
                         <rich:panel style="width: 100%">
                             <rich:dataTable value="#{searchController.resultsModel}"
                                 var="result" id="resultsTable" headerClass="tableHeader"
@@ -128,14 +129,23 @@
                                 <rich:column sortable="true">
                                     <a4j:commandButton value="#{msg.oneWayTicket}"
                                         ajaxSingle="true"
-                                        oncomplete="#{rich:component('oneWayPanel')}.show()"
+                                        oncomplete="#{rich:component('purchasePanel')}.show()"
                                         action="#{searchController.purchaseOneWayTicket}"
-                                        reRender="oneWayPanel">
+                                        reRender="purchasePanel">
                                         <f:setPropertyActionListener value="${result}"
                                             target="#{searchController.selectedEntry}" />
                                     </a4j:commandButton>
+
                                     <h:outputText value="&#160;" />
-                                    <a4j:commandButton value="#{msg.twoWayTicket}" />
+
+                                    <a4j:commandButton value="#{msg.twoWayTicket}"
+                                        ajaxSingle="true"
+                                        oncomplete="#{rich:component('purchasePanel')}.show()"
+                                        action="#{searchController.purchaseTwoWayTicket}"
+                                        reRender="purchasePanel">
+                                        <f:setPropertyActionListener value="${result}"
+                                            target="#{searchController.selectedEntry}" />
+                                    </a4j:commandButton>
                                 </rich:column>
                             </rich:dataTable>
                         </rich:panel>
@@ -154,13 +164,13 @@
 }
 </style>
 
-            <rich:modalPanel id="oneWayPanel" autosized="true" width="200"
+            <rich:modalPanel id="purchasePanel" autosized="true" width="200"
                 height="120" moveable="true" resizeable="false">
                 <f:facet name="controls">
                     <h:panelGroup>
                         <h:graphicImage value="/images/close.png" styleClass="hidelink"
-                            id="hidelink" onclick="#{rich:component('oneWayPanel')}.hide()" />
-                        <rich:componentControl for="oneWayPanel" attachTo="hidelink"
+                            id="hidelink" onclick="#{rich:component('purchasePanel')}.hide()" />
+                        <rich:componentControl for="purchasePanel" attachTo="hidelink"
                             operation="hide" event="onclick" />
                     </h:panelGroup>
                 </f:facet>
@@ -177,8 +187,42 @@
                             <h:outputLabel for="purchaseStartStop" value="#{msg.toStop}" />
                             <rich:comboBox
                                 suggestionValues="#{searchController.currentAvailableTargetStopNames}"
-                                value="#{searchController.toStopPerPurchase}" />
+                                value="#{searchController.toStopPerPurchase}">
+                                <a4j:support event="onselect" reRender="returnDate" />
+                            </rich:comboBox>
                         </h:panelGrid>
+
+                        <br />
+
+                        <rich:panel id="returnsPanel" header="#{msg.returnHeaderLabel}"
+                            rendered="#{searchController.travelType == 'TWO_WAY'}">
+
+                            <h:panelGrid columns="2" columnClasses="firstColumn,secondColumn">
+                                <h:outputLabel value="#{msg.returnDate}:" for="returnDate" />
+                                <rich:calendar id="returnDate" datePattern="dd.MM.yyyy"
+                                    firstWeekDay="1" value="#{searchController.returnDate}"
+                                    disabled="#{searchController.toStopPerPurchase == null}" >
+                                    <a4j:support event="onchanged"
+                                        action="#{searchController.returnDateSelected}"
+                                        reRender="returnsTable" />
+                                </rich:calendar>
+                            </h:panelGrid>
+
+                            <rich:dataTable id="returnsTable"
+                                value="#{searchController.returnResultsModel}" var="returnResult">
+
+                                <rich:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{msg.departureTime}" />
+                                    </f:facet>
+                                    <!-- TODO calculate real departure time for the selected start stop-->
+                                    <h:outputText value="#{returnResult.run.time.time}">
+                                        <f:convertDateTime pattern="hh:mm"/>
+                                    </h:outputText>
+                                </rich:column>
+                            </rich:dataTable>
+                        </rich:panel>
+
                         <h:panelGroup id="seatChoices">
                             <a4j:region rendered="#{seatController.seatHandler != null}">
                                 <a4j:include viewId="../seats.jsp">
@@ -228,12 +272,14 @@
                         </rich:panel>
 
                         <a4j:commandButton
-                            oncomplete="#{rich:component('oneWayPanel')}.hide()"
-                            action="#{searchController.proceed}" value="#{msg.markPurchased}" reRender="resultsPanel" />
+                            oncomplete="#{rich:component('purchasePanel')}.hide()"
+                            action="#{searchController.proceed}" value="#{msg.markPurchased}"
+                            reRender="resultsPanel" />
 
                     </a4j:outputPanel>
                 </a4j:form>
             </rich:modalPanel>
+
         </f:view>
     </ui:define>
 </ui:composition>

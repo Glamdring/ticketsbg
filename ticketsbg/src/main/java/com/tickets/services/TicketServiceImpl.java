@@ -82,6 +82,15 @@ public class TicketServiceImpl extends BaseService<Ticket> implements TicketServ
 
             ticket = save(ticket);
 
+            // updating the collections, so that the results
+            // are 'visible' immediately
+            // no risk of double-saving, because the ticket object
+            // is already persistent
+            selectedEntry.getRun().getTickets().add(ticket);
+            if (selectedReturnEntry != null) {
+                selectedReturnEntry.getRun().getReturnTickets().add(ticket);
+            }
+
             return ticket;
         }
 

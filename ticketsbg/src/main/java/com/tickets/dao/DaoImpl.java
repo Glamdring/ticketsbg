@@ -114,4 +114,14 @@ public class DaoImpl implements Dao {
         return sessionFactory.getCurrentSession();
     }
 
+    @Override
+    public void flush() {
+        getSession().flush();
+    }
+
+    @Override
+    public void clearPersistentContext() {
+        getSession().clear();
+    }
+
 }

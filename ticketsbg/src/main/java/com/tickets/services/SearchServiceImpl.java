@@ -51,8 +51,10 @@ public class SearchServiceImpl extends BaseService implements SearchService {
                     new Object[] { startStop, endStop, user});
         }
 
+        System.out.println(result.size());
         filterSearchResults(startStop, endStop, date, fromHour, toHour,
                 isTimeForDeparture, result);
+        System.out.println(result.size());
 
         return result;
 

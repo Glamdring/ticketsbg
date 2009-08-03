@@ -121,4 +121,14 @@ public class DaoEMImpl implements Dao {
     public Object attach(Object entity) {
         return entityManager.merge(entity);
     }
+
+    @Override
+    public void flush() {
+        entityManager.flush();
+    }
+
+    @Override
+    public void clearPersistentContext() {
+        entityManager.clear();
+    }
 }

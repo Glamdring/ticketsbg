@@ -107,4 +107,14 @@ public interface Dao {
      * @param entity
      */
     Object attach(Object entity);
+
+    /**
+     * Flushes the underlying persistent context
+     */
+    void flush();
+
+    /**
+     * Clears the underlying persistent context
+     */
+    void clearPersistentContext();
 }

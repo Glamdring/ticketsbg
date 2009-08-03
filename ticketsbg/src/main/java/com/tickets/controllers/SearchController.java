@@ -144,23 +144,6 @@ public class SearchController extends BaseController {
         return Screen.SEARCH_RESULTS.getOutcome();
     }
 
-    private String adminSearch() {
-        //Clear the vacant seats cache so that it is recalculated
-        ServiceFunctions.clearCache();
-
-        if (toStop != null && toStop.equals("")) {
-            toStop = null;
-        }
-
-        List<SearchResultEntry> result = searchService.adminSearch(loggedUserHolder.getLoggedUser(),
-                fromStop, toStop, date, fromHour, toHour, timeForDeparture);
-
-        resultsModel = new ListDataModel(result);
-
-        return Screen.ADMIN_SEARCH_RESULTS.getOutcome();
-    }
-
-
     @Action
     public void filterToStops() {
         if (fromStop != null && fromStop.length() > 0) {
@@ -273,15 +256,6 @@ public class SearchController extends BaseController {
         return null;
     }
 
-    @Action
-    public void purchaseOneWayTicket() {
-        currentAvailableTargetStopNames = searchService
-                .listAllEndStopsForRoute(fromStop, selectedEntry.getRun()
-                        .getRoute());
-
-        seatController.setSeatHandler(new SeatHandler(selectedEntry.getRun()));
-    }
-
     public String cancelTickets() {
         return Screen.SEARCH_SCREEN.getOutcome();
     }
@@ -351,6 +325,55 @@ public class SearchController extends BaseController {
         seatController.setReturnSeatHandler(new SeatHandler(selectedReturnEntry.getRun()));
     }
 
+
+    /* -------------- ADMIN PANEL METHODS FOLLOW ------------------ */
+
+    private String adminSearch() {
+        //Clear the vacant seats cache so that it is recalculated
+        ServiceFunctions.clearCache();
+
+        if (toStop != null && toStop.equals("")) {
+            toStop = null;
+        }
+
+        List<SearchResultEntry> result = searchService.adminSearch(loggedUserHolder.getLoggedUser(),
+                fromStop, toStop, date, fromHour, toHour, timeForDeparture);
+
+        resultsModel = new ListDataModel(result);
+
+        return Screen.ADMIN_SEARCH_RESULTS.getOutcome();
+    }
+
+    @Action
+    public void purchaseOneWayTicket() {
+        currentAvailableTargetStopNames = searchService
+                .listAllEndStopsForRoute(fromStop, selectedEntry.getRun()
+                        .getRoute());
+
+        seatController.setSeatHandler(new SeatHandler(selectedEntry.getRun()));
+
+        // If there is a selected end stop for the search,
+        // have it displayed in the panel
+        toStopPerPurchase = toStop;
+
+        travelType = "ONE_WAY";
+    }
+
+    @Action
+    public void purchaseTwoWayTicket() {
+        // the same actions as for one way, with additional ones
+        purchaseOneWayTicket();
+
+        travelType = "TWO_WAY";
+    }
+
+    @Action
+    public void returnDateSelected() {
+        returnResultsModel = new ListDataModel(searchService.adminSearch(loggedUserHolder.getLoggedUser(),
+                toStopPerPurchase, fromStop, returnDate, 0, 24, true));
+    }
+
+    /* ------------------- GETTERS AND SETTERS FOLLOW ---------------- */
     public String getFromStop() {
         return fromStop;
     }
