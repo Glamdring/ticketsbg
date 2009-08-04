@@ -29,9 +29,11 @@ import org.hibernate.annotations.LazyCollectionOption;
                 name = "Run.getLastRunForRoute",
                 query = "SELECT run FROM Run run WHERE route=:route ORDER BY time DESC LIMIT 1"
         ),
+        // The query implies that the last run has also the last runId (hence the MAX)
+        // No other decent way of taking the greatest element in group-by queries
         @NamedQuery(
                 name = "Run.getLastRuns",
-                query = "SELECT DISTINCT new list(route, run, run.time) FROM Route AS route LEFT OUTER JOIN route.runs AS run GROUP BY route HAVING (SELECT MAX(time) FROM route.runs) = run.time OR (SELECT MAX(time) FROM route.runs) IS NULL "
+                query = "SELECT DISTINCT new list(route, MAX(run), MAX(run.time)) FROM Route AS route LEFT OUTER JOIN route.runs AS run GROUP BY route"
         ),
         //TODO optimize. Now does a query for each run (to match a price)
         @NamedQuery(

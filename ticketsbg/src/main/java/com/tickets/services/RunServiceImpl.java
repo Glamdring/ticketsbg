@@ -31,6 +31,11 @@ public class RunServiceImpl extends BaseService<Run> implements RunService<Run> 
             } else {
                 time = run.getTime();
             }
+            //If the single run is already created
+            if (run != null && route.isSingleRun()) {
+                continue;
+            }
+
             if (route.isSingleRun()) {
                 createSingleRunForRoute(route);
             } else {

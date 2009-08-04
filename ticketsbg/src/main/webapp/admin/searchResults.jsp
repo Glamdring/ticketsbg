@@ -175,7 +175,7 @@
                     </h:panelGroup>
                 </f:facet>
                 <f:facet name="header">
-                    <h:outputText value="#{msg.oneWayTicket}" />
+                    <h:outputText value="#{searchController.travelType == 'TWO_WAY' ? msg.twoWayTicket : msg.oneWayTicket}" />
                 </f:facet>
                 <a4j:form>
                     <a4j:outputPanel ajaxRendered="true">
