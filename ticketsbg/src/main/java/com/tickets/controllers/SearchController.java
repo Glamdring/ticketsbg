@@ -163,10 +163,6 @@ public class SearchController extends BaseController {
             return null;
         }
 
-        // If the search has been from the admin panel,
-        // and no target stop has been chosen, locate the appropriate price
-        selectedEntry.setPrice(findPrice(fromStop, toStopPerPurchase, selectedEntry.getRun().getRoute()));
-
         // Creating many ticket instances
         tickets = new ArrayList<Ticket>();
 
@@ -364,6 +360,8 @@ public class SearchController extends BaseController {
         // the same actions as for one way, with additional ones
         purchaseOneWayTicket();
 
+        selectedReturnEntry = null;
+        returnResultsModel = null;
         travelType = "TWO_WAY";
     }
 
@@ -371,6 +369,13 @@ public class SearchController extends BaseController {
     public void returnDateSelected() {
         returnResultsModel = new ListDataModel(searchService.adminSearch(loggedUserHolder.getLoggedUser(),
                 toStopPerPurchase, fromStop, returnDate, 0, 24, true));
+    }
+
+    @Action
+    public void toStopSelected() {
+        // If the search has been from the admin panel,
+        // and no target stop has been chosen, locate the appropriate price
+        selectedEntry.setPrice(findPrice(fromStop, toStopPerPurchase, selectedEntry.getRun().getRoute()));
     }
 
     /* ------------------- GETTERS AND SETTERS FOLLOW ---------------- */

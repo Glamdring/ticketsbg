@@ -116,7 +116,7 @@
                                     </f:facet>
                                     <h:outputText value="#{result.run.time.time}">
                                         <f:convertDateTime pattern="hh:mm" />
-                                    </h:outputText>
+                                    </h:outputText> #{msg.hourAbbr}
                                 </rich:column>
 
                                 <rich:column sortable="true">
@@ -175,7 +175,8 @@
                     </h:panelGroup>
                 </f:facet>
                 <f:facet name="header">
-                    <h:outputText value="#{searchController.travelType == 'TWO_WAY' ? msg.twoWayTicket : msg.oneWayTicket}" />
+                    <h:outputText
+                        value="#{searchController.travelType == 'TWO_WAY' ? msg.twoWayTicket : msg.oneWayTicket}" />
                 </f:facet>
                 <a4j:form>
                     <a4j:outputPanel ajaxRendered="true">
@@ -188,9 +189,24 @@
                             <rich:comboBox
                                 suggestionValues="#{searchController.currentAvailableTargetStopNames}"
                                 value="#{searchController.toStopPerPurchase}">
-                                <a4j:support event="onselect" reRender="returnDate" />
+                                <a4j:support event="onselect"
+                                    action="#{searchController.toStopSelected}"
+                                    reRender="returnDate,oneWayPrice" />
                             </rich:comboBox>
                         </h:panelGrid>
+
+                        <h:panelGroup id="oneWayPrice">
+                            <h:outputText value="#{msg.oneWayPrice}: " />
+
+                            <h:outputText
+                                value="#{searchController.selectedEntry.price.price}"
+                                styleClass="bold"
+                                rendered="#{searchController.toStopPerPurchase != null}">
+                                <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                                <f:converter binding="#{currencyConverter}"
+                                    converterId="currencyConverter" />
+                            </h:outputText>
+                        </h:panelGroup>
 
                         <br />
 
@@ -201,7 +217,7 @@
                                 <h:outputLabel value="#{msg.returnDate}:" for="returnDate" />
                                 <rich:calendar id="returnDate" datePattern="dd.MM.yyyy"
                                     firstWeekDay="1" value="#{searchController.returnDate}"
-                                    disabled="#{searchController.toStopPerPurchase == null}" >
+                                    disabled="#{searchController.toStopPerPurchase == null}">
                                     <a4j:support event="onchanged"
                                         action="#{searchController.returnDateSelected}"
                                         reRender="returnsTable" />
@@ -209,18 +225,71 @@
                             </h:panelGrid>
 
                             <rich:dataTable id="returnsTable"
-                                value="#{searchController.returnResultsModel}" var="returnResult">
+                                value="#{searchController.returnResultsModel}"
+                                var="returnResult">
 
                                 <rich:column>
                                     <f:facet name="header">
                                         <h:outputText value="#{msg.departureTime}" />
                                     </f:facet>
-                                    <!-- TODO calculate real departure time for the selected start stop-->
-                                    <h:outputText value="#{returnResult.run.time.time}">
-                                        <f:convertDateTime pattern="hh:mm"/>
+                                    <h:outputText value="#{returnResult.departureTime.time}">
+                                        <f:convertDateTime pattern="HH:mm"
+                                            timeZone="#{timeZoneController.timeZone}" />
+                                    </h:outputText> #{msg.hourAbbr}
+                                </rich:column>
+
+                                <rich:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{msg.arrivalTime}" />
+                                    </f:facet>
+                                    <h:outputText value="#{returnResult.arrivalTime.time}">
+                                        <f:convertDateTime pattern="HH:mm"
+                                            timeZone="#{timeZoneController.timeZone}" />
+                                    </h:outputText> #{msg.hourAbbr}
+                                </rich:column>
+
+                                <rich:column
+                                    rendered="#{loggedUserHolder.loggedUser.agent != null}">
+                                    <f:facet name="header">
+                                        <h:outputText value="#{msg.firm}" />
+                                    </f:facet>
+                                    <h:outputText value="#{returnResult.run.route.firm.name}" />
+                                </rich:column>
+
+                                <rich:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{msg.twoWayPrice}" />
+                                    </f:facet>
+                                    <h:outputText value="#{returnResult.price.twoWayPrice}">
+                                        <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                                        <f:converter binding="#{currencyConverter}"
+                                            converterId="currencyConverter" />
                                     </h:outputText>
                                 </rich:column>
+
+                                <rich:column>
+                                    <a4j:commandButton value="#{msg.select}"
+                                        reRender="selectedReturnChoice">
+                                        <f:setPropertyActionListener value="#{returnResult}"
+                                            target="#{searchController.selectedReturnEntry}" />
+                                    </a4j:commandButton>
+                                </rich:column>
                             </rich:dataTable>
+                            <h:panelGroup id="returnChoice" style="font-weight: bold;">
+                                <h:panelGroup rendered="#{searchController.selectedReturnEntry != null}">
+                                    <h:outputText
+                                        value="#{searchController.selectedReturnEntry.departureTime.time}">
+                                        <f:convertDateTime pattern="HH:mm"
+                                            timeZone="#{timeZoneController.timeZone}" />
+                                    </h:outputText> #{msg.hourAbbr} - <h:outputText
+                                        value="#{searchController.selectedReturnEntry.price.twoWayPrice}">
+
+                                        <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                                        <f:converter binding="#{currencyConverter}"
+                                            converterId="currencyConverter" />
+                                    </h:outputText>
+                                </h:panelGroup>
+                            </h:panelGroup>
                         </rich:panel>
 
                         <h:panelGroup id="seatChoices">

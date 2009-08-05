@@ -104,7 +104,7 @@
                             value="#{searchController.toHour}" id="toHour" width="50"
                             style="float:left;">
                             <f:convertNumber minIntegerDigits="2" />
-                        </rich:comboBox>
+                        </rich:comboBox> #{msg.hourAbbr}
                     </h:panelGroup>
                 </h:panelGrid>
 
@@ -143,7 +143,7 @@
                                 value="#{searchController.returnToHour}" id="returnToHour"
                                 width="50" style="float:left;">
                                 <f:convertNumber minIntegerDigits="2" />
-                            </rich:comboBox>
+                            </rich:comboBox> #{msg.hourAbbr}
                         </h:panelGroup>
                     </h:panelGrid>
                 </rich:panel>

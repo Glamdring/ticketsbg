@@ -29,8 +29,9 @@ public class CurrencyConverter implements Converter {
     //TODO : handle currencies. Currently only lev supported, and hard-coded
 
     private String addCurrencyInformation(BigDecimal value) {
-        if (value == null)
+        if (value == null) {
             value = BigDecimal.ZERO;
+        }
 
         return value.toString() + " лв.";
     }
