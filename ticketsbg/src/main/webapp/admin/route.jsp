@@ -199,7 +199,7 @@
 
                                             <h:outputText />
                                             <a4j:commandButton value="#{msg.save}"
-                                                action="#{routeController.savePrice}" />
+                                                action="#{routeController.savePrice}" reRender="pricesTree" />
                                         </h:panelGrid>
                                     </rich:panel>
                                 </h:panelGrid>

@@ -231,6 +231,13 @@
         </navigation-case>
     </navigation-rule>
 
+     <navigation-rule>
+        <navigation-case>
+            <from-outcome>travelList</from-outcome>
+            <to-view-id>/admin/travelList.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
     <lifecycle>
         <phase-listener>com.tickets.controllers.SecurityPhaseListener</phase-listener>
     </lifecycle>

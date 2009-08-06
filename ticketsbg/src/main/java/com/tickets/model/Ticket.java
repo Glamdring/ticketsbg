@@ -23,7 +23,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "tickets")
-public class Ticket implements Serializable {
+public class Ticket implements Serializable, Comparable<Ticket> {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -230,5 +230,14 @@ public class Ticket implements Serializable {
 
     public void setReturnSeat(int returnSeat) {
         this.returnSeat = returnSeat;
+    }
+
+    @Override
+    public int compareTo(Ticket t) {
+        if (this.getTicketCode() == null) {
+            return -1;
+        }
+
+        return this.getTicketCode().compareTo(t.getTicketCode());
     }
 }
