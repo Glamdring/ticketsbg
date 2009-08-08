@@ -4,11 +4,19 @@ public class Seat {
     private int number;
     private boolean vacant;
 
+    //the absolute id of this seat, regardless of settings
+    private int id;
+
     public Seat() {
     }
 
     public Seat(int number) {
+        this.number=  number;
+    }
+
+    public Seat(int number, int id) {
         this.number = number;
+        this.id = id;
     }
 
     public int getNumber() {
@@ -25,6 +33,14 @@ public class Seat {
 
     public void setVacant(boolean vacant) {
         this.vacant = vacant;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override

@@ -15,6 +15,10 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+/**
+ * The Price object is used to indicate a price between two stops
+ * It is often used to mark a journey between two points
+ */
 @Entity
 @Table(name = "prices")
 @NamedQueries( {
@@ -23,7 +27,6 @@ import javax.persistence.Table;
             query = "select p from Price p where p.startStop=:startStop AND "
                 + "p.endStop=:endStop AND p.route=:route")
 })
-
 public class Price implements Serializable {
 
     @Id

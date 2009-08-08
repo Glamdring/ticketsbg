@@ -22,4 +22,13 @@ public interface TicketService extends Service<Ticket> {
      *
      */
     void finalizePurchase(List<Ticket> tickets, User user);
+
+    /**
+     * Gets the number of the first vacant seat
+     * Used when the user hasn't chosen a seat
+     *
+     * @param selectedEntry
+     * @return the seat number
+     */
+    int getFirstVacantSeat(SearchResultEntry selectedEntry);
 }

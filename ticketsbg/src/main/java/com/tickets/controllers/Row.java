@@ -9,6 +9,8 @@ public class Row {
     private Seat fourth;
     private Seat middleSeat;
 
+    private boolean separator;
+
     public Row() {
     }
 
@@ -58,5 +60,13 @@ public class Row {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public boolean isSeparator() {
+        return separator;
+    }
+
+    public void setSeparator(boolean separator) {
+        this.separator = separator;
     }
 }

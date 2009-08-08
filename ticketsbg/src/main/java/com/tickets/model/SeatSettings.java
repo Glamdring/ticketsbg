@@ -1,7 +1,16 @@
 package com.tickets.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+
+import org.hibernate.annotations.CollectionOfElements;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 @Embeddable
 public class SeatSettings {
@@ -18,8 +27,16 @@ public class SeatSettings {
     @Column
     private int numberOfSeatsDownstairs;
 
-    @Column
-    private int secondDoorRow;
+    /**
+     * Ids, starting from left to right, 4 in a row
+     */
+    @CollectionOfElements(targetElement=Integer.class)
+    @JoinTable(
+            name = "missingSeats",
+            joinColumns = @JoinColumn(name="routeId")
+    )
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Integer> missingSeats = new ArrayList<Integer>();
 
     public boolean isStartRight() {
         return startRight;
@@ -53,12 +70,11 @@ public class SeatSettings {
         this.numberOfSeatsDownstairs = numberOfSeatsDownstairs;
     }
 
-    public int getSecondDoorRow() {
-        return secondDoorRow;
+    public List<Integer> getMissingSeats() {
+        return missingSeats;
     }
 
-    public void setSecondDoorRow(int secondDoorRow) {
-        this.secondDoorRow = secondDoorRow;
+    public void setMissingSeats(List<Integer> missingSeats) {
+        this.missingSeats = missingSeats;
     }
-
 }

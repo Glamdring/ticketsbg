@@ -122,18 +122,22 @@
                                             </h:outputText>
 
                                             <h:outputText value="#{msg.departureTime}: " />
-                                            <h:outputText value="#{result.departureTime.time}"
-                                                styleClass="bold">
-                                                <f:convertDateTime type="time" pattern="HH:mm"
-                                                    timeZone="#{timeZoneController.timeZone}" />
-                                            </h:outputText> #{msg.hourAbbr}
+                                            <h:panelGroup>
+                                                <h:outputText value="#{result.departureTime.time}"
+                                                    styleClass="bold">
+                                                    <f:convertDateTime type="time" pattern="HH:mm"
+                                                        timeZone="#{timeZoneController.timeZone}" />
+                                                </h:outputText> #{msg.hourAbbr}
+                                            </h:panelGroup>
 
                                             <h:outputText value="#{msg.arrivalTime}: " />
-                                            <h:outputText value="#{result.arrivalTime.time}"
-                                                styleClass="bold">
-                                                <f:convertDateTime type="time" pattern="HH:mm"
-                                                    timeZone="#{timeZoneController.timeZone}" />
-                                            </h:outputText> #{msg.hourAbbr}
+                                            <h:panelGroup>
+                                                <h:outputText value="#{result.arrivalTime.time}"
+                                                    styleClass="bold">
+                                                    <f:convertDateTime type="time" pattern="HH:mm"
+                                                        timeZone="#{timeZoneController.timeZone}" />
+                                                </h:outputText> #{msg.hourAbbr}
+                                            </h:panelGroup>
 
                                             <h:outputText value="#{msg.duration}: " />
                                             <h:panelGroup>
@@ -204,18 +208,22 @@
                                             <h:panelGrid columns="2">
 
                                                 <h:outputText value="#{msg.departureTime}: " />
-                                                <h:outputText value="#{result.departureTime.time}"
-                                                    styleClass="bold">
-                                                    <f:convertDateTime type="time" pattern="HH:mm"
-                                                        timeZone="#{timeZoneController.timeZone}" />
-                                                </h:outputText> #{msg.hourAbbr}
+                                                <h:panelGroup>
+                                                   <h:outputText value="#{result.departureTime.time}"
+                                                       styleClass="bold">
+                                                       <f:convertDateTime type="time" pattern="HH:mm"
+                                                           timeZone="#{timeZoneController.timeZone}" />
+                                                   </h:outputText> #{msg.hourAbbr}
+                                                </h:panelGroup>
 
                                                 <h:outputText value="#{msg.arrivalTime}: " />
-                                                <h:outputText value="#{result.arrivalTime.time}"
-                                                    styleClass="bold">
-                                                    <f:convertDateTime type="time" pattern="HH:mm"
-                                                        timeZone="#{timeZoneController.timeZone}" />
-                                                </h:outputText> #{msg.hourAbbr}
+                                                <h:panelGroup>
+                                                    <h:outputText value="#{result.arrivalTime.time}"
+                                                        styleClass="bold">
+                                                        <f:convertDateTime type="time" pattern="HH:mm"
+                                                            timeZone="#{timeZoneController.timeZone}" />
+                                                    </h:outputText> #{msg.hourAbbr}
+                                                </h:panelGroup>
 
                                                 <h:outputText value="#{msg.vacantSeats}: " />
                                                 <h:outputText

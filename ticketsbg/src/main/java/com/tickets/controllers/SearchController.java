@@ -184,6 +184,9 @@ public class SearchController extends BaseController {
             if (selectedReturnSeats != null && selectedReturnSeats.size() > i) {
                 returnSeat = selectedReturnSeats.get(i).getNumber();
             }
+            if (seat == -1) {
+                seat = ticketService.getFirstVacantSeat(selectedEntry);
+            }
 
             Ticket ticket = ticketService.createTicket(selectedEntry, selectedReturnEntry, seat, returnSeat);
             total ++;
@@ -309,7 +312,7 @@ public class SearchController extends BaseController {
             pd.setNumberOfTickets(0);
             ticketCounts.add(pd);
         }
-        seatController.setSeatHandler(new SeatHandler(selectedEntry.getRun()));
+        seatController.setSeatHandler(new SeatHandler(selectedEntry));
     }
 
     @SuppressWarnings("unchecked")
@@ -318,7 +321,7 @@ public class SearchController extends BaseController {
         selectedReturnRowId = new Long(selectedId);
         selectedReturnEntry = ((List<SearchResultEntry>) returnResultsModel.getWrappedData()).get(selectedId);
 
-        seatController.setReturnSeatHandler(new SeatHandler(selectedReturnEntry.getRun()));
+        seatController.setReturnSeatHandler(new SeatHandler(selectedReturnEntry));
     }
 
 
@@ -346,7 +349,7 @@ public class SearchController extends BaseController {
                 .listAllEndStopsForRoute(fromStop, selectedEntry.getRun()
                         .getRoute());
 
-        seatController.setSeatHandler(new SeatHandler(selectedEntry.getRun()));
+        seatController.setSeatHandler(new SeatHandler(selectedEntry));
 
         // If there is a selected end stop for the search,
         // have it displayed in the panel

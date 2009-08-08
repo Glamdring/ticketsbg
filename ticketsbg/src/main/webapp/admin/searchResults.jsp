@@ -146,6 +146,17 @@
                                         <f:setPropertyActionListener value="${result}"
                                             target="#{searchController.selectedEntry}" />
                                     </a4j:commandButton>
+
+                                    <h:outputText value="&#160;" />
+
+                                    <h:commandLink action="#{travelListController.openTravelList}"
+                                        title="#{msg.travelList}">
+                                        <f:setPropertyActionListener value="#{run}"
+                                            target="#{travelListController.run}" />
+                                        <h:graphicImage value="/images/runs.png"
+                                            style="width:16; height:16; border-style: none;"
+                                            alt="#{msg.remove}" title="#{msg.remove}" />
+                                    </h:commandLink>
                                 </rich:column>
                             </rich:dataTable>
                         </rich:panel>

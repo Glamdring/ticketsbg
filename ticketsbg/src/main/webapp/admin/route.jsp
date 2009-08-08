@@ -420,16 +420,6 @@
                             </h:inputText>
                         </h:panelGroup>
 
-                        <h:outputText value=",&#160;" />
-
-                        <h:outputLabel value="#{msg.secondDoorRow}: "
-                                for="secondDoorRow"
-                                rendered="#{routeController.route.seatSettings.doubleDecker}" />
-                            <h:inputText id="secondDoorRow"
-                                value="#{routeController.route.seatSettings.secondDoorRow}">
-                                <a4j:support event="onchange" ajaxSingle="true" action="#{seatController.seatHandler.refreshRows}"
-                                    reRender="seatsViewInner1" />
-                            </h:inputText>
                         <br />
                         <a4j:include viewId="../seats.jsp">
                             <ui:param name="return" value="false" />

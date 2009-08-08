@@ -20,6 +20,7 @@ public class SeatConverter implements Converter {
         String[] parts = s.split(":");
         Seat seat = new Seat(Integer.parseInt(parts[0]));
         seat.setVacant(Boolean.parseBoolean(parts[1]));
+        seat.setId(Integer.parseInt(parts[2]));
         return seat;
     }
 
@@ -27,7 +28,7 @@ public class SeatConverter implements Converter {
     public String getAsString(FacesContext facescontext,
             UIComponent uicomponent, Object obj) throws ConverterException {
         Seat seat = (Seat) obj;
-        String result = seat.getNumber() + ":" + seat.isVacant();
+        String result = seat.getNumber() + ":" + seat.isVacant() + ":" + seat.getId();
         return result;
     }
 

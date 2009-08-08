@@ -1,9 +1,11 @@
 package com.tickets.services;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.tickets.controllers.SeatHandler;
 import com.tickets.model.Discount;
 import com.tickets.model.PaymentMethod;
 import com.tickets.model.Run;
@@ -132,5 +134,19 @@ public class TicketServiceImpl extends BaseService<Ticket> implements TicketServ
             }
             ticket = save(ticket);
         }
+    }
+
+    @Override
+    public int getFirstVacantSeat(SearchResultEntry entry) {
+        List<Integer> usedSeats = SeatHandler.getUsedSeats(entry.getPrice(),
+                entry.getRun());
+
+        for (int i = 1; i < entry.getRun().getRoute().getSeats(); i ++) {
+            if (Collections.binarySearch(usedSeats, i) < 0) {
+                return i;
+            }
+        }
+
+        throw new IllegalStateException("All seats have been taken!");
     }
 }
