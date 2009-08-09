@@ -128,7 +128,7 @@
 
                                 <rich:column sortable="true">
                                     <a4j:commandButton value="#{msg.oneWayTicket}"
-                                        ajaxSingle="true"
+                                        ajaxSingle="true" disabled="#{result.run.seatsExceeded}"
                                         oncomplete="#{rich:component('purchasePanel')}.show()"
                                         action="#{searchController.purchaseOneWayTicket}"
                                         reRender="purchasePanel">
@@ -139,7 +139,7 @@
                                     <h:outputText value="&#160;" />
 
                                     <a4j:commandButton value="#{msg.twoWayTicket}"
-                                        ajaxSingle="true"
+                                        ajaxSingle="true" disabled="#{result.run.seatsExceeded}"
                                         oncomplete="#{rich:component('purchasePanel')}.show()"
                                         action="#{searchController.purchaseTwoWayTicket}"
                                         reRender="purchasePanel">

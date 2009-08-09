@@ -10,12 +10,14 @@ import com.tickets.annotations.Action;
 import com.tickets.controllers.BaseController;
 import com.tickets.controllers.PurchaseController;
 import com.tickets.controllers.Screen;
+import com.tickets.controllers.security.AccessLevel;
 import com.tickets.exceptions.UserException;
 import com.tickets.model.User;
 import com.tickets.services.UserService;
 
 @Controller("loginController")
 @Scope("request")
+@Action(accessLevel=AccessLevel.PUBLIC)
 public class LoginController extends BaseController {
 
     private String username;

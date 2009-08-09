@@ -20,38 +20,43 @@
             <a4j:outputPanel ajaxRendered="true">
                 <h:panelGrid columns="2" styleClass="gridContent">
                     <h:outputLabel for="name" value="#{msg.firmName}: " />
-                    <h:inputText value="#{firmController.firm.name}" id="name" />
+                    <h:inputText value="#{firmController.firm.name}" id="name" size="30" />
 
                     <h:outputLabel for="description" value="#{msg.description}: " />
                     <h:inputTextarea value="#{firmController.firm.description}"
-                        id="description" rows="4" cols="20" />
+                        id="description" rows="4" cols="27" />
 
                     <h:outputLabel for="bulstat" value="#{msg.bulstat}: " />
-                    <h:inputText value="#{firmController.firm.bulstat}" id="bulstat" />
+                    <h:inputText value="#{firmController.firm.bulstat}" id="bulstat" size="30" />
 
                     <h:outputLabel for="epayKin" value="#{msg.epayKin}: " />
-                    <h:inputText value="#{firmController.firm.epayKin}" id="epayKin" />
+                    <h:inputText value="#{firmController.firm.epayKin}" id="epayKin" size="30" />
 
                     <h:outputLabel for="iban" value="#{msg.iban}: " />
-                    <h:inputText value="#{firmController.firm.iban}" id="iban" />
+                    <h:inputText value="#{firmController.firm.iban}" id="iban" size="30"/>
 
                     <h:outputLabel for="bank" value="#{msg.bank}: " />
-                    <h:inputText value="#{firmController.firm.bank}" id="bank" />
+                    <h:inputText value="#{firmController.firm.bank}" id="bank" size="30" />
 
                     <h:outputLabel for="bic" value="#{msg.bic}: " />
-                    <h:inputText value="#{firmController.firm.bic}" id="bic" />
+                    <h:inputText value="#{firmController.firm.bic}" id="bic" size="30" />
 
                     <h:outputLabel for="other" value="#{msg.other}: " />
-                    <h:inputText value="#{firmController.firm.other}" id="other" />
+                    <h:inputText value="#{firmController.firm.other}" id="other" size="30" />
 
-                    <h:outputLabel for="active" value="#{msg.active}: " />
-                    <h:selectBooleanCheckbox value="#{firmController.firm.active}" id="active" />
+                    <h:outputLabel for="active" value="#{msg.active}: "
+                        rendered="#{loggedUserHolder.loggedUser.administrator}" />
+                    <h:selectBooleanCheckbox value="#{firmController.firm.active}"
+                        id="active"
+                        rendered="#{loggedUserHolder.loggedUser.administrator}" />
 
                     <h:outputLabel for="hasAnotherTicketSellingSystem"
-                        value="#{msg.hasAnotherTicketSellingSystem}: " />
+                        value="#{msg.hasAnotherTicketSellingSystem}: "
+                        rendered="#{loggedUserHolder.loggedUser.administrator}" />
                     <h:selectBooleanCheckbox
                         value="#{firmController.firm.hasAnotherTicketSellingSystem}"
-                        id="hasAnotherTicketSellingSystem" />
+                        id="hasAnotherTicketSellingSystem"
+                        rendered="#{loggedUserHolder.loggedUser.administrator}" />
 
                     <h:outputText value="" />
                     <a4j:commandButton value="${msg.save}"

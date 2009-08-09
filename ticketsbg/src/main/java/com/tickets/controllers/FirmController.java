@@ -35,6 +35,7 @@ public class FirmController extends BaseCRUDController<Firm> {
             endConversation();
     }
 
+    @Action(accessLevel=AccessLevel.FIRM_ADMINISTRATOR)
     public Firm getFirm() {
         return firm;
     }

@@ -11,6 +11,7 @@ public enum Screen {
     ROUTE_SCREEN("routeScreen"),
     ROUTES_LIST("routesList"),
     ADMIN_HOME("adminPanel"),
+    ADMIN_LOGIN_SCREEN("adminLoginScreen"),
     RUNS_LIST("runsList"),
     ADMIN_SEARCH_RESULTS("adminSearchResults"),
 

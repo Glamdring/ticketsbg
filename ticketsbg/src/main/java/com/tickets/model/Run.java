@@ -41,6 +41,7 @@ import org.hibernate.annotations.LazyCollectionOption;
                 query = "SELECT DISTINCT new com.tickets.model.SearchResultEntry(run, price) FROM Run run, IN(run.route.prices) price " +
                         "WHERE price.startStop.name=:fromStop AND price.endStop.name=:toStop " +
                         "AND price.price > 0 " +
+                        "AND run.seatsExceeded = false " +
                         "ORDER BY run.time, price.price"
         ),
 

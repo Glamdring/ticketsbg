@@ -56,8 +56,11 @@ public class SecurityAspect implements Serializable {
 
         User user = LoggedUserHolder.getUser();
 
+        boolean isAdminPage = facesContext.getViewRoot().getViewId().indexOf("/admin/") > -1;
+
         if (user == null) {
-            redirectTo(Screen.LOGIN_SCREEN, facesContext);
+            redirectTo(isAdminPage ? Screen.ADMIN_LOGIN_SCREEN
+                    : Screen.LOGIN_SCREEN, facesContext);
             return getObjectToReturn(jp);
         }
 

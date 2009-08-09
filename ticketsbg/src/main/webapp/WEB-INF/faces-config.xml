@@ -166,10 +166,18 @@
         </navigation-case>
     </navigation-rule>
 
-     <navigation-rule>
+    <navigation-rule>
         <navigation-case>
             <from-outcome>loginScreen</from-outcome>
             <to-view-id>/login.jsp</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>adminLoginScreen</from-outcome>
+            <to-view-id>/admin/login.jsp</to-view-id>
             <redirect />
         </navigation-case>
     </navigation-rule>
@@ -184,27 +192,12 @@
 
     <navigation-rule>
         <navigation-case>
-            <from-outcome>adminSearchResults</from-outcome>
-            <to-view-id>/admin/searchResults.jsp</to-view-id>
+            <from-outcome>adminSearchScreen</from-outcome>
+            <to-view-id>/admin/search.jsp</to-view-id>
             <redirect />
         </navigation-case>
     </navigation-rule>
 
-    <navigation-rule>
-        <navigation-case>
-            <from-outcome>rolesList</from-outcome>
-            <to-view-id>/admin/roles.jsp</to-view-id>
-            <redirect />
-        </navigation-case>
-    </navigation-rule>
-
-    <navigation-rule>
-        <navigation-case>
-            <from-outcome>roleScreen</from-outcome>
-            <to-view-id>/admin/role.jsp</to-view-id>
-            <redirect />
-        </navigation-case>
-    </navigation-rule>
 
     <navigation-rule>
         <navigation-case>
@@ -239,7 +232,7 @@
         </navigation-case>
     </navigation-rule>
 
-     <navigation-rule>
+    <navigation-rule>
         <navigation-case>
             <from-outcome>travelList</from-outcome>
             <to-view-id>/admin/travelList.jsp</to-view-id>
@@ -250,7 +243,23 @@
         <navigation-case>
             <from-outcome>unauthorized</from-outcome>
             <to-view-id>/unauthorized.jsp</to-view-id>
-            <redirect/>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>agentsList</from-outcome>
+            <to-view-id>/admin/agents.jsp</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>agentScreen</from-outcome>
+            <to-view-id>/admin/agent.jsp</to-view-id>
+            <redirect />
         </navigation-case>
     </navigation-rule>
 </faces-config>

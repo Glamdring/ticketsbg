@@ -249,6 +249,10 @@ public class User extends Customer implements Serializable {
         this.accessLevel = accessLevel;
     }
 
+    public boolean isAdministrator() {
+        return getAccessLevel() == AccessLevel.ADMINISTRATOR;
+    }
+
     @Override
     public String toString() {
         return super.toString() + " : " + username + " : " + getName() + " : " + password;
