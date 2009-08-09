@@ -1,24 +1,23 @@
 package com.tickets.controllers.security;
 
 public enum AccessLevel {
-    ADMINISTRATOR(5),
-    FIRM_ADMINISTRATOR(4),
-    FIRM_COORDINATOR(3),
-    CASHIER_DESK(2),
-    PUBLIC(1);
+    ADMINISTRATOR(50),
+    FIRM_ADMINISTRATOR(40),
+    FIRM_COORDINATOR(30),
+    CASHIER_DESK(20),
+    PUBLIC(10);
 
-    private int value;
+    private int privileges;
 
     private AccessLevel(int value) {
-        this.value = value;
+        this.privileges = value;
     }
 
-    public int getValue() {
-        return value;
+    public int getPrivileges() {
+        return privileges;
     }
 
-    public void setValue(int value) {
-        this.value = value;
+    public void setPrivileges(int privileges) {
+        this.privileges = privileges;
     }
-
 }

@@ -1,14 +1,15 @@
 package com.tickets.controllers.security;
 
 import java.io.Serializable;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
-import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 
 import com.tickets.annotations.Action;
@@ -25,10 +26,9 @@ public class SecurityAspect implements Serializable {
     public SecurityAspect() {
     }
 
-    @Before("execution(* com.tickets.controllers..*.*(..))")
-    public void checkAccessToOperation(JoinPoint jp) throws Throwable {
+    @Around("execution(* com.tickets.controllers..*.*(..))")
+    public Object checkAccessToOperation(ProceedingJoinPoint jp) throws Throwable {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-
         Method method = null;
         try {
             method = jp.getTarget().getClass().getDeclaredMethod(
@@ -38,7 +38,7 @@ public class SecurityAspect implements Serializable {
             // event handler, which are ignored by the
             // security checks
 
-            return;
+            return jp.proceed();
         }
 
         Action action = method.getAnnotation(Action.class);
@@ -54,8 +54,12 @@ public class SecurityAspect implements Serializable {
         }
 
         if (requiredLevel == AccessLevel.PUBLIC) {
-            return;
+            return jp.proceed();
         }
+
+        // having an object to return, because in some cases
+        // (getter methods) a new empty instance will be created
+        // in order to avoid NPEs and IAEs
 
         HttpSession session = (HttpSession) facesContext.getExternalContext()
                 .getSession(true);
@@ -64,20 +68,37 @@ public class SecurityAspect implements Serializable {
                 .getAttribute(LOGGED_UESR_HOLDER_KEY);
         if (loggedUserHolder == null) {
             redirectTo(Screen.LOGIN_SCREEN, facesContext);
-            return;
+            return getObjectToReturn(jp);
         }
 
         User user = loggedUserHolder.getLoggedUser();
 
         if (user == null) {
             redirectTo(Screen.LOGIN_SCREEN, facesContext);
-            return;
+            return getObjectToReturn(jp);
         }
 
-        if (user.getAccessLevel().getValue() < requiredLevel.getValue()) {
+        if (user.getAccessLevel().getPrivileges() < requiredLevel.getPrivileges()) {
             redirectTo(Screen.UNAUTHORIZED, facesContext);
+            return getObjectToReturn(jp);
         }
 
+        return jp.proceed();
+    }
+
+    private Object getObjectToReturn(ProceedingJoinPoint jp) {
+        if (jp.getSignature().getName().startsWith("get")) {
+            try {
+                Object result = jp.proceed();
+                Constructor c = result.getClass().getDeclaredConstructor();
+                c.setAccessible(true);
+                return c.newInstance();
+            } catch (Throwable ex) {
+                // failed to create an empty object - use null as return value
+            }
+        }
+
+        return null;
     }
 
     private void redirectTo(Screen screen, FacesContext facesContext) {

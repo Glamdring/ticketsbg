@@ -1,5 +1,6 @@
 package com.tickets.controllers;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -35,9 +36,9 @@ public class UserController extends BaseCRUDController<User> {
 
     private ListDataModel usersModel;
 
-    private List<SelectItem> accessLevelSelectItems;
+    private List<SelectItem> accessLevelSelectItems = new ArrayList<SelectItem>();
 
-    private List<SelectItem> administrationSelectItems;
+    private List<SelectItem> administrationSelectItems = new ArrayList<SelectItem>();
 
     @Override
     public void save() {
@@ -53,7 +54,7 @@ public class UserController extends BaseCRUDController<User> {
         usersModel = new ListDataModel(userService.list(User.class));
 
         EnumSet<AccessLevel> exclusions = EnumSet.of(AccessLevel.PUBLIC);
-        if (loggedUserHolder.getLoggedUser() != null && loggedUserHolder.getLoggedUser().getAccessLevel().getValue() < AccessLevel.ADMINISTRATOR.getValue()) {
+        if (loggedUserHolder.getLoggedUser() != null && loggedUserHolder.getLoggedUser().getAccessLevel().getPrivileges() < AccessLevel.ADMINISTRATOR.getPrivileges()) {
             exclusions.add(AccessLevel.ADMINISTRATOR);
         }
 
