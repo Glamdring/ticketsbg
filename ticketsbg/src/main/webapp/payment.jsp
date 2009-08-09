@@ -85,31 +85,6 @@
                     </rich:panel>
                 </rich:panel>
             </a4j:form>
-
-            <rich:modalPanel id="loginPanel" autosized="true" width="250">
-                <f:facet name="header">
-                    <h:outputText value="#{msg.login}" />
-                </f:facet>
-                <f:facet name="controls">
-                    <h:panelGroup>
-                        <h:graphicImage value="/images/close.png" id="hidelink"
-                            styleClass="hidelink" />
-                        <rich:componentControl for="loginPanel" attachTo="hidelink"
-                            operation="hide" event="onclick" />
-                    </h:panelGroup>
-                </f:facet>
-
-                <a4j:form ajaxSubmit="true" id="loginForm">
-                    <ui:include src="loginFields.jsp">
-                        <ui:param name="isAdmin" value="false" />
-                    </ui:include>
-                    <h:inputHidden id="admin" converter="#{booleanConverter}"
-                        value="false" binding="#{loginController.admin}" />
-                    <a4j:support event="hide"
-                        action="#{personalInformationController.updateCustomer}" />
-                </a4j:form>
-            </rich:modalPanel>
-
         </f:view>
     </ui:define>
 </ui:composition>

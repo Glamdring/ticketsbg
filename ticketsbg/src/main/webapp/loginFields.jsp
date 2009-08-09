@@ -8,12 +8,7 @@
     xmlns:c="http://java.sun.com/jstl/core"
     xmlns:tc="http://tickets.bg/tickets">
     <f:view>
-		<a4j:status>
-			<f:facet name="start">
-				<h:graphicImage value="/images/ajaxloading.gif" />
-			</f:facet>
-		</a4j:status>
-		<rich:messages errorClass="error" />
+        <rich:messages errorClass="error" />
         <h:panelGrid columns="2">
             <h:outputLabel value="#{msg.username}" for="username" />
             <h:inputText id="username" value="#{loginController.username}" />
@@ -22,7 +17,13 @@
             <h:inputSecret id="password" value="#{loginController.password}" />
 
             <a4j:commandButton action="#{loginController.login}"
-                value="#{msg.login}" type="submit"/>
+                value="#{msg.login}" type="submit" />
+
+            <a4j:status>
+                <f:facet name="start">
+                    <h:graphicImage value="/images/ajaxloading.gif" />
+                </f:facet>
+            </a4j:status>
         </h:panelGrid>
     </f:view>
 </ui:composition>

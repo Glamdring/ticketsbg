@@ -14,11 +14,13 @@
 .firstColumn {
     text-align: right;
     padding-right: 5px;
-    width: 120px;
+    width: 130px;
+    font-weight: bold;
 }
 
 .secondColumn {
     text-align: right;
+    font-weight: bold;
 }
 </style>
     <script type="text/javascript">
@@ -34,13 +36,13 @@
     <f:view>
         <rich:panel header="#{msg.searchTitle}"
             headerClass="rich-panel-header-main">
-            <!-- rich:messages id="messages" errorClass="error" /-->
+            <rich:messages id="messages" errorClass="error" />
 
             <h:panelGrid columns="2" columnClasses="firstColumn,secondColumn"
                 rendered="#{!isAdmin}">
-                <h:outputLabel value="#{msg.travelType}:" for="travelType" />
+                <h:outputLabel value="" for="travelType" />
                 <h:selectOneRadio value="#{searchController.travelType}"
-                    id="travelType">
+                    id="travelType" style="font-weight: bold;">
                     <a4j:support event="onclick" reRender="returnPanel"
                         ajaxSingle="true" />
                     <f:selectItem itemLabel="#{msg.twoWayTravelType}"
@@ -55,7 +57,7 @@
                 <h:panelGroup>
                     <rich:comboBox suggestionValues="#{searchController.stopNames}"
                         directInputSuggestions="false" required="true"
-                        value="#{searchController.fromStop}" id="fromStop">
+                        value="#{searchController.fromStop}" id="fromStop" label="#{msg.startStop}">
 
                         <a4j:support event="onselect" reRender="toStop"
                             action="#{searchController.filterToStops}" ajaxSingle="true" />
@@ -70,7 +72,7 @@
                 <h:outputLabel value="#{msg.toStop}:" for="toStop" />
                 <rich:comboBox suggestionValues="#{searchController.toStopNames}"
                     directInputSuggestions="false" required="${!isAdmin}"
-                    value="#{searchController.toStop}" id="toStop" />
+                    value="#{searchController.toStop}" id="toStop" label="#{msg.endStop}" />
             </h:panelGrid>
 
             <!-- One way fields -->
@@ -78,7 +80,8 @@
                 <h:panelGrid columns="2" columnClasses="firstColumn,secondColumn">
                     <h:outputLabel value="#{msg.departureDate}:" for="date" />
                     <rich:calendar id="date" datePattern="dd.MM.yyyy" firstWeekDay="1"
-                        value="#{searchController.date}" />
+                        value="#{searchController.date}" label="#{msg.departureDate}"
+                        required="true" />
 
                     <h:panelGroup>
                         <h:selectOneMenu id="departureOrArival"

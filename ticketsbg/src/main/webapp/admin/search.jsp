@@ -12,7 +12,7 @@
 
     <ui:define name="body">
         <f:view>
-            <a4j:form id="searchForm" ajaxSubmit="true">
+            <a4j:form id="searchForm" ajaxSubmit="false">
                 <ui:include src="../searchFields.jsp">
                     <ui:param name="isAdmin" value="true" />
                 </ui:include>

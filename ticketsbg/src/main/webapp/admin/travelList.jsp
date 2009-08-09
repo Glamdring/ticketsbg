@@ -8,6 +8,7 @@
     xmlns:c="http://java.sun.com/jstl/core"
     xmlns:fmt="http://java.sun.com/jstl/fmt"
     xmlns:t="http://myfaces.apache.org/tomahawk"
+    xmlns:tc="http://tickets.com/tc"
     template="printTemplate.jsp">
     <ui:define name="body">
         <f:view>
@@ -25,10 +26,9 @@
 
                 <table width="800px;">
                 <a4j:repeat value="#{travelListController.travelList}" var="entry">
-                    <tr style="padding-top: 20px;">
-                        <td colspan="4">
-                            <h:outputText value="#{entry.caption}"
-                                style="font-weight: bold" />
+                    <tr>
+                        <td colspan="4" style="font-weight: bold; padding-top: 20px;">
+                            <h:outputText value="#{entry.caption}"/> (<h:outputText value="#{tc:getSize(entry.tickets)}" />)
                         </td>
                     </tr>
                         <a4j:repeat value="#{entry.tickets}" var="ticket"

@@ -4,32 +4,76 @@
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:a4j="http://richfaces.org/a4j"
     xmlns:rich="http://richfaces.org/rich">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Tickets</title>
-    <link href="css/main.css" type="text/css" rel="stylesheet" />
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Tickets</title>
+<link href="css/main.css" type="text/css" rel="stylesheet" />
+<style type="text/css">
+.menuContent {
+    vertical-align: middle;
+}
 
-    <ui:insert name="head" />
-  </head>
-  <body style="margin-left: 0px; margin-top: 0px; margin-right: 0px">
-    <a4j:poll action="#{keepAliveController.poll}" interval="1000" immediate="true" ajaxSingle="true" />
-    <f:loadBundle var="msg" basename="com.tickets.constants.messages" />
+.menuIcon {
+    margin-right: 5px;
+    vertical-align: middle;
+}
+</style>
+<ui:insert name="head" />
+</head>
+<body style="margin-left: 0px; margin-top: 0px; margin-right: 0px">
+<f:loadBundle var="msg" basename="com.tickets.constants.messages" />
 
 
-    <img src="images/logo.jpg" alt="bus.bg" width="1005" height="100" />
-    <h:panelGrid columns="5">
-        <!-- menu items -->
-    </h:panelGrid>
-    <h:panelGrid columns="2" columnClasses="side,main">
-        <h:panelGroup>
-            <ui:include src="purchaseDetailsSideScreen.jsp" />
-        </h:panelGroup>
-        <ui:insert name="body" />
-    </h:panelGrid>
-    <h:form id="commonForm">
-        <h:commandLink value="#{msg.logout}"
-            action="#{loggedUserHolder.logout}"
-            rendered="#{loggedUserHolder.loggedUser != null}" />
-    </h:form>
-  </body>
+<img src="images/logo.jpg" alt="bus.bg" width="1005" height="100" />
+<a4j:form style="padding: 0px; margin: 0px;">
+    <a4j:poll action="#{keepAliveController.poll}" interval="100000"
+        immediate="true" ajaxSingle="true" />
+
+    <rich:toolBar itemSeparator="line" height="34" width="1005">
+        <rich:menuItem action="searchScreen" id="searchMenuItem">
+            <h:graphicImage value="/images/search.png" styleClass="menuIcon" />
+            <h:outputText value="#{msg.searchMenuItem}" styleClass="menuContent" />
+        </rich:menuItem>
+
+        <rich:menuItem action="registrationScreen" rendered="#{loggedUserHolder.loggedUser == null}">
+            <h:graphicImage value="/images/users.png" styleClass="menuIcon" />
+            <h:outputText value="#{msg.register}" styleClass="menuContent" />
+        </rich:menuItem>
+
+        <rich:menuItem submitMode="ajax" rendered="#{loggedUserHolder.loggedUser == null}"
+            onclick="#{rich:component('loginPanel')}.show()" ajaxSingle="true" immediate="true">
+            <h:graphicImage value="/images/login.png" styleClass="menuIcon" />
+            <h:outputText value="#{msg.login}" styleClass="menuContent" />
+        </rich:menuItem>
+
+        <rich:menuItem style="text-align: right;" action="history"
+            rendered="#{loggedUserHolder.loggedUser != null}">
+            <h:graphicImage value="/images/routes.png" styleClass="menuIcon" />
+            <h:outputText value="#{msg.travelHistory}"/>
+        </rich:menuItem>
+
+        <rich:menuItem style="text-align: right;" action="profile"
+            rendered="#{loggedUserHolder.loggedUser != null}">
+            <h:graphicImage value="/images/profile.png" styleClass="menuIcon" />
+            <h:outputText value="#{msg.profile}" />
+            <h:outputText value=" (#{loggedUserHolder.loggedUser.username})" />
+        </rich:menuItem>
+
+        <rich:menuItem action="#{loggedUserHolder.logout}" rendered="#{loggedUserHolder.loggedUser != null}">
+            <h:graphicImage value="/images/logout.png" styleClass="menuIcon" />
+            <h:outputText value="#{msg.logout}" styleClass="menuContent" />
+        </rich:menuItem>
+
+    </rich:toolBar>
+</a4j:form>
+
+<a4j:include viewId="loginPanel.jsp" />
+
+<h:panelGrid columns="2" columnClasses="side,main">
+    <h:panelGroup>
+        <ui:include src="purchaseDetailsSideScreen.jsp" />
+    </h:panelGroup>
+    <ui:insert name="body" />
+</h:panelGrid>
+</body>
 </html>

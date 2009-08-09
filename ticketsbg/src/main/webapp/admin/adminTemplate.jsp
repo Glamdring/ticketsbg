@@ -22,11 +22,11 @@
 <ui:insert name="head" />
 </head>
 <body style="margin-left: 0px; margin-top: 0px; margin-right: 0px">
-<a4j:keepAlive beanName="keepAliveController" />
-
 <f:loadBundle var="msg" basename="com.tickets.constants.messages" />
 
 <a4j:form id="toolbarForm">
+    <a4j:poll action="#{keepAliveController.poll}" interval="100000"
+        immediate="true" ajaxSingle="true" />
 
     <rich:toolBar itemSeparator="line" height="34">
         <rich:menuItem action="adminSearchScreen" id="searchMenuItem">

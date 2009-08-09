@@ -40,6 +40,12 @@ public class TravelListController extends BaseController {
     private void insertTicketDataIntoTravelList(Ticket ticket, boolean isReturn) {
         List<Price> prices = run.getRoute().getPrices();
         for (Price price : prices) {
+
+            if (!(price.getStartStop().getName().equals(ticket.getStartStop())
+                    && price.getEndStop().getName().equals(ticket.getEndStop()))) {
+                continue;
+            }
+
             String caption = price.getStartStop().getName() + " - "
                     + price.getEndStop().getName();
 
@@ -58,6 +64,7 @@ public class TravelListController extends BaseController {
             } else {
                 tdi.setSeatNumber(ticket.getSeat());
             }
+
             tmpTLS.getTickets().add(tdi);
 
             if (idx > -1) {
