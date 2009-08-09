@@ -6,12 +6,15 @@ public enum Screen {
     SEARCH_RESULTS("searchResults"),
     HOME("home"),
     REGISTRATION_SCREEN("registrationScreen"),
+    LOGIN_SCREEN("loginScreen"),
 
     ROUTE_SCREEN("routeScreen"),
     ROUTES_LIST("routesList"),
     ADMIN_HOME("adminPanel"),
     RUNS_LIST("runsList"),
-    ADMIN_SEARCH_RESULTS("adminSearchResults")
+    ADMIN_SEARCH_RESULTS("adminSearchResults"),
+
+    UNAUTHORIZED("unauthorized")
     ;
 
 

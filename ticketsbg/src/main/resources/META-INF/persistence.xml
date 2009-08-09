@@ -19,7 +19,7 @@
         <class>com.tickets.model.UsersHistory</class>
         <class>com.tickets.model.UsersHistory</class>
         <class>com.tickets.model.Discount</class>
-        <class>com.tickets.model.Role</class>
+        <class>com.tickets.model.LogEntry</class>
 
 
         <properties>

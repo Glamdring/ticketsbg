@@ -6,12 +6,15 @@ import javax.faces.model.ListDataModel;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import com.tickets.annotations.Action;
+import com.tickets.controllers.security.AccessLevel;
 import com.tickets.model.Firm;
 import com.tickets.services.Service;
 
 
 @Controller("firmController")
 @Scope("conversation.access")
+@Action(accessLevel=AccessLevel.ADMINISTRATOR)
 public class FirmController extends BaseCRUDController<Firm> {
 
     @Resource(name="baseService")

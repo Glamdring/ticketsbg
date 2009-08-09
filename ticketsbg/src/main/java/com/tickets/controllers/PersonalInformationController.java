@@ -39,7 +39,7 @@ public class PersonalInformationController extends BaseController {
             customer = new Customer();
         }
 
-        SelectItemUtils.formSelectItems(CustomerType.class, customerTypeItems);
+        customerTypeItems = SelectItemUtils.formSelectItems(CustomerType.class);
     }
 
 

@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import com.tickets.annotations.Action;
+import com.tickets.controllers.security.AccessLevel;
 import com.tickets.model.Route;
 import com.tickets.model.Run;
 import com.tickets.services.RunService;
@@ -12,6 +14,7 @@ import com.tickets.services.RunService;
 @Controller("runController")
 @Scope("conversation.manual")
 @ConversationName("routesAndRuns")
+@Action(accessLevel=AccessLevel.FIRM_COORDINATOR)
 public class RunController extends BaseController {
     private Route route;
     private Run run;

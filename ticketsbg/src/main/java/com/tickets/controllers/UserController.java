@@ -1,5 +1,6 @@
 package com.tickets.controllers;
 
+import java.util.EnumSet;
 import java.util.List;
 
 import javax.faces.model.ListDataModel;
@@ -9,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import com.tickets.annotations.Action;
+import com.tickets.controllers.security.AccessLevel;
+import com.tickets.controllers.users.LoggedUserHolder;
 import com.tickets.model.Firm;
 import com.tickets.model.User;
 import com.tickets.services.Service;
@@ -18,16 +22,20 @@ import com.tickets.utils.SelectItemUtils;
 
 @Controller("userController")
 @Scope("conversation.access")
+@Action(accessLevel=AccessLevel.FIRM_ADMINISTRATOR)
 public class UserController extends BaseCRUDController<User> {
 
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private LoggedUserHolder loggedUserHolder;
+
     private User user = new User();
 
     private ListDataModel usersModel;
 
-    private List<SelectItem> roleSelectItems;
+    private List<SelectItem> accessLevelSelectItems;
 
     private List<SelectItem> administrationSelectItems;
 
@@ -43,7 +51,15 @@ public class UserController extends BaseCRUDController<User> {
     @Override
     protected void refreshList() {
         usersModel = new ListDataModel(userService.list(User.class));
-        roleSelectItems = SelectItemUtils.formSelectItems(userService.listNonAdminRoles(), false);
+
+        EnumSet<AccessLevel> exclusions = EnumSet.of(AccessLevel.PUBLIC);
+        if (loggedUserHolder.getLoggedUser() != null && loggedUserHolder.getLoggedUser().getAccessLevel().getValue() < AccessLevel.ADMINISTRATOR.getValue()) {
+            exclusions.add(AccessLevel.ADMINISTRATOR);
+        }
+
+        accessLevelSelectItems = SelectItemUtils.formSelectItems(
+                AccessLevel.class, exclusions, AccessLevel.CASHIER_DESK);
+
         administrationSelectItems = SelectItemUtils.formSelectItems(userService.list(Firm.class));
 
         // End the current conversation in case the list of roles
@@ -102,18 +118,28 @@ public class UserController extends BaseCRUDController<User> {
     public void setUsersModel(ListDataModel usersModel) {
         this.usersModel = usersModel;
     }
-    public List<SelectItem> getRoleSelectItems() {
-        return roleSelectItems;
+
+    public List<SelectItem> getAccessLevelSelectItems() {
+        return accessLevelSelectItems;
     }
 
-    public void setRoleSelectItems(List<SelectItem> roleSelectItems) {
-        this.roleSelectItems = roleSelectItems;
+    public void setAccessLevelSelectItems(List<SelectItem> accessLevelSelectItems) {
+        this.accessLevelSelectItems = accessLevelSelectItems;
     }
+
     public List<SelectItem> getAdministrationSelectItems() {
         return administrationSelectItems;
     }
     public void setAdministrationSelectItems(
             List<SelectItem> administrationSelectItems) {
         this.administrationSelectItems = administrationSelectItems;
+    }
+
+    public LoggedUserHolder getLoggedUserHolder() {
+        return loggedUserHolder;
+    }
+
+    public void setLoggedUserHolder(LoggedUserHolder loggedUserHolder) {
+        this.loggedUserHolder = loggedUserHolder;
     }
 }

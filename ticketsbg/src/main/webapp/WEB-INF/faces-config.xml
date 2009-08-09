@@ -166,6 +166,14 @@
         </navigation-case>
     </navigation-rule>
 
+     <navigation-rule>
+        <navigation-case>
+            <from-outcome>loginScreen</from-outcome>
+            <to-view-id>/login.jsp</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+
     <navigation-rule>
         <navigation-case>
             <from-outcome>runsList</from-outcome>
@@ -238,8 +246,11 @@
         </navigation-case>
     </navigation-rule>
 
-    <lifecycle>
-        <phase-listener>com.tickets.controllers.SecurityPhaseListener</phase-listener>
-    </lifecycle>
-
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>unauthorized</from-outcome>
+            <to-view-id>/unauthorized.jsp</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
 </faces-config>

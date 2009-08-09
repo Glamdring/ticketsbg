@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.tickets.exceptions.UserException;
 import com.tickets.model.Firm;
-import com.tickets.model.Role;
 import com.tickets.model.User;
 
 /**
@@ -69,8 +68,5 @@ public interface UserService extends Service<User> {
      * @return list of users
      */
     List<User> fetchUsers(Firm firm);
-
-
-    List<Role> listNonAdminRoles();
 
 }

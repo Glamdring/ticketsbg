@@ -18,7 +18,6 @@ import com.tickets.constants.Messages;
 import com.tickets.constants.Settings;
 import com.tickets.exceptions.UserException;
 import com.tickets.model.Firm;
-import com.tickets.model.Role;
 import com.tickets.model.User;
 import com.tickets.utils.CertificateManager;
 import com.tickets.utils.base64.Base64Decoder;
@@ -293,12 +292,5 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
     @Override
     public boolean isHash(String password) {
         return password.length() == 37 && password.matches("[0-9abcdef]+");
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public List<Role> listNonAdminRoles() {
-        String query = "SELECT r FROM Role r WHERE r.admin=false";
-        return getDao().findByQuery(query);
     }
 }

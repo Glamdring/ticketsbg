@@ -35,12 +35,12 @@
                         <h:selectBooleanCheckbox value="#{userController.user.active}"
                             id="active" />
 
-                        <h:outputLabel for="roles" value="#{msg.roles}: " />
-                        <rich:pickList id="roles" showButtonsLabel="false"
-                            value="#{userController.user.roles}"
-                            converter="#{entityConverter}">
-                            <f:selectItems value="#{userController.roleSelectItems}" />
-                        </rich:pickList>
+                        <h:outputLabel for="accessLevel" value="#{msg.accessLevel}: " />
+                        <h:selectOneMenu id="accessLevel"
+                            value="#{userController.user.accessLevel}"
+                            converter="#{enumConverter}">
+                            <f:selectItems value="#{userController.accessLevelSelectItems}" />
+                        </h:selectOneMenu>
 
                         <a4j:commandButton value="#{msg.save}"
                             action="#{userController.save}"

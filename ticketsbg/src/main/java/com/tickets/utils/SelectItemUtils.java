@@ -12,7 +12,8 @@ import com.tickets.model.Selectable;
 
 public class SelectItemUtils {
 
-    public static List<SelectItem> formSelectItems(List<? extends Selectable> original, boolean addEmptyElement) {
+    public static List<SelectItem> formSelectItems(
+            List<? extends Selectable> original, boolean addEmptyElement) {
         int size = addEmptyElement ? original.size() + 1 : original.size();
 
         List<SelectItem> list = new ArrayList<SelectItem>(size);
@@ -28,27 +29,53 @@ public class SelectItemUtils {
         return list;
     }
 
-    public static List<SelectItem> formSelectItems(List<? extends Selectable> original) {
+
+    public static List<SelectItem> formSelectItems(
+            List<? extends Selectable> original) {
         return formSelectItems(original, true);
     }
 
-    public static void formSelectItems(Class<? extends Enum> clazz, List<SelectItem> targetList) {
-        formSelectItems(clazz, targetList, null);
+    public static List<SelectItem> formSelectItems(Class<? extends Enum> clazz) {
+        return formSelectItems(clazz, null, null);
     }
 
-    public static void formSelectItems(Class<? extends Enum> clazz, List<SelectItem> targetList, EnumSet<? extends Enum> exclusions) {
+    public static List<SelectItem> formSelectItems(Class<? extends Enum> clazz,
+            Enum defaultValue) {
+        return formSelectItems(clazz, null, defaultValue);
+    }
+
+    public static List<SelectItem> formSelectItems(Class<? extends Enum> clazz,
+            EnumSet<? extends Enum> exclusions) {
+        return formSelectItems(clazz, exclusions, null);
+    }
+
+    public static List<SelectItem> formSelectItems(Class<? extends Enum> clazz,
+            EnumSet<? extends Enum> exclusions, Enum defaultValue) {
         try {
             Method method = clazz.getDeclaredMethod("values");
             Enum[] values = (Enum[]) method.invoke(null);
+            List<SelectItem> targetList = new ArrayList<SelectItem>(
+                    values.length);
+
+            if (defaultValue != null) {
+                targetList.add(new SelectItem(defaultValue, Messages
+                        .getString(defaultValue.toString())));
+            }
             for (Enum en : values) {
+                // if this is the default value, skip, because it's alread added
+                if (en == defaultValue) {
+                    continue;
+                }
                 if (exclusions == null || !exclusions.contains(en)) {
-                    SelectItem si = new SelectItem(en, Messages.getString(en.toString()));
+                    SelectItem si = new SelectItem(en, Messages.getString(en
+                            .toString()));
                     targetList.add(si);
                 }
             }
+            return targetList;
         } catch (Exception ex) {
             ex.printStackTrace();
+            return new ArrayList<SelectItem>();
         }
     }
 }
-

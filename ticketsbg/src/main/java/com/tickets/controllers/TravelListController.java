@@ -6,12 +6,15 @@ import java.util.List;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import com.tickets.annotations.Action;
+import com.tickets.controllers.security.AccessLevel;
 import com.tickets.model.Price;
 import com.tickets.model.Run;
 import com.tickets.model.Ticket;
 
 @Controller("travelListController")
 @Scope("request")
+@Action(accessLevel=AccessLevel.CASHIER_DESK)
 public class TravelListController extends BaseController {
     private Run run;
     private List<TravelListSubroute> travelList = new ArrayList<TravelListSubroute>();

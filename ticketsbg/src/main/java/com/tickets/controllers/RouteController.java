@@ -30,6 +30,7 @@ import org.springframework.stereotype.Controller;
 
 import com.tickets.annotations.Action;
 import com.tickets.constants.Messages;
+import com.tickets.controllers.security.AccessLevel;
 import com.tickets.controllers.users.LoggedUserHolder;
 import com.tickets.model.Day;
 import com.tickets.model.Discount;
@@ -45,6 +46,7 @@ import com.tickets.utils.SelectItemUtils;
 @Controller("routeController")
 @Scope("conversation.manual")
 @ConversationName("routesAndRuns")
+@Action(accessLevel=AccessLevel.FIRM_COORDINATOR)
 public class RouteController extends BaseController implements Serializable {
 
     private Route route;
@@ -246,7 +248,7 @@ public class RouteController extends BaseController implements Serializable {
             dayNames.put(day.getName(), day.getLabel());
         }
 
-        SelectItemUtils.formSelectItems(DiscountType.class, discountTypeSelectItems);
+        discountTypeSelectItems = SelectItemUtils.formSelectItems(DiscountType.class);
     }
 
     private void refreshList() {

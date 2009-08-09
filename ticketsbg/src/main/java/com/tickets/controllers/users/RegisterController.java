@@ -57,7 +57,7 @@ public class RegisterController extends BaseController {
 
     @PostConstruct
     public void init() {
-        SelectItemUtils.formSelectItems(CustomerType.class, customerTypeItems);
+        customerTypeItems = SelectItemUtils.formSelectItems(CustomerType.class);
     }
 
     private boolean validate() {

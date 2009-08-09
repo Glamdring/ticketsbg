@@ -27,7 +27,7 @@ public class PaymentController extends BaseController {
     @PostConstruct
     public void init() {
         //List all except the CASH_DESK option
-        SelectItemUtils.formSelectItems(PaymentMethod.class, paymentMethods,
+        paymentMethods = SelectItemUtils.formSelectItems(PaymentMethod.class,
                 EnumSet.of(PaymentMethod.CASH_DESK));
     }
 

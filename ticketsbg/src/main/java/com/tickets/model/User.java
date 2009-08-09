@@ -1,16 +1,12 @@
 package com.tickets.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -18,10 +14,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.validator.Length;
 import org.hibernate.validator.NotEmpty;
+
+import com.tickets.controllers.security.AccessLevel;
 
 /**
  * The User object represents three types of registered users:
@@ -100,7 +96,7 @@ public class User extends Customer implements Serializable {
     private Agent agent;
 
     @Column
-    private byte privs;
+    private AccessLevel accessLevel;
 
     @Column
     private boolean isStaff;
@@ -116,11 +112,6 @@ public class User extends Customer implements Serializable {
 
     @Column
     private String city;
-
-    @ManyToMany
-    @JoinTable
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Role> roles = new ArrayList<Role>();
 
     public String getUsername() {
         return username;
@@ -160,14 +151,6 @@ public class User extends Customer implements Serializable {
 
     public void setFirm(Firm firm) {
         this.firm = firm;
-    }
-
-    public byte getPrivs() {
-        return privs;
-    }
-
-    public void setPrivs(byte privs) {
-        this.privs = privs;
     }
 
     public boolean isStaff() {
@@ -250,20 +233,20 @@ public class User extends Customer implements Serializable {
         this.city = city;
     }
 
-    public List<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
-    }
-
     public Agent getAgent() {
         return agent;
     }
 
     public void setAgent(Agent agent) {
         this.agent = agent;
+    }
+
+    public AccessLevel getAccessLevel() {
+        return accessLevel;
+    }
+
+    public void setAccessLevel(AccessLevel accessLevel) {
+        this.accessLevel = accessLevel;
     }
 
     @Override
