@@ -64,7 +64,7 @@
             </h:form>
         </f:view>
 
-        <rich:modalPanel id="entityPanel" autosized="true" width="200"
+        <rich:modalPanel id="entityPanel" autosized="true" width="250"
             height="120" moveable="true" resizeable="false">
             <f:facet name="controls">
                 <h:panelGroup>

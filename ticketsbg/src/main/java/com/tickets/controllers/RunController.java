@@ -24,14 +24,28 @@ public class RunController extends BaseController {
     @Autowired
     private RunService<Run> service;
 
+    @Action
     public String view() {
         route = service.get(Route.class, route.getId());
         return Screen.RUNS_LIST.getOutcome();
     }
 
+    @Action
     public void delete() {
         route.getRuns().remove(run);
         service.delete(run);
+    }
+
+    @Action(accessLevel=AccessLevel.CASHIER_DESK)
+    public void setSeatsExceeded() {
+        run.setSeatsExceeded(true);
+        service.save(run);
+    }
+
+    @Action(accessLevel=AccessLevel.CASHIER_DESK)
+    public void undoSeatsExceeded() {
+        run.setSeatsExceeded(false);
+        service.save(run);
     }
 
     public Route getRoute() {

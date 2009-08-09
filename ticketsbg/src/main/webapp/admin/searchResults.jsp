@@ -151,12 +151,37 @@
 
                                     <h:commandLink action="#{travelListController.openTravelList}"
                                         title="#{msg.travelList}">
-                                        <f:setPropertyActionListener value="#{run}"
+                                        <f:setPropertyActionListener value="#{result.run}"
                                             target="#{travelListController.run}" />
                                         <h:graphicImage value="/images/runs.png"
                                             style="width:16; height:16; border-style: none;"
                                             alt="#{msg.remove}" title="#{msg.remove}" />
                                     </h:commandLink>
+
+                                    <h:outputText value="&#160;" />
+
+                                    <h:commandLink title="#{msg.setSeatsExceeded}"
+                                        action="#{runController.setSeatsExceeded}"
+                                        rendered="#{loggedUserHolder.loggedUser.firm.hasAnotherTicketSellingSystem and !result.run.seatsExceeded}">
+                                        <f:setPropertyActionListener value="#{result.run}"
+                                            target="#{runController.run}" />
+                                        <h:graphicImage value="/images/close.png"
+                                            style="width:16; height:16; border-style: none;"
+                                            alt="#{msg.remove}" title="#{msg.remove}" />
+                                    </h:commandLink>
+
+                                    <h:commandLink title="#{msg.undoSeatsExceeded}"
+                                        action="#{runController.undoSeatsExceeded}"
+                                        rendered="#{loggedUserHolder.loggedUser.firm.hasAnotherTicketSellingSystem and result.run.seatsExceeded}">
+
+                                        <f:setPropertyActionListener value="#{result.run}"
+                                            target="#{runController.run}" />
+                                        <h:graphicImage value="/images/undo.png"
+                                            style="width:16; height:16; border-style: none;"
+                                            alt="#{msg.remove}" title="#{msg.remove}" />
+                                    </h:commandLink>
+
+
                                 </rich:column>
                             </rich:dataTable>
                         </rich:panel>
@@ -287,7 +312,8 @@
                                 </rich:column>
                             </rich:dataTable>
                             <h:panelGroup id="returnChoice" style="font-weight: bold;">
-                                <h:panelGroup rendered="#{searchController.selectedReturnEntry != null}">
+                                <h:panelGroup
+                                    rendered="#{searchController.selectedReturnEntry != null}">
                                     <h:outputText
                                         value="#{searchController.selectedReturnEntry.departureTime.time}">
                                         <f:convertDateTime pattern="HH:mm"

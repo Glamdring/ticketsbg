@@ -64,6 +64,26 @@
                                 style="width:16; height:16; border-style: none;"
                                 alt="#{msg.remove}" title="#{msg.remove}" />
                         </h:commandLink>
+                        <h:commandLink title="#{msg.setSeatsExceeded}"
+                            action="#{runController.setSeatsExceeded}"
+                            rendered="#{loggedUserHolder.loggedUser.firm.hasAnotherTicketSellingSystem and !run.seatsExceeded}">
+                            <f:setPropertyActionListener value="#{run}"
+                                target="#{runController.run}" />
+                            <h:graphicImage value="/images/close.png"
+                                style="width:16; height:16; border-style: none;"
+                                alt="#{msg.remove}" title="#{msg.remove}" />
+                        </h:commandLink>
+
+                        <h:commandLink title="#{msg.undoSeatsExceeded}"
+                            action="#{runController.undoSeatsExceeded}"
+                            rendered="#{loggedUserHolder.loggedUser.firm.hasAnotherTicketSellingSystem and run.seatsExceeded}">
+
+                            <f:setPropertyActionListener value="#{run}"
+                                target="#{runController.run}" />
+                            <h:graphicImage value="/images/undo.png"
+                                style="width:16; height:16; border-style: none;"
+                                alt="#{msg.remove}" title="#{msg.remove}" />
+                        </h:commandLink>
                     </rich:column>
                     <f:facet name="footer">
                         <rich:datascroller align="center" maxPages="20"

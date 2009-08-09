@@ -44,6 +44,15 @@
                     <h:outputLabel for="other" value="#{msg.other}: " />
                     <h:inputText value="#{firmController.firm.other}" id="other" />
 
+                    <h:outputLabel for="active" value="#{msg.active}: " />
+                    <h:selectBooleanCheckbox value="#{firmController.firm.active}" id="active" />
+
+                    <h:outputLabel for="hasAnotherTicketSellingSystem"
+                        value="#{msg.hasAnotherTicketSellingSystem}: " />
+                    <h:selectBooleanCheckbox
+                        value="#{firmController.firm.hasAnotherTicketSellingSystem}"
+                        id="hasAnotherTicketSellingSystem" />
+
                     <h:outputText value="" />
                     <a4j:commandButton value="${msg.save}"
                         action="#{firmController.save}"

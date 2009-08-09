@@ -63,6 +63,9 @@ public class Firm implements Serializable, Selectable {
     @Column
     private boolean allowDiscounts;
 
+    @Column
+    private boolean hasAnotherTicketSellingSystem;
+
     @ManyToMany
     @JoinTable(name="firmsAgents", joinColumns=@JoinColumn(name="firmId", referencedColumnName="firmId"),
             inverseJoinColumns=@JoinColumn(name="agentId", referencedColumnName="agentId"))
@@ -175,6 +178,15 @@ public class Firm implements Serializable, Selectable {
 
     public void setAgents(List<Agent> agents) {
         this.agents = agents;
+    }
+
+    public boolean isHasAnotherTicketSellingSystem() {
+        return hasAnotherTicketSellingSystem;
+    }
+
+    public void setHasAnotherTicketSellingSystem(
+            boolean hasAnotherTicketSellingSystem) {
+        this.hasAnotherTicketSellingSystem = hasAnotherTicketSellingSystem;
     }
 
     @Override

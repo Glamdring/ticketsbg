@@ -88,6 +88,14 @@ public class Run implements Serializable {
     @Temporal(value = TemporalType.TIMESTAMP)
     private Calendar time;
 
+    /**
+     * This column value is set to true in cases when this system
+     * is used in parallel with another system, which handles
+     * the cashier-desk sales.
+     */
+    @Column
+    private boolean seatsExceeded;
+
     public Run() {
     }
 
@@ -130,5 +138,13 @@ public class Run implements Serializable {
 
     public void setReturnTickets(Set<Ticket> returnTickets) {
         this.returnTickets = returnTickets;
+    }
+
+    public boolean isSeatsExceeded() {
+        return seatsExceeded;
+    }
+
+    public void setSeatsExceeded(boolean seatsExceeded) {
+        this.seatsExceeded = seatsExceeded;
     }
 }
