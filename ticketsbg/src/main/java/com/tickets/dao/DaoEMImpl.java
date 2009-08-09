@@ -11,6 +11,9 @@ import javax.persistence.Query;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 
+import com.tickets.controllers.security.ActionLogger;
+import com.tickets.controllers.security.DatabaseOperationType;
+
 @Repository("dao")
 @Scope("singleton")
 public class DaoEMImpl implements Dao {
@@ -20,11 +23,12 @@ public class DaoEMImpl implements Dao {
 
     @SuppressWarnings("unchecked")
     public <T extends Serializable> void delete(Class clazz, T id) {
-        entityManager.remove(getById(clazz, id));
+        delete(getById(clazz, id));
 
     }
 
     public void delete(Object object) {
+        ActionLogger.logAction(this, object, DatabaseOperationType.SAVE);
         entityManager.remove(object);
 
     }
@@ -87,7 +91,9 @@ public class DaoEMImpl implements Dao {
     }
 
     public <T> T getById(Class<T> clazz, Serializable id) {
-        return entityManager.find(clazz, id);
+        T e = entityManager.find(clazz, id);
+        ActionLogger.logAction(this, e, DatabaseOperationType.RETRIEVE);
+        return e;
     }
 
     public Connection getConnection() {
@@ -102,15 +108,10 @@ public class DaoEMImpl implements Dao {
         // (managed)
         // if e is transient (new instance), it is saved and a persistent (and
         // managed) copy is returned
-
         e = entityManager.merge(e);
 
+        ActionLogger.logAction(this, e, DatabaseOperationType.SAVE);
         return e;
-    }
-
-    public Object saveObject(Object o) {
-        o = entityManager.merge(o);
-        return o;
     }
 
     public List findByQuery(org.hibernate.Query query) {
@@ -130,5 +131,10 @@ public class DaoEMImpl implements Dao {
     @Override
     public void clearPersistentContext() {
         entityManager.clear();
+    }
+
+    @Override
+    public Object getDelegate() {
+        return entityManager.getDelegate();
     }
 }

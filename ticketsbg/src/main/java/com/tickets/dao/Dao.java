@@ -117,4 +117,10 @@ public interface Dao {
      * Clears the underlying persistent context
      */
     void clearPersistentContext();
+
+    /**
+     * Returns the native implementation delegate
+     * @return the delegate
+     */
+    Object getDelegate();
 }

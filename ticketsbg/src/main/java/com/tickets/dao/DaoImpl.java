@@ -124,4 +124,9 @@ public class DaoImpl implements Dao {
         getSession().clear();
     }
 
+    @Override
+    public Object getDelegate() {
+        return getSession();
+    }
+
 }

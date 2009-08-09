@@ -171,7 +171,9 @@
                                                     value="#{msg.toStop} " /> <h:outputText
                                                     value="#{data.stop.name}" /> <h:outputText value=" (" />
                                                 <h:outputText value="#{data.price.price}"
-                                                    converter="#{currencyConverter}" /> <h:outputText
+                                                    converter="#{currencyConverter}">
+                                                    <f:convertNumber maxFractionDigits="2" minFractionDigits="2"/>
+                                                    </h:outputText> <h:outputText
                                                     value=")" /></div>
                                             </rich:treeNode>
                                         </rich:tree>

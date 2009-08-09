@@ -5,7 +5,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -21,13 +20,12 @@ import com.tickets.model.User;
 @Component("securityAspect")
 public class SecurityAspect implements Serializable {
 
-    private static final String LOGGED_UESR_HOLDER_KEY = "loggedUserHolder";
-
     public SecurityAspect() {
     }
 
     @Around("execution(* com.tickets.controllers..*.*(..))")
-    public Object checkAccessToOperation(ProceedingJoinPoint jp) throws Throwable {
+    public Object checkAccessToOperation(ProceedingJoinPoint jp)
+            throws Throwable {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         Method method = null;
         try {
@@ -43,8 +41,7 @@ public class SecurityAspect implements Serializable {
 
         Action action = method.getAnnotation(Action.class);
         if (action == null) {
-            action = method.getDeclaringClass().getAnnotation(
-                    Action.class);
+            action = method.getDeclaringClass().getAnnotation(Action.class);
         }
 
         AccessLevel requiredLevel = AccessLevel.PUBLIC;
@@ -57,34 +54,30 @@ public class SecurityAspect implements Serializable {
             return jp.proceed();
         }
 
-        // having an object to return, because in some cases
-        // (getter methods) a new empty instance will be created
-        // in order to avoid NPEs and IAEs
-
-        HttpSession session = (HttpSession) facesContext.getExternalContext()
-                .getSession(true);
-
-        LoggedUserHolder loggedUserHolder = (LoggedUserHolder) session
-                .getAttribute(LOGGED_UESR_HOLDER_KEY);
-        if (loggedUserHolder == null) {
-            redirectTo(Screen.LOGIN_SCREEN, facesContext);
-            return getObjectToReturn(jp);
-        }
-
-        User user = loggedUserHolder.getLoggedUser();
+        User user = LoggedUserHolder.getUser();
 
         if (user == null) {
             redirectTo(Screen.LOGIN_SCREEN, facesContext);
             return getObjectToReturn(jp);
         }
 
-        if (user.getAccessLevel().getPrivileges() < requiredLevel.getPrivileges()) {
+        if (user.getAccessLevel().getPrivileges() < requiredLevel
+                .getPrivileges()) {
             redirectTo(Screen.UNAUTHORIZED, facesContext);
             return getObjectToReturn(jp);
         }
 
         return jp.proceed();
     }
+
+    /**
+     * having an object to return, because in some cases
+     * (getter methods) a new empty instance will be created
+     * in order to avoid NPEs and IAEs
+     *
+     * @param jp
+     * @return an object to return :)
+     */
 
     private Object getObjectToReturn(ProceedingJoinPoint jp) {
         if (jp.getSignature().getName().startsWith("get")) {
