@@ -293,4 +293,11 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
     public boolean isHash(String password) {
         return password.length() == 37 && password.matches("[0-9abcdef]+");
     }
+
+    @Override
+    public void changePassword(User user, String newPassword) {
+        user.setPassword(saltAndHashPassword(newPassword));
+        user.setTemporaryPassword("");
+        getDao().persist(user);
+    }
 }

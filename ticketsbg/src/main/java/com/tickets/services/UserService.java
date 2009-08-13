@@ -69,4 +69,12 @@ public interface UserService extends Service<User> {
      */
     List<User> fetchUsers(Firm firm);
 
+
+    /**
+     * Change the password of the specified user
+     * @param loggedUserHolder
+     * @param newPassword
+     */
+    void changePassword(User user, String newPassword);
+
 }

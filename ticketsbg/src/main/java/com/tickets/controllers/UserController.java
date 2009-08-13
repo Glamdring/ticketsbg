@@ -38,7 +38,7 @@ public class UserController extends BaseCRUDController<User> {
 
     private List<SelectItem> accessLevelSelectItems = new ArrayList<SelectItem>();
 
-    private List<SelectItem> administrationSelectItems = new ArrayList<SelectItem>();
+    private List<SelectItem> firmSelectItems = new ArrayList<SelectItem>();
 
     @Override
     public void save() {
@@ -61,7 +61,7 @@ public class UserController extends BaseCRUDController<User> {
         accessLevelSelectItems = SelectItemUtils.formSelectItems(
                 AccessLevel.class, exclusions, AccessLevel.CASHIER_DESK);
 
-        administrationSelectItems = SelectItemUtils.formSelectItems(userService.list(Firm.class));
+        firmSelectItems = SelectItemUtils.formSelectItems(userService.list(Firm.class));
 
         // End the current conversation in case the list of roles
         // is refreshed, but only if the bean has not just been constructed
@@ -128,12 +128,12 @@ public class UserController extends BaseCRUDController<User> {
         this.accessLevelSelectItems = accessLevelSelectItems;
     }
 
-    public List<SelectItem> getAdministrationSelectItems() {
-        return administrationSelectItems;
+    public List<SelectItem> getFirmSelectItems() {
+        return firmSelectItems;
     }
-    public void setAdministrationSelectItems(
-            List<SelectItem> administrationSelectItems) {
-        this.administrationSelectItems = administrationSelectItems;
+
+    public void setFirmSelectItems(List<SelectItem> firmSelectItems) {
+        this.firmSelectItems = firmSelectItems;
     }
 
     public LoggedUserHolder getLoggedUserHolder() {

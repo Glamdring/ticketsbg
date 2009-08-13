@@ -47,3 +47,7 @@ td {
 .gridContent {
     vertical-align: top;
 }
+
+.message {
+    color: green;
+}
