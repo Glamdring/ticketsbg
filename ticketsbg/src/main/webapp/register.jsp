@@ -13,32 +13,44 @@
                     header="#{msg.register}">
                     <rich:graphValidator>
                         <h:panelGrid columns="3">
-                            <h:outputLabel value="#{msg.username}" for="username" />
+                            <h:panelGroup>
+                                <h:outputLabel value="#{msg.username}" for="username" />
+                                <h:outputText value=" *" styleClass="asterisk" />
+                            </h:panelGroup>
                             <h:inputText value="#{registerController.user.username}"
                                 id="username" size="35">
-                                <a4j:support event="onblur" ajaxSingle="true" />
+                                <rich:ajaxValidator event="onblur" />
                             </h:inputText>
                             <rich:message for="username" errorClass="error" />
 
-                            <h:outputLabel value="#{msg.password}" for="password" />
+                            <h:panelGroup>
+                                <h:outputLabel value="#{msg.password}" for="password" />
+                                <h:outputText value=" *" styleClass="asterisk" />
+                            </h:panelGroup>
                             <h:inputSecret value="#{registerController.user.password}"
                                 id="password" size="35">
-                                <a4j:support event="onblur" ajaxSingle="true" />
+                                <rich:ajaxValidator event="onblur" />
                             </h:inputSecret>
                             <rich:message for="password" errorClass="error" />
 
-                            <h:outputLabel value="#{msg.repeatPassword}" for="repeatPassword" />
+                            <h:panelGroup>
+                                <h:outputLabel value="#{msg.repeatPassword}" for="repeatPassword" />
+                                <h:outputText value=" *" styleClass="asterisk" />
+                            </h:panelGroup>
                             <h:inputSecret value="#{registerController.user.repeatPassword}"
                                 id="repeatPassword" size="35">
-                                <a4j:support event="onblur" ajaxSingle="true" />
+                                <rich:ajaxValidator event="onblur" />
                             </h:inputSecret>
-                            <rich:message for="password" errorClass="error" />
+                            <rich:message for="repeatPassword" errorClass="error" />
 
 
-                            <h:outputLabel value="#{msg.email}" for="email" />
+                            <h:panelGroup>
+                                <h:outputLabel value="#{msg.email}" for="email" />
+                                <h:outputText value=" *" styleClass="asterisk" />
+                            </h:panelGroup>
                             <h:inputText value="#{registerController.user.email}" id="email"
                                 size="35">
-                                <a4j:support event="onblur" ajaxSingle="true" />
+                                <rich:ajaxValidator event="onblur" />
                             </h:inputText>
                             <rich:message for="email" errorClass="error" />
 
@@ -54,6 +66,8 @@
                             <a4j:outputPanel id="companyLabel">
                                 <h:outputLabel value="#{msg.companyName}" for="companyName"
                                     rendered="#{registerController.user.customerType == 'BUSINESS'}" />
+                                <h:outputText value=" *" styleClass="asterisk"
+                                    rendered="#{registerController.user.customerType == 'BUSINESS'}" />
                             </a4j:outputPanel>
                             <a4j:outputPanel id="companyNamePanel">
                                 <h:inputText value="#{registerController.user.companyName}"
@@ -65,10 +79,13 @@
                                     rendered="#{registerController.user.customerType == 'BUSINESS'} " />
                             </a4j:outputPanel>
 
-                            <h:outputLabel value="#{msg.names}" for="names" />
+                            <h:panelGroup>
+                                <h:outputLabel value="#{msg.names}" for="names" />
+                                <h:outputText value=" *" styleClass="asterisk" />
+                            </h:panelGroup>
                             <h:inputText value="#{registerController.user.name}" id="names"
                                 size="35">
-                                <a4j:support event="onblur" ajaxSingle="true" />
+                                <rich:ajaxValidator event="onblur" />
                             </h:inputText>
                             <rich:message for="names" errorClass="error" />
 
@@ -115,6 +132,7 @@
                                     value="#{registerController.user.agreedToTerms}"
                                     id="agreedToTerms" label="#{msg.agreedToterms}" />
                                 <h:outputLabel for="agreedToTerms" value="#{msg.agreedToTerms}" />
+                                <h:outputText value=" *" styleClass="asterisk" />
                             </h:panelGroup>
                             <rich:message for="agreedToTerms" errorClass="error" />
 

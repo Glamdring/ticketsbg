@@ -8,7 +8,7 @@
     xmlns:c="http://java.sun.com/jstl/core"
     xmlns:tc="http://tickets.bg/tickets">
 
-    <rich:modalPanel id="changePasswordPanel" autosized="true" width="350">
+    <rich:modalPanel id="changePasswordPanel" autosized="true" width="500">
         <f:facet name="header">
             <h:outputText value="#{msg.changePassword}" />
         </f:facet>
@@ -50,7 +50,7 @@
                 <h:outputText/>
                 <a4j:commandButton action="#{changePasswordController.changePassword}"
                     oncomplete="#{rich:component('changePasswordPanel')}.hide()"
-                    value="#{msg.doChangePassword}" />
+                    value="#{msg.doChangePassword}" reRender="messages" />
                 <h:outputText/>
 
             </h:panelGrid>

@@ -68,6 +68,7 @@ public class User extends Customer implements Serializable {
     private String password;
 
     @Transient
+    @Length(max=40, min=4)
     private String repeatPassword;
 
     @Column

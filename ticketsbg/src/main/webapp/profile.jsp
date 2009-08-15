@@ -11,8 +11,10 @@
             <a4j:form id="profileForm">
                 <rich:panel headerClass="rich-panel-header-main"
                     header="#{msg.profile}">
-                    <rich:messages styleClass="message" globalOnly="true"
-                        ajaxRendered="true" errorClass="error" />
+                    <a4j:outputPanel ajaxRendered="true" id="messages">
+                        <h:messages styleClass="message" globalOnly="true"
+                            errorClass="error" />
+                    </a4j:outputPanel>
 
                     <rich:graphValidator>
                         <h:panelGrid columns="3">
