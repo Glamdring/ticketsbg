@@ -270,4 +270,12 @@
             <redirect />
         </navigation-case>
     </navigation-rule>
+
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>history</from-outcome>
+            <to-view-id>/history.jsp</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
 </faces-config>

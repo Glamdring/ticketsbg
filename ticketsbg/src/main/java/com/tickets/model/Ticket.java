@@ -14,6 +14,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -23,6 +25,12 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "tickets")
+@NamedQueries({
+    @NamedQuery(
+        name = "Ticket.findByUser",
+        query = "SELECT t FROM Ticket t WHERE t.user=:user"
+    )
+})
 public class Ticket implements Serializable, Comparable<Ticket> {
 
     @Id

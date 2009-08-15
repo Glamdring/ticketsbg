@@ -31,4 +31,12 @@ public interface TicketService extends Service<Ticket> {
      * @return the seat number
      */
     int getFirstVacantSeat(SearchResultEntry selectedEntry);
+
+    /**
+     * Lists all tickets purchased by the specified user
+     * @param user
+     * @return the list
+     */
+
+    List<Ticket> getTicketsByUser(User user);
 }

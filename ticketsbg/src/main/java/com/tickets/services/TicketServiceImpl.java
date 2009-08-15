@@ -17,7 +17,6 @@ import com.tickets.utils.GeneralUtils;
 @Service("ticketService")
 public class TicketServiceImpl extends BaseService<Ticket> implements TicketService {
 
-
     @Override
     public Ticket createTicket(SearchResultEntry selectedEntry,
             SearchResultEntry selectedReturnEntry, int seat, int returnSeat, Discount discount) {
@@ -148,5 +147,12 @@ public class TicketServiceImpl extends BaseService<Ticket> implements TicketServ
         }
 
         throw new IllegalStateException("All seats have been taken!");
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Ticket> getTicketsByUser(User user) {
+        return getDao().findByNamedQuery("Ticket.findByUser",
+                new String[] { "user" }, new Object[] { user });
     }
 }
