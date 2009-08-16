@@ -7,7 +7,7 @@ import com.tickets.model.Route;
 import com.tickets.model.SearchResultEntry;
 import com.tickets.model.User;
 
-public interface SearchService {
+public interface SearchService extends Service {
 
     /**
      * Performs a search listing all runs for the specified criteria

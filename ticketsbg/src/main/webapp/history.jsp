@@ -18,7 +18,7 @@
                     <rich:dataTable headerClass="dr-pnl-h" rows="10"
                         onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
                         onRowMouseOut="this.style.backgroundColor='white'" cellpadding="0"
-                        cellspacing="0" width="900" border="0" var="ticket"
+                        cellspacing="0" border="0" var="ticket"
                         value="#{historyController.tickets}" id="historyTable">
 
                         <rich:column>

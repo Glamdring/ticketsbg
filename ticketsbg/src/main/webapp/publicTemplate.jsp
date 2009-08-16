@@ -69,11 +69,12 @@
 
 <a4j:include viewId="loginPanel.jsp" />
 
-<h:panelGrid columns="2" columnClasses="side,main">
+<h:panelGrid columns="2" columnClasses="main,side">
+    <ui:insert name="body" />
     <h:panelGroup>
         <ui:include src="purchaseDetailsSideScreen.jsp" />
+        <ui:include src="statistics.jsp" />
     </h:panelGroup>
-    <ui:insert name="body" />
 </h:panelGrid>
 </body>
 </html>

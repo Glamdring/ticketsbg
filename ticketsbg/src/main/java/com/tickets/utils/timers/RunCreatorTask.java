@@ -1,4 +1,4 @@
-package com.tickets.utils;
+package com.tickets.utils.timers;
 
 import java.util.TimerTask;
 
