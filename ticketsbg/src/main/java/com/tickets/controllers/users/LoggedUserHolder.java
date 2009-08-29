@@ -45,6 +45,10 @@ public class LoggedUserHolder implements Serializable {
         LoggedUserHolder loggedUserHolder = (LoggedUserHolder) session
                 .getAttribute(LOGGED_UESR_HOLDER_KEY);
 
+        if (loggedUserHolder == null) {
+            return null;
+        }
+
         return loggedUserHolder.getLoggedUser();
     }
 }

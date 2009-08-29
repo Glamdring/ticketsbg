@@ -4,7 +4,8 @@
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:a4j="http://richfaces.org/a4j"
-    xmlns:rich="http://richfaces.org/rich">
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:p="http://primefaces.prime.com.tr/ui">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Tickets</title>
@@ -19,6 +20,7 @@
     vertical-align: middle;
 }
 </style>
+<p:resources />
 <ui:insert name="head" />
 </head>
 <body style="margin-left: 0px; margin-top: 0px; margin-right: 0px">
@@ -62,6 +64,22 @@
 
             <rich:menuItem value="#{msg.agents}" action="agentsList"
                 icon="/images/agents.png" />
+        </rich:dropDownMenu>
+
+
+        <rich:dropDownMenu style="padding-right: 27px; padding-left: 27px;"
+            hideDelay="100">
+            <f:facet name="label">
+                <h:panelGroup>
+                    <h:graphicImage value="/images/statistics.png"
+                        styleClass="menuIcon" />
+                    <h:outputText value="#{msg.reports}" styleClass="menuContent" />
+                </h:panelGroup>
+            </f:facet>
+
+            <rich:menuItem value="#{msg.soldTickets}" action="soldTicketsStats" />
+
+            <rich:menuItem value="#{msg.usedSeatsPercentage}" action="usedSeatsPercentage" />
         </rich:dropDownMenu>
     </rich:toolBar>
 

@@ -252,7 +252,8 @@ public class RouteController extends BaseController implements Serializable {
     }
 
     private void refreshList() {
-        routesModel = new ListDataModel(routeService.list());
+        routesModel = new ListDataModel(routeService.list(LoggedUserHolder
+                .getUser().getFirm()));
 
         // End the current conversation in case the list of routes
         // is refreshed, but only if the bean has not just been constructed

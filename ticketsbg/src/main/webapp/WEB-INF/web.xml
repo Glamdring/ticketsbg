@@ -117,6 +117,20 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
 
+    <servlet>
+        <servlet-name>Resource Servlet</servlet-name>
+        <servlet-class>
+            org.primefaces.ui.resource.ResourceServlet
+    </servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Resource Servlet</servlet-name>
+        <url-pattern>/primefaces_resources/*</url-pattern>
+    </servlet-mapping>
+
+
     <!--
         servlet> <servlet-name>CXFServlet</servlet-name>
         <servlet-class>org.apache.cxf.transport.servlet.CXFServlet

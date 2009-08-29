@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.tickets.model.Day;
+import com.tickets.model.Firm;
 import com.tickets.model.Route;
 import com.tickets.model.RouteDay;
 import com.tickets.model.RouteHour;
@@ -16,12 +17,17 @@ import com.tickets.model.RouteHour;
 @Service("routeService")
 public class RouteServiceImpl extends BaseService<Route> implements RouteService {
 
-    public List list() {
-        return list(Route.class);
+    public List list(Firm firm) {
+        return getDao().findByQuery("SELECT r FROM Route r WHERE r.firm=:firm",
+                new String[] { "firm" }, new Object[] { firm });
     }
 
-    public List listOrdered(String orderColumn) {
-        return listOrdered(Route.class, orderColumn);
+    public List listOrdered(Firm firm, String orderColumn) {
+        return getDao().findByQuery(
+                "SELECT r FROM Route r WHERE r.firm=:firm ORDER BY "
+                        + orderColumn,
+                new String[] { "firm" },
+                new Object[] { firm });
     }
 
     @Override
@@ -98,6 +104,18 @@ public class RouteServiceImpl extends BaseService<Route> implements RouteService
                 break;
             }
         }
+    }
+
+    @Override
+    public Route findRoute(String selectedRouteName, Firm firm) {
+        List result = getDao().findByNamedQuery("Route.findByNameAndFirm",
+                new String[] { "name", "firm" },
+                new Object[] { selectedRouteName, firm });
+        if (result != null && result.size() > 0) {
+            return (Route) result.get(0);
+        }
+
+        return null;
     }
 
 }
