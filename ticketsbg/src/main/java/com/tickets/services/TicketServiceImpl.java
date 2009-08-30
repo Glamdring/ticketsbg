@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.tickets.controllers.SeatHandler;
 import com.tickets.model.Discount;
 import com.tickets.model.PaymentMethod;
+import com.tickets.model.Route;
 import com.tickets.model.Run;
 import com.tickets.model.SearchResultEntry;
 import com.tickets.model.Ticket;
@@ -140,7 +141,8 @@ public class TicketServiceImpl extends BaseService<Ticket> implements TicketServ
         List<Integer> usedSeats = SeatHandler.getUsedSeats(entry.getPrice(),
                 entry.getRun());
 
-        for (int i = 1; i < entry.getRun().getRoute().getSeats(); i ++) {
+        Route route = entry.getRun().getRoute();
+        for (int i = route.getSellSeatsFrom(); i < route.getSellSeatsTo(); i ++) {
             if (Collections.binarySearch(usedSeats, i) < 0) {
                 return i;
             }

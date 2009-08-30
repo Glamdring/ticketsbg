@@ -80,6 +80,11 @@
             <rich:menuItem value="#{msg.charts}" action="stats" />
 
         </rich:dropDownMenu>
+
+        <rich:menuItem action="#{loggedUserHolder.logout}" rendered="#{loggedUserHolder.loggedUser != null}">
+            <h:graphicImage value="/images/logout.png" styleClass="menuIcon" />
+            <h:outputText value="#{msg.logout}" styleClass="menuContent" />
+        </rich:menuItem>
     </rich:toolBar>
 </a4j:form>
 <rich:modalPanel id="firmPanel" autosized="true" width="350"

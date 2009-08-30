@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.tickets.model.Route;
 import com.tickets.model.Run;
 import com.tickets.model.Stop;
 import com.tickets.model.Ticket;
@@ -31,7 +32,8 @@ public class ServiceFunctions {
             return result;
         }
 
-        int seats = run.getRoute().getSeats();
+        Route route = run.getRoute();
+        int seats = route.getSellSeatsTo() - route.getSellSeatsFrom() + 1;
 
         List<Stop> stops = run.getRoute().getStops();
         Stop startStop = getStopByName(fromStop, stops);

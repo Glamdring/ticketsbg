@@ -39,6 +39,7 @@ import com.tickets.model.Price;
 import com.tickets.model.Route;
 import com.tickets.model.Stop;
 import com.tickets.model.StopPriceHolder;
+import com.tickets.model.User;
 import com.tickets.services.RouteService;
 import com.tickets.services.StopService;
 import com.tickets.utils.SelectItemUtils;
@@ -46,7 +47,7 @@ import com.tickets.utils.SelectItemUtils;
 @Controller("routeController")
 @Scope("conversation.manual")
 @ConversationName("routesAndRuns")
-@Action(accessLevel=AccessLevel.FIRM_COORDINATOR)
+@Action(accessLevel = AccessLevel.FIRM_COORDINATOR)
 public class RouteController extends BaseController implements Serializable {
 
     private Route route;
@@ -81,13 +82,20 @@ public class RouteController extends BaseController implements Serializable {
 
     @Action
     public String save() {
+        if (route.getSellSeatsTo() == 0) {
+            route.setSellSeatsTo(route.getSeats());
+        }
+        if (route.getSellSeatsFrom() == 0) {
+            route.setSellSeatsFrom(1);
+        }
+
         routeService.save(route, Arrays.asList(daysPickList));
         refreshList();
         return Screen.ROUTES_LIST.getOutcome();
     }
 
     @Action
-    public String edit(){
+    public String edit() {
         route = (Route) routesModel.getRowData();
         daysPickList = routeService.getDaysList(route);
         seatController.setSeatHandler(new SeatHandler(route));
@@ -117,9 +125,9 @@ public class RouteController extends BaseController implements Serializable {
 
     @Action
     public void removeHour() {
-        //If removing a persistent entity, call the service
-        //else, the supplied selection is a negative number,
-        //so just remove the .abs(..) position from the list
+        // If removing a persistent entity, call the service
+        // else, the supplied selection is a negative number,
+        // so just remove the .abs(..) position from the list
         if (selectedHour > 0) {
             routeService.removeHour(selectedHour, route);
         } else {
@@ -182,10 +190,11 @@ public class RouteController extends BaseController implements Serializable {
         return Boolean.FALSE;
     }
 
-    @SuppressWarnings({ "unused" })
+    @SuppressWarnings( { "unused" })
     public void listReordered(ValueChangeEvent evt) {
-        //TODO : skip the multiple events!
-        //TODO: listener-method is executed before the actual value is set! fix!
+        // TODO : skip the multiple events!
+        // TODO: listener-method is executed before the actual value is set!
+        // fix!
         stopService.listReoredered(route);
         refreshTreeModel();
     }
@@ -201,36 +210,39 @@ public class RouteController extends BaseController implements Serializable {
                 try {
                     tree.queueNodeExpand(rowKey);
                 } catch (IOException ex) {
-                    //Ignore
+                    // Ignore
                 }
             } else {
                 price = stopService.getPrice(rowKey, route);
                 priceValue = new BigDecimal(price.getPrice().toString());
-                twoWayPriceValue = new BigDecimal(price.getTwoWayPrice().toString());
+                twoWayPriceValue = new BigDecimal(price.getTwoWayPrice()
+                        .toString());
             }
         }
     }
 
     public void refreshTreeModel() {
         pricesTreeData = new TreeNodeImpl<StopPriceHolder>();
-        for (int i = 0; i < route.getStops().size() - 1; i ++) {
+        for (int i = 0; i < route.getStops().size() - 1; i++) {
             TreeNode<StopPriceHolder> node = new TreeNodeImpl<StopPriceHolder>();
             node.setData(new StopPriceHolder(route.getStops().get(i)));
-            //the root node is the parent
+            // the root node is the parent
             node.setParent(pricesTreeData);
-            pricesTreeData.addChild("start" + node.getData().getStop().getStopId(), node);
+            pricesTreeData.addChild("start"
+                    + node.getData().getStop().getStopId(), node);
 
-            for (int j = i + 1; j < route.getStops().size(); j ++) {
+            for (int j = i + 1; j < route.getStops().size(); j++) {
                 TreeNode<StopPriceHolder> subNode = new TreeNodeImpl<StopPriceHolder>();
                 StopPriceHolder holder = new StopPriceHolder();
                 holder.setStop(route.getStops().get(j));
-                holder.setPrice(stopService.getPrice(node.getData().getStop().getStopId(),
-                        holder.getStop().getStopId(), route));
+                holder.setPrice(stopService.getPrice(node.getData().getStop()
+                        .getStopId(), holder.getStop().getStopId(), route));
 
                 holder.setLeaf(true);
                 subNode.setData(holder);
                 subNode.setParent(node);
-                node.addChild("end" + subNode.getData().getStop().getStopId(), subNode);
+                node.addChild("end" + subNode.getData().getStop().getStopId(),
+                        subNode);
             }
         }
 
@@ -248,17 +260,21 @@ public class RouteController extends BaseController implements Serializable {
             dayNames.put(day.getName(), day.getLabel());
         }
 
-        discountTypeSelectItems = SelectItemUtils.formSelectItems(DiscountType.class);
+        discountTypeSelectItems = SelectItemUtils
+                .formSelectItems(DiscountType.class);
     }
 
     private void refreshList() {
-        routesModel = new ListDataModel(routeService.list(LoggedUserHolder
-                .getUser().getFirm()));
+        User user = LoggedUserHolder.getUser();
+        if (user != null) {
+            routesModel = new ListDataModel(routeService.list(user.getFirm()));
+        }
 
         // End the current conversation in case the list of routes
         // is refreshed, but only if the bean has not just been constructed
-        if (route != null)
+        if (route != null) {
             endConversation();
+        }
     }
 
     private void endConversation() {
@@ -381,7 +397,8 @@ public class RouteController extends BaseController implements Serializable {
         return discountTypeSelectItems;
     }
 
-    public void setDiscountTypeSelectItems(List<SelectItem> discountTypeSelectItems) {
+    public void setDiscountTypeSelectItems(
+            List<SelectItem> discountTypeSelectItems) {
         this.discountTypeSelectItems = discountTypeSelectItems;
     }
 

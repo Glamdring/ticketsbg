@@ -97,7 +97,7 @@ public class User extends Customer implements Serializable {
     private Agent agent;
 
     @Column
-    private AccessLevel accessLevel;
+    private AccessLevel accessLevel = AccessLevel.PUBLIC;
 
     @Column
     private boolean isStaff;

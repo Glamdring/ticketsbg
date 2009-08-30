@@ -7,6 +7,8 @@ import java.util.List;
 
 import javax.faces.model.SelectItem;
 
+import com.tickets.controllers.security.AccessLevel;
+import com.tickets.controllers.users.LoggedUserHolder;
 import com.tickets.model.Price;
 import com.tickets.model.Route;
 import com.tickets.model.Run;
@@ -255,6 +257,10 @@ public class SeatHandler {
      * Static method for listing all used seats on a run
      * (static, because of external usage)
      *
+     * The ones that are configured not to be sold online
+     * are also marked as used, but only for the public
+     * part of the site.
+     *
      * @param price
      * @param run
      * @return a sorted list
@@ -273,6 +279,19 @@ public class SeatHandler {
             if (ticket.getStartStop().equals(price.getStartStop())
                     && ticket.getEndStop().equals(price.getEndStop())) {
                 u.add(ticket.getReturnSeat());
+            }
+        }
+
+        // If this is not the admin part, mark all seats beyond the
+        // configured 'sell online' seats as used
+        if (LoggedUserHolder.getUser() == null
+                || LoggedUserHolder.getUser().getAccessLevel() == AccessLevel.PUBLIC) {
+
+            for (int i = 1; i < run.getRoute().getSellSeatsFrom(); i ++) {
+                u.add(i);
+            }
+            for (int i = run.getRoute().getSellSeatsTo() + 1; i < run.getRoute().getSeats(); i ++) {
+                u.add(i);
             }
         }
 

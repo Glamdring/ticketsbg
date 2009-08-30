@@ -117,6 +117,12 @@ public class Route extends DataObject implements Serializable {
     @Embedded
     private SeatSettings seatSettings = new SeatSettings();
 
+    @Column
+    private int sellSeatsFrom;
+
+    @Column
+    private int sellSeatsTo;
+
     public Route() {
     }
 
@@ -298,5 +304,21 @@ public class Route extends DataObject implements Serializable {
 
     public void setSeatSettings(SeatSettings seatSettings) {
         this.seatSettings = seatSettings;
+    }
+
+    public int getSellSeatsFrom() {
+        return sellSeatsFrom;
+    }
+
+    public void setSellSeatsFrom(int sellSeatsFrom) {
+        this.sellSeatsFrom = sellSeatsFrom;
+    }
+
+    public int getSellSeatsTo() {
+        return sellSeatsTo;
+    }
+
+    public void setSellSeatsTo(int sellSeatsTo) {
+        this.sellSeatsTo = sellSeatsTo;
     }
 }

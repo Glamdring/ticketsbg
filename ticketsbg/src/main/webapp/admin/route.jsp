@@ -33,11 +33,28 @@
             <h:form id="routeForm">
                 <div align="center"><h:panelGrid columns="1">
                     <rich:panel id="mainInfoPanel">
-                        <a4j:outputPanel>
-                            <h:outputLabel value="#{msg.routeName}: " for="routeName" />
-                            <rich:toolTip value="#{msg.routeNameHint}" followMouse="true" />
-                        </a4j:outputPanel>
-                        <h:inputText value="#{routeController.route.name}" id="routeName" />
+                        <h:panelGrid columns="2" style="width: 100%;">
+                            <h:panelGroup>
+                                <a4j:outputPanel>
+                                    <h:outputLabel value="#{msg.routeName}: " for="routeName" />
+                                    <rich:toolTip value="#{msg.routeNameHint}" followMouse="true" />
+                                </a4j:outputPanel>
+                                <h:inputText value="#{routeController.route.name}"
+                                    id="routeName" />
+                            </h:panelGroup>
+
+                            <h:panelGroup style="float: right;">
+                                <h:outputText value="#{msg.doOnlineSale} " />
+                                <h:outputLabel value="#{msg.sellSeatsFrom}: " for="sellSeatsFrom" />
+                                <h:inputText value="#{routeController.route.sellSeatsFrom}"
+                                    id="sellSeatsFrom" size="3" />
+
+                                <h:outputLabel value=" #{msg.sellSeatsTo}: " for="sellSeatsTo" />
+                                <h:inputText value="#{routeController.route.sellSeatsTo}"
+                                    id="sellSeatsTo" size="3" />
+                            </h:panelGroup>
+
+                        </h:panelGrid>
                     </rich:panel>
 
                     <rich:panel header="#{msg.routeDetailsHeader}" id="routeDetails">
