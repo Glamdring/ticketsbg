@@ -11,6 +11,7 @@
     xmlns:p="http://primefaces.prime.com.tr/ui"
     template="adminTemplate.jsp">
     <ui:define name="head">
+    <p:resources />
         <style type="text/css">
 .line {
     width: 800px;

@@ -5,8 +5,12 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
+import javax.faces.context.FacesContext;
 import javax.faces.model.ListDataModel;
+import javax.faces.validator.ValidatorException;
 
 import org.apache.myfaces.orchestra.conversation.annotations.ConversationName;
 import org.richfaces.model.selection.SimpleSelection;
@@ -15,6 +19,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.tickets.annotations.Action;
+import com.tickets.constants.Messages;
 import com.tickets.controllers.security.AccessLevel;
 import com.tickets.controllers.users.LoggedUserHolder;
 import com.tickets.model.Discount;
@@ -138,6 +143,14 @@ public class SearchController extends BaseController {
 
         if (travelType.equals(TWO_WAY) && returnDate == null) {
             addError("choseReturnDate");
+        }
+
+        if (result.size() == 1) {
+            selectedEntry = result.get(0);
+            selectedRowId = 0l;
+            selection = new SimpleSelection();
+            selection.addKey(0);
+            rowSelectionChanged();
         }
 
         purchaseController.setCurrentStep(Step.SEARCH_RESULTS);
@@ -270,6 +283,7 @@ public class SearchController extends BaseController {
         returnResultsModel = null;
         selectedEntry = null;
         selectedReturnEntry = null;
+        selectedRowId = null;
     }
 
     public String toSearchScreen() {
@@ -325,6 +339,20 @@ public class SearchController extends BaseController {
         seatController.setReturnSeatHandler(new SeatHandler(selectedReturnEntry));
     }
 
+    @SuppressWarnings("unused")
+    public void validateDate(FacesContext ctx,
+            UIComponent c, Object value) {
+        Date date = (Date) value;
+        if (date == null)
+            return;
+
+        if (date.compareTo(new Date()) < 0) {
+            FacesMessage fm = new FacesMessage(
+                        Messages.getString("dateMustNotBeBeforeToday"));
+
+            throw new ValidatorException(fm);
+        }
+    }
 
     /* -------------- ADMIN PANEL METHODS FOLLOW ------------------ */
 

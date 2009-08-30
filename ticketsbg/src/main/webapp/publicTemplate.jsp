@@ -26,7 +26,7 @@
 
 <img src="images/logo.jpg" alt="bus.bg" width="1005" height="100" />
 <a4j:form style="padding: 0px; margin: 0px;">
-    <a4j:poll action="#{keepAliveController.poll}" interval="100000"
+    <a4j:poll action="#{keepAliveController.poll}" interval="500000"
         immediate="true" ajaxSingle="true" />
 
     <rich:toolBar itemSeparator="line" height="34" width="1005">

@@ -81,7 +81,7 @@
                     <h:outputLabel value="#{msg.departureDate}:" for="date" />
                     <rich:calendar id="date" datePattern="dd.MM.yyyy" firstWeekDay="1"
                         value="#{searchController.date}" label="#{msg.departureDate}"
-                        required="true" />
+                        required="true" validator="#{searchController.validateDate}" />
 
                     <h:panelGroup>
                         <h:selectOneMenu id="departureOrArival"
