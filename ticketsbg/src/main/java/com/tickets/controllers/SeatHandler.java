@@ -14,6 +14,7 @@ import com.tickets.model.Route;
 import com.tickets.model.Run;
 import com.tickets.model.SearchResultEntry;
 import com.tickets.model.Ticket;
+import com.tickets.model.User;
 
 public class SeatHandler {
 
@@ -284,9 +285,9 @@ public class SeatHandler {
 
         // If this is not the admin part, mark all seats beyond the
         // configured 'sell online' seats as used
-        if (LoggedUserHolder.getUser() == null
-                || LoggedUserHolder.getUser().getAccessLevel() == AccessLevel.PUBLIC) {
-
+        User user = LoggedUserHolder.getUser();
+        if (user == null || user.getAccessLevel() == null ||
+                user.getAccessLevel() == AccessLevel.PUBLIC) {
             for (int i = 1; i < run.getRoute().getSellSeatsFrom(); i ++) {
                 u.add(i);
             }
