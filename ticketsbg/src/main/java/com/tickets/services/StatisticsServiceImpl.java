@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -55,10 +57,10 @@ public class StatisticsServiceImpl
 
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "null" })
     @Override
     public List<SoldTickets> getSoldTickets(Route route, int period,
-            int timeType, Firm firm) {
+            int timeType, Firm firm, Date fromDate, Date toDate) {
 
         String query = "SELECT t FROM Ticket t WHERE ";
         List<String> paramNames = new ArrayList<String>();
@@ -77,8 +79,31 @@ public class StatisticsServiceImpl
                 paramNames.toArray(new String[]{}),
                 values.toArray());
 
+        if (fromDate == null && toDate != null) {
+            fromDate = new Date(0);
+        }
+        if (fromDate != null && toDate == null) {
+            toDate = new Date();
+        }
+        if (fromDate != null && toDate != null) {
+            for (Iterator<Ticket> it = preResult.iterator(); it.hasNext();) {
+                Ticket t = it.next();
+                Date time = null;
+                if (timeType == StatisticsService.BY_RUN_TIME) {
+                    time = t.getRun().getTime().getTime();
+                }
+                if (timeType == StatisticsService.BY_PURCHASE_TIME) {
+                    time = t.getCreationTime().getTime();
+                }
+
+                if (time.compareTo(fromDate) < 0
+                    || time.compareTo(toDate) > 0) {
+                    it.remove();
+                }
+            }
+        }
+
         List<SoldTickets> result = new LinkedList<SoldTickets>();
-        Collections.sort(result);
 
         for (Ticket ticket : preResult) {
             Calendar time = null;
@@ -97,6 +122,7 @@ public class StatisticsServiceImpl
             st.setTickets(st.getTickets() + 1);
             result.add(st);
         }
+        //TODO order day of week
 
         return result;
 

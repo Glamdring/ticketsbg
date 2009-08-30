@@ -52,7 +52,7 @@
             </f:facet>
 
             <rich:menuItem value="#{msg.users}" action="usersList"
-                icon="/images/users.png" iconStyle="width: 32px; height: 32px;" />
+                icon="/images/users.png" />
 
             <rich:menuItem value="#{msg.firmSettings}" ajaxSingle="true"
                 oncomplete="#{rich:component('firmPanel')}.show()"
@@ -77,19 +77,18 @@
                 </h:panelGroup>
             </f:facet>
 
-            <rich:menuItem value="#{msg.soldTickets}" action="soldTicketsStats" />
+            <rich:menuItem value="#{msg.charts}" action="stats" />
 
-            <rich:menuItem value="#{msg.usedSeatsPercentage}" action="usedSeatsPercentage" />
         </rich:dropDownMenu>
     </rich:toolBar>
-
-    <rich:modalPanel id="firmPanel" autosized="true" width="350"
+</a4j:form>
+<rich:modalPanel id="firmPanel" autosized="true" width="350"
         height="120" moveable="true" resizeable="false">
         <f:facet name="controls">
             <h:panelGroup>
                 <h:graphicImage value="/images/close.png" styleClass="hidelink"
-                    id="hidelink" onclick="#{rich:component('firmPanel')}.hide()" />
-                <rich:componentControl for="firmPanel" attachTo="hidelink"
+                    id="hidelinkFirm" onclick="#{rich:component('firmPanel')}.hide()" />
+                <rich:componentControl for="firmPanel" attachTo="hidelinkFirm"
                     operation="hide" event="onclick" />
             </h:panelGroup>
         </f:facet>
@@ -98,8 +97,6 @@
         </f:facet>
         <a4j:include viewId="firm.jsp" />
     </rich:modalPanel>
-
-</a4j:form>
 <ui:insert name="body" />
 </body>
 </html>

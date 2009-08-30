@@ -1,5 +1,6 @@
 package com.tickets.services;
 
+import java.util.Date;
 import java.util.List;
 
 import com.tickets.model.Firm;
@@ -33,10 +34,19 @@ public interface StatisticsService extends Service {
      *
      * @param firm
      * 		the firm of the currently logged user; null if super-admin
+     *
+     * @param fromDate
+     * 		the starting date of the period for which the stats will
+     * 		be calculated
+     *
+     * @param toDate
+     * 		the last date of the period for which the stats will
+     * 		be calculated
+     *
      * @return list of SoldTickets to be used for statistics
      */
     List<SoldTickets> getSoldTickets(Route route,
             int period,
             int timeType,
-            Firm firm);
+            Firm firm, Date fromDate, Date toDate);
 }

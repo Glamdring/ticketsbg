@@ -16,7 +16,8 @@
 
 <f:loadBundle var="msg" basename="com.tickets.constants.messages" />
 
-
+<div style="width: 100%; margin-top: 20px;" align="center">
 <ui:insert name="body" />
+</div>
 </body>
 </html>

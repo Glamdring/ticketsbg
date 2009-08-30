@@ -2,6 +2,7 @@ package com.tickets.controllers;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -33,10 +34,10 @@ public class StatisticsController extends BaseController {
     private RouteService routeService;
 
     private String selectedRouteName;
-
     private int selectedPeriod = Calendar.DAY_OF_MONTH;
-
     private int selectedTimeType = StatisticsService.BY_RUN_TIME;
+    private Date fromDate;
+    private Date toDate;
 
     private List<SelectItem> periodItems;
     private List<SelectItem> timeTypeItems;
@@ -69,7 +70,8 @@ public class StatisticsController extends BaseController {
         Route route = routeService.findRoute(selectedRouteName, firm);
 
         return statsService.getSoldTickets(route, selectedPeriod,
-                selectedTimeType, firm);
+                selectedTimeType, firm,
+                fromDate, toDate);
     }
 
     public String getSelectedRouteName() {
@@ -126,5 +128,21 @@ public class StatisticsController extends BaseController {
 
     public void setSelectedTimeType(int selectedTimeType) {
         this.selectedTimeType = selectedTimeType;
+    }
+
+    public Date getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(Date fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public Date getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(Date toDate) {
+        this.toDate = toDate;
     }
 }

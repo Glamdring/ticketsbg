@@ -281,16 +281,8 @@
 
     <navigation-rule>
         <navigation-case>
-            <from-outcome>soldTicketsStats</from-outcome>
-            <to-view-id>/admin/soldTickets.jsp</to-view-id>
-            <redirect />
-        </navigation-case>
-    </navigation-rule>
-
-    <navigation-rule>
-        <navigation-case>
-            <from-outcome>usedSeatsPercentage</from-outcome>
-            <to-view-id>/admin/usedSeatsPercentage.jsp</to-view-id>
+            <from-outcome>stats</from-outcome>
+            <to-view-id>/admin/stats.jsp</to-view-id>
             <redirect />
         </navigation-case>
     </navigation-rule>
