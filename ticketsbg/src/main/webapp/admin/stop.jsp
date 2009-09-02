@@ -31,7 +31,7 @@
                         id="timeToDeparture" />
 
                     <h:outputLabel value="#{msg.mapUrl}" for="mapUrl" id="mapLabel" />
-                    <h:inputText id="mapUrl"
+                    <h:inputText id="mapUrl" size="30"
                         value="#{routeController.currentStopMapAddress}" />
 
                     <a4j:commandButton action="#{routeController.saveStop}"

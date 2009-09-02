@@ -66,13 +66,29 @@
                                         fromMapVar.addOverlay(new GMarker(fromMapVar.getCenter()));
                                     } else {
                                         var clientgeocoder = new GClientGeocoder();
-                                        clientgeocoder.getLatLng(address, setLocation);
+                                        clientgeocoder.getLatLng(address, setFromLocation);
                                     }
                                 }
 
-                                function setLocation(response) {
+                                function initToMap() {
+                                    var address = #{searchController.mapHandler.toAddress};
+                                    if (address == null) {
+                                        toMapVar.addOverlay(new GMarker(toMapVar.getCenter()));
+                                    } else {
+                                        var clientgeocoder = new GClientGeocoder();
+                                        clientgeocoder.getLatLng(address, setToLocation);
+                                    }
+                                }
+
+                                function setFromLocation(response) {
                                     fromMapVar.addOverlay(new GMarker(response));
                                     fromMapVar.panTo(response);
+                                }
+
+                                function setToLocation(response) {
+                                    alert(response);
+                                    toMapVar.addOverlay(new GMarker(response));
+                                    toMapVar.panTo(response);
                                 }
 
                                 //]]>
@@ -103,7 +119,7 @@
 
                             <rich:modalPanel id="toMapPanel" autosized="true"
                                 onmaskclick="#{rich:component('toMapPanel')}.hide()"
-                                resizeable="false" onshow="toMapVar.checkResize()">
+                                resizeable="false" onshow="toMapVar.checkResize(); initToMap();">
                                 <f:facet name="controls">
                                     <h:panelGroup>
                                         <h:graphicImage value="/images/close.png"

@@ -457,7 +457,7 @@
             </h:form>
         </f:view>
 
-        <rich:modalPanel id="stopPanel" autosized="true" width="450">
+        <rich:modalPanel id="stopPanel" autosized="true" width="400">
             <f:facet name="header">
                 <h:outputText value="#{msg.addOrModifyStop}" />
             </f:facet>

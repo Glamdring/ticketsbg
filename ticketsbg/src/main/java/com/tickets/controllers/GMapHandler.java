@@ -62,8 +62,10 @@ public class GMapHandler implements Serializable {
          try {
              String s = url.substring(url.indexOf("q="));
 
-            return "\"" + URLDecoder.decode(s.substring("q=".length(), s
+            String result = "\"" + URLDecoder.decode(s.substring("q=".length(), s
                             .indexOf("&")), "utf-8") + "\"";
+            System.out.println(result);
+            return result;
          } catch (Exception ex) {
              // on any exception (caused by incorrect url, empty map, etc),
              // return null-string
