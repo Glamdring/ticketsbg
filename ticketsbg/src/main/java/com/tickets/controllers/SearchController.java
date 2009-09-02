@@ -68,9 +68,7 @@ public class SearchController extends BaseController {
     private String fromStop;
     private String toStop;
 
-    // Google maps details
-    private String fromMapUrl;
-    private String toMapUrl;
+    private GMapHandler mapHandler = new GMapHandler();
 
     // A variable holding the selected stop in case
     // a purchase is made from the administration panel
@@ -161,8 +159,8 @@ public class SearchController extends BaseController {
             rowSelectionChanged();
         }
 
-        fromMapUrl = stopService.getMapUrl(fromStop);
-        toMapUrl = stopService.getMapUrl(toStop);
+        mapHandler.setFromMapUrl(stopService.getMapUrl(fromStop));
+        mapHandler.setToMapUrl(stopService.getMapUrl(toStop));
 
         purchaseController.setCurrentStep(Step.SEARCH_RESULTS);
 
@@ -687,46 +685,11 @@ public class SearchController extends BaseController {
         this.toStopPerPurchase = toStopPerPurchase;
     }
 
-
-    //------------ Map coords handling ---------------------------
-    public String getToMapLat() {
-        return getMapLat(toMapUrl);
+    public GMapHandler getMapHandler() {
+        return mapHandler;
     }
 
-    public String getToMapLng() {
-        return getMapLng(toMapUrl);
-    }
-
-    public String getFromMapLat() {
-        return getMapLat(fromMapUrl);
-    }
-
-    public String getFromMapLng() {
-        return getMapLng(fromMapUrl);
-    }
-
-    public String getMapLat(String mapUrl) {
-        String coords = getCoordsPortion(mapUrl);
-        String result = coords.split(",")[0];
-        return result;
-    }
-
-    public String getMapLng(String mapUrl) {
-        String coords = getCoordsPortion(mapUrl);
-        String result = coords.split(",")[1];
-        return result;
-    }
-
-    private String getCoordsPortion(String mapUrl) {
-        try {
-            String s = mapUrl.substring(
-                    mapUrl.indexOf("ll="));
-
-            return s.substring("ll=".length(), s.indexOf("&"));
-        } catch (Exception ex) {
-            // on any exception (caused by incorrect url, empty map, etc),
-            // return 0,0
-            return "0,0";
-        }
+    public void setMapHandler(GMapHandler mapHandler) {
+        this.mapHandler = mapHandler;
     }
 }

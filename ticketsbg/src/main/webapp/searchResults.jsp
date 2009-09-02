@@ -58,8 +58,27 @@
                                     timeZone="#{timeZoneController.timeZone}" />
                             </h:outputText>)
 
+                            <script type="text/javascript">
+                                //<![CDATA[
+                                function initFromMap() {
+                                    var address = #{searchController.mapHandler.fromAddress};
+                                    if (address == null) {
+                                        fromMapVar.addOverlay(new GMarker(fromMapVar.getCenter()));
+                                    } else {
+                                        var clientgeocoder = new GClientGeocoder();
+                                        clientgeocoder.getLatLng(address, setLocation);
+                                    }
+                                }
+
+                                function setLocation(response) {
+                                    fromMapVar.addOverlay(new GMarker(response));
+                                    fromMapVar.panTo(response);
+                                }
+
+                                //]]>
+                            </script>
                             <rich:modalPanel id="fromMapPanel"
-                                autosized="true" onshow="fromMapVar.checkResize()"
+                                autosized="true" onshow="fromMapVar.checkResize(); initFromMap();"
                                 onmaskclick="#{rich:component('fromMapPanel')}.hide()"
                                 resizeable="false">
 
@@ -74,11 +93,11 @@
                                 </f:facet>
 
                                 <rich:panel>
-                                    <rich:gmap lat="#{searchController.fromMapLat}"
-                                        lng="#{searchController.fromMapLng}" zoom="17"
+                                    <rich:gmap lat="#{searchController.mapHandler.fromMapLat}"
+                                        lng="#{searchController.mapHandler.fromMapLng}" zoom="17"
                                         mapType="G_HYBRID_MAP" showGMapTypeControl="false"
-                                        style="width: 530px; height: 530px;"
-                                        gmapVar="fromMapVar" />
+                                        style="width: 500px; height: 500px;"
+                                        gmapVar="fromMapVar"/>
                                 </rich:panel>
                             </rich:modalPanel>
 
@@ -95,10 +114,10 @@
                                     </h:panelGroup>
                                 </f:facet>
                                 <rich:panel>
-                                    <rich:gmap lat="#{searchController.toMapLat}"
-                                        lng="#{searchController.toMapLng}" zoom="17"
+                                    <rich:gmap lat="#{searchController.mapHandler.toMapLat}"
+                                        lng="#{searchController.mapHandler.toMapLng}" zoom="17"
                                         mapType="G_HYBRID_MAP" showGMapTypeControl="false"
-                                        style="width: 530px; height: 530px;"
+                                        style="width: 500px; height: 500px;"
                                         gmapVar="toMapVar" />
                                 </rich:panel>
                             </rich:modalPanel>

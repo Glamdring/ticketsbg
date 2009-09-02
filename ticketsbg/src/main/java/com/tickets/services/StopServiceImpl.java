@@ -165,7 +165,7 @@ public class StopServiceImpl extends BaseService<Stop> implements StopService {
 
     @Override
     public void saveMapAddress(String stopName, String mapAddress) {
-        StopMap sm = new StopMap();
+        StopMap sm = getStopMap(stopName);
         sm.setStopName(stopName);
         sm.setMapUrl(mapAddress);
         getDao().persist(sm);
@@ -173,13 +173,17 @@ public class StopServiceImpl extends BaseService<Stop> implements StopService {
 
     @Override
     public String getMapUrl(String stopName) {
-        List list = getDao().findByNamedQuery("StopMap.findByStopName",
-                new String[] { "stopName" }, new Object[] { stopName });
+       return getStopMap(stopName).getMapUrl();
+    }
 
-        if (list != null && list.size() > 0) {
-            return ((StopMap) list.get(0)).getMapUrl();
-        }
+    private StopMap getStopMap(String stopName) {
+         List list = getDao().findByNamedQuery("StopMap.findByStopName",
+                 new String[] { "stopName" }, new Object[] { stopName });
 
-        return "";
+         if (list != null && list.size() > 0) {
+             return (StopMap) list.get(0);
+         }
+
+         return new StopMap();
     }
 }
