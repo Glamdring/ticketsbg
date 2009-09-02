@@ -19,7 +19,7 @@
             <a4j:commandButton action="#{loginController.login}"
                 value="#{msg.login}" type="submit" />
 
-            <a4j:status>
+            <a4j:status id="loginStatus">
                 <f:facet name="start">
                     <h:graphicImage value="/images/ajaxloading.gif" />
                 </f:facet>

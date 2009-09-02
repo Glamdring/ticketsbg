@@ -68,6 +68,8 @@ public class RouteController extends BaseController implements Serializable {
 
     private List<String> existingStopNames = new ArrayList<String>();
 
+    private String currentStopMapAddress = "";
+
     @Autowired
     private SeatController seatController;
 
@@ -139,11 +141,13 @@ public class RouteController extends BaseController implements Serializable {
     @Action
     public void addStop() {
         stop = new Stop();
+        currentStopMapAddress = "";
     }
 
     @Action
     public void saveStop() {
         stopService.addStopToRoute(stop, route);
+        stopService.saveMapAddress(stop.getName(), currentStopMapAddress);
         listReordered(null);
     }
 
@@ -343,6 +347,7 @@ public class RouteController extends BaseController implements Serializable {
 
     public void setStop(Stop stop) {
         this.stop = stop;
+        setCurrentStopMapAddress(stopService.getMapUrl(stop.getName()));
     }
 
     public HtmlOrderingList getStopsTable() {
@@ -408,5 +413,13 @@ public class RouteController extends BaseController implements Serializable {
 
     public void setExistingStopNames(List<String> existingStopNames) {
         this.existingStopNames = existingStopNames;
+    }
+
+    public String getCurrentStopMapAddress() {
+        return currentStopMapAddress;
+    }
+
+    public void setCurrentStopMapAddress(String currentStopMapAddress) {
+        this.currentStopMapAddress = currentStopMapAddress;
     }
 }

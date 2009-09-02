@@ -60,12 +60,6 @@
         <param-value>rfRes</param-value>
     </context-param>
 
-    <!--
-        listener> <listener-class>
-        org.apache.myfaces.webapp.StartupServletContextListener
-        </listener-class> </listener
-    -->
-
     <listener>
         <listener-class>
             org.springframework.web.context.ContextLoaderListener
@@ -130,7 +124,6 @@
         <url-pattern>/primefaces_resources/*</url-pattern>
     </servlet-mapping>
 
-
     <!--
         servlet> <servlet-name>CXFServlet</servlet-name>
         <servlet-class>org.apache.cxf.transport.servlet.CXFServlet
@@ -166,5 +159,4 @@
         <error-code>404</error-code>
         <location>/404.jsp</location>
     </error-page>
-
 </web-app>

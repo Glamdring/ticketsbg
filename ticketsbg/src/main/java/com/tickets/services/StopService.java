@@ -59,4 +59,8 @@ public interface StopService extends Service<Stop> {
      * @return list of names
      */
     List<String> getExistingStopNames();
+
+    void saveMapAddress(String stopName, String mapAddress);
+
+    String getMapUrl(String stopName);
 }

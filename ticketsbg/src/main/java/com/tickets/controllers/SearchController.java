@@ -31,6 +31,7 @@ import com.tickets.model.TicketCount;
 import com.tickets.model.User;
 import com.tickets.services.SearchService;
 import com.tickets.services.ServiceFunctions;
+import com.tickets.services.StopService;
 import com.tickets.services.TicketService;
 import com.tickets.utils.GeneralUtils;
 /**
@@ -51,6 +52,9 @@ public class SearchController extends BaseController {
     private TicketService ticketService;
 
     @Autowired
+    private StopService stopService;
+
+    @Autowired
     private LoggedUserHolder loggedUserHolder;
 
     @Autowired
@@ -63,6 +67,10 @@ public class SearchController extends BaseController {
 
     private String fromStop;
     private String toStop;
+
+    // Google maps details
+    private String fromMapUrl;
+    private String toMapUrl;
 
     // A variable holding the selected stop in case
     // a purchase is made from the administration panel
@@ -152,6 +160,9 @@ public class SearchController extends BaseController {
             selection.addKey(0);
             rowSelectionChanged();
         }
+
+        fromMapUrl = stopService.getMapUrl(fromStop);
+        toMapUrl = stopService.getMapUrl(toStop);
 
         purchaseController.setCurrentStep(Step.SEARCH_RESULTS);
 
@@ -346,7 +357,7 @@ public class SearchController extends BaseController {
         if (date == null)
             return;
 
-        if (date.compareTo(new Date()) < 0) {
+        if (date.compareTo(GeneralUtils.getPreviousDay().getTime()) < 0) {
             FacesMessage fm = new FacesMessage(
                         Messages.getString("dateMustNotBeBeforeToday"));
 
@@ -674,5 +685,48 @@ public class SearchController extends BaseController {
 
     public void setToStopPerPurchase(String toStopPerPurchase) {
         this.toStopPerPurchase = toStopPerPurchase;
+    }
+
+
+    //------------ Map coords handling ---------------------------
+    public String getToMapLat() {
+        return getMapLat(toMapUrl);
+    }
+
+    public String getToMapLng() {
+        return getMapLng(toMapUrl);
+    }
+
+    public String getFromMapLat() {
+        return getMapLat(fromMapUrl);
+    }
+
+    public String getFromMapLng() {
+        return getMapLng(fromMapUrl);
+    }
+
+    public String getMapLat(String mapUrl) {
+        String coords = getCoordsPortion(mapUrl);
+        String result = coords.split(",")[0];
+        return result;
+    }
+
+    public String getMapLng(String mapUrl) {
+        String coords = getCoordsPortion(mapUrl);
+        String result = coords.split(",")[1];
+        return result;
+    }
+
+    private String getCoordsPortion(String mapUrl) {
+        try {
+            String s = mapUrl.substring(
+                    mapUrl.indexOf("ll="));
+
+            return s.substring("ll=".length(), s.indexOf("&"));
+        } catch (Exception ex) {
+            // on any exception (caused by incorrect url, empty map, etc),
+            // return 0,0
+            return "0,0";
+        }
     }
 }

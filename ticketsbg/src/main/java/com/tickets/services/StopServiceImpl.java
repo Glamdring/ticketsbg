@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.tickets.model.Price;
 import com.tickets.model.Route;
 import com.tickets.model.Stop;
+import com.tickets.model.StopMap;
 
 @Service("stopService")
 public class StopServiceImpl extends BaseService<Stop> implements StopService {
@@ -160,5 +161,25 @@ public class StopServiceImpl extends BaseService<Stop> implements StopService {
     public List<String> getExistingStopNames() {
         List<String> result = getDao().findByQuery("SELECT stop.name FROM Stop stop GROUP BY stop.name ORDER BY stop.name");
         return result;
+    }
+
+    @Override
+    public void saveMapAddress(String stopName, String mapAddress) {
+        StopMap sm = new StopMap();
+        sm.setStopName(stopName);
+        sm.setMapUrl(mapAddress);
+        getDao().persist(sm);
+    }
+
+    @Override
+    public String getMapUrl(String stopName) {
+        List list = getDao().findByNamedQuery("StopMap.findByStopName",
+                new String[] { "stopName" }, new Object[] { stopName });
+
+        if (list != null && list.size() > 0) {
+            return ((StopMap) list.get(0)).getMapUrl();
+        }
+
+        return "";
     }
 }

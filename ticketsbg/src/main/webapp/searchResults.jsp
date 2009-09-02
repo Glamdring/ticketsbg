@@ -8,8 +8,7 @@
     xmlns:c="http://java.sun.com/jstl/core"
     xmlns:fmt="http://java.sun.com/jstl/fmt"
     xmlns:t="http://myfaces.apache.org/tomahawk"
-    xmlns:tc="http://tickets.com/tc"
-    template="publicTemplate.jsp">
+    xmlns:tc="http://tickets.com/tc" template="publicTemplate.jsp">
 
     <ui:define name="head">
         <style type="text/css">
@@ -22,6 +21,12 @@
     border-style: none;
     padding: 0px;
     margin: 0px;
+}
+
+.mapLink {
+    font-weight: bold;
+    color: darkblue;
+    text-decoration: underline;
 }
 
 .gridContent {
@@ -37,15 +42,66 @@
                         <h:panelGroup style="font-weight: normal;">
                             <h:outputText value="#{msg.searchResultsFrom} " />
                             <h:outputText value="#{searchController.fromStop}"
-                                styleClass="bold" />
+                                styleClass="mapLink" id="fromStopHeader">
+                                <rich:componentControl for="fromMapPanel"
+                                    attachTo="fromStopHeader" operation="show" event="onmouseover" />
+                            </h:outputText>
                             <h:outputText value=" #{msg.searchResultsTo} " />
                             <h:outputText value="#{searchController.toStop}"
-                                styleClass="bold" />
+                                styleClass="mapLink" id="toStopHeader">
+                                <rich:componentControl for="toMapPanel" attachTo="toStopHeader"
+                                    operation="show" event="onmouseover" />
+                            </h:outputText>
                                         (<h:outputText
                                 value="#{searchController.date}">
                                 <f:convertDateTime type="date" pattern="dd.MM.yyyy"
                                     timeZone="#{timeZoneController.timeZone}" />
                             </h:outputText>)
+
+                            <rich:modalPanel id="fromMapPanel"
+                                autosized="true" onshow="fromMapVar.checkResize()"
+                                onmaskclick="#{rich:component('fromMapPanel')}.hide()"
+                                resizeable="false">
+
+                                <f:facet name="controls">
+                                    <h:panelGroup>
+                                        <h:graphicImage value="/images/close.png"
+                                            id="hidelinkFromMapPanel" styleClass="hidelink" />
+                                        <rich:componentControl for="fromMapPanel"
+                                            attachTo="hidelinkFromMapPanel" operation="hide"
+                                            event="onclick" />
+                                    </h:panelGroup>
+                                </f:facet>
+
+                                <rich:panel>
+                                    <rich:gmap lat="#{searchController.fromMapLat}"
+                                        lng="#{searchController.fromMapLng}" zoom="17"
+                                        mapType="G_HYBRID_MAP" showGMapTypeControl="false"
+                                        style="width: 530px; height: 530px;"
+                                        gmapVar="fromMapVar" />
+                                </rich:panel>
+                            </rich:modalPanel>
+
+                            <rich:modalPanel id="toMapPanel" autosized="true"
+                                onmaskclick="#{rich:component('toMapPanel')}.hide()"
+                                resizeable="false" onshow="toMapVar.checkResize()">
+                                <f:facet name="controls">
+                                    <h:panelGroup>
+                                        <h:graphicImage value="/images/close.png"
+                                            id="hidelinkToMapPanel" styleClass="hidelink" />
+                                        <rich:componentControl for="toMapPanel"
+                                            attachTo="hidelinkToMapPanel" operation="hide"
+                                            event="onclick" />
+                                    </h:panelGroup>
+                                </f:facet>
+                                <rich:panel>
+                                    <rich:gmap lat="#{searchController.toMapLat}"
+                                        lng="#{searchController.toMapLng}" zoom="17"
+                                        mapType="G_HYBRID_MAP" showGMapTypeControl="false"
+                                        style="width: 530px; height: 530px;"
+                                        gmapVar="toMapVar" />
+                                </rich:panel>
+                            </rich:modalPanel>
                         </h:panelGroup>
                     </f:facet>
 
@@ -195,7 +251,8 @@
                                             #{msg.returnHeaderLabel}
                                         </f:facet>
 
-                                        <rich:panel id="resultEntry" header="#{result.run.route.name}" style="width: 100%;">
+                                        <rich:panel id="resultEntry" header="#{result.run.route.name}"
+                                            style="width: 100%;">
                                             <a4j:repeat value="#{result.run.route.stops}" var="stop"
                                                 rowKeyVar="stopId">
                                                 <h:outputText value=" → " rendered="#{stopId > 0}" />
@@ -209,11 +266,11 @@
 
                                                 <h:outputText value="#{msg.departureTime}: " />
                                                 <h:panelGroup>
-                                                   <h:outputText value="#{result.departureTime.time}"
-                                                       styleClass="bold">
-                                                       <f:convertDateTime type="time" pattern="HH:mm"
-                                                           timeZone="#{timeZoneController.timeZone}" />
-                                                   </h:outputText> #{msg.hourAbbr}
+                                                    <h:outputText value="#{result.departureTime.time}"
+                                                        styleClass="bold">
+                                                        <f:convertDateTime type="time" pattern="HH:mm"
+                                                            timeZone="#{timeZoneController.timeZone}" />
+                                                    </h:outputText> #{msg.hourAbbr}
                                                 </h:panelGroup>
 
                                                 <h:outputText value="#{msg.arrivalTime}: " />

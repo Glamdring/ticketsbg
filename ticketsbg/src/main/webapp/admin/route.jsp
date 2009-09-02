@@ -5,7 +5,6 @@
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:a4j="http://richfaces.org/a4j"
     xmlns:rich="http://richfaces.org/rich"
-    xmlns:j4j="http://javascript4jsf.dev.java.net/"
     xmlns:c="http://java.sun.com/jstl/core"
     xmlns:tc="http://tickets.com/tc"
     xmlns:t="http://myfaces.apache.org/tomahawk"
