@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.tickets.constants.Constants;
+import com.tickets.constants.Settings;
 import com.tickets.controllers.SeatHandler;
 import com.tickets.model.Discount;
 import com.tickets.model.PaymentMethod;
@@ -16,26 +18,33 @@ import com.tickets.model.User;
 import com.tickets.utils.GeneralUtils;
 
 @Service("ticketService")
-public class TicketServiceImpl extends BaseService<Ticket> implements TicketService {
+public class TicketServiceImpl extends BaseService<Ticket> implements
+        TicketService {
 
     @Override
     public Ticket createTicket(SearchResultEntry selectedEntry,
-            SearchResultEntry selectedReturnEntry, int seat, int returnSeat, Discount discount) {
+            SearchResultEntry selectedReturnEntry, int seat, int returnSeat,
+            Discount discount) {
 
-        //Allow only one user per run at a time, to avoid collisions
-        String runIdIntern = "run" + String.valueOf(selectedEntry.getRun().getRunId()).intern();
+        // Allow only one user per run at a time, to avoid collisions
+        String runIdIntern = "run"
+                + String.valueOf(selectedEntry.getRun().getRunId()).intern();
         String returnRunIdIntern = null;
         if (selectedReturnEntry != null) {
-            returnRunIdIntern = "run" + String.valueOf(selectedEntry.getRun().getRunId()).intern();
+            returnRunIdIntern = "run"
+                    + String.valueOf(selectedEntry.getRun().getRunId())
+                            .intern();
         }
         synchronized (runIdIntern) {
             if (returnRunIdIntern != null) {
-                synchronized(returnRunIdIntern) {
-                    return doCreateTicket(selectedEntry, selectedReturnEntry, seat, returnSeat, discount);
+                synchronized (returnRunIdIntern) {
+                    return doCreateTicket(selectedEntry, selectedReturnEntry,
+                            seat, returnSeat, discount);
                 }
             }
 
-            return doCreateTicket(selectedEntry, selectedReturnEntry, seat, returnSeat, discount);
+            return doCreateTicket(selectedEntry, selectedReturnEntry, seat,
+                    returnSeat, discount);
         }
     }
 
@@ -43,11 +52,13 @@ public class TicketServiceImpl extends BaseService<Ticket> implements TicketServ
     public Ticket createTicket(SearchResultEntry selectedEntry,
             SearchResultEntry selectedReturnEntry, int seat, int returnSeat) {
 
-        return createTicket(selectedEntry, selectedReturnEntry, seat, returnSeat, null);
+        return createTicket(selectedEntry, selectedReturnEntry, seat,
+                returnSeat, null);
     }
 
     private Ticket doCreateTicket(SearchResultEntry selectedEntry,
-            SearchResultEntry selectedReturnEntry, int seat, int returnSeat, Discount discount) {
+            SearchResultEntry selectedReturnEntry, int seat, int returnSeat,
+            Discount discount) {
         if (ServiceFunctions.getVacantSeats(selectedEntry.getRun(),
                 selectedEntry.getPrice().getStartStop().getName(),
                 selectedEntry.getPrice().getEndStop().getName()) > 0) {
@@ -64,9 +75,10 @@ public class TicketServiceImpl extends BaseService<Ticket> implements TicketServ
             } else {
                 // In case there are no more seats available, quit
                 // the creation process
-                if (ServiceFunctions.getVacantSeats(selectedReturnEntry.getRun(),
-                        selectedReturnEntry.getPrice().getStartStop().getName(),
-                        selectedReturnEntry.getPrice().getEndStop().getName()) < 0) {
+                if (ServiceFunctions.getVacantSeats(selectedReturnEntry
+                        .getRun(), selectedReturnEntry.getPrice()
+                        .getStartStop().getName(), selectedReturnEntry
+                        .getPrice().getEndStop().getName()) < 0) {
                     return null;
                 }
 
@@ -74,7 +86,8 @@ public class TicketServiceImpl extends BaseService<Ticket> implements TicketServ
                 ticket.setPrice(selectedEntry.getPrice().getTwoWayPrice());
                 ticket.setReturnRun(selectedReturnEntry.getRun());
             }
-            ticket.setStartStop(selectedEntry.getPrice().getStartStop().getName());
+            ticket.setStartStop(selectedEntry.getPrice().getStartStop()
+                    .getName());
             ticket.setEndStop(selectedEntry.getPrice().getEndStop().getName());
 
             // Creation time set in order to remove it after a certain
@@ -104,10 +117,13 @@ public class TicketServiceImpl extends BaseService<Ticket> implements TicketServ
         try {
             code += run.getRoute().getFirm().getFirmId();
         } catch (Exception ex) {
-            //Ignore - only occurs in test environment
+            // Ignore - only occurs in test environment
         }
         code += run.getRunId();
-        code += ("" + run.getTime().getTimeInMillis()).substring(8); //after the 7th digit
+        code += ("" + run.getTime().getTimeInMillis()).substring(8); // after
+                                                                        // the
+                                                                        // 7th
+                                                                        // digit
         code += ((int) (Math.random() * 8999 + 100000));
 
         if (code.length() % 2 == 1) {
@@ -115,8 +131,8 @@ public class TicketServiceImpl extends BaseService<Ticket> implements TicketServ
         }
 
         StringBuilder sb = new StringBuilder(code);
-        for (int i = 2; i < code.length() - 1 ; i += 2) {
-            sb.insert(i + (i-2)/2, '-');
+        for (int i = 2; i < code.length() - 1; i += 2) {
+            sb.insert(i + (i - 2) / 2, '-');
         }
         return sb.toString();
     }
@@ -141,7 +157,7 @@ public class TicketServiceImpl extends BaseService<Ticket> implements TicketServ
                 entry.getRun());
 
         Route route = entry.getRun().getRoute();
-        for (int i = route.getSellSeatsFrom(); i < route.getSellSeatsTo(); i ++) {
+        for (int i = route.getSellSeatsFrom(); i < route.getSellSeatsTo(); i++) {
             if (Collections.binarySearch(usedSeats, i) < 0) {
                 return i;
             }
@@ -155,5 +171,23 @@ public class TicketServiceImpl extends BaseService<Ticket> implements TicketServ
     public List<Ticket> getTicketsByUser(User user) {
         return getDao().findByNamedQuery("Ticket.findByUser",
                 new String[] { "user" }, new Object[] { user });
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void clearUnusedTickets() {
+        List<Ticket> unconfirmed = getDao().findByNamedQuery(
+                "Ticket.findUnconfirmedNotInProcess");
+
+        long timeoutPeriod = Integer.parseInt(Settings
+                .getValue("ticket.timeout"))
+                * Constants.ONE_MINUTE;
+
+        for (Ticket ticket : unconfirmed) {
+            if (System.currentTimeMillis()
+                    - ticket.getCreationTime().getTimeInMillis() > timeoutPeriod) {
+                ticket.setTimeouted(true);
+            }
+        }
     }
 }

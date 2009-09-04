@@ -215,11 +215,21 @@
         <property name="timerTask" ref="statisticsTask" />
     </bean>
 
+    <bean id="scheduledTicketsClearingTask" class="org.springframework.scheduling.timer.ScheduledTimerTask"
+        lazy-init="false">
+        <!-- wait 1 minute before starting repeated execution -->
+        <property name="delay" value="60000" />
+        <!-- run every minute -->
+        <property name="period" value="60000" />
+        <property name="timerTask" ref="unusedTicketsClearingTask" />
+    </bean>
+
     <bean id="timerFactory" class="org.springframework.scheduling.timer.TimerFactoryBean">
         <property name="scheduledTimerTasks">
             <list>
                 <ref bean="scheduledRunTask" />
                 <ref bean="scheduledStatsTask" />
+                <ref bean="scheduledTicketsClearingTask" />
             </list>
         </property>
     </bean>

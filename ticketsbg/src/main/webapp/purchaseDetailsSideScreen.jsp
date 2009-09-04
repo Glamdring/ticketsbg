@@ -23,6 +23,14 @@
                     <br />
                     <br />
                 </a4j:repeat>
+
+                <h:graphicImage url="/images/timer.png" style="width: 16px; height: 16px;" />
+                <h:outputText value="#{purchaseController.timeRemaining}"
+                    id="timeRemaining"
+                    rendered="#{purchaseController.tickets != null and tc:getSize(purchaseController.tickets) > 0}">
+                    <f:convertDateTime pattern="mm:ss" />
+                </h:outputText>
+                <a4j:poll interval="1000" reRender="timeRemaining" />
             </rich:panel>
         </a4j:form>
     </f:view>

@@ -121,7 +121,7 @@ public class SearchController extends BaseController {
 
     @Action
     public String navigateToSearch() {
-        endConversation();
+        resetSearchFields();
         return Screen.SEARCH_SCREEN.getOutcome();
     }
 
@@ -305,6 +305,20 @@ public class SearchController extends BaseController {
         selectedEntry = null;
         selectedReturnEntry = null;
         selectedRowId = null;
+    }
+
+    private void resetSearchFields() {
+        fromStop = null;
+        toStop = null;
+        date = GeneralUtils.createEmptyCalendar().getTime();;
+        returnDate = GeneralUtils.createEmptyCalendar().getTime();;
+        toHour = 0;
+        fromHour = 0;
+        returnToHour = 0;
+        returnFromHour = 0;
+        timeForDeparture = true;
+        returnTimeForDeparture = true;
+        travelType = TWO_WAY;
     }
 
     public String toSearchScreen() {

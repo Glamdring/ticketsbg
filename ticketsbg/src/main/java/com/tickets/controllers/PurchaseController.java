@@ -1,6 +1,7 @@
 package com.tickets.controllers;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.apache.myfaces.orchestra.conversation.annotations.ConversationName;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import com.tickets.constants.Constants;
+import com.tickets.constants.Settings;
 import com.tickets.model.Customer;
 import com.tickets.model.PaymentMethod;
 import com.tickets.model.Ticket;
@@ -64,5 +67,25 @@ public class PurchaseController extends BaseController {
         service.finalizePurchase(tickets, user);
         setCurrentStep(null);
         setTickets(new ArrayList<Ticket>());
+    }
+
+    public long getTimeRemaining() {
+        Calendar min = null;
+        for (Ticket ticket : tickets) {
+            if (min == null) {
+                min = ticket.getCreationTime();
+            } else if (min.compareTo(ticket.getCreationTime()) < 0){
+                min = ticket.getCreationTime();
+            }
+        }
+
+        if (min == null) {
+            return 0;
+        }
+        long timeoutPeriod = Integer.parseInt(Settings
+                .getValue("ticket.timeout"))
+                * Constants.ONE_MINUTE;
+
+        return timeoutPeriod - (System.currentTimeMillis() - min.getTimeInMillis());
     }
 }

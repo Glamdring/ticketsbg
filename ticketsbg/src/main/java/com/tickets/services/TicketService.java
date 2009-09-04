@@ -39,4 +39,12 @@ public interface TicketService extends Service<Ticket> {
      */
 
     List<Ticket> getTicketsByUser(User user);
+
+    /**
+     * Clears unused tickets. The timeout is defined in a setting,
+     * in minutes. All tickets that have timeouted and don't have
+     * completed transactions are deleted, and then the user
+     * is notified of the timeout
+     */
+    void clearUnusedTickets();
 }

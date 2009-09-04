@@ -7,7 +7,7 @@
 
     <rich:messages id="messages" errorClass="error">
         <f:facet name="errorMarker">
-            <h:graphicImage url="/images/delete.png" width="14" height="14"
+            <h:graphicImage url="/images/validationError.png" width="14" height="14"
                 style="margin-right: 4px;" />
         </f:facet>
     </rich:messages>

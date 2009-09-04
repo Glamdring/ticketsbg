@@ -29,7 +29,10 @@ import javax.persistence.TemporalType;
     @NamedQuery(
         name = "Ticket.findByUser",
         query = "SELECT t FROM Ticket t WHERE t.user=:user"
-    )
+    ),
+    @NamedQuery(
+        name = "Ticket.findUnconfirmedNotInProcess",
+        query = "SELECT t FROM Ticket t WHERE t.committed=false AND t.paymentInProcess=false"),
 })
 public class Ticket implements Serializable, Comparable<Ticket> {
 
@@ -92,6 +95,9 @@ public class Ticket implements Serializable, Comparable<Ticket> {
 
     @Column
     private int returnSeat;
+
+    @Column
+    private boolean timeouted;
 
     public Run getRun() {
         return run;
@@ -238,6 +244,14 @@ public class Ticket implements Serializable, Comparable<Ticket> {
 
     public void setReturnSeat(int returnSeat) {
         this.returnSeat = returnSeat;
+    }
+
+    public boolean isTimeouted() {
+        return timeouted;
+    }
+
+    public void setTimeouted(boolean timeouted) {
+        this.timeouted = timeouted;
     }
 
     @Override
