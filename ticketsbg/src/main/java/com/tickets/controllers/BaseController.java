@@ -6,6 +6,8 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import org.apache.myfaces.orchestra.conversation.Conversation;
+
 import com.tickets.constants.Messages;
 
 public abstract class BaseController implements Serializable {
@@ -44,5 +46,11 @@ public abstract class BaseController implements Serializable {
 
     protected static String getLocalizedMessage(String key, Object...params) {
         return Messages.getString(key, params);
+    }
+
+    protected void endConversation() {
+        if (Conversation.getCurrentInstance() != null) {
+            Conversation.getCurrentInstance().invalidate();
+        }
     }
 }

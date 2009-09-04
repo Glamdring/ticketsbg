@@ -6,6 +6,7 @@ import java.util.List;
 import org.richfaces.model.ListRowKey;
 import org.springframework.stereotype.Service;
 
+import com.tickets.model.Firm;
 import com.tickets.model.Price;
 import com.tickets.model.Route;
 import com.tickets.model.Stop;
@@ -46,9 +47,9 @@ public class StopServiceImpl extends BaseService<Stop> implements StopService {
         List<Price> prices = route.getPrices();
         List<Stop> stops = route.getStops();
         // to size - 1, because no sub-route can start from the last stop
-        for (int i = 0; i < stops.size() - 1; i ++) {
+        for (int i = 0; i < stops.size() - 1; i++) {
             // from 1, because the first stop cannot be an end-stop
-            for (int j = i + 1; j < stops.size(); j ++) {
+            for (int j = i + 1; j < stops.size(); j++) {
                 Price price = new Price();
                 price.setStartStop(stops.get(i));
                 price.setEndStop(stops.get(j));
@@ -59,17 +60,16 @@ public class StopServiceImpl extends BaseService<Stop> implements StopService {
         }
 
         /*
-         Remove unneeded prices (~= DELETE_ORPHAN)
-         Remove if:
-         - the last stop is starting stop
-         - if the first stop is an end stop
-         - if either start or end stop is not found in the stops list (deleted)
+         * Remove unneeded prices (~= DELETE_ORPHAN) Remove if: - the last stop
+         * is starting stop - if the first stop is an end stop - if either start
+         * or end stop is not found in the stops list (deleted)
          */
 
-        for (int i = 0; i < prices.size(); i ++) {
+        for (int i = 0; i < prices.size(); i++) {
             Price price = prices.get(i);
             boolean shouldRemove = false;
-            if (price.getStartStop().getStopId() == stops.get(stops.size() - 1).getStopId()) {
+            if (price.getStartStop().getStopId() == stops.get(stops.size() - 1)
+                    .getStopId()) {
                 shouldRemove = true;
             }
             if (price.getEndStop().getStopId() == stops.get(0).getStopId()) {
@@ -82,7 +82,7 @@ public class StopServiceImpl extends BaseService<Stop> implements StopService {
 
             if (shouldRemove) {
                 prices.remove(i);
-                i --;
+                i--;
             }
         }
     }
@@ -98,8 +98,10 @@ public class StopServiceImpl extends BaseService<Stop> implements StopService {
 
     private boolean containsPrice(List<Price> prices, Price price) {
         for (Price p : prices) {
-            if (p.getStartStop().getStopId() == price.getStartStop().getStopId()
-                && p.getEndStop().getStopId() == price.getEndStop().getStopId()) {
+            if (p.getStartStop().getStopId() == price.getStartStop()
+                    .getStopId()
+                    && p.getEndStop().getStopId() == price.getEndStop()
+                            .getStopId()) {
                 return true;
             }
         }
@@ -113,17 +115,18 @@ public class StopServiceImpl extends BaseService<Stop> implements StopService {
                 route.getStops().get(i).setIdx(i + 1);
             }
         }
-        //Reordering the list itself, not only changing the idx's
+        // Reordering the list itself, not only changing the idx's
         Collections.sort(route.getStops());
 
         cascadePrices(route);
     }
 
-
     @Override
     public Price getPrice(ListRowKey keys, Route route) {
-        int startStopId = Integer.parseInt(((String) keys.get(0)).replace("start", ""));
-        int endStopId = Integer.parseInt(((String) keys.get(1)).replace("end", ""));
+        int startStopId = Integer.parseInt(((String) keys.get(0)).replace(
+                "start", ""));
+        int endStopId = Integer.parseInt(((String) keys.get(1)).replace("end",
+                ""));
 
         return getPrice(startStopId, endStopId, route);
     }
@@ -137,7 +140,8 @@ public class StopServiceImpl extends BaseService<Stop> implements StopService {
 
         for (Price price : route.getPrices()) {
             if (endStop.getStopId() == price.getEndStop().getStopId()
-            && startStop.getStopId() == price.getStartStop().getStopId()) {
+                    && startStop.getStopId() == price.getStartStop()
+                            .getStopId()) {
                 searchedPrice = price;
                 break;
             }
@@ -158,32 +162,37 @@ public class StopServiceImpl extends BaseService<Stop> implements StopService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<String> getExistingStopNames() {
-        List<String> result = getDao().findByQuery("SELECT stop.name FROM Stop stop GROUP BY stop.name ORDER BY stop.name");
+    public List<String> getExistingStopNames(Firm firm) {
+        List<String> result = getDao()
+            .findByQuery(
+                "SELECT stop.name FROM Stop stop WHERE stop.route.firm=:firm GROUP BY stop.name ORDER BY stop.name",
+                new String[] { "firm" }, new Object[] { firm });
         return result;
     }
 
     @Override
-    public void saveMapAddress(String stopName, String mapAddress) {
-        StopMap sm = getStopMap(stopName);
+    public void saveMapAddress(String stopName, String mapAddress, Firm firm) {
+        StopMap sm = getStopMap(stopName, firm);
         sm.setStopName(stopName);
         sm.setMapUrl(mapAddress);
+        sm.setFirm(firm);
         getDao().persist(sm);
     }
 
     @Override
-    public String getMapUrl(String stopName) {
-       return getStopMap(stopName).getMapUrl();
+    public String getMapUrl(String stopName, Firm firm) {
+        return getStopMap(stopName, firm).getMapUrl();
     }
 
-    private StopMap getStopMap(String stopName) {
-         List list = getDao().findByNamedQuery("StopMap.findByStopName",
-                 new String[] { "stopName" }, new Object[] { stopName });
+    private StopMap getStopMap(String stopName, Firm firm) {
+        List list = getDao().findByNamedQuery("StopMap.findByStopName",
+                new String[] { "stopName", "firm" },
+                new Object[] { stopName, firm });
 
-         if (list != null && list.size() > 0) {
-             return (StopMap) list.get(0);
-         }
+        if (list != null && list.size() > 0) {
+            return (StopMap) list.get(0);
+        }
 
-         return new StopMap();
+        return new StopMap();
     }
 }

@@ -36,7 +36,7 @@
     <f:view>
         <rich:panel header="#{msg.searchTitle}"
             headerClass="rich-panel-header-main">
-            <rich:messages id="messages" errorClass="error" />
+            <ui:include src="messages.jsp" />
 
             <h:panelGrid columns="2" columnClasses="firstColumn,secondColumn"
                 rendered="#{!isAdmin}">
@@ -57,22 +57,25 @@
                 <h:panelGroup>
                     <rich:comboBox suggestionValues="#{searchController.stopNames}"
                         directInputSuggestions="false" required="true"
-                        value="#{searchController.fromStop}" id="fromStop" label="#{msg.startStop}">
+                        value="#{searchController.fromStop}" id="fromStop">
+
+                        <f:attribute name="label" value="#{msg.startStop}" />
 
                         <a4j:support event="onselect" reRender="toStop"
                             action="#{searchController.filterToStops}" ajaxSingle="true" />
                         <a4j:support event="onchange" reRender="toStop"
                             eventsQueue="fromStopOnchange"
                             action="#{searchController.filterToStops}" ajaxSingle="true"
-                            requestDelay="1000" />
+                            requestDelay="500" />
                     </rich:comboBox>
-                    <rich:message for="fromStop" id="fromStopError" errorClass="error" />
                 </h:panelGroup>
 
                 <h:outputLabel value="#{msg.toStop}:" for="toStop" />
                 <rich:comboBox suggestionValues="#{searchController.toStopNames}"
                     directInputSuggestions="false" required="${!isAdmin}"
-                    value="#{searchController.toStop}" id="toStop" label="#{msg.endStop}" />
+                    value="#{searchController.toStop}" id="toStop">
+                    <f:attribute name="label" value="#{msg.endStop}" />
+                </rich:comboBox>
             </h:panelGrid>
 
             <!-- One way fields -->
@@ -80,8 +83,10 @@
                 <h:panelGrid columns="2" columnClasses="firstColumn,secondColumn">
                     <h:outputLabel value="#{msg.departureDate}:" for="date" />
                     <rich:calendar id="date" datePattern="dd.MM.yyyy" firstWeekDay="1"
-                        value="#{searchController.date}" label="#{msg.departureDate}"
-                        required="true" validator="#{searchController.validateDate}" />
+                        value="#{searchController.date}"
+                        required="true" validator="#{searchController.validateDate}">
+                        <f:attribute name="label" value="#{msg.departureDate}" />
+                    </rich:calendar>
 
                     <h:panelGroup>
                         <h:selectOneMenu id="departureOrArival"

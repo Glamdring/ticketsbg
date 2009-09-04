@@ -86,7 +86,6 @@
                                 }
 
                                 function setToLocation(response) {
-                                    alert(response);
                                     toMapVar.addOverlay(new GMarker(response));
                                     toMapVar.panTo(response);
                                 }

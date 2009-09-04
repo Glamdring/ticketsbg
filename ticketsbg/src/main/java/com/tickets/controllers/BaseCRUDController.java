@@ -3,8 +3,6 @@ package com.tickets.controllers;
 import javax.annotation.PostConstruct;
 import javax.faces.model.ListDataModel;
 
-import org.apache.myfaces.orchestra.conversation.Conversation;
-
 import com.tickets.services.Service;
 
 public abstract class BaseCRUDController<E> extends BaseController {
@@ -44,11 +42,5 @@ public abstract class BaseCRUDController<E> extends BaseController {
     @PostConstruct
     public void init() {
         refreshList();
-    }
-
-    protected void endConversation() {
-        if (Conversation.getCurrentInstance() != null) {
-            Conversation.getCurrentInstance().invalidate();
-        }
     }
 }

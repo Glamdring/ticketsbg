@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.richfaces.model.ListRowKey;
 
+import com.tickets.model.Firm;
 import com.tickets.model.Price;
 import com.tickets.model.Route;
 import com.tickets.model.Stop;
@@ -58,9 +59,9 @@ public interface StopService extends Service<Stop> {
      *
      * @return list of names
      */
-    List<String> getExistingStopNames();
+    List<String> getExistingStopNames(Firm firm);
 
-    void saveMapAddress(String stopName, String mapAddress);
+    void saveMapAddress(String stopName, String mapAddress, Firm firm);
 
-    String getMapUrl(String stopName);
+    String getMapUrl(String stopName, Firm firm);
 }

@@ -23,8 +23,10 @@ import com.tickets.constants.Messages;
 import com.tickets.controllers.security.AccessLevel;
 import com.tickets.controllers.users.LoggedUserHolder;
 import com.tickets.model.Discount;
+import com.tickets.model.Firm;
 import com.tickets.model.Price;
 import com.tickets.model.Route;
+import com.tickets.model.Run;
 import com.tickets.model.SearchResultEntry;
 import com.tickets.model.Ticket;
 import com.tickets.model.TicketCount;
@@ -118,6 +120,12 @@ public class SearchController extends BaseController {
     private UIInput admin;
 
     @Action
+    public String navigateToSearch() {
+        endConversation();
+        return Screen.SEARCH_SCREEN.getOutcome();
+    }
+
+    @Action
     public String search() {
         if (isAdmin()) {
             return adminSearch();
@@ -159,8 +167,12 @@ public class SearchController extends BaseController {
             rowSelectionChanged();
         }
 
-        mapHandler.setFromMapUrl(stopService.getMapUrl(fromStop));
-        mapHandler.setToMapUrl(stopService.getMapUrl(toStop));
+        if (result.size() > 0) {
+            Run firstResult = result.get(0).getRun();
+            Firm firm = firstResult.getRoute().getFirm();
+            mapHandler.setFromMapUrl(stopService.getMapUrl(fromStop, firm));
+            mapHandler.setToMapUrl(stopService.getMapUrl(toStop, firm));
+        }
 
         purchaseController.setCurrentStep(Step.SEARCH_RESULTS);
 

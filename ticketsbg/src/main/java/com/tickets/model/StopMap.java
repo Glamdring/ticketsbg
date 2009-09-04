@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
@@ -15,7 +16,8 @@ import javax.persistence.NamedQuery;
 @NamedQueries({
     @NamedQuery(
         name = "StopMap.findByStopName",
-        query = "SELECT sm FROM StopMap sm WHERE sm.stopName=:stopName"
+        query = "SELECT sm FROM StopMap sm WHERE " +
+                "sm.stopName=:stopName AND sm.firm=:firm"
     )
 })
 public class StopMap implements Serializable {
@@ -29,6 +31,9 @@ public class StopMap implements Serializable {
 
     @Lob
     private String mapUrl;
+
+    @ManyToOne
+    private Firm firm;
 
     public int getStopMapId() {
         return stopMapId;
@@ -52,5 +57,13 @@ public class StopMap implements Serializable {
 
     public void setMapUrl(String mapUrl) {
         this.mapUrl = mapUrl;
+    }
+
+    public Firm getFirm() {
+        return firm;
+    }
+
+    public void setFirm(Firm firm) {
+        this.firm = firm;
     }
 }

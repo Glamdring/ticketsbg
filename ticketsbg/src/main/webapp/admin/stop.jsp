@@ -17,7 +17,10 @@
                     <h:outputLabel value="#{msg.stopName}" for="stopName" />
                     <h:panelGroup>
                         <tc:autocompleteBox value="#{routeController.stop.name}" id="stopName"
-                            suggestionValues="#{routeController.existingStopNames}" />
+                            suggestionValues="#{routeController.existingStopNames}">
+                            <a4j:support event="onselect"
+                                action="#{routeController.stopNameSelected}" reRender="mapUrl" />
+                        </tc:autocompleteBox>
                     </h:panelGroup>
 
 

@@ -30,7 +30,7 @@
         immediate="true" ajaxSingle="true" />
 
     <rich:toolBar itemSeparator="line" height="34" width="1005">
-        <rich:menuItem action="searchScreen" id="searchMenuItem">
+        <rich:menuItem action="#{searchController.navigateToSearch}" id="searchMenuItem">
             <h:graphicImage value="/images/search.png" styleClass="menuIcon" />
             <h:outputText value="#{msg.searchMenuItem}" styleClass="menuContent" />
         </rich:menuItem>

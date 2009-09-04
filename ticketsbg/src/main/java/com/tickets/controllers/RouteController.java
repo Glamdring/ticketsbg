@@ -15,7 +15,6 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
-import org.apache.myfaces.orchestra.conversation.Conversation;
 import org.apache.myfaces.orchestra.conversation.annotations.ConversationName;
 import org.richfaces.component.UITree;
 import org.richfaces.component.html.HtmlOrderingList;
@@ -147,7 +146,9 @@ public class RouteController extends BaseController implements Serializable {
     @Action
     public void saveStop() {
         stopService.addStopToRoute(stop, route);
-        stopService.saveMapAddress(stop.getName(), currentStopMapAddress);
+        stopService.saveMapAddress(stop.getName(),
+                currentStopMapAddress,
+                loggedUserHolder.getLoggedUser().getFirm());
         listReordered(null);
     }
 
@@ -192,6 +193,12 @@ public class RouteController extends BaseController implements Serializable {
             return Boolean.TRUE;
 
         return Boolean.FALSE;
+    }
+
+    @Action
+    public void stopNameSelected() {
+        currentStopMapAddress = stopService.getMapUrl(stop.getName(),
+                loggedUserHolder.getLoggedUser().getFirm());
     }
 
     @SuppressWarnings( { "unused" })
@@ -257,7 +264,8 @@ public class RouteController extends BaseController implements Serializable {
         refreshList();
         route = new Route();
         days = routeService.list(Day.class);
-        existingStopNames = stopService.getExistingStopNames();
+        existingStopNames = stopService.getExistingStopNames(
+                loggedUserHolder.getLoggedUser().getFirm());
 
         for (Day day : days) {
             day.setLabel(Messages.getString(day.getName()));
@@ -279,10 +287,6 @@ public class RouteController extends BaseController implements Serializable {
         if (route != null) {
             endConversation();
         }
-    }
-
-    private void endConversation() {
-        Conversation.getCurrentInstance().invalidate();
     }
 
     public Route getRoute() {
@@ -347,7 +351,8 @@ public class RouteController extends BaseController implements Serializable {
 
     public void setStop(Stop stop) {
         this.stop = stop;
-        setCurrentStopMapAddress(stopService.getMapUrl(stop.getName()));
+        setCurrentStopMapAddress(stopService.getMapUrl(stop.getName(),
+                loggedUserHolder.getLoggedUser().getFirm()));
     }
 
     public HtmlOrderingList getStopsTable() {
