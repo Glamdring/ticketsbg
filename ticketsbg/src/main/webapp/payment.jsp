@@ -11,40 +11,40 @@
     template="publicTemplate.jsp">
     <ui:define name="body">
         <f:view>
-            <a4j:form id="paymentForm">
-                <rich:panel header="#{msg.payment}"
-                    headerClass="rich-panel-header-main">
-                    <h:messages />
+            <h:panelGroup>
+                <a4j:form id="paymentForm">
+                    <rich:panel header="#{msg.payment}"
+                        headerClass="rich-panel-header-main">
+                        <h:messages />
 
-                    <a4j:include viewId="personalInformation.jsp" />
+                        <a4j:include viewId="personalInformation.jsp" />
 
-                    <rich:panel header="#{msg.payment}">
-                        <div align="center">
-                            <h:panelGrid columns="2" width="400px" style="text-align: center;">
-                            <a4j:commandLink action="#{paymentController.buy}"
-                                oncomplete="document.getElementById('ePayForm').submit();">
-                                <h:graphicImage url="/images/epay.jpg" style="border: 0px;"
-                                    height="43" />
-                            </a4j:commandLink>
+                        <rich:panel header="#{msg.payment}">
+                            <div align="center"><h:panelGrid columns="2" width="400px"
+                                style="text-align: center;">
+                                <a4j:commandLink action="#{paymentController.buy}"
+                                    oncomplete="document.getElementById('ePayForm').submit();">
+                                    <h:graphicImage url="/images/epay.jpg" style="border: 0px;"
+                                        height="43" />
+                                </a4j:commandLink>
 
-                            <a4j:commandLink actionListener="#{paymentController.buy}"
-                                oncomplete="document.getElementById('creditCardForm').submit();">
-                                <h:graphicImage url="/images/creditCards.gif"
-                                    style="border: 0px;" height="45" />
-                            </a4j:commandLink>
-                            </h:panelGrid>
-                         </div>
+                                <a4j:commandLink actionListener="#{paymentController.buy}"
+                                    oncomplete="document.getElementById('creditCardForm').submit();">
+                                    <h:graphicImage url="/images/creditCards.gif"
+                                        style="border: 0px;" height="45" />
+                                </a4j:commandLink>
+                            </h:panelGrid></div>
+                        </rich:panel>
                     </rich:panel>
-                </rich:panel>
-            </a4j:form>
-            <form action="https://devep2.datamax.bg/ep2/epay2_demo/"
-                id="ePayForm">
-                <input type=hidden name="PAGE" value="paylogin" />
-                <input type=hidden name="ENCODED" value="[ENCODED]" />
-                <input type=hidden name="CHECKSUM" value="[CHECKSUM]" />
-                <input type=hidden name="URL_OK" value="http://..." />
-                <input type=hidden name="URL_CANCEL" value="http://..." />
-            </form>
+                </a4j:form>
+                <form action="https://devep2.datamax.bg/ep2/epay2_demo/"
+                    id="ePayForm"><input type="hidden" name="PAGE"
+                    value="paylogin" /> <input type="hidden" name="ENCODED"
+                    value="[ENCODED]" /> <input type="hidden" name="CHECKSUM"
+                    value="[CHECKSUM]" /> <input type="hidden" name="URL_OK"
+                    value="http://..." /> <input type="hidden" name="URL_CANCEL"
+                    value="http://..." /></form>
+            </h:panelGroup>
         </f:view>
     </ui:define>
 </ui:composition>

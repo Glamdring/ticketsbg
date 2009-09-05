@@ -8,7 +8,8 @@
     xmlns:c="http://java.sun.com/jstl/core"
     xmlns:fmt="http://java.sun.com/jstl/fmt"
     xmlns:t="http://myfaces.apache.org/tomahawk"
-    xmlns:tc="http://tickets.com/tc">
+    xmlns:tc="http://tickets.com/tc"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions">
     <f:view>
         <a4j:form rendered="#{tc:getSize(purchaseController.tickets) > 0}"
             id="purchaseDetailsForm">
@@ -80,6 +81,8 @@
                         <f:convertDateTime pattern="mm:ss" />
                     </h:outputText>
                 </h:panelGrid>
+                <h:commandButton value="#{msg.payment}" action="paymentScreen"
+                    rendered="#{!fn:contains(request.requestURI, 'payment.jsp')}" />
             </rich:panel>
         </a4j:form>
     </f:view>

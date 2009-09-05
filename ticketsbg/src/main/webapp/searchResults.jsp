@@ -94,48 +94,6 @@
 
                                 //]]>
                             </script>
-                            <rich:modalPanel id="fromMapPanel" autosized="true"
-                                onshow="fromMapVar.checkResize(); initFromMap();"
-                                onmaskclick="#{rich:component('fromMapPanel')}.hide()"
-                                resizeable="false">
-
-                                <f:facet name="controls">
-                                    <h:panelGroup>
-                                        <h:graphicImage value="/images/close.png"
-                                            id="hidelinkFromMapPanel" styleClass="hidelink" />
-                                        <rich:componentControl for="fromMapPanel"
-                                            attachTo="hidelinkFromMapPanel" operation="hide"
-                                            event="onclick" />
-                                    </h:panelGroup>
-                                </f:facet>
-
-                                <rich:panel>
-                                    <rich:gmap lat="#{searchController.mapHandler.fromMapLat}"
-                                        lng="#{searchController.mapHandler.fromMapLng}" zoom="17"
-                                        mapType="G_HYBRID_MAP" showGMapTypeControl="false"
-                                        style="width: 500px; height: 500px;" gmapVar="fromMapVar" />
-                                </rich:panel>
-                            </rich:modalPanel>
-
-                            <rich:modalPanel id="toMapPanel" autosized="true"
-                                onmaskclick="#{rich:component('toMapPanel')}.hide()"
-                                resizeable="false" onshow="toMapVar.checkResize(); initToMap();">
-                                <f:facet name="controls">
-                                    <h:panelGroup>
-                                        <h:graphicImage value="/images/close.png"
-                                            id="hidelinkToMapPanel" styleClass="hidelink" />
-                                        <rich:componentControl for="toMapPanel"
-                                            attachTo="hidelinkToMapPanel" operation="hide"
-                                            event="onclick" />
-                                    </h:panelGroup>
-                                </f:facet>
-                                <rich:panel>
-                                    <rich:gmap lat="#{searchController.mapHandler.toMapLat}"
-                                        lng="#{searchController.mapHandler.toMapLng}" zoom="17"
-                                        mapType="G_HYBRID_MAP" showGMapTypeControl="false"
-                                        style="width: 500px; height: 500px;" gmapVar="toMapVar" />
-                                </rich:panel>
-                            </rich:modalPanel>
                         </h:panelGroup>
                     </f:facet>
 
@@ -398,7 +356,6 @@
                         </a4j:outputPanel>
                     </rich:panel>
 
-
                     <h:panelGroup>
                         <h:commandButton value="#{msg.backToSearchScreen}"
                             action="#{searchController.toSearchScreen}" />
@@ -407,6 +364,49 @@
                             value="#{msg.toPayment}" />
                     </h:panelGroup>
                 </rich:panel>
+
+
+                <rich:modalPanel id="fromMapPanel" autosized="true"
+                    onshow="fromMapVar.checkResize(); initFromMap();"
+                    onmaskclick="#{rich:component('fromMapPanel')}.hide()"
+                    resizeable="false">
+
+                    <f:facet name="controls">
+                        <h:panelGroup>
+                            <h:graphicImage value="/images/close.png"
+                                id="hidelinkFromMapPanel" styleClass="hidelink" />
+                            <rich:componentControl for="fromMapPanel"
+                                attachTo="hidelinkFromMapPanel" operation="hide" event="onclick" />
+                        </h:panelGroup>
+                    </f:facet>
+
+                    <rich:panel>
+                        <rich:gmap lat="#{searchController.mapHandler.fromMapLat}"
+                            lng="#{searchController.mapHandler.fromMapLng}" zoom="17"
+                            mapType="G_HYBRID_MAP" showGMapTypeControl="false"
+                            style="width: 500px; height: 500px;" gmapVar="fromMapVar" />
+                    </rich:panel>
+                </rich:modalPanel>
+
+                <rich:modalPanel id="toMapPanel" autosized="true"
+                    onmaskclick="#{rich:component('toMapPanel')}.hide()"
+                    resizeable="false" onshow="toMapVar.checkResize(); initToMap();">
+                    <f:facet name="controls">
+                        <h:panelGroup>
+                            <h:graphicImage value="/images/close.png" id="hidelinkToMapPanel"
+                                styleClass="hidelink" />
+                            <rich:componentControl for="toMapPanel"
+                                attachTo="hidelinkToMapPanel" operation="hide" event="onclick" />
+                        </h:panelGroup>
+                    </f:facet>
+                    <rich:panel>
+                        <rich:gmap lat="#{searchController.mapHandler.toMapLat}"
+                            lng="#{searchController.mapHandler.toMapLng}" zoom="17"
+                            mapType="G_HYBRID_MAP" showGMapTypeControl="false"
+                            style="width: 500px; height: 500px;" gmapVar="toMapVar" />
+                    </rich:panel>
+                </rich:modalPanel>
+
             </h:form>
         </f:view>
     </ui:define>

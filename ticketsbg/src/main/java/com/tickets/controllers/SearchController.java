@@ -305,6 +305,8 @@ public class SearchController extends BaseController {
         selectedEntry = null;
         selectedReturnEntry = null;
         selectedRowId = null;
+        selectedReturnRowId = null;
+        selection = null;
     }
 
     private void resetSearchFields() {
