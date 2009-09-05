@@ -121,9 +121,9 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
         }
         code += run.getRunId();
         code += ("" + run.getTime().getTimeInMillis()).substring(8); // after
-                                                                        // the
-                                                                        // 7th
-                                                                        // digit
+        // the
+        // 7th
+        // digit
         code += ((int) (Math.random() * 8999 + 100000));
 
         if (code.length() % 2 == 1) {
@@ -177,15 +177,20 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
     @Override
     public void clearUnusedTickets() {
         List<Ticket> unconfirmed = getDao().findByNamedQuery(
-                "Ticket.findUnconfirmedNotInProcess");
+                "Ticket.findUnconfirmed");
 
         long timeoutPeriod = Integer.parseInt(Settings
                 .getValue("ticket.timeout"))
                 * Constants.ONE_MINUTE;
 
+        long inProcessTimeoutPeriod = timeoutPeriod * 3 / 2;
         for (Ticket ticket : unconfirmed) {
-            if (System.currentTimeMillis()
-                    - ticket.getCreationTime().getTimeInMillis() > timeoutPeriod) {
+            long diff = System.currentTimeMillis()
+                    - ticket.getCreationTime().getTimeInMillis();
+
+            if (diff > (ticket.isPaymentInProcess()
+                    ? inProcessTimeoutPeriod
+                    : timeoutPeriod)) {
                 ticket.setTimeouted(true);
             }
         }

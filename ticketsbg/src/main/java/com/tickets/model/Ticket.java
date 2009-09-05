@@ -31,8 +31,8 @@ import javax.persistence.TemporalType;
         query = "SELECT t FROM Ticket t WHERE t.user=:user"
     ),
     @NamedQuery(
-        name = "Ticket.findUnconfirmedNotInProcess",
-        query = "SELECT t FROM Ticket t WHERE t.committed=false AND t.paymentInProcess=false"),
+        name = "Ticket.findUnconfirmed",
+        query = "SELECT t FROM Ticket t WHERE t.committed=false"),
 })
 public class Ticket implements Serializable, Comparable<Ticket> {
 

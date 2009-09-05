@@ -25,7 +25,8 @@
                     <br />
                 </a4j:repeat>
 
-                <h:panelGrid columns="2"
+                <rich:toolTip value="#{msg.timerTooltip}" for="timeRemaining" />
+                <h:panelGrid columns="2" id="timeHolder"
                     rendered="#{purchaseController.tickets != null and tc:getSize(purchaseController.tickets) > 0}">
                     <h:panelGroup>
                         <h:graphicImage url="/images/timer.png"

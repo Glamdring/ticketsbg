@@ -48,8 +48,10 @@ public class PurchaseController extends BaseController {
     public void setPaymentMethod(PaymentMethod paymentMethod) {
         for (Ticket ticket : tickets) {
             ticket.setPaymentMethod(paymentMethod);
+            ticket.setPaymentInProcess(true);
         }
     }
+
     public void setUser(User user) {
         for (Ticket ticket : tickets) {
             ticket.setUser(user);
