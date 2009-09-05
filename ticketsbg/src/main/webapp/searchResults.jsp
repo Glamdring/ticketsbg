@@ -36,7 +36,7 @@
     </ui:define>
     <ui:define name="body">
         <f:view>
-            <a4j:form id="searchResults">
+            <h:form id="searchResults">
                 <rich:panel headerClass="rich-panel-header-main">
                     <f:facet name="header">
                         <h:panelGroup style="font-weight: normal;">
@@ -44,13 +44,15 @@
                             <h:outputText value="#{searchController.fromStop}"
                                 styleClass="mapLink" id="fromStopHeader">
                                 <rich:componentControl for="fromMapPanel"
-                                    attachTo="fromStopHeader" operation="show" event="onmouseover" />
+                                    attachTo="fromStopHeader" operation="show" event="onmouseover"
+                                    rendered="#{searchController.mapHandler.fromMapUrl != null}" />
                             </h:outputText>
                             <h:outputText value=" #{msg.searchResultsTo} " />
                             <h:outputText value="#{searchController.toStop}"
                                 styleClass="mapLink" id="toStopHeader">
                                 <rich:componentControl for="toMapPanel" attachTo="toStopHeader"
-                                    operation="show" event="onmouseover" />
+                                    operation="show" event="onmouseover"
+                                    rendered="#{searchController.mapHandler.toMapUrl != null}" />
                             </h:outputText>
                                         (<h:outputText
                                 value="#{searchController.date}">
@@ -92,8 +94,8 @@
 
                                 //]]>
                             </script>
-                            <rich:modalPanel id="fromMapPanel"
-                                autosized="true" onshow="fromMapVar.checkResize(); initFromMap();"
+                            <rich:modalPanel id="fromMapPanel" autosized="true"
+                                onshow="fromMapVar.checkResize(); initFromMap();"
                                 onmaskclick="#{rich:component('fromMapPanel')}.hide()"
                                 resizeable="false">
 
@@ -111,8 +113,7 @@
                                     <rich:gmap lat="#{searchController.mapHandler.fromMapLat}"
                                         lng="#{searchController.mapHandler.fromMapLng}" zoom="17"
                                         mapType="G_HYBRID_MAP" showGMapTypeControl="false"
-                                        style="width: 500px; height: 500px;"
-                                        gmapVar="fromMapVar"/>
+                                        style="width: 500px; height: 500px;" gmapVar="fromMapVar" />
                                 </rich:panel>
                             </rich:modalPanel>
 
@@ -132,8 +133,7 @@
                                     <rich:gmap lat="#{searchController.mapHandler.toMapLat}"
                                         lng="#{searchController.mapHandler.toMapLng}" zoom="17"
                                         mapType="G_HYBRID_MAP" showGMapTypeControl="false"
-                                        style="width: 500px; height: 500px;"
-                                        gmapVar="toMapVar" />
+                                        style="width: 500px; height: 500px;" gmapVar="toMapVar" />
                                 </rich:panel>
                             </rich:modalPanel>
                         </h:panelGroup>
@@ -407,7 +407,7 @@
                             value="#{msg.toPayment}" />
                     </h:panelGroup>
                 </rich:panel>
-            </a4j:form>
+            </h:form>
         </f:view>
     </ui:define>
 </ui:composition>

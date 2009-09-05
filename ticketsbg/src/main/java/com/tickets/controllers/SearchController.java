@@ -312,9 +312,9 @@ public class SearchController extends BaseController {
         toStop = null;
         date = GeneralUtils.createEmptyCalendar().getTime();;
         returnDate = GeneralUtils.createEmptyCalendar().getTime();;
-        toHour = 0;
+        toHour = 24;
         fromHour = 0;
-        returnToHour = 0;
+        returnToHour = 24;
         returnFromHour = 0;
         timeForDeparture = true;
         returnTimeForDeparture = true;

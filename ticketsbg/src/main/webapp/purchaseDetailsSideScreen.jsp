@@ -10,7 +10,8 @@
     xmlns:t="http://myfaces.apache.org/tomahawk"
     xmlns:tc="http://tickets.com/tc">
     <f:view>
-        <a4j:form rendered="#{tc:getSize(purchaseController.tickets) > 0}">
+        <a4j:form rendered="#{tc:getSize(purchaseController.tickets) > 0}"
+            id="purchaseDetailsForm">
             <rich:panel header="#{msg.currentTickets}"
                 headerClass="rich-panel-header-main" id="currentTickets">
                 <a4j:repeat var="ticket" value="#{purchaseController.tickets}">
@@ -24,13 +25,60 @@
                     <br />
                 </a4j:repeat>
 
-                <h:graphicImage url="/images/timer.png" style="width: 16px; height: 16px;" />
-                <h:outputText value="#{purchaseController.timeRemaining}"
-                    id="timeRemaining"
+                <h:panelGrid columns="2"
                     rendered="#{purchaseController.tickets != null and tc:getSize(purchaseController.tickets) > 0}">
-                    <f:convertDateTime pattern="mm:ss" />
-                </h:outputText>
-                <a4j:poll interval="1000" reRender="timeRemaining" />
+                    <h:panelGroup>
+                        <h:graphicImage url="/images/timer.png"
+                            style="width: 16px; height: 16px;" />
+
+                        <a4j:jsFunction name="timeoutPurchase" oncomplete="document.location='search.jsp';"
+                            action="#{purchaseController.timeoutPurchase}" />
+
+                        <script type="text/javascript">
+                            //<![CDATA[
+                                function updateTimer() {
+                                    var c = document.getElementById("purchaseDetailsForm:timeRemaining");
+                                    var parts = c.innerHTML.split(":");
+                                    if (parts[0].substring(0,1) == "0") {
+                                        parts[0] = parts[0].substring(1);
+                                    }
+                                    if (parts[1].substring(0,1) == "0") {
+                                        parts[1] = parts[1].substring(1);
+                                    }
+
+                                    var sec = parseInt(parts[1]);
+                                    var min = parseInt(parts[0]);
+                                    if (sec == 0) {
+                                        sec = "59";
+                                        min --;
+                                    } else {
+                                        sec --;
+                                    }
+
+                                    if (min < 0) {
+                                        clearInterval();
+                                        timeoutPurchase();
+                                    } else {
+                                        minStr = "" + min;
+                                        if (minStr.length == 1) {
+                                            minStr = "0" + minStr;
+                                        }
+                                        sStr = "" + sec;
+                                        if (sStr.length == 1) {
+                                            sStr = "0" + sStr;
+                                        }
+                                        c.innerHTML = minStr + ":" + sStr;
+                                    }
+                                }
+                                setInterval("updateTimer()", 1000);
+                            //]]>
+                        </script>
+                    </h:panelGroup>
+                    <h:outputText value="#{purchaseController.timeRemaining}"
+                        id="timeRemaining" style="font-weight: bold;">
+                        <f:convertDateTime pattern="mm:ss" />
+                    </h:outputText>
+                </h:panelGrid>
             </rich:panel>
         </a4j:form>
     </f:view>

@@ -25,11 +25,12 @@ public class Settings {
 
     private static void load() {
         try {
-            InputStream is = Messages.class
-                    .getResourceAsStream("/settings.properties");
+            InputStream is = Settings.class
+                    .getResourceAsStream("settings.properties");
             settings = new Properties();
             settings.load(is);
         } catch (Exception ex) {
+            settings = null;
             ex.printStackTrace();
         }
     }

@@ -218,7 +218,7 @@
     <bean id="scheduledTicketsClearingTask" class="org.springframework.scheduling.timer.ScheduledTimerTask"
         lazy-init="false">
         <!-- wait 1 minute before starting repeated execution -->
-        <property name="delay" value="60000" />
+        <property name="delay" value="30000" />
         <!-- run every minute -->
         <property name="period" value="60000" />
         <property name="timerTask" ref="unusedTicketsClearingTask" />

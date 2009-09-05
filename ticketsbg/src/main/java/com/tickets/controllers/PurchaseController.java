@@ -82,10 +82,28 @@ public class PurchaseController extends BaseController {
         if (min == null) {
             return 0;
         }
+
         long timeoutPeriod = Integer.parseInt(Settings
                 .getValue("ticket.timeout"))
                 * Constants.ONE_MINUTE;
 
-        return timeoutPeriod - (System.currentTimeMillis() - min.getTimeInMillis());
+        long result = timeoutPeriod - (System.currentTimeMillis() - min.getTimeInMillis());
+
+        if (result > timeoutPeriod || result < 0) {
+            return 0;
+        }
+
+        return result;
+    }
+
+    public String timeoutPurchase() {
+        for (Ticket ticket : tickets) {
+            ticket.setTimeouted(true);
+            service.save(ticket);
+        }
+
+        tickets.clear();
+
+        return Screen.SEARCH_SCREEN.getOutcome();
     }
 }

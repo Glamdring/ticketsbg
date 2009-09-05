@@ -1,5 +1,6 @@
 package com.tickets.services;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -46,8 +47,17 @@ public class ServiceFunctions {
 
         // Iterating all tickets and removing those whose stops
         // don't intersect with the current criteria
+        List<Ticket> tickets = new ArrayList<Ticket>(run.getTickets().size()
+                + run.getReturnTickets().size());
+
+        tickets.addAll(run.getTickets());
+        tickets.addAll(run.getReturnTickets());
+
         ticketCycle:
         for (Ticket ticket : run.getTickets()) {
+            if (ticket.isTimeouted()) {
+                continue;
+            }
             //from (relative) first to penultimate stop
             for (int i = startStop.getIdx() - 1; i < endStop.getIdx() - 1; i ++) {
                 Stop tmpStop = stops.get(i);

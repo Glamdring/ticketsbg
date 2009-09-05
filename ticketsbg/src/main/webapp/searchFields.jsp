@@ -23,16 +23,6 @@
     font-weight: bold;
 }
 </style>
-    <script type="text/javascript">
-    //Couldn't do it with richfaces tags..
-    function toggleReturnPanel(travelType) {
-        var display = "none";
-        if (travelType == "twoWay")
-            display = "block";
-
-        document.getElementById('searchForm:returnPanel').style.display = display;
-    }
-</script>
     <f:view>
         <rich:panel header="#{msg.searchTitle}"
             headerClass="rich-panel-header-main">
@@ -83,8 +73,8 @@
                 <h:panelGrid columns="2" columnClasses="firstColumn,secondColumn">
                     <h:outputLabel value="#{msg.departureDate}:" for="date" />
                     <rich:calendar id="date" datePattern="dd.MM.yyyy" firstWeekDay="1"
-                        value="#{searchController.date}"
-                        required="true" validator="#{searchController.validateDate}">
+                        value="#{searchController.date}" required="true"
+                        validator="#{searchController.validateDate}">
                         <f:attribute name="label" value="#{msg.departureDate}" />
                     </rich:calendar>
 
