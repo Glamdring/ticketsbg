@@ -265,6 +265,22 @@
 
     <navigation-rule>
         <navigation-case>
+            <from-outcome>discountsList</from-outcome>
+            <to-view-id>/admin/genericDiscounts.jsp</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>discountScreen</from-outcome>
+            <to-view-id>/admin/genericDiscount.jsp</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <navigation-case>
             <from-outcome>profile</from-outcome>
             <to-view-id>/profile.jsp</to-view-id>
             <redirect />

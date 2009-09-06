@@ -62,6 +62,9 @@
                     target="#{firmController.firm}" />
             </rich:menuItem>
 
+            <rich:menuItem value="#{msg.discounts}" action="discountsList"
+                icon="/images/discounts.png" />
+
             <rich:menuItem value="#{msg.agents}" action="agentsList"
                 icon="/images/agents.png" />
         </rich:dropDownMenu>

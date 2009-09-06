@@ -34,11 +34,13 @@ import com.tickets.controllers.users.LoggedUserHolder;
 import com.tickets.model.Day;
 import com.tickets.model.Discount;
 import com.tickets.model.DiscountType;
+import com.tickets.model.GenericDiscount;
 import com.tickets.model.Price;
 import com.tickets.model.Route;
 import com.tickets.model.Stop;
 import com.tickets.model.StopPriceHolder;
 import com.tickets.model.User;
+import com.tickets.services.DiscountService;
 import com.tickets.services.RouteService;
 import com.tickets.services.StopService;
 import com.tickets.utils.SelectItemUtils;
@@ -67,10 +69,15 @@ public class RouteController extends BaseController implements Serializable {
 
     private List<String> existingStopNames = new ArrayList<String>();
 
+    private List<String> genericDiscountNames = new ArrayList<String>();
+
     private String currentStopMapAddress = "";
 
     @Autowired
     private SeatController seatController;
+
+    @Autowired
+    private DiscountService discountService;
 
     @Autowired
     private StopService stopService;
@@ -201,6 +208,14 @@ public class RouteController extends BaseController implements Serializable {
                 loggedUserHolder.getLoggedUser().getFirm());
     }
 
+    @Action
+    public void genericDiscountSelected() {
+        GenericDiscount gd = discountService.findGenericDiscount(
+                discount.getName(),
+                loggedUserHolder.getLoggedUser().getFirm());
+        discount.setDescription(gd.getDescription());
+    }
+
     @SuppressWarnings( { "unused" })
     public void listReordered(ValueChangeEvent evt) {
         // TODO : skip the multiple events!
@@ -266,6 +281,14 @@ public class RouteController extends BaseController implements Serializable {
         days = routeService.list(Day.class);
         existingStopNames = stopService.getExistingStopNames(
                 loggedUserHolder.getLoggedUser().getFirm());
+
+        List<GenericDiscount> genDiscounts = discountService.getGenericDiscounts(
+                loggedUserHolder.getLoggedUser().getFirm());
+
+        genericDiscountNames = new ArrayList<String>(genDiscounts.size());
+        for (GenericDiscount gd : genDiscounts) {
+            genericDiscountNames.add(gd.getName());
+        }
 
         for (Day day : days) {
             day.setLabel(Messages.getString(day.getName()));
@@ -426,5 +449,13 @@ public class RouteController extends BaseController implements Serializable {
 
     public void setCurrentStopMapAddress(String currentStopMapAddress) {
         this.currentStopMapAddress = currentStopMapAddress;
+    }
+
+    public List<String> getGenericDiscountNames() {
+        return genericDiscountNames;
+    }
+
+    public void setGenericDiscountNames(List<String> genericDiscountNames) {
+        this.genericDiscountNames = genericDiscountNames;
     }
 }
