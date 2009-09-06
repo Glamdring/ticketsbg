@@ -39,37 +39,23 @@
 }
 </style>
 
-    <a4j:outputPanel id="showSeatsView#{modifier}" styleClass="hyperlink">
-        <rich:effect for="showSeatsView#{modifier}" event="onclick"
-            type="Fade" params="delay:0.0, duration:0.1" disableDefault="true" />
-        <rich:effect for="showSeatsView#{modifier}" event="onclick"
-            type="BlindDown" targetId="seatsView#{modifier}"
-            params="delay:0.1,duration:1.0,from:0.0,to:1.0" />
-        <rich:effect for="showSeatsView#{modifier}" event="onclick"
-            type="Appear" targetId="seatsView#{modifier}"
-            params="delay:0.1,duration:0.5,from:0.0,to:1.0" />
-        <rich:effect for="showSeatsView#{modifier}" event="onclick"
-            type="Appear" targetId="hideSeatsView#{modifier}"
-            params="delay:0,duration:1.0,from:0.0,to:1.0" />
-        <h:outputText value="#{msg.showSeatsView}" />
-    </a4j:outputPanel>
+    <h:outputText value="#{seatController[handler].run == null ? msg.showSeatsView : msg.chooseSeat}" styleClass="hyperlink">
+        <rich:componentControl for="seatsModalPanel#{modifier}"
+            event="onclick" operation="show" />
+    </h:outputText>
 
-    <a4j:outputPanel id="hideSeatsView#{modifier}" style="display:none"
-        styleClass="hyperlink">
-        <rich:effect for="hideSeatsView#{modifier}" event="onclick"
-            type="BlindUp" targetId="seatsView#{modifier}"
-            params="id:'source1', duration:1.0" />
-        <rich:effect for="hideSeatsView#{modifier}" event="onclick"
-            type="Appear" targetId="showSeatsView#{modifier}"
-            params="delay:0, duration:0.5" />
-        <rich:effect for="hideSeatsView#{modifier}" event="onclick"
-            type="Fade" targetId="hideSeatsView#{modifier}"
-            params="delay:0.0, duration:0.1" />
-        <h:outputText value="#{msg.hideSeatsView}" />
-    </a4j:outputPanel>
-
-
-    <rich:panel id="seatsView#{modifier}" style="display: none;">
+    <rich:modalPanel id="seatsModalPanel#{modifier}" autosized="true">
+        <f:facet name="header">
+            <h:outputText value="#{msg.seats}" />
+        </f:facet>
+        <f:facet name="controls">
+            <h:panelGroup>
+                <h:graphicImage value="/images/close.png" id="hidelink#{modifier}"
+                    styleClass="hidelink" />
+                <rich:componentControl for="seatsModalPanel#{modifier}"
+                    attachTo="hidelink#{modifier}" operation="hide" event="onclick" />
+            </h:panelGroup>
+        </f:facet>
         <a4j:outputPanel id="seatsViewInner#{modifier}" ajaxRendered="true">
             <c:set var="handler" value="seatHandler" />
             <c:if test="#{return}">
@@ -80,7 +66,7 @@
                     value="#{seatController[handler].selectedSeats}"
                     converter="#{seatConverter}">
                     <f:selectItems value="#{seatController[handler].seatSelectItems}" />
-                    <a4j:support event="onchange" ajaxSingle="true" />
+                    <!-- a4j:support event="onchange" ajaxSingle="true" /-->
                 </t:selectManyCheckbox>
 
                 <rich:column styleClass="seat">
@@ -120,5 +106,9 @@
                 </rich:column>
             </rich:dataTable>
         </a4j:outputPanel>
-    </rich:panel>
+        <div align="center"><a4j:commandButton value="OK">
+            <rich:componentControl for="seatsModalPanel#{modifier}"
+                event="onclick" operation="hide" />
+        </a4j:commandButton></div>
+    </rich:modalPanel>
 </ui:composition>
