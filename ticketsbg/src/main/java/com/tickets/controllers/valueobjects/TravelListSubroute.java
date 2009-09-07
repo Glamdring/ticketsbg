@@ -1,8 +1,9 @@
-package com.tickets.controllers;
+package com.tickets.controllers.valueobjects;
 
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+
 
 public class TravelListSubroute {
 

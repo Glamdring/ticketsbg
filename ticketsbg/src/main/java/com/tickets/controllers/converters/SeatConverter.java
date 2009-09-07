@@ -8,7 +8,7 @@ import javax.faces.convert.ConverterException;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.tickets.controllers.Seat;
+import com.tickets.controllers.valueobjects.Seat;
 
 @Component("seatConverter")
 @Scope("singleton")

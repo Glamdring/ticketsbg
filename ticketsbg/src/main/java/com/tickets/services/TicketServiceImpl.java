@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.tickets.constants.Constants;
 import com.tickets.constants.Settings;
-import com.tickets.controllers.SeatHandler;
+import com.tickets.controllers.handlers.SeatHandler;
 import com.tickets.model.Discount;
 import com.tickets.model.PaymentMethod;
 import com.tickets.model.Route;

@@ -38,8 +38,14 @@
     background-color: #C8DCF9;
 }
 </style>
+    <c:set var="handler" value="seatHandler" />
+    <c:if test="#{return}">
+        <c:set var="handler" value="returnSeatHandler" />
+    </c:if>
 
-    <h:outputText value="#{seatController[handler].run == null ? msg.showSeatsView : msg.chooseSeat}" styleClass="hyperlink">
+    <h:outputText
+        value="#{seatController[handler].run == null ? msg.showSeatsView : msg.chooseSeat}"
+        styleClass="hyperlink">
         <rich:componentControl for="seatsModalPanel#{modifier}"
             event="onclick" operation="show" />
     </h:outputText>
@@ -56,59 +62,57 @@
                     attachTo="hidelink#{modifier}" operation="hide" event="onclick" />
             </h:panelGroup>
         </f:facet>
-        <a4j:outputPanel id="seatsViewInner#{modifier}" ajaxRendered="true">
-            <c:set var="handler" value="seatHandler" />
-            <c:if test="#{return}">
-                <c:set var="handler" value="returnSeatHandler" />
-            </c:if>
-            <rich:dataTable value="#{seatController[handler].rows}" var="row">
-                <t:selectManyCheckbox layout="spread" id="selectedSeats#{modifier}"
-                    value="#{seatController[handler].selectedSeats}"
-                    converter="#{seatConverter}">
-                    <f:selectItems value="#{seatController[handler].seatSelectItems}" />
-                    <!-- a4j:support event="onchange" ajaxSingle="true" /-->
-                </t:selectManyCheckbox>
+        <a4j:form ajaxSubmit="true">
+            <a4j:outputPanel id="seatsViewInner#{modifier}" ajaxRendered="true">
+                <rich:dataTable value="#{seatController[handler].rows}" var="row">
+                    <t:selectManyCheckbox layout="spread" id="selectedSeats#{modifier}"
+                        value="#{seatController[handler].selectedSeats}"
+                        converter="#{seatConverter}">
+                        <f:selectItems value="#{seatController[handler].seatSelectItems}" />
+                        <a4j:support event="onchange" />
+                    </t:selectManyCheckbox>
 
-                <rich:column styleClass="seat">
-                    <t:checkbox index="#{row.first.id - 1}"
-                        for="selectedSeats#{modifier}" rendered="#{!row.separator}" />
-                    <h:panelGroup rendered="#{row.separator}" layout="block"
-                        styleClass="separatorRow">&#160;</h:panelGroup>
-                </rich:column>
+                    <rich:column styleClass="seat">
+                        <t:checkbox index="#{row.first.id - 1}"
+                            for="selectedSeats#{modifier}" rendered="#{!row.separator}" />
+                        <h:panelGroup rendered="#{row.separator}" layout="block"
+                            styleClass="separatorRow">&#160;</h:panelGroup>
+                    </rich:column>
 
-                <rich:column styleClass="seat">
-                    <t:checkbox index="#{row.second.id - 1}"
-                        for="selectedSeats#{modifier}" rendered="#{!row.separator}" />
-                    <h:panelGroup rendered="#{row.separator}" layout="block"
-                        styleClass="separatorRow">&#160;</h:panelGroup>
-                </rich:column>
+                    <rich:column styleClass="seat">
+                        <t:checkbox index="#{row.second.id - 1}"
+                            for="selectedSeats#{modifier}" rendered="#{!row.separator}" />
+                        <h:panelGroup rendered="#{row.separator}" layout="block"
+                            styleClass="separatorRow">&#160;</h:panelGroup>
+                    </rich:column>
 
-                <rich:column styleClass="isle" style="vertical-align: top;">
-                    <t:checkbox index="#{row.middleSeat.id - 1}"
-                        for="selectedSeats#{modifier}"
-                        rendered="#{row.middleSeat != null and !row.separator}" />
-                    <h:panelGroup rendered="#{row.separator}" layout="block"
-                        styleClass="separatorRow">&#160;</h:panelGroup>
-                </rich:column>
+                    <rich:column styleClass="isle" style="vertical-align: top;">
+                        <t:checkbox index="#{row.middleSeat.id - 1}"
+                            for="selectedSeats#{modifier}"
+                            rendered="#{row.middleSeat != null and !row.separator}" />
+                        <h:panelGroup rendered="#{row.separator}" layout="block"
+                            styleClass="separatorRow">&#160;</h:panelGroup>
+                    </rich:column>
 
-                <rich:column styleClass="seat">
-                    <t:checkbox index="#{row.third.id - 1}"
-                        for="selectedSeats#{modifier}" rendered="#{!row.separator}" />
-                    <h:panelGroup rendered="#{row.separator}" layout="block"
-                        styleClass="separatorRow">&#160;</h:panelGroup>
-                </rich:column>
+                    <rich:column styleClass="seat">
+                        <t:checkbox index="#{row.third.id - 1}"
+                            for="selectedSeats#{modifier}" rendered="#{!row.separator}" />
+                        <h:panelGroup rendered="#{row.separator}" layout="block"
+                            styleClass="separatorRow">&#160;</h:panelGroup>
+                    </rich:column>
 
-                <rich:column styleClass="seat">
-                    <t:checkbox index="#{row.fourth.id - 1}"
-                        for="selectedSeats#{modifier}" rendered="#{!row.separator}" />
-                    <h:panelGroup rendered="#{row.separator}" layout="block"
-                        styleClass="separatorRow">&#160;</h:panelGroup>
-                </rich:column>
-            </rich:dataTable>
-        </a4j:outputPanel>
-        <div align="center"><a4j:commandButton value="OK">
-            <rich:componentControl for="seatsModalPanel#{modifier}"
-                event="onclick" operation="hide" />
-        </a4j:commandButton></div>
+                    <rich:column styleClass="seat">
+                        <t:checkbox index="#{row.fourth.id - 1}"
+                            for="selectedSeats#{modifier}" rendered="#{!row.separator}" />
+                        <h:panelGroup rendered="#{row.separator}" layout="block"
+                            styleClass="separatorRow">&#160;</h:panelGroup>
+                    </rich:column>
+                </rich:dataTable>
+            </a4j:outputPanel>
+            <div align="center"><a4j:commandButton value="OK" id="okButton">
+                <rich:componentControl for="seatsModalPanel#{modifier}"
+                    event="onclick" operation="hide" />
+            </a4j:commandButton></div>
+        </a4j:form>
     </rich:modalPanel>
 </ui:composition>

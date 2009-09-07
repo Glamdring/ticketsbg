@@ -1,6 +1,8 @@
-package com.tickets.model;
+package com.tickets.controllers.valueobjects;
 
 import java.io.Serializable;
+
+import com.tickets.model.Discount;
 
 /**
  * A List of ticket-counts is used to display ticket selection options

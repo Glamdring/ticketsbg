@@ -1,4 +1,4 @@
-package com.tickets.controllers;
+package com.tickets.controllers.handlers;
 
 import java.io.Serializable;
 import java.net.URLDecoder;

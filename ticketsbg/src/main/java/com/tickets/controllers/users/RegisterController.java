@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
 
 import com.tickets.controllers.BaseController;
 import com.tickets.controllers.PurchaseController;
-import com.tickets.controllers.Screen;
+import com.tickets.controllers.valueobjects.Screen;
 import com.tickets.exceptions.UserException;
 import com.tickets.model.CustomerType;
 import com.tickets.model.User;

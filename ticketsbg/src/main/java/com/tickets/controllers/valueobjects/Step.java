@@ -1,4 +1,5 @@
-package com.tickets.controllers;
+package com.tickets.controllers.valueobjects;
+
 
 public enum Step {
 

@@ -29,8 +29,10 @@ import org.springframework.stereotype.Controller;
 
 import com.tickets.annotations.Action;
 import com.tickets.constants.Messages;
+import com.tickets.controllers.handlers.SeatHandler;
 import com.tickets.controllers.security.AccessLevel;
 import com.tickets.controllers.users.LoggedUserHolder;
+import com.tickets.controllers.valueobjects.Screen;
 import com.tickets.model.Day;
 import com.tickets.model.Discount;
 import com.tickets.model.DiscountType;

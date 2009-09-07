@@ -20,8 +20,15 @@ import org.springframework.stereotype.Controller;
 
 import com.tickets.annotations.Action;
 import com.tickets.constants.Messages;
+import com.tickets.controllers.handlers.GMapHandler;
+import com.tickets.controllers.handlers.SeatHandler;
 import com.tickets.controllers.security.AccessLevel;
 import com.tickets.controllers.users.LoggedUserHolder;
+import com.tickets.controllers.valueobjects.Screen;
+import com.tickets.controllers.valueobjects.Seat;
+import com.tickets.controllers.valueobjects.Step;
+import com.tickets.controllers.valueobjects.TicketCount;
+import com.tickets.controllers.valueobjects.TicketCountsHolder;
 import com.tickets.model.Discount;
 import com.tickets.model.Firm;
 import com.tickets.model.Price;
@@ -29,7 +36,6 @@ import com.tickets.model.Route;
 import com.tickets.model.Run;
 import com.tickets.model.SearchResultEntry;
 import com.tickets.model.Ticket;
-import com.tickets.model.TicketCount;
 import com.tickets.model.User;
 import com.tickets.services.SearchService;
 import com.tickets.services.ServiceFunctions;
@@ -72,6 +78,7 @@ public class SearchController extends BaseController {
 
     private GMapHandler mapHandler = new GMapHandler();
 
+    private TicketCountsHolder ticketCountsHolder = new TicketCountsHolder();
     // A variable holding the selected stop in case
     // a purchase is made from the administration panel
     private String toStopPerPurchase;
@@ -105,10 +112,6 @@ public class SearchController extends BaseController {
     private SearchResultEntry selectedReturnEntry;
     private SimpleSelection returnSelection;
     private Long selectedReturnRowId;
-
-    private List<TicketCount> ticketCounts = new ArrayList<TicketCount>();
-    // defaults to 1 for user-friendliness, as this is the most common case
-    private int regularTicketsCount = 1;
 
     private List<Ticket> tickets;
     private boolean proposeCancellation;
@@ -210,7 +213,7 @@ public class SearchController extends BaseController {
             selectedReturnSeats = seatController.getReturnSeatHandler().getSelectedSeats();
         }
 
-        for (int i = 0; i < regularTicketsCount; i ++) {
+        for (int i = 0; i < ticketCountsHolder.getRegularTicketsCount(); i ++) {
             int seat = -1;
             int returnSeat = -1;
             if (selectedSeats.size() > i) {
@@ -232,7 +235,7 @@ public class SearchController extends BaseController {
             }
         }
 
-        for (TicketCount tc : ticketCounts) {
+        for (TicketCount tc : ticketCountsHolder.getTicketCounts()) {
             for (int i = 0; i < tc.getNumberOfTickets(); i++) {
                 Ticket tmpTicket = ticketService.createTicket(selectedEntry, selectedReturnEntry, -1, -1, tc.getDiscount());
                 total ++;
@@ -307,6 +310,9 @@ public class SearchController extends BaseController {
         selectedRowId = null;
         selectedReturnRowId = null;
         selection = null;
+        seatController.setSeatHandler(null);
+        seatController.setReturnSeatHandler(null);
+        ticketCountsHolder = new TicketCountsHolder();
     }
 
     private void resetSearchFields() {
@@ -356,15 +362,15 @@ public class SearchController extends BaseController {
         selectedRowId = new Long(selectedId);
         selectedEntry = ((List<SearchResultEntry>) resultsModel.getWrappedData()).get(selectedId);
 
-        ticketCounts = new ArrayList<TicketCount>(selectedEntry.getRun().getRoute().getDiscounts().size());
+        ticketCountsHolder.setTicketCounts(new ArrayList<TicketCount>(selectedEntry.getRun().getRoute().getDiscounts().size()));
 
         for (Discount discount : selectedEntry.getRun().getRoute().getDiscounts()) {
             TicketCount pd = new TicketCount();
             pd.setDiscount(discount);
             pd.setNumberOfTickets(0);
-            ticketCounts.add(pd);
+            ticketCountsHolder.getTicketCounts().add(pd);
         }
-        seatController.setSeatHandler(new SeatHandler(selectedEntry));
+        seatController.setSeatHandler(new SeatHandler(selectedEntry, ticketCountsHolder));
     }
 
     @SuppressWarnings("unchecked")
@@ -373,7 +379,7 @@ public class SearchController extends BaseController {
         selectedReturnRowId = new Long(selectedId);
         selectedReturnEntry = ((List<SearchResultEntry>) returnResultsModel.getWrappedData()).get(selectedId);
 
-        seatController.setReturnSeatHandler(new SeatHandler(selectedReturnEntry));
+        seatController.setReturnSeatHandler(new SeatHandler(selectedReturnEntry, ticketCountsHolder));
     }
 
     @SuppressWarnings("unused")
@@ -632,28 +638,20 @@ public class SearchController extends BaseController {
         this.selectedReturnEntry = selectedReturnEntry;
     }
 
-    public List<TicketCount> getPurchaseDiscounts() {
-        return ticketCounts;
-    }
-
-    public void setPurchaseDiscounts(List<TicketCount> purchaseDiscounts) {
-        this.ticketCounts = purchaseDiscounts;
-    }
-
     public List<TicketCount> getTicketCounts() {
-        return ticketCounts;
+        return ticketCountsHolder.getTicketCounts();
     }
 
     public void setTicketCounts(List<TicketCount> ticketCounts) {
-        this.ticketCounts = ticketCounts;
+        ticketCountsHolder.setTicketCounts(ticketCounts);
     }
 
     public int getRegularTicketsCount() {
-        return regularTicketsCount;
+        return ticketCountsHolder.getRegularTicketsCount();
     }
 
     public void setRegularTicketsCount(int regularTicketsCount) {
-        this.regularTicketsCount = regularTicketsCount;
+        ticketCountsHolder.setRegularTicketsCount(regularTicketsCount);
     }
 
     public List<Ticket> getTickets() {
@@ -719,5 +717,13 @@ public class SearchController extends BaseController {
 
     public void setMapHandler(GMapHandler mapHandler) {
         this.mapHandler = mapHandler;
+    }
+
+    public TicketCountsHolder getTicketCountsHolder() {
+        return ticketCountsHolder;
+    }
+
+    public void setTicketCountsHolder(TicketCountsHolder ticketCountsHolder) {
+        this.ticketCountsHolder = ticketCountsHolder;
     }
 }

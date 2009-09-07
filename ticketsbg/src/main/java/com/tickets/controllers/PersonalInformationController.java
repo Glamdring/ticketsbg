@@ -12,6 +12,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.tickets.controllers.users.LoggedUserHolder;
+import com.tickets.controllers.valueobjects.Screen;
+import com.tickets.controllers.valueobjects.Step;
 import com.tickets.model.Customer;
 import com.tickets.model.CustomerType;
 import com.tickets.model.User;

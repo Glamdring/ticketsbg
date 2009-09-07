@@ -5,8 +5,10 @@ import java.io.Serializable;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import com.tickets.controllers.handlers.SeatHandler;
+
 @Controller("seatController")
-@Scope("conversation.manual")
+@Scope("conversation.access")
 public class SeatController extends BaseController implements Serializable {
 
     private SeatHandler seatHandler;

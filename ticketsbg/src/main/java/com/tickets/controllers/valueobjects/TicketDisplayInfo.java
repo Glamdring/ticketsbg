@@ -1,4 +1,4 @@
-package com.tickets.controllers;
+package com.tickets.controllers.valueobjects;
 
 public class TicketDisplayInfo implements Comparable<TicketDisplayInfo>{
 

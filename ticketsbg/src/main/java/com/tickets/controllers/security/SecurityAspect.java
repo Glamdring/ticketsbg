@@ -12,8 +12,8 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
 import com.tickets.annotations.Action;
-import com.tickets.controllers.Screen;
 import com.tickets.controllers.users.LoggedUserHolder;
+import com.tickets.controllers.valueobjects.Screen;
 import com.tickets.model.User;
 
 @Aspect

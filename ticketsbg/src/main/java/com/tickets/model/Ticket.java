@@ -32,7 +32,7 @@ import javax.persistence.TemporalType;
     ),
     @NamedQuery(
         name = "Ticket.findUnconfirmed",
-        query = "SELECT t FROM Ticket t WHERE t.committed=false"),
+        query = "SELECT t FROM Ticket t WHERE t.committed=false")
 })
 public class Ticket implements Serializable, Comparable<Ticket> {
 

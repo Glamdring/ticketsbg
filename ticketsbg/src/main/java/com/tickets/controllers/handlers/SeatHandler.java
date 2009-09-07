@@ -1,14 +1,20 @@
-package com.tickets.controllers;
+package com.tickets.controllers.handlers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.faces.model.SelectItem;
 
 import com.tickets.controllers.security.AccessLevel;
 import com.tickets.controllers.users.LoggedUserHolder;
+import com.tickets.controllers.valueobjects.Row;
+import com.tickets.controllers.valueobjects.Seat;
+import com.tickets.controllers.valueobjects.TicketCount;
+import com.tickets.controllers.valueobjects.TicketCountsHolder;
 import com.tickets.model.Price;
 import com.tickets.model.Route;
 import com.tickets.model.Run;
@@ -29,9 +35,18 @@ public class SeatHandler {
 
     private int firstSeatUpstairs;
 
+    private TicketCountsHolder ticketCountsHolder;
+
+    private Queue<Seat> selectionQueue = new LinkedBlockingQueue<Seat>();
+
     public SeatHandler(Route route) {
         this.route = route;
         refreshRows();
+    }
+
+    public SeatHandler(SearchResultEntry entry, TicketCountsHolder ticketCountsHolder) {
+        this(entry);
+        this.ticketCountsHolder = ticketCountsHolder;
     }
 
     public SeatHandler(SearchResultEntry entry) {
@@ -337,6 +352,27 @@ public class SeatHandler {
     }
 
     public void setSelectedSeats(List<Seat> selectedSeats) {
+        if (run != null) {
+            Seat newSelection = null;
+            for (Seat seat : selectedSeats) {
+                if (!this.selectedSeats.contains(seat)) {
+                    newSelection = seat;
+                    break;
+                }
+            }
+            // in case of other events just re-setting the already existing value
+            if (newSelection == null) {
+                this.selectedSeats = selectedSeats;
+                return;
+            }
+
+            selectionQueue.add(newSelection);
+
+            if (selectedSeats.size() > getTotalNumberOfTickets()) {
+                selectedSeats.remove(selectionQueue.poll());
+            }
+        }
+
         this.selectedSeats = selectedSeats;
         if (run == null) {
             updateMissingSeats();
@@ -365,5 +401,34 @@ public class SeatHandler {
 
     public void setFirstSeatUpstairs(int firstSeatUpstairs) {
         this.firstSeatUpstairs = firstSeatUpstairs;
+    }
+
+    public TicketCountsHolder getTicketCountsHolder() {
+        return ticketCountsHolder;
+    }
+
+    public void setTicketCountsHolder(TicketCountsHolder ticketCountsHolder) {
+        this.ticketCountsHolder = ticketCountsHolder;
+    }
+
+    public Integer[] getUsed() {
+        return used;
+    }
+
+    public void setUsed(Integer[] used) {
+        this.used = used;
+    }
+
+    public int getTotalNumberOfTickets() {
+        if (run == null) {
+            return 0;
+        }
+
+        int total = ticketCountsHolder.getRegularTicketsCount();
+        for (TicketCount tc : ticketCountsHolder.getTicketCounts()) {
+            total += tc.getNumberOfTickets();
+        }
+
+        return total;
     }
 }
