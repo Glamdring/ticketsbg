@@ -113,7 +113,7 @@
                         cellpadding="0" cellspacing="0">
                         <h:panelGroup id="oneWay" style="border-style: none;">
                             <rich:extendedDataTable value="#{searchController.resultsModel}"
-                                height="#{searchController.resultsModel.rowCount == 0 ? 50 : searchController.resultsModel.rowCount * (searchController.returnResultsModel == null ? 176 : 196) + 30}"
+                                height="#{searchController.resultsModel.rowCount == 0 ? 50 : searchController.resultsModel.rowCount * (searchController.returnResultsModel == null ? 179 : 199) + 30}"
                                 var="result" rowKeyVar="rowId" selectionMode="single"
                                 enableContextMenu="false" id="resultsTable"
                                 selection="#{searchController.selection}"

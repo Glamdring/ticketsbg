@@ -69,7 +69,7 @@
             </h:panelGrid>
 
             <!-- One way fields -->
-            <rich:panel id="oneWayPanel" style="border-style: none;">
+            <h:panelGroup id="oneWayPanel">
                 <h:panelGrid columns="2" columnClasses="firstColumn,secondColumn">
                     <h:outputLabel value="#{msg.departureDate}:" for="date" />
                     <rich:calendar id="date" datePattern="dd.MM.yyyy" firstWeekDay="1"
@@ -106,10 +106,10 @@
                     </h:panelGroup>
                 </h:panelGrid>
 
-            </rich:panel>
+            </h:panelGroup>
             <!--  Return fields -->
             <a4j:outputPanel ajaxRendered="true" rendered="#{!isAdmin}">
-                <rich:panel id="returnPanel" style="border-style: none;"
+                <h:panelGroup id="returnPanel"
                     rendered="#{searchController.travelType == 'twoWay'}">
                     <h:panelGrid columns="2" columnClasses="firstColumn,secondColumn">
                         <h:outputLabel value="#{msg.returnDate}:" for="returnDate" />
@@ -144,7 +144,7 @@
                             </rich:comboBox> #{msg.hourAbbr}
                         </h:panelGroup>
                     </h:panelGrid>
-                </rich:panel>
+                </h:panelGroup>
             </a4j:outputPanel>
 
             <h:panelGrid columns="2" columnClasses="firstColumn,secondColumn">
