@@ -29,6 +29,7 @@ public class DaoEMImpl implements Dao {
 
     public void delete(Object object) {
         ActionLogger.logAction(this, object, DatabaseOperationType.SAVE);
+        object = entityManager.merge(object);
         entityManager.remove(object);
 
     }

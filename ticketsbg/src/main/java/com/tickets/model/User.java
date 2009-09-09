@@ -52,14 +52,18 @@ import com.tickets.controllers.security.AccessLevel;
             query = "select u from User u where u.username=:username"
         ),
         @NamedQuery(
-                name = "User.getByFirm",
-                query = "select u from User u WHERE u.firm=:firm"
-            )
+            name = "User.getByFirm",
+            query = "select u from User u WHERE u.firm=:firm AND u.agent IS NULL"
+        ),
+        @NamedQuery(
+            name = "User.getAgentsUsersByFirm",
+            query = "select u from User u WHERE u.firm=:firm AND u.agent IS NOT NULL"
+        )
 })
 public class User extends Customer implements Serializable {
 
     @Column(nullable = false, length = 40)
-    @Length(max=40, min=6)
+    @Length(max=40, min=4)
     @NotEmpty
     private String username;
 

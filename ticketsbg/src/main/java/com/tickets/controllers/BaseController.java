@@ -53,4 +53,8 @@ public abstract class BaseController implements Serializable {
             Conversation.getCurrentInstance().invalidate();
         }
     }
+
+    public boolean isHasMessages() {
+        return FacesContext.getCurrentInstance().getMessages().hasNext();
+    }
 }

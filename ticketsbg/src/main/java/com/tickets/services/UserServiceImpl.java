@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.tickets.constants.Constants;
 import com.tickets.constants.Messages;
 import com.tickets.constants.Settings;
+import com.tickets.dao.ValidationBypassingEventListener;
 import com.tickets.exceptions.UserException;
 import com.tickets.model.Firm;
 import com.tickets.model.User;
@@ -268,7 +269,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public User findUserByUserName(String userName) {
+    public User findUser(String userName) {
         List<User> result = getDao().findByNamedQuery("User.getByUsername", new String[] {
                 "username"}, new Object[] {userName});
 
@@ -289,6 +290,16 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
         return result;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<User> fetchAgentsUsers(Firm firm) {
+        List result = getDao().findByNamedQuery("User.getAgentsUsersByFirm",
+                new String[] { "firm" },
+                new Object[] { firm });
+
+        return result;
+    }
+
     @Override
     public boolean isHash(String password) {
         return password.length() == 37 && password.matches("[0-9abcdef]+");
@@ -299,5 +310,15 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
         user.setPassword(saltAndHashPassword(newPassword));
         user.setTemporaryPassword("");
         getDao().persist(user);
+    }
+
+    @Override
+    public User save(User user) {
+        ValidationBypassingEventListener.turnValidationOff();
+        try {
+            return super.save(user);
+        } finally {
+            ValidationBypassingEventListener.turnValidationOn();
+        }
     }
 }

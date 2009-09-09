@@ -46,11 +46,11 @@ public interface UserService extends Service<User> {
     String saltAndHashPassword(String password);
 
     /**
-     * TODO DOC
+     * Finds a user by a provided username
      * @param userName
      * @return user
      */
-    User findUserByUserName(String userName);
+    User findUser(String userName);
 
     /**
      * Checks whether the argument is a hash, or a normal password
@@ -62,12 +62,22 @@ public interface UserService extends Service<User> {
 
 
     /**
-     * Lists all users assigned to the specified administration
+     * Lists all internal users assigned to the specified firm
      *
-     * @param administration
+     * @param firm
      * @return list of users
      */
     List<User> fetchUsers(Firm firm);
+
+
+    /**
+     * Fetches all users that are external to the firm (those
+     * assigned to agents)
+     *
+     * @param firm
+     * @return list of useres
+     */
+    List<User> fetchAgentsUsers(Firm firm);
 
 
     /**
@@ -76,5 +86,6 @@ public interface UserService extends Service<User> {
      * @param newPassword
      */
     void changePassword(User user, String newPassword);
+
 
 }

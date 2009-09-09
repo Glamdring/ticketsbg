@@ -15,21 +15,49 @@
 }
 </style>
     <f:view>
-        <h:messages />
-        <h:form id="userForm">
+        <rich:messages/>
+        <a4j:outputPanel ajaxRendered="true">
+            <t:inputHidden forceId="true" id="userFormHasMessages"
+                value="#{userController.hasMessages}" />
+        </a4j:outputPanel>
+        <a4j:form id="userForm">
             <a4j:outputPanel ajaxRendered="true">
                 <rich:panel>
                     <h:panelGrid columns="2" styleClass="gridContent">
                         <h:outputLabel for="username" value="#{msg.username}: " />
-                        <h:inputText value="#{userController.user.username}" id="username"
-                            disabled="#{userController.user.id > 0}" autocomplete="false" />
+                        <a4j:outputPanel>
+                            <h:inputText value="#{userController.user.username}"
+                                id="username" disabled="#{userController.user.id > 0}"
+                                autocomplete="false">
+                                <f:attribute name="label" value="#{msg.username}" />
+                                <rich:ajaxValidator />
+                            </h:inputText>
+                            <rich:message errorClass="error" for="username" />
+                        </a4j:outputPanel>
+
 
                         <h:outputLabel for="password" value="#{msg.password}: " />
                         <h:inputSecret value="#{userController.user.password}"
-                            id="password" autocomplete="false" redisplay="true" />
+                            id="password" autocomplete="false" redisplay="true"
+                            validatorMessage="#{msg.commonLengthMessage}">
+                            <f:attribute name="label" value="#{msg.password}" />
+                        </h:inputSecret>
 
                         <h:outputLabel for="names" value="#{msg.names}: " />
-                        <h:inputText value="#{userController.user.name}" id="names" />
+                        <h:inputText value="#{userController.user.name}" id="names">
+                            <f:attribute name="label" value="#{msg.names}" />
+                        </h:inputText>
+
+                        <h:outputLabel for="email" value="#{msg.email}: " />
+                        <h:inputText value="#{userController.user.email}" id="email">
+                            <f:attribute name="label" value="#{msg.email}" />
+                        </h:inputText>
+
+                        <h:outputLabel for="contactPhone" value="#{msg.contactPhone}: " />
+                        <h:inputText value="#{userController.user.contactPhone}"
+                            id="contactPhone">
+                            <f:attribute name="label" value="#{msg.contactPhone}" />
+                        </h:inputText>
 
                         <h:outputLabel for="active" value="#{msg.active}: " />
                         <h:selectBooleanCheckbox value="#{userController.user.active}"
@@ -42,14 +70,20 @@
                             <f:selectItems value="#{userController.accessLevelSelectItems}" />
                         </h:selectOneMenu>
 
+                        <h:outputLabel for="agent" value="#{msg.agent}: " />
+                        <h:selectOneMenu id="agent" converter="#{entityConverter}"
+                            value="#{userController.user.agent}">
+                            <f:selectItems value="#{userController.agents}" />
+                        </h:selectOneMenu>
+
                         <a4j:commandButton value="#{msg.save}"
-                            action="#{userController.save}"
-                            oncomplete="#{rich:component('entityPanel')}.hide()"
-                            reRender="usersTable" />
+                            action="#{userController.save}" type="submit"
+                            oncomplete="if (document.getElementById('userFormHasMessages').value == 'false') { #{rich:component('entityPanel')}.hide()}"
+                            reRender="usersTable,agentsUsersTable" />
                         <h:outputText value="" />
                     </h:panelGrid>
                 </rich:panel>
             </a4j:outputPanel>
-        </h:form>
+        </a4j:form>
     </f:view>
 </ui:composition>

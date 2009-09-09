@@ -193,4 +193,8 @@ public class Firm implements Serializable, Selectable {
     public String getLabel() {
         return getName();
     }
+
+    public void addAgent(Agent agent) {
+        agents.add(agent);
+    }
 }

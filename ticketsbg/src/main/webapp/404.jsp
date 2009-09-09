@@ -10,6 +10,8 @@
     xmlns:t="http://myfaces.apache.org/tomahawk" template="publicTemplate.jsp">
 
     <ui:define name="body">
-        <h:outputText value="#{msg.pageDoesNotExist}" styleClass="error" />
+        <f:view>
+            <h:outputText value="#{msg.pageDoesNotExist}" styleClass="error" />
+        </f:view>
     </ui:define>
 </ui:composition>
