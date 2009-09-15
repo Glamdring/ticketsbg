@@ -51,12 +51,13 @@
 
                         <f:attribute name="label" value="#{msg.startStop}" />
 
-                        <a4j:support event="onselect" reRender="toStop"
-                            action="#{searchController.filterToStops}" ajaxSingle="true" />
                         <a4j:support event="onchange" reRender="toStop"
                             eventsQueue="fromStopOnchange"
                             action="#{searchController.filterToStops}" ajaxSingle="true"
                             requestDelay="500" />
+                        <a4j:support event="onselect" reRender="toStop"
+                            action="#{searchController.filterToStops}" ajaxSingle="true" />
+
                     </rich:comboBox>
                 </h:panelGroup>
 

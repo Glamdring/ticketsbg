@@ -186,8 +186,11 @@ public class SearchController extends BaseController {
     @Action
     public void filterToStops() {
         if (fromStop != null && fromStop.length() > 0) {
-            toStopNames = searchService.listAllEndStops(fromStop,
+            List<String> result = searchService.listAllEndStops(fromStop,
                     loggedUserHolder.getLoggedUser());
+            if (result.size() > 0) {
+                toStopNames = result;
+            }
         }
     }
 
