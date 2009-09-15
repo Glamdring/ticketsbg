@@ -22,6 +22,12 @@
     text-align: right;
     font-weight: bold;
 }
+
+.disabled-cell {
+    text-decoration: line-through;
+    background-color: lightgrey;
+    background-image: none;
+}
 </style>
     <f:view>
         <rich:panel header="#{msg.searchTitle}"
@@ -69,13 +75,46 @@
                 </rich:comboBox>
             </h:panelGrid>
 
+            <script type="text/javascript">
+            //<![CDATA[
+                var ONE_DAY = 1000 * 60 * 60 * 24;
+                var currentDate = new Date();
+
+                function disallowPastDays(day) {
+
+                    if (currentDate == undefined) {
+                        currentDate = day.date.getDate;
+                    }
+
+                    if (currentDate.getTime() - day.date.getTime() >= ONE_DAY) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+
+                function getDayClass(day) {
+                    if (currentDate == undefined) {
+                        currentDate = day.date.getDate;
+                    }
+                    if (currentDate.getTime() - day.date.getTime() >= ONE_DAY) {
+                        return "disabled-cell";
+                    } else {
+                        return null;
+                    }
+
+                }
+            //]]>
+            </script>
             <!-- One way fields -->
             <h:panelGroup id="oneWayPanel">
                 <h:panelGrid columns="2" columnClasses="firstColumn,secondColumn">
                     <h:outputLabel value="#{msg.departureDate}:" for="date" />
                     <rich:calendar id="date" datePattern="dd.MM.yyyy" firstWeekDay="1"
                         value="#{searchController.date}" required="true"
-                        validator="#{searchController.validateDate}">
+                        validator="#{searchController.validateDate}"
+                        enableManualInput="true" isDayEnabled="disallowPastDays"
+                        boundaryDatesMode="scroll" dayStyleClass="getDayClass">
                         <f:attribute name="label" value="#{msg.departureDate}" />
                     </rich:calendar>
 
@@ -115,7 +154,9 @@
                     <h:panelGrid columns="2" columnClasses="firstColumn,secondColumn">
                         <h:outputLabel value="#{msg.returnDate}:" for="returnDate" />
                         <rich:calendar id="returnDate" datePattern="dd.MM.yyyy"
-                            firstWeekDay="1" value="#{searchController.returnDate}" />
+                            firstWeekDay="1" value="#{searchController.returnDate}"
+                            enableManualInput="true" isDayEnabled="disallowPastDays"
+                            boundaryDatesMode="scroll" dayStyleClass="getDayClass" />
 
                         <h:panelGroup>
                             <h:selectOneMenu id="returnDepartureOrArival"

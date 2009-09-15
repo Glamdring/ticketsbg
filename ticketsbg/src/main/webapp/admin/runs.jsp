@@ -62,7 +62,7 @@
                                 target="#{travelListController.run}" />
                             <h:graphicImage value="/images/runs.png"
                                 style="width:16; height:16; border-style: none;"
-                                alt="#{msg.remove}" title="#{msg.remove}" />
+                                alt="#{msg.seatsExceeded}" title="#{msg.seatsExceeded}" />
                         </h:commandLink>
                         <h:commandLink title="#{msg.setSeatsExceeded}"
                             action="#{runController.setSeatsExceeded}"
@@ -71,7 +71,7 @@
                                 target="#{runController.run}" />
                             <h:graphicImage value="/images/close.png"
                                 style="width:16; height:16; border-style: none;"
-                                alt="#{msg.remove}" title="#{msg.remove}" />
+                                alt="#{msg.travelList}" title="#{msg.travelList}" />
                         </h:commandLink>
 
                         <h:commandLink title="#{msg.undoSeatsExceeded}"
@@ -82,7 +82,7 @@
                                 target="#{runController.run}" />
                             <h:graphicImage value="/images/undo.png"
                                 style="width:16; height:16; border-style: none;"
-                                alt="#{msg.remove}" title="#{msg.remove}" />
+                                alt="#{msg.undoSeatsExceeded}" title="#{msg.undoSeatsExceeded}" />
                         </h:commandLink>
                     </rich:column>
                     <f:facet name="footer">
