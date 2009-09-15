@@ -65,7 +65,7 @@ public class StatisticsServiceImpl
             int timeType, Firm firm, Date fromDate, Date toDate,
             StatsDataType dataType) {
 
-        String query = "SELECT t FROM Ticket t WHERE ";
+        String query = "SELECT t FROM Ticket t WHERE t.timeouted=false AND ";
         List<String> paramNames = new ArrayList<String>();
         List<Object> values = new ArrayList<Object>();
         if (route == null) {
