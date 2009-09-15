@@ -1,5 +1,6 @@
 package com.tickets.services;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,10 +16,11 @@ import javax.annotation.PostConstruct;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import com.tickets.controllers.valueobjects.StatsDataType;
 import com.tickets.model.Firm;
 import com.tickets.model.Route;
 import com.tickets.model.Ticket;
-import com.tickets.model.stats.SoldTickets;
+import com.tickets.model.stats.StatsHolder;
 import com.tickets.utils.GeneralUtils;
 
 /**
@@ -59,8 +61,9 @@ public class StatisticsServiceImpl
 
     @SuppressWarnings({ "unchecked", "null" })
     @Override
-    public List<SoldTickets> getSoldTickets(Route route, int period,
-            int timeType, Firm firm, Date fromDate, Date toDate) {
+    public List<StatsHolder> getStatistics(Route route, int period,
+            int timeType, Firm firm, Date fromDate, Date toDate,
+            StatsDataType dataType) {
 
         String query = "SELECT t FROM Ticket t WHERE ";
         List<String> paramNames = new ArrayList<String>();
@@ -103,7 +106,7 @@ public class StatisticsServiceImpl
             }
         }
 
-        List<SoldTickets> result = new LinkedList<SoldTickets>();
+        List<StatsHolder> result = new LinkedList<StatsHolder>();
 
         for (Ticket ticket : preResult) {
             Calendar time = null;
@@ -113,14 +116,19 @@ public class StatisticsServiceImpl
                 time = ticket.getCreationTime();
             }
             String periodStr = getPeriodString(time, period);
-            SoldTickets st = new SoldTickets(periodStr, 0);
-            int pos = Collections.binarySearch(result, st);
+            StatsHolder sh = new StatsHolder(periodStr, BigDecimal.ZERO);
+            int pos = Collections.binarySearch(result, sh);
             if (pos > -1) {
-                st = result.get(pos);
+                sh = result.get(pos);
             }
 
-            st.setTickets(st.getTickets() + 1);
-            result.add(st);
+            if (dataType == StatsDataType.TICKETS_COUNT) {
+                sh.setValue(sh.getValue().add(BigDecimal.ONE));
+            }
+            if (dataType == StatsDataType.MONEY) {
+                sh.setValue(sh.getValue().add(ticket.getPrice()));
+            }
+            result.add(sh);
         }
         //TODO order day of week
 

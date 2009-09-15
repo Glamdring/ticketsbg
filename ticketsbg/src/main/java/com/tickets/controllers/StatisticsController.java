@@ -16,11 +16,13 @@ import com.tickets.annotations.Action;
 import com.tickets.constants.Messages;
 import com.tickets.controllers.security.AccessLevel;
 import com.tickets.controllers.users.LoggedUserHolder;
+import com.tickets.controllers.valueobjects.StatsDataType;
 import com.tickets.model.Firm;
 import com.tickets.model.Route;
-import com.tickets.model.stats.SoldTickets;
+import com.tickets.model.stats.StatsHolder;
 import com.tickets.services.RouteService;
 import com.tickets.services.StatisticsService;
+import com.tickets.utils.SelectItemUtils;
 
 @Controller("statisticsController")
 @Scope("singleton")
@@ -36,11 +38,14 @@ public class StatisticsController extends BaseController {
     private String selectedRouteName;
     private int selectedPeriod = Calendar.DAY_OF_MONTH;
     private int selectedTimeType = StatisticsService.BY_RUN_TIME;
+    private StatsDataType selectedDataType;
+
     private Date fromDate;
     private Date toDate;
 
     private List<SelectItem> periodItems;
     private List<SelectItem> timeTypeItems;
+    private List<SelectItem> dataTypeItems;
     private List<String> routeNames;
 
     @PostConstruct
@@ -53,6 +58,10 @@ public class StatisticsController extends BaseController {
         timeTypeItems = new ArrayList<SelectItem>();
         timeTypeItems.add(new SelectItem(StatisticsService.BY_RUN_TIME, Messages.getString("statsByRunTime")));
         timeTypeItems.add(new SelectItem(StatisticsService.BY_PURCHASE_TIME, Messages.getString("statsByPurchaseTime")));
+
+        dataTypeItems = SelectItemUtils.formSelectItems(StatsDataType.class);
+
+
     }
 
     @Action(accessLevel=AccessLevel.PUBLIC)
@@ -65,13 +74,13 @@ public class StatisticsController extends BaseController {
         return statsService.getDestinationsCount();
     }
 
-    public List<SoldTickets> getSoldTickets() {
+    public List<StatsHolder> getStatistics() {
         Firm firm = LoggedUserHolder.getUser().getFirm();
         Route route = routeService.findRoute(selectedRouteName, firm);
 
-        return statsService.getSoldTickets(route, selectedPeriod,
+        return statsService.getStatistics(route, selectedPeriod,
                 selectedTimeType, firm,
-                fromDate, toDate);
+                fromDate, toDate, selectedDataType);
     }
 
     public String getSelectedRouteName() {
@@ -144,5 +153,21 @@ public class StatisticsController extends BaseController {
 
     public void setToDate(Date toDate) {
         this.toDate = toDate;
+    }
+
+    public StatsDataType getSelectedDataType() {
+        return selectedDataType;
+    }
+
+    public void setSelectedDataType(StatsDataType selectedDataType) {
+        this.selectedDataType = selectedDataType;
+    }
+
+    public List<SelectItem> getDataTypeItems() {
+        return dataTypeItems;
+    }
+
+    public void setDataTypeItems(List<SelectItem> dataTypeItems) {
+        this.dataTypeItems = dataTypeItems;
     }
 }

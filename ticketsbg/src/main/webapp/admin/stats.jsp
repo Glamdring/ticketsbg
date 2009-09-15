@@ -24,8 +24,9 @@
         <f:view>
             <h:form id="statsForm">
                 <h:messages />
-                <h:panelGrid columns="5" columnClasses="gridContent">
+                <h:panelGrid columns="6" columnClasses="gridContent">
                     <h:outputText value="#{msg.route}" />
+                    <h:outputText value="#{msg.statsDataType}" />
                     <h:outputText value="#{msg.periodType}" />
                     <h:outputText value="#{msg.timeType}" />
                     <h:outputText value="#{msg.fromDate}" />
@@ -35,6 +36,12 @@
                         suggestionValues="#{statisticsController.routeNames}">
                         <a4j:support event="onselect" reRender="chartHolder" />
                     </rich:comboBox>
+
+                    <h:selectOneMenu id="selectedDataType" converter="#{enumConverter}"
+                        value="#{statisticsController.selectedDataType}">
+                        <f:selectItems value="#{statisticsController.dataTypeItems}" />
+                        <a4j:support event="onchange" reRender="chartHolder" />
+                    </h:selectOneMenu>
 
                     <h:selectOneMenu id="selectedPeriod"
                         value="#{statisticsController.selectedPeriod}">
@@ -61,10 +68,12 @@
                 </h:panelGrid>
 
                 <h:panelGroup id="chartHolder">
-                    <p:lineChart value="#{statisticsController.soldTickets}" var="sale"
+                    <p:lineChart value="#{statisticsController.statistics}" var="sale"
                         xfield="#{sale.period}" id="chart" styleClass="line"
                         wmode="opaque">
-                        <p:chartSeries label="#{msg.soldTickets}" value="#{sale.tickets}" />
+                        <p:chartSeries label="#{msg[statisticsController.selectedDataType.key]}" value="#{sale.value}">
+                            <f:convertNumber minFractionDigits="0" maxFractionDigits="2" />
+                        </p:chartSeries>
                     </p:lineChart>
                 </h:panelGroup>
             </h:form>

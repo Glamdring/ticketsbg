@@ -1,16 +1,17 @@
 package com.tickets.model.stats;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
-public class SoldTickets implements Serializable, Comparable<SoldTickets> {
+public class StatsHolder implements Serializable, Comparable<StatsHolder> {
 
     private String period;
-    private int tickets;
+    private BigDecimal value;
 
-    public SoldTickets(String period, int tickets) {
+    public StatsHolder(String period, BigDecimal value) {
         super();
         this.period = period;
-        this.tickets = tickets;
+        this.value = value;
     }
 
     public String getPeriod() {
@@ -21,16 +22,16 @@ public class SoldTickets implements Serializable, Comparable<SoldTickets> {
         this.period = period;
     }
 
-    public int getTickets() {
-        return tickets;
+    public BigDecimal getValue() {
+        return value;
     }
 
-    public void setTickets(int tickets) {
-        this.tickets = tickets;
+    public void setValue(BigDecimal value) {
+        this.value = value;
     }
 
     @Override
-    public int compareTo(SoldTickets o) {
+    public int compareTo(StatsHolder o) {
         if (o == null) {
             return -1;
         }

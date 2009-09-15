@@ -3,9 +3,10 @@ package com.tickets.services;
 import java.util.Date;
 import java.util.List;
 
+import com.tickets.controllers.valueobjects.StatsDataType;
 import com.tickets.model.Firm;
 import com.tickets.model.Route;
-import com.tickets.model.stats.SoldTickets;
+import com.tickets.model.stats.StatsHolder;
 
 public interface StatisticsService extends Service {
 
@@ -43,10 +44,16 @@ public interface StatisticsService extends Service {
      * 		the last date of the period for which the stats will
      * 		be calculated
      *
+     * @param dataType
+     * 		whether sold tickets cound, or summed prices should be seen
+     *
      * @return list of SoldTickets to be used for statistics
      */
-    List<SoldTickets> getSoldTickets(Route route,
+    List<StatsHolder> getStatistics(Route route,
             int period,
             int timeType,
-            Firm firm, Date fromDate, Date toDate);
+            Firm firm,
+            Date fromDate,
+            Date toDate,
+            StatsDataType dataType);
 }
