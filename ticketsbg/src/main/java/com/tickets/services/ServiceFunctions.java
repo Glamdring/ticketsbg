@@ -18,6 +18,10 @@ public class ServiceFunctions {
     private static ThreadLocal<Map<Run, Integer>> cache = new ThreadLocal<Map<Run, Integer>>();
 
     public static int getVacantSeats(Run run, String fromStop, String toStop) {
+        return getVacantSeats(run, fromStop, toStop, true);
+    }
+
+    public static int getVacantSeats(Run run, String fromStop, String toStop, boolean useCache) {
         if (run == null || fromStop == null) {
             return 0;
         }
@@ -26,7 +30,7 @@ public class ServiceFunctions {
         if (cache.get() == null)
             cache.set(new HashMap<Run, Integer>());
 
-        if (cache.get().containsKey(run)) {
+        if (useCache && cache.get().containsKey(run)) {
             Integer result = cache.get().get(run);
             // Remove the result after getting it TODO ??
             cache.get().remove(run);

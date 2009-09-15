@@ -40,6 +40,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
         else
             passParam = saltAndHashPassword(new String(password));
 
+        System.out.println(passParam);
         List<User> result = getDao().findByNamedQuery("User.login",
                 new String[] { "username", "password" },
                 new Object[] { username, passParam });

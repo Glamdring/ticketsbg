@@ -59,6 +59,12 @@
         </param-name>
         <param-value>rfRes</param-value>
     </context-param>
+     <context-param>
+        <param-name>org.apache.myfaces.redirectTracker.POLICY</param-name>
+        <param-value>
+            org.apache.myfaces.custom.redirectTracker.policy.MessagesRedirectTrackPolicy
+        </param-value>
+    </context-param>
 
     <listener>
         <listener-class>

@@ -352,7 +352,7 @@
                                 <rich:inputNumberSpinner
                                     value="#{searchController.regularTicketsCount}" minValue="0"
                                     maxValue="#{searchController.selectedEntry == null ? 50 : tc:getVacantSeats(searchController.selectedEntry.run, searchController.fromStop, searchController.toStop)}"
-                                    inputSize="3">
+                                    inputSize="3" cycled="false">
                                     <a4j:support event="onchange" ajaxSingle="true" />
                                 </rich:inputNumberSpinner>
                             </h:panelGrid>
@@ -369,7 +369,7 @@
                                     </h:panelGroup>
 
                                     <rich:inputNumberSpinner value="#{tc.numberOfTickets}"
-                                        minValue="0" inputSize="3"
+                                        minValue="0" inputSize="3" cycled="false"
                                         maxValue="#{tc:getVacantSeats(searchController.selectedEntry.run, searchController.fromStop, searchController.toStop)}">
                                         <a4j:support event="onchange" ajaxSingle="true" />
                                     </rich:inputNumberSpinner>

@@ -27,6 +27,7 @@
     font-weight: bold;
     color: darkblue;
     text-decoration: underline;
+    cursor: pointer;
 }
 
 .gridContent {
@@ -36,7 +37,7 @@
     </ui:define>
     <ui:define name="body">
         <f:view>
-            <h:form id="searchResults">
+            <a4j:form id="searchResults">
                 <rich:panel headerClass="rich-panel-header-main">
                     <f:facet name="header">
                         <h:panelGroup style="font-weight: normal;">
@@ -44,14 +45,14 @@
                             <h:outputText value="#{searchController.fromStop}"
                                 styleClass="mapLink" id="fromStopHeader">
                                 <rich:componentControl for="fromMapPanel"
-                                    attachTo="fromStopHeader" operation="show" event="onmouseover"
+                                    attachTo="fromStopHeader" operation="show" event="onclick"
                                     rendered="#{searchController.mapHandler.fromMapUrl != null}" />
                             </h:outputText>
                             <h:outputText value=" #{msg.searchResultsTo} " />
                             <h:outputText value="#{searchController.toStop}"
                                 styleClass="mapLink" id="toStopHeader">
-                                <rich:componentControl for="toMapPanel" attachTo="toStopHeader"
-                                    operation="show" event="onmouseover"
+                                <rich:componentControl for="toMapPanel"
+                                    attachTo="toStopHeader" operation="show" event="onclick"
                                     rendered="#{searchController.mapHandler.toMapUrl != null}" />
                             </h:outputText>
                                         (<h:outputText
@@ -97,8 +98,7 @@
                         </h:panelGroup>
                     </f:facet>
 
-
-                    <rich:messages errorClass="error" ajaxRendered="true" />
+                    <ui:include src="messages.jsp" />
                     <!-- show this button below the messages only if the message is
                     asking the question whether tickets are to be cancelled -->
                     <a4j:outputPanel rendered="#{searchController.proposeCancellation}">
@@ -211,7 +211,7 @@
                         <h:panelGroup id="return" style="border-style: none;">
                             <a4j:region>
                                 <rich:extendedDataTable
-                                    height="#{searchController.returnResultsModel.rowCount * 119 + 30}"
+                                    height="#{searchController.returnResultsModel.rowCount * 122 + 30}"
                                     value="#{searchController.returnResultsModel}" var="result"
                                     rowKeyVar="rowId" selectionMode="single"
                                     enableContextMenu="false" id="returnResultsTable"
@@ -243,8 +243,7 @@
                                             #{msg.returnHeaderLabel}
                                         </f:facet>
 
-                                        <rich:panel id="resultEntry" header="#{result.run.route.name}"
-                                            style="width: 100%;">
+                                        <rich:panel id="resultEntry" header="#{result.run.route.name}">
                                             <a4j:repeat value="#{result.run.route.stops}" var="stop"
                                                 rowKeyVar="stopId">
                                                 <h:outputText value=" → " rendered="#{stopId > 0}" />
@@ -369,7 +368,7 @@
                 <rich:modalPanel id="fromMapPanel" autosized="true"
                     onshow="fromMapVar.checkResize(); initFromMap();"
                     onmaskclick="#{rich:component('fromMapPanel')}.hide()"
-                    resizeable="false">
+                    resizeable="false" rendered="#{!empty searchController.mapHandler.fromMapUrl}">
 
                     <f:facet name="controls">
                         <h:panelGroup>
@@ -390,7 +389,8 @@
 
                 <rich:modalPanel id="toMapPanel" autosized="true"
                     onmaskclick="#{rich:component('toMapPanel')}.hide()"
-                    resizeable="false" onshow="toMapVar.checkResize(); initToMap();">
+                    resizeable="false" onshow="toMapVar.checkResize(); initToMap();"
+                    rendered="#{!empty searchController.mapHandler.toMapUrl}">
                     <f:facet name="controls">
                         <h:panelGroup>
                             <h:graphicImage value="/images/close.png" id="hidelinkToMapPanel"
@@ -406,8 +406,7 @@
                             style="width: 500px; height: 500px;" gmapVar="toMapVar" />
                     </rich:panel>
                 </rich:modalPanel>
-
-            </h:form>
+            </a4j:form>
         </f:view>
     </ui:define>
 </ui:composition>

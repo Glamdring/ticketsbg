@@ -18,20 +18,20 @@
                                 <h:outputText value=" *" styleClass="asterisk" />
                             </h:panelGroup>
                             <h:inputText value="#{registerController.user.username}"
-                                id="username" size="35">
+                                id="regUsername" size="35">
                                 <rich:ajaxValidator event="onblur" />
                             </h:inputText>
-                            <rich:message for="username" errorClass="error" />
+                            <rich:message for="regUsername" errorClass="error" />
 
                             <h:panelGroup>
                                 <h:outputLabel value="#{msg.password}" for="password" />
                                 <h:outputText value=" *" styleClass="asterisk" />
                             </h:panelGroup>
                             <h:inputSecret value="#{registerController.user.password}"
-                                id="password" size="35">
+                                id="regPassword" size="35">
                                 <rich:ajaxValidator event="onblur" />
                             </h:inputSecret>
-                            <rich:message for="password" errorClass="error" />
+                            <rich:message for="regPassword" errorClass="error" />
 
                             <h:panelGroup>
                                 <h:outputLabel value="#{msg.repeatPassword}" for="repeatPassword" />
@@ -89,7 +89,10 @@
                             </h:inputText>
                             <rich:message for="names" errorClass="error" />
 
-                            <h:outputLabel value="#{msg.contactPhone}" for="contactPhone" />
+                            <h:panelGroup>
+                                <h:outputLabel value="#{msg.contactPhone}" for="contactPhone" />
+                                <h:outputText value=" *" styleClass="asterisk" />
+                            </h:panelGroup>
                             <h:inputText value="#{registerController.user.contactPhone}"
                                 id="contactPhone" size="35" />
                             <rich:message for="contactPhone" errorClass="error" />

@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.hibernate.Session;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 
@@ -119,23 +120,29 @@ public class DaoEMImpl implements Dao {
         return query.list();
     }
 
-    @Override
     public Object attach(Object entity) {
         return entityManager.merge(entity);
     }
 
-    @Override
     public void flush() {
         entityManager.flush();
     }
 
-    @Override
     public void clearPersistentContext() {
         entityManager.clear();
     }
 
-    @Override
     public Object getDelegate() {
         return entityManager.getDelegate();
+    }
+
+    public void commitCurrentTransaction() {
+        ((Session) getDelegate()).getTransaction().commit();
+        ((Session) getDelegate()).beginTransaction();
+    }
+
+    @Override
+    public void refresh(Object obj) {
+        entityManager.refresh(obj);
     }
 }

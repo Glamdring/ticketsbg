@@ -397,7 +397,7 @@
                     </rich:panel>
 
                     <!-- Seats positioning -->
-                    <rich:panel id="seatsPanel" header="#{msg.seatsSettings}">
+                    <rich:panel id="seatsPanel" header="#{msg.seatsSettings}" rendered="#{routeController.route.id > 0}">
                         <h:selectBooleanCheckbox value="#{routeController.route.seatSettings.startRight}" id="startRight">
                             <a4j:support event="onchange" ajaxSingle="true"
                                 reRender="seatsViewInner1"

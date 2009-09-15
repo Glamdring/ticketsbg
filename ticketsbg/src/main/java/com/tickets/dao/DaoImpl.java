@@ -114,19 +114,25 @@ public class DaoImpl implements Dao {
         return sessionFactory.getCurrentSession();
     }
 
-    @Override
     public void flush() {
         getSession().flush();
     }
 
-    @Override
     public void clearPersistentContext() {
         getSession().clear();
     }
 
-    @Override
     public Object getDelegate() {
         return getSession();
+    }
+
+    public void commitCurrentTransaction() {
+        getSession().getTransaction().commit();
+        getSession().beginTransaction();
+    }
+
+    public void refresh(Object obj) {
+        getSession().refresh(obj);
     }
 
 }

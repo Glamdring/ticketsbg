@@ -27,12 +27,12 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
             Discount discount) {
 
         // Allow only one user per run at a time, to avoid collisions
-        String runIdIntern = "run"
-                + String.valueOf(selectedEntry.getRun().getRunId()).intern();
+        String runIdIntern = ("run"
+                + String.valueOf(selectedEntry.getRun().getRunId())).intern();
         String returnRunIdIntern = null;
         if (selectedReturnEntry != null) {
-            returnRunIdIntern = "run"
-                    + String.valueOf(selectedEntry.getRun().getRunId())
+            returnRunIdIntern = ("run"
+                    + String.valueOf(selectedEntry.getRun().getRunId()))
                             .intern();
         }
         synchronized (runIdIntern) {
@@ -59,9 +59,12 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
     private Ticket doCreateTicket(SearchResultEntry selectedEntry,
             SearchResultEntry selectedReturnEntry, int seat, int returnSeat,
             Discount discount) {
-        if (ServiceFunctions.getVacantSeats(selectedEntry.getRun(),
+        Run run = selectedEntry.getRun();
+        //reload the run
+        getDao().refresh(run);
+        if (ServiceFunctions.getVacantSeats(run,
                 selectedEntry.getPrice().getStartStop().getName(),
-                selectedEntry.getPrice().getEndStop().getName()) > 0) {
+                selectedEntry.getPrice().getEndStop().getName(), false) > 0) {
 
             Ticket ticket = new Ticket();
             ticket.setSeat(seat);
@@ -75,10 +78,14 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
             } else {
                 // In case there are no more seats available, quit
                 // the creation process
-                if (ServiceFunctions.getVacantSeats(selectedReturnEntry
-                        .getRun(), selectedReturnEntry.getPrice()
+
+                //reload the run
+                Run returnRun = selectedReturnEntry.getRun();
+                getDao().refresh(returnRun);
+
+                if (ServiceFunctions.getVacantSeats(returnRun, selectedReturnEntry.getPrice()
                         .getStartStop().getName(), selectedReturnEntry
-                        .getPrice().getEndStop().getName()) < 0) {
+                        .getPrice().getEndStop().getName(), false) < 0) {
                     return null;
                 }
 
@@ -106,6 +113,8 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
                 selectedReturnEntry.getRun().getReturnTickets().add(ticket);
             }
 
+            // Flush here, so that data is flushed while synchronized
+            getDao().flush();
             return ticket;
         }
 
@@ -157,13 +166,13 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
                 entry.getRun());
 
         Route route = entry.getRun().getRoute();
-        for (int i = route.getSellSeatsFrom(); i < route.getSellSeatsTo(); i++) {
+        for (int i = route.getSellSeatsFrom(); i <= route.getSellSeatsTo(); i++) {
             if (Collections.binarySearch(usedSeats, i) < 0) {
                 return i;
             }
         }
 
-        throw new IllegalStateException("All seats have been taken!");
+        return -1;
     }
 
     @SuppressWarnings("unchecked")
@@ -194,5 +203,7 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
                 ticket.setTimeouted(true);
             }
         }
+
+        System.gc();
     }
 }

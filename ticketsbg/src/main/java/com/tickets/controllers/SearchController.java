@@ -143,6 +143,7 @@ public class SearchController extends BaseController {
 
     private String publicSearch() {
         //resetting, in case the conversation hasn't ended
+
         resetSelections();
 
         List<SearchResultEntry> result = searchService.search(fromStop, toStop, date,
@@ -162,7 +163,7 @@ public class SearchController extends BaseController {
             addError("choseReturnDate");
         }
 
-        if (result.size() == 1) {
+        if (result.size() == 101) {
             selectedEntry = result.get(0);
             selectedRowId = 0l;
             selection = new SimpleSelection();

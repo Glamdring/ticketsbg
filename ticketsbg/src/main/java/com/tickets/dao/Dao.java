@@ -123,4 +123,15 @@ public interface Dao {
      * @return the delegate
      */
     Object getDelegate();
+
+    /**
+     * Commits the current transaction, and starts a new one
+     */
+    void commitCurrentTransaction();
+
+    /**
+     * Refresh the state of the given object
+     * @param obj
+     */
+    void refresh(Object obj);
 }
