@@ -83,7 +83,7 @@ public class UserController extends BaseCRUDController<User> {
         }
 
         accessLevelSelectItems = SelectItemUtils.formSelectItems(
-                AccessLevel.class, exclusions, AccessLevel.CASHIER_DESK);
+                AccessLevel.class, exclusions, AccessLevel.CASH_DESK);
 
         firmSelectItems = SelectItemUtils.formSelectItems(userService.list(Firm.class));
 
@@ -98,6 +98,7 @@ public class UserController extends BaseCRUDController<User> {
         userService.delete((User) (getAgentsUsersModel().getRowData()));
         refreshList();
     }
+
 
     @Override
     protected User createEntity() {

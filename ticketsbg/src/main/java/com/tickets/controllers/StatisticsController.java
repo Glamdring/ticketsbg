@@ -16,16 +16,19 @@ import com.tickets.annotations.Action;
 import com.tickets.constants.Messages;
 import com.tickets.controllers.security.AccessLevel;
 import com.tickets.controllers.users.LoggedUserHolder;
+import com.tickets.controllers.valueobjects.PurchaseMeansType;
 import com.tickets.controllers.valueobjects.StatsDataType;
 import com.tickets.model.Firm;
 import com.tickets.model.Route;
+import com.tickets.model.Ticket;
+import com.tickets.model.User;
 import com.tickets.model.stats.StatsHolder;
 import com.tickets.services.RouteService;
 import com.tickets.services.StatisticsService;
 import com.tickets.utils.SelectItemUtils;
 
 @Controller("statisticsController")
-@Scope("singleton")
+@Scope("conversation.access")
 @Action(accessLevel=AccessLevel.FIRM_COORDINATOR)
 public class StatisticsController extends BaseController {
 
@@ -39,6 +42,7 @@ public class StatisticsController extends BaseController {
     private int selectedPeriod = Calendar.DAY_OF_MONTH;
     private int selectedTimeType = StatisticsService.BY_RUN_TIME;
     private StatsDataType selectedDataType;
+    private PurchaseMeansType selectedPurchaseMeansType = PurchaseMeansType.BOTH;
 
     private Date fromDate;
     private Date toDate;
@@ -46,22 +50,28 @@ public class StatisticsController extends BaseController {
     private List<SelectItem> periodItems;
     private List<SelectItem> timeTypeItems;
     private List<SelectItem> dataTypeItems;
+    private List<SelectItem> purchaseMeansTypeItems;
     private List<String> routeNames;
 
     @PostConstruct
     public void init() {
-        periodItems = new ArrayList<SelectItem>();
-        periodItems.add(new SelectItem(Calendar.DAY_OF_MONTH, Messages.getString("statsDayOfMonth")));
-        periodItems.add(new SelectItem(Calendar.MONTH, Messages.getString("statsMonth")));
-        periodItems.add(new SelectItem(Calendar.DAY_OF_WEEK, Messages.getString("statsDayOfWeek")));
+        // Don't initialize in case a not in the admin panel
+        User user = LoggedUserHolder.getUser();
+        if (user != null && user.isStaff()) {
+            periodItems = new ArrayList<SelectItem>();
+            periodItems.add(new SelectItem(Calendar.DAY_OF_MONTH, Messages.getString("statsDayOfMonth")));
+            periodItems.add(new SelectItem(Calendar.MONTH, Messages.getString("statsMonth")));
+            periodItems.add(new SelectItem(Calendar.DAY_OF_WEEK, Messages.getString("statsDayOfWeek")));
 
-        timeTypeItems = new ArrayList<SelectItem>();
-        timeTypeItems.add(new SelectItem(StatisticsService.BY_RUN_TIME, Messages.getString("statsByRunTime")));
-        timeTypeItems.add(new SelectItem(StatisticsService.BY_PURCHASE_TIME, Messages.getString("statsByPurchaseTime")));
+            timeTypeItems = new ArrayList<SelectItem>();
+            timeTypeItems.add(new SelectItem(StatisticsService.BY_RUN_TIME, Messages.getString("statsByRunTime")));
+            timeTypeItems.add(new SelectItem(StatisticsService.BY_PURCHASE_TIME, Messages.getString("statsByPurchaseTime")));
 
-        dataTypeItems = SelectItemUtils.formSelectItems(StatsDataType.class);
+            dataTypeItems = SelectItemUtils.formSelectItems(StatsDataType.class);
 
-
+            purchaseMeansTypeItems = SelectItemUtils.formSelectItems(
+                    PurchaseMeansType.class, PurchaseMeansType.BOTH);
+        }
     }
 
     @Action(accessLevel=AccessLevel.PUBLIC)
@@ -80,7 +90,16 @@ public class StatisticsController extends BaseController {
 
         return statsService.getStatistics(route, selectedPeriod,
                 selectedTimeType, firm,
-                fromDate, toDate, selectedDataType);
+                fromDate, toDate, selectedDataType, selectedPurchaseMeansType);
+    }
+
+    public List<Ticket> getTickets() {
+        Firm firm = LoggedUserHolder.getUser().getFirm();
+        Route route = routeService.findRoute(selectedRouteName, firm);
+
+        return statsService.getTickets(route, selectedPeriod,
+                selectedTimeType, firm,
+                fromDate, toDate, selectedDataType, selectedPurchaseMeansType);
     }
 
     public String getSelectedRouteName() {
@@ -169,5 +188,22 @@ public class StatisticsController extends BaseController {
 
     public void setDataTypeItems(List<SelectItem> dataTypeItems) {
         this.dataTypeItems = dataTypeItems;
+    }
+
+    public PurchaseMeansType getSelectedPurchaseMeansType() {
+        return selectedPurchaseMeansType;
+    }
+
+    public void setSelectedPurchaseMeansType(
+            PurchaseMeansType selectedPurchaseMeansType) {
+        this.selectedPurchaseMeansType = selectedPurchaseMeansType;
+    }
+
+    public List<SelectItem> getPurchaseMeansTypeItems() {
+        return purchaseMeansTypeItems;
+    }
+
+    public void setPurchaseMeansTypeItems(List<SelectItem> purchaseMeansTypeItems) {
+        this.purchaseMeansTypeItems = purchaseMeansTypeItems;
     }
 }

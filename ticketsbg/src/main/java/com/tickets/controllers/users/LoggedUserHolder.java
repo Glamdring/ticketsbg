@@ -8,11 +8,14 @@ import javax.servlet.http.HttpSession;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import com.tickets.annotations.Action;
+import com.tickets.controllers.security.AccessLevel;
 import com.tickets.controllers.valueobjects.Screen;
 import com.tickets.model.User;
 
 @Controller("loggedUserHolder")
 @Scope("session")
+@Action(accessLevel=AccessLevel.PUBLIC)
 public class LoggedUserHolder implements Serializable {
 
     private static final String LOGGED_UESR_HOLDER_KEY = "loggedUserHolder";
@@ -39,16 +42,20 @@ public class LoggedUserHolder implements Serializable {
      * @return the currently logged user; null if no user is logged
      */
     public static User getUser() {
-        HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-                .getExternalContext().getSession(true);
+        try {
+            HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+                    .getExternalContext().getSession(true);
 
-        LoggedUserHolder loggedUserHolder = (LoggedUserHolder) session
-                .getAttribute(LOGGED_UESR_HOLDER_KEY);
+            LoggedUserHolder loggedUserHolder = (LoggedUserHolder) session
+                    .getAttribute(LOGGED_UESR_HOLDER_KEY);
 
-        if (loggedUserHolder == null) {
+            if (loggedUserHolder == null) {
+                return null;
+            }
+
+            return loggedUserHolder.getLoggedUser();
+        } catch (NullPointerException ex) {
             return null;
         }
-
-        return loggedUserHolder.getLoggedUser();
     }
 }

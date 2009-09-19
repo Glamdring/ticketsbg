@@ -16,8 +16,10 @@ import javax.annotation.PostConstruct;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import com.tickets.controllers.valueobjects.PurchaseMeansType;
 import com.tickets.controllers.valueobjects.StatsDataType;
 import com.tickets.model.Firm;
+import com.tickets.model.PaymentMethod;
 import com.tickets.model.Route;
 import com.tickets.model.Ticket;
 import com.tickets.model.stats.StatsHolder;
@@ -59,52 +61,13 @@ public class StatisticsServiceImpl
 
     }
 
-    @SuppressWarnings({ "unchecked", "null" })
     @Override
     public List<StatsHolder> getStatistics(Route route, int period,
             int timeType, Firm firm, Date fromDate, Date toDate,
-            StatsDataType dataType) {
+            StatsDataType dataType, PurchaseMeansType purchaseMeansType) {
 
-        String query = "SELECT t FROM Ticket t WHERE t.timeouted=false AND ";
-        List<String> paramNames = new ArrayList<String>();
-        List<Object> values = new ArrayList<Object>();
-        if (route == null) {
-            query += "t.run.route.firm=:firm ";
-            paramNames.add("firm");
-            values.add(firm);
-        } else {
-            query += "t.run.route=:route ";
-            paramNames.add("route");
-            values.add(route);
-        }
-
-        List<Ticket> preResult = getDao().findByQuery(query,
-                paramNames.toArray(new String[]{}),
-                values.toArray());
-
-        if (fromDate == null && toDate != null) {
-            fromDate = new Date(0);
-        }
-        if (fromDate != null && toDate == null) {
-            toDate = new Date();
-        }
-        if (fromDate != null && toDate != null) {
-            for (Iterator<Ticket> it = preResult.iterator(); it.hasNext();) {
-                Ticket t = it.next();
-                Date time = null;
-                if (timeType == StatisticsService.BY_RUN_TIME) {
-                    time = t.getRun().getTime().getTime();
-                }
-                if (timeType == StatisticsService.BY_PURCHASE_TIME) {
-                    time = t.getCreationTime().getTime();
-                }
-
-                if (time.compareTo(fromDate) < 0
-                    || time.compareTo(toDate) > 0) {
-                    it.remove();
-                }
-            }
-        }
+        List<Ticket> preResult = getTickets(route, period, timeType, firm,
+                fromDate, toDate, dataType, purchaseMeansType);
 
         List<StatsHolder> result = new LinkedList<StatsHolder>();
 
@@ -134,6 +97,73 @@ public class StatisticsServiceImpl
 
         return result;
 
+    }
+
+
+    @SuppressWarnings("unchecked")
+    public List<Ticket> getTickets(Route route, int period,
+            int timeType, Firm firm, Date fromDate, Date toDate,
+            StatsDataType dataType, PurchaseMeansType purchaseMeansType) {
+
+        String query = "SELECT t FROM Ticket t WHERE t.timeouted=false AND t.committed=true AND ";
+        //String query = "SELECT t FROM Ticket t WHERE ";
+        List<String> paramNames = new ArrayList<String>();
+        List<Object> values = new ArrayList<Object>();
+        if (route == null) {
+            query += "t.run.route.firm=:firm ";
+            paramNames.add("firm");
+            values.add(firm);
+        } else {
+            query += "t.run.route=:route ";
+            paramNames.add("route");
+            values.add(route);
+        }
+
+        if (purchaseMeansType != PurchaseMeansType.BOTH) {
+            //difference is only "=" and "!="
+            if (purchaseMeansType == PurchaseMeansType.AT_CASH_DESK) {
+                query += " AND paymentMethod=:paymentMethod";
+            } else if (purchaseMeansType == PurchaseMeansType.ONLINE) {
+                query += " AND paymentMethod!=:paymentMethod";
+
+            }
+            paramNames.add("paymentMethod");
+            values.add(PaymentMethod.CASH_DESK);
+        }
+
+        List<Ticket> result = getDao().findByQuery(query,
+                paramNames.toArray(new String[]{}),
+                values.toArray());
+
+        if (fromDate == null && toDate != null) {
+            fromDate = new Date(0);
+        }
+        if (fromDate != null && toDate == null) {
+            toDate = new Date();
+        }
+
+        if (fromDate != null && toDate != null) {
+            for (Iterator<Ticket> it = result.iterator(); it.hasNext();) {
+                Ticket t = it.next();
+
+                // setting default value, just in case
+                Date time = t.getRun().getTime().getTime();
+
+                if (timeType == StatisticsService.BY_RUN_TIME) {
+                    time = t.getRun().getTime().getTime();
+                }
+                if (timeType == StatisticsService.BY_PURCHASE_TIME) {
+                    time = t.getCreationTime().getTime();
+                }
+
+                if (time.compareTo(fromDate) < 0
+                    || time.compareTo(toDate) > 0) {
+                    it.remove();
+                }
+            }
+        }
+
+        return result;
     }
 
     private String getPeriodString(Calendar time, int period) {

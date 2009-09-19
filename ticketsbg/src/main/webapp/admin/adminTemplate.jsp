@@ -45,8 +45,7 @@
             hideDelay="100">
             <f:facet name="label">
                 <h:panelGroup>
-                    <h:graphicImage value="/images/settings.png"
-                        styleClass="menuIcon" />
+                    <h:graphicImage value="/images/settings.png" styleClass="menuIcon" />
                     <h:outputText value="#{msg.settings}" styleClass="menuContent" />
                 </h:panelGroup>
             </f:facet>
@@ -67,6 +66,10 @@
 
             <rich:menuItem value="#{msg.agents}" action="agentsList"
                 icon="/images/agents.png" />
+
+            <rich:menuItem value="#{msg.firms}" action="firmsList"
+                icon="/images/agents.png"
+                rendered="#{loggedUserHolder.loggedUser.accessLevel == 'ADMINISTRATOR'}" />
         </rich:dropDownMenu>
 
 
@@ -80,31 +83,49 @@
                 </h:panelGroup>
             </f:facet>
 
-            <rich:menuItem value="#{msg.charts}" action="stats" />
+            <rich:menuItem value="#{msg.charts}" action="charts" />
+
+            <rich:menuItem value="#{msg.tableReports}" action="tableReports" />
 
         </rich:dropDownMenu>
 
-        <rich:menuItem action="#{loggedUserHolder.logout}" rendered="#{loggedUserHolder.loggedUser != null}">
+        <rich:menuItem action="#{loggedUserHolder.logout}"
+            rendered="#{loggedUserHolder.loggedUser != null}">
             <h:graphicImage value="/images/logout.png" styleClass="menuIcon" />
             <h:outputText value="#{msg.logout}" styleClass="menuContent" />
         </rich:menuItem>
+
+        <rich:dropDownMenu
+            rendered="#{loggedUserHolder.loggedUser.accessLevel == 'ADMINISTRATOR'}">
+            <f:facet name="label">
+                <a4j:region selfRendered="true" renderRegionOnly="true">
+                    <h:selectOneMenu id="currentFirm"
+                        value="#{loggedUserHolder.loggedUser.firm}"
+                        converter="#{entityConverter}">
+                        <f:selectItems value="#{firmController.firmsSelectItems}" />
+                        <a4j:support event="onchange" action="#{routeController.init}" />
+                    </h:selectOneMenu>
+                </a4j:region>
+            </f:facet>
+        </rich:dropDownMenu>
     </rich:toolBar>
+
 </a4j:form>
 <rich:modalPanel id="firmPanel" autosized="true" width="350"
-        height="120" moveable="true" resizeable="false">
-        <f:facet name="controls">
-            <h:panelGroup>
-                <h:graphicImage value="/images/close.png" styleClass="hidelink"
-                    id="hidelinkFirm" onclick="#{rich:component('firmPanel')}.hide()" />
-                <rich:componentControl for="firmPanel" attachTo="hidelinkFirm"
-                    operation="hide" event="onclick" />
-            </h:panelGroup>
-        </f:facet>
-        <f:facet name="header">
-            <h:outputText value="#{msg.firm}" />
-        </f:facet>
-        <a4j:include viewId="firm.jsp" />
-    </rich:modalPanel>
+    height="120" moveable="true" resizeable="false">
+    <f:facet name="controls">
+        <h:panelGroup>
+            <h:graphicImage value="/images/close.png" styleClass="hidelink"
+                id="hidelinkFirm" onclick="#{rich:component('firmPanel')}.hide()" />
+            <rich:componentControl for="firmPanel" attachTo="hidelinkFirm"
+                operation="hide" event="onclick" />
+        </h:panelGroup>
+    </f:facet>
+    <f:facet name="header">
+        <h:outputText value="#{msg.firm}" />
+    </f:facet>
+    <a4j:include viewId="firm.jsp" />
+</rich:modalPanel>
 <ui:insert name="body" />
 </body>
 </html>

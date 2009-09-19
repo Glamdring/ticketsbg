@@ -1,7 +1,11 @@
 package com.tickets.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Resource;
 import javax.faces.model.ListDataModel;
+import javax.faces.model.SelectItem;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -10,6 +14,7 @@ import com.tickets.annotations.Action;
 import com.tickets.controllers.security.AccessLevel;
 import com.tickets.model.Firm;
 import com.tickets.services.Service;
+import com.tickets.utils.SelectItemUtils;
 
 
 @Controller("firmController")
@@ -24,10 +29,14 @@ public class FirmController extends BaseCRUDController<Firm> {
 
     private ListDataModel firmsModel;
 
+    private List<SelectItem> firmsSelectItems = new ArrayList<SelectItem>();
+
     @SuppressWarnings("unchecked")
     @Override
     protected void refreshList() {
-        firmsModel = new ListDataModel(service.list(Firm.class));
+        List<Firm> firms = service.list(Firm.class);
+        firmsModel = new ListDataModel(firms);
+        firmsSelectItems = SelectItemUtils.formSelectItems(firms);
 
         // End the current conversation in case the list of roles
         // is refreshed, but only if the bean has not just been constructed
@@ -45,7 +54,7 @@ public class FirmController extends BaseCRUDController<Firm> {
         this.firm = firm;
     }
 
-
+    @Action(accessLevel=AccessLevel.ADMINISTRATOR)
     public ListDataModel getFirmsModel() {
         return firmsModel;
     }
@@ -89,4 +98,11 @@ public class FirmController extends BaseCRUDController<Firm> {
         return service;
     }
 
+    public List<SelectItem> getFirmsSelectItems() {
+        return firmsSelectItems;
+    }
+
+    public void setFirmsSelectItems(List<SelectItem> firmsSelectItems) {
+        this.firmsSelectItems = firmsSelectItems;
+    }
 }

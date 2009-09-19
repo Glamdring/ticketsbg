@@ -279,6 +279,10 @@ public class RouteController extends BaseController implements Serializable {
 
     @PostConstruct
     public void init() {
+        if (loggedUserHolder.getLoggedUser() == null) {
+            return;
+        }
+
         refreshList();
         route = new Route();
         days = routeService.list(Day.class);

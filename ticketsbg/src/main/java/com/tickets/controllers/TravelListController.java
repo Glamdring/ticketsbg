@@ -16,7 +16,7 @@ import com.tickets.model.Ticket;
 
 @Controller("travelListController")
 @Scope("request")
-@Action(accessLevel=AccessLevel.CASHIER_DESK)
+@Action(accessLevel=AccessLevel.CASH_DESK)
 public class TravelListController extends BaseController {
     private Run run;
     private List<TravelListSubroute> travelList = new ArrayList<TravelListSubroute>();

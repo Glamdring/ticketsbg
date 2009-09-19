@@ -419,7 +419,7 @@ public class SearchController extends BaseController {
         return Screen.ADMIN_SEARCH_RESULTS.getOutcome();
     }
 
-    @Action(accessLevel=AccessLevel.CASHIER_DESK)
+    @Action(accessLevel=AccessLevel.CASH_DESK)
     public void purchaseOneWayTicket() {
         currentAvailableTargetStopNames = searchService
                 .listAllEndStopsForRoute(fromStop, selectedEntry.getRun()
@@ -434,7 +434,7 @@ public class SearchController extends BaseController {
         travelType = "ONE_WAY";
     }
 
-    @Action(accessLevel=AccessLevel.CASHIER_DESK)
+    @Action(accessLevel=AccessLevel.CASH_DESK)
     public void purchaseTwoWayTicket() {
         // the same actions as for one way, with additional ones
         purchaseOneWayTicket();
@@ -444,13 +444,13 @@ public class SearchController extends BaseController {
         travelType = "TWO_WAY";
     }
 
-    @Action(accessLevel=AccessLevel.CASHIER_DESK)
+    @Action(accessLevel=AccessLevel.CASH_DESK)
     public void returnDateSelected() {
         returnResultsModel = new ListDataModel(searchService.adminSearch(loggedUserHolder.getLoggedUser(),
                 toStopPerPurchase, fromStop, returnDate, 0, 24, true));
     }
 
-    @Action(accessLevel=AccessLevel.CASHIER_DESK)
+    @Action(accessLevel=AccessLevel.CASH_DESK)
     public void toStopSelected() {
         // If the search has been from the admin panel,
         // and no target stop has been chosen, locate the appropriate price

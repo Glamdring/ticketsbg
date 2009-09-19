@@ -37,13 +37,13 @@ public class RunController extends BaseController {
         service.delete(run);
     }
 
-    @Action(accessLevel=AccessLevel.CASHIER_DESK)
+    @Action(accessLevel=AccessLevel.CASH_DESK)
     public void setSeatsExceeded() {
         run.setSeatsExceeded(true);
         service.save(run);
     }
 
-    @Action(accessLevel=AccessLevel.CASHIER_DESK)
+    @Action(accessLevel=AccessLevel.CASH_DESK)
     public void undoSeatsExceeded() {
         run.setSeatsExceeded(false);
         service.save(run);

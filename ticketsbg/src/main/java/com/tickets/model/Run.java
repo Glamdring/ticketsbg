@@ -92,7 +92,7 @@ public class Run implements Serializable {
     /**
      * This column value is set to true in cases when this system
      * is used in parallel with another system, which handles
-     * the cashier-desk sales.
+     * the cash-desk sales.
      */
     @Column
     private boolean seatsExceeded;
