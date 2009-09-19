@@ -66,6 +66,9 @@ public class Firm implements Serializable, Selectable {
     @Column
     private boolean hasAnotherTicketSellingSystem;
 
+    @Column
+    private String subdomain;
+
     @ManyToMany
     @JoinTable(name="firmsAgents", joinColumns=@JoinColumn(name="firmId", referencedColumnName="firmId"),
             inverseJoinColumns=@JoinColumn(name="agentId", referencedColumnName="agentId"))
@@ -187,6 +190,14 @@ public class Firm implements Serializable, Selectable {
     public void setHasAnotherTicketSellingSystem(
             boolean hasAnotherTicketSellingSystem) {
         this.hasAnotherTicketSellingSystem = hasAnotherTicketSellingSystem;
+    }
+
+    public String getSubdomain() {
+        return subdomain;
+    }
+
+    public void setSubdomain(String subdomain) {
+        this.subdomain = subdomain;
     }
 
     @Override

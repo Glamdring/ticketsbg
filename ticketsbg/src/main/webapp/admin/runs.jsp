@@ -88,7 +88,6 @@
                     <f:facet name="footer">
                         <rich:datascroller align="center" maxPages="20"
                             page="#{runController.page}" id="scroller" />
-
                     </f:facet>
                 </rich:dataTable>
             </h:form>

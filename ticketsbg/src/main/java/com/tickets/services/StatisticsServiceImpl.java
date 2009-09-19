@@ -89,7 +89,9 @@ public class StatisticsServiceImpl
                 sh.setValue(sh.getValue().add(BigDecimal.ONE));
             }
             if (dataType == StatsDataType.MONEY) {
-                sh.setValue(sh.getValue().add(ticket.getPrice()));
+                sh.setValue(sh.getValue().add(ticket.isTwoWay()
+                        ? ticket.getPrice().divide(BigDecimal.valueOf(2))
+                        : ticket.getPrice()));
             }
             result.add(sh);
         }
@@ -105,16 +107,19 @@ public class StatisticsServiceImpl
             int timeType, Firm firm, Date fromDate, Date toDate,
             StatsDataType dataType, PurchaseMeansType purchaseMeansType) {
 
-        String query = "SELECT t FROM Ticket t WHERE t.timeouted=false AND t.committed=true AND ";
-        //String query = "SELECT t FROM Ticket t WHERE ";
+        //String query = "SELECT t FROM Ticket t WHERE t.timeouted=false AND t.committed=true AND ";
+        String query = "SELECT t FROM Ticket t WHERE ";
+        String returnQuery = query;
         List<String> paramNames = new ArrayList<String>();
         List<Object> values = new ArrayList<Object>();
         if (route == null) {
             query += "t.run.route.firm=:firm ";
+            returnQuery += "t.returnRun.route.firm=:firm";
             paramNames.add("firm");
             values.add(firm);
         } else {
             query += "t.run.route=:route ";
+            returnQuery += "t.returnRun.route=:route ";
             paramNames.add("route");
             values.add(route);
         }
@@ -123,8 +128,10 @@ public class StatisticsServiceImpl
             //difference is only "=" and "!="
             if (purchaseMeansType == PurchaseMeansType.AT_CASH_DESK) {
                 query += " AND paymentMethod=:paymentMethod";
+                returnQuery += " AND paymentMethod=:paymentMethod";
             } else if (purchaseMeansType == PurchaseMeansType.ONLINE) {
                 query += " AND paymentMethod!=:paymentMethod";
+                returnQuery += " AND paymentMethod!=:paymentMethod";
 
             }
             paramNames.add("paymentMethod");
@@ -134,6 +141,10 @@ public class StatisticsServiceImpl
         List<Ticket> result = getDao().findByQuery(query,
                 paramNames.toArray(new String[]{}),
                 values.toArray());
+
+        result.addAll(getDao().findByQuery(returnQuery,
+                paramNames.toArray(new String[]{}),
+                values.toArray()));
 
         if (fromDate == null && toDate != null) {
             fromDate = new Date(0);

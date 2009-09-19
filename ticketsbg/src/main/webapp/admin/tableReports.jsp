@@ -8,7 +8,7 @@
     xmlns:c="http://java.sun.com/jstl/core"
     xmlns:fmt="http://java.sun.com/jstl/fmt"
     xmlns:t="http://myfaces.apache.org/tomahawk"
-    template="adminTemplate.jsp">
+    xmlns:tc="http://tickets.com/tc" template="adminTemplate.jsp">
 
     <ui:define name="body">
         <f:view>
@@ -20,17 +20,20 @@
                 </ui:include>
 
                 <h:panelGroup id="tableHolder">
+                    <h:outputText value="#{msg.ticketsTotal}: " />
+                    <c:set var="tickets" value="#{statisticsController.tickets}" />
+                    <h:outputText styleClass="bold" value="#{tc:getSize(tickets)}" />
 
-                    <rich:dataTable value="#{statisticsController.tickets}"
-                        var="ticket">
-                        <rich:column>
+                    <rich:dataTable value="#{tickets}" var="ticket" rows="50">
+
+                        <rich:column sortBy="#{ticket.run.route.name}">
                             <f:facet name="header">
                                 <h:outputText value="#{msg.routeName}" />
                             </f:facet>
                             <h:outputText value="#{ticket.run.route.name}" />
                         </rich:column>
 
-                        <rich:column>
+                        <rich:column sortBy="#{ticket.creationTime.time}">
                             <f:facet name="header">
                                 <h:outputText value="#{msg.purchaseTime}" />
                             </f:facet>
@@ -40,7 +43,7 @@
                             </h:outputText>
                         </rich:column>
 
-                        <rich:column>
+                        <rich:column sortBy="#{ticket.run.time.time}">
                             <f:facet name="header">
                                 <h:outputText value="#{msg.travelTime}" />
                             </f:facet>
@@ -50,25 +53,40 @@
                             </h:outputText>
                         </rich:column>
 
-                        <rich:column>
+                        <rich:column sortBy="#{ticket.price}">
                             <f:facet name="header">
                                 <h:outputText value="#{msg.price}" />
                             </f:facet>
-                            <h:outputText value="#{ticket.price}">
+                            <h:outputText value="#{ticket.price}"
+                                rendered="#{!ticket.twoWay}">
                                 <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
                                 <f:converter binding="#{currencyConverter}"
                                     converterId="currencyConverter" />
                             </h:outputText>
+
+                            <h:outputText value="#{ticket.price / 2}"
+                                rendered="#{ticket.twoWay}">
+                                <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                                <f:converter binding="#{currencyConverter}"
+                                    converterId="currencyConverter" />
+                            </h:outputText>
+                            <f:facet name="footer">
+                                <h:outputText value="#{statisticsController.totalPrice}">
+                                    <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                                    <f:converter binding="#{currencyConverter}"
+                                        converterId="currencyConverter" />
+                                </h:outputText>
+                            </f:facet>
                         </rich:column>
 
-                        <rich:column>
+                        <rich:column sortBy="#{ticket.twoWay}">
                             <f:facet name="header">
                                 <h:outputText value="#{msg.twoWay}" />
                             </f:facet>
                             <h:outputText value="#{ticket.twoWay ? msg.yes : msg.no}" />
                         </rich:column>
 
-                        <rich:column>
+                        <rich:column sortBy="#{ticket.customerInformation.customerName}">
                             <f:facet name="header">
                                 <h:outputText value="#{msg.customerName}" />
                             </f:facet>
@@ -90,6 +108,11 @@
                             </f:facet>
                             <h:outputText value="#{ticket.customerInformation.email}" />
                         </rich:column>
+
+                        <f:facet name="footer">
+                            <rich:datascroller align="center" maxPages="20"
+                                page="#{statisticsController.page}" id="scroller" />
+                        </f:facet>
                     </rich:dataTable>
                 </h:panelGroup>
             </h:form>

@@ -1,5 +1,6 @@
 package com.tickets.controllers;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -53,6 +54,9 @@ public class StatisticsController extends BaseController {
     private List<SelectItem> purchaseMeansTypeItems;
     private List<String> routeNames;
 
+    private int page;
+    private BigDecimal totalPrice = BigDecimal.ZERO;
+
     @PostConstruct
     public void init() {
         // Don't initialize in case a not in the admin panel
@@ -97,9 +101,17 @@ public class StatisticsController extends BaseController {
         Firm firm = LoggedUserHolder.getUser().getFirm();
         Route route = routeService.findRoute(selectedRouteName, firm);
 
-        return statsService.getTickets(route, selectedPeriod,
+        List<Ticket> tickets = statsService.getTickets(route, selectedPeriod,
                 selectedTimeType, firm,
                 fromDate, toDate, selectedDataType, selectedPurchaseMeansType);
+
+        totalPrice = BigDecimal.ZERO;
+        for (Ticket ticket : tickets) {
+            totalPrice = totalPrice.add(ticket.isTwoWay() ? ticket.getPrice()
+                    .divide(BigDecimal.valueOf(2)) : ticket.getPrice());
+        }
+
+        return tickets;
     }
 
     public String getSelectedRouteName() {
@@ -205,5 +217,21 @@ public class StatisticsController extends BaseController {
 
     public void setPurchaseMeansTypeItems(List<SelectItem> purchaseMeansTypeItems) {
         this.purchaseMeansTypeItems = purchaseMeansTypeItems;
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
     }
 }

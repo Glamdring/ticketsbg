@@ -26,6 +26,9 @@
                     <h:inputTextarea value="#{firmController.firm.description}"
                         id="description" rows="4" cols="27" />
 
+                    <h:outputLabel for="subdomain" value="#{msg.subdomain}: " />
+                    <h:inputText value="#{firmController.firm.subdomain}" id="subdomain" size="30" />
+
                     <h:outputLabel for="bulstat" value="#{msg.bulstat}: " />
                     <h:inputText value="#{firmController.firm.bulstat}" id="bulstat" size="30" />
 
