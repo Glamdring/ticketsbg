@@ -18,4 +18,6 @@ public class Constants {
     public static final String RESULT_SUCCESS = "success";
     public static final String USER_KEY = "loggedUser";
 
+    public static final String CURRENT_FIRM_KEY = "currentSelectedFirm";
+
 }

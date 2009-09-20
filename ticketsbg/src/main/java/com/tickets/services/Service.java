@@ -17,5 +17,7 @@ public interface Service<E> {
 
      <T> T get(Class<T> clazz, Serializable id);
 
+     <T> T get(Class<T> clazz, String propertyName, Serializable propertyValue);
+
      Object attach(Object object);
 }

@@ -310,4 +310,8 @@
             <redirect />
         </navigation-case>
     </navigation-rule>
+
+    <lifecycle>
+        <phase-listener>com.tickets.controllers.lifecycle.FirmIdentifier</phase-listener>
+    </lifecycle>
 </faces-config>

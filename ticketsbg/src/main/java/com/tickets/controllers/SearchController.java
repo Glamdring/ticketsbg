@@ -143,18 +143,19 @@ public class SearchController extends BaseController {
 
     private String publicSearch() {
         //resetting, in case the conversation hasn't ended
-
         resetSelections();
 
+        Firm currentFirm = getCurrentFirm();
+
         List<SearchResultEntry> result = searchService.search(fromStop, toStop, date,
-                fromHour, toHour, timeForDeparture);
+                fromHour, toHour, timeForDeparture, currentFirm);
 
         resultsModel = new ListDataModel(result);
 
         if (travelType.equals(TWO_WAY) && returnDate != null) {
             List<SearchResultEntry> returnResult = searchService.search(toStop, fromStop,
                     returnDate, returnFromHour, returnToHour,
-                    returnTimeForDeparture);
+                    returnTimeForDeparture, currentFirm);
 
             returnResultsModel = new ListDataModel(returnResult);
         }

@@ -8,7 +8,9 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.myfaces.orchestra.conversation.Conversation;
 
+import com.tickets.constants.Constants;
 import com.tickets.constants.Messages;
+import com.tickets.model.Firm;
 
 public abstract class BaseController implements Serializable {
 
@@ -54,6 +56,9 @@ public abstract class BaseController implements Serializable {
         }
     }
 
+    protected Firm getCurrentFirm() {
+        return (Firm) getSessionValue(Constants.CURRENT_FIRM_KEY);
+    }
     public boolean isHasMessages() {
         return FacesContext.getCurrentInstance().getMessages().hasNext();
     }

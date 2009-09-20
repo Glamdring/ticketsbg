@@ -90,4 +90,16 @@ public class BaseService<E> implements Service<E> {
     public Object attach(Object obj) {
         return getDao().attach(obj);
     }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T get(Class<T> clazz, String propertyName, Serializable propertyValue) {
+        List result = getDao().findByQuery("SELECT o FROM " + clazz.getName()+ " o WHERE " + propertyName + "=:" + propertyName,
+                new String[] {propertyName}, new Object[] {propertyValue});
+        if (result.size() > 0) {
+            return (T) result.get(0);
+        }
+
+        return null;
+    }
 }

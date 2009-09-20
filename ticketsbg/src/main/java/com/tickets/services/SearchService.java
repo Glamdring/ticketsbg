@@ -3,6 +3,7 @@ package com.tickets.services;
 import java.util.Date;
 import java.util.List;
 
+import com.tickets.model.Firm;
 import com.tickets.model.Route;
 import com.tickets.model.SearchResultEntry;
 import com.tickets.model.User;
@@ -19,6 +20,7 @@ public interface SearchService extends Service {
      * @param toHour
      * @param isTimeForDeparture defines whether the selected time is
      * 	for departure (true) or for arrival(false)
+     * @param currentFirm
      * @return list of runs and prices
      */
     List<SearchResultEntry> search(String startStop,
@@ -26,7 +28,8 @@ public interface SearchService extends Service {
             Date date,
             int fromHour,
             int toHour,
-            boolean isTimeForDeparture);
+            boolean isTimeForDeparture,
+            Firm currentFirm);
 
 
     /**

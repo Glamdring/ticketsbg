@@ -44,7 +44,15 @@ import org.hibernate.annotations.LazyCollectionOption;
                         "AND run.seatsExceeded = false " +
                         "ORDER BY run.time, price.price"
         ),
-
+        @NamedQuery(
+                name = "Run.searchByFirm",
+                query = "SELECT DISTINCT new com.tickets.model.SearchResultEntry(run, price) FROM Run run, IN(run.route.prices) price " +
+                        "WHERE price.startStop.name=:fromStop AND price.endStop.name=:toStop " +
+                        "AND price.price > 0 " +
+                        "AND run.seatsExceeded = false " +
+                        "AND run.route.firm=:firm " +
+                        "ORDER BY run.time, price.price"
+        ),
         @NamedQuery(
                 name = "Run.adminSearch",
                 query = "SELECT DISTINCT new com.tickets.model.SearchResultEntry(run, price) FROM Run run, User user, IN(run.route.prices) price, Firm firm LEFT OUTER JOIN firm.agents agent " +

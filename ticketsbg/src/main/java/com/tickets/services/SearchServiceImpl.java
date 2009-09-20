@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.tickets.model.Firm;
 import com.tickets.model.Route;
 import com.tickets.model.Run;
 import com.tickets.model.SearchResultEntry;
@@ -20,15 +21,24 @@ public class SearchServiceImpl extends BaseService implements SearchService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<SearchResultEntry> search(String fromStop, String toStop, Date date,
-            int fromHour, int toHour, boolean isTimeForDeparture) {
+    public List<SearchResultEntry> search(String fromStop, String toStop,
+            Date date, int fromHour, int toHour, boolean isTimeForDeparture,
+            Firm currentFirm) {
 
-        List<SearchResultEntry> result = getDao().findByNamedQuery("Run.search",
-                new String[] { "fromStop", "toStop"},
-                new Object[] { fromStop, toStop });
 
-        filterSearchResults(fromStop, toStop, date, fromHour, toHour, isTimeForDeparture,
-                result);
+        List<SearchResultEntry> result;
+        if (currentFirm == null) {
+            result = getDao().findByNamedQuery("Run.search",
+                    new String[] { "fromStop", "toStop" },
+                    new Object[] { fromStop, toStop });
+        } else {
+            result = getDao().findByNamedQuery("Run.searchByFirm",
+                    new String[] { "fromStop", "toStop", "firm" },
+                    new Object[] { fromStop, toStop, currentFirm });
+        }
+
+        filterSearchResults(fromStop, toStop, date, fromHour, toHour,
+                isTimeForDeparture, result);
 
         return result;
     }
@@ -43,12 +53,12 @@ public class SearchServiceImpl extends BaseService implements SearchService {
 
         if (endStop == null || endStop.length() == 0) {
             result = getDao().findByNamedQuery("Run.adminSearchNoEndStop",
-                    new String[] { "fromStop", "user"},
-                    new Object[] { startStop, user});
+                    new String[] { "fromStop", "user" },
+                    new Object[] { startStop, user });
         } else {
             result = getDao().findByNamedQuery("Run.adminSearch",
-                    new String[] { "fromStop", "toStop", "user"},
-                    new Object[] { startStop, endStop, user});
+                    new String[] { "fromStop", "toStop", "user" },
+                    new Object[] { startStop, endStop, user });
         }
 
         filterSearchResults(startStop, endStop, date, fromHour, toHour,
@@ -70,7 +80,6 @@ public class SearchServiceImpl extends BaseService implements SearchService {
         toTime.add(Calendar.HOUR_OF_DAY, toHour);
         // toTime.roll(Calendar.MINUTE, 1);
 
-
         // Complexity n^2 in the worst case, but generally n (because of the
         // limited number of stops)
         // This better go in the query, but such date + minutes calculations
@@ -84,17 +93,18 @@ public class SearchServiceImpl extends BaseService implements SearchService {
 
             // if no target stop chosen, assume the final stop of the route;
             if (toStopObj == null) {
-                toStopObj = run.getRoute().getStops().get(run.getRoute().getStops().size() - 1);
+                toStopObj = run.getRoute().getStops().get(
+                        run.getRoute().getStops().size() - 1);
             }
 
             // Cloning in order to avoid update queries, as the run object
             // is still associated with the session
             Calendar departureTime = (Calendar) run.getTime().clone();
-            departureTime.add(Calendar.MINUTE, fromStopObj.getTimeToDeparture());
+            departureTime
+                    .add(Calendar.MINUTE, fromStopObj.getTimeToDeparture());
 
             Calendar arrivalTime = (Calendar) run.getTime().clone();
             arrivalTime.add(Calendar.MINUTE, toStopObj.getTimeToArrival());
-
 
             Calendar targetTime = null;
 
@@ -104,7 +114,7 @@ public class SearchServiceImpl extends BaseService implements SearchService {
                 targetTime = arrivalTime;
             }
 
-            //Filtering if the timing doesn't fit the selected
+            // Filtering if the timing doesn't fit the selected
             if (fromTime.compareTo(targetTime) > 0
                     || toTime.compareTo(targetTime) < 0) {
 
@@ -112,7 +122,7 @@ public class SearchServiceImpl extends BaseService implements SearchService {
                 continue;
             }
 
-            //Filtering the ones with no seats remaining
+            // Filtering the ones with no seats remaining
             if (ServiceFunctions.getVacantSeats(run, fromStop, toStop, false) <= 0) {
                 it.remove();
                 continue;
@@ -141,7 +151,7 @@ public class SearchServiceImpl extends BaseService implements SearchService {
         List<String> stops = null;
         if (user != null && user.isStaff()) {
             stops = getDao().findByNamedQuery("Stop.listAllStopNamesForUser",
-                    new String[]{"user"}, new Object[]{user});
+                    new String[] { "user" }, new Object[] { user });
         } else {
             stops = getDao().findByNamedQuery("Stop.listAllStopNames");
         }
@@ -154,11 +164,14 @@ public class SearchServiceImpl extends BaseService implements SearchService {
     public List<String> listAllEndStops(String startStopName, User user) {
         List<String> stops = null;
         if (user != null && user.isStaff()) {
-            stops = getDao().findByNamedQuery("Stop.listAllEndStopNamesForUser",
-                    new String[]{"startStopName", "user"}, new Object[]{startStopName, user});
+            stops = getDao().findByNamedQuery(
+                    "Stop.listAllEndStopNamesForUser",
+                    new String[] { "startStopName", "user" },
+                    new Object[] { startStopName, user });
         } else {
             stops = getDao().findByNamedQuery("Stop.listAllEndStopNames",
-                new String[]{"startStopName"}, new Object[]{startStopName});
+                    new String[] { "startStopName" },
+                    new Object[] { startStopName });
         }
 
         return stops;
