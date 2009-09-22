@@ -56,10 +56,11 @@ public interface SearchService extends Service {
     /**
      * Lists all available stop names
      * @param user the logged user (needed in case of staff members)
+     * @param firm the firm whose stops are fetched. Pass null for all
      *
      * @return list of stop names
      */
-    List<String> listAllStops(User user);
+    List<String> listAllStops(User user, Firm firm);
 
 
     /**
@@ -68,9 +69,11 @@ public interface SearchService extends Service {
      *
      * @param startStopName
      * @param user the logged user (needed in case of staff members)
+     * @param firm the firm whose stops are fetched. Pass null for all
+     *
      * @return list of stop names
      */
-    List<String> listAllEndStops(String startStopName, User user);
+    List<String> listAllEndStops(String startStopName, User user, Firm firm);
 
 
     /**

@@ -71,7 +71,7 @@ public class SeatHandler {
 
         for (int i = 0; i < rowCount; i ++) {
             Row row = new Row();
-            boolean lastRow = i == route.getSeats() / 4 - 1;
+            boolean lastRow = i == rowCount - 1;
             int rowId = i + 1;
             if (!lastRow || route.getSeatSettings().isLastRowHasFourSeats()) {
                 if (route.getSeatSettings().isStartRight()) {
@@ -152,13 +152,19 @@ public class SeatHandler {
                 }
             }
 
-            // If the current row is the first upstairs
-            // add a separation row
-            if (row.getFirst().getNumber() == firstSeatUpstairs ||
-                    row.getFourth().getNumber() == firstSeatUpstairs) {
+            // If the bus is a double-decker, and the
+            // current row is the first upstairs add a separation row
+            if (route.getSeatSettings().isDoubleDecker() && (row.getFirst().getNumber() == firstSeatUpstairs ||
+                    row.getFourth().getNumber() == firstSeatUpstairs)) {
                 Row separatorRow = new Row();
                 separatorRow.setSeparator(true);
                 rows.add(separatorRow);
+            }
+
+            // If rows are needed that are not initially calculated
+            System.out.println(route.getSeats() - rowCount * 4 + skippedSeats >= 4);
+            if (route.getSeats() - rowCount * 4 + skippedSeats >= 4) {
+                rowCount ++;
             }
 
             rows.add(row);

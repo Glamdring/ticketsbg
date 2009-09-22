@@ -147,11 +147,15 @@ public class SearchServiceImpl extends BaseService implements SearchService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<String> listAllStops(User user) {
+    public List<String> listAllStops(User user, Firm firm) {
         List<String> stops = null;
         if (user != null && user.isStaff()) {
             stops = getDao().findByNamedQuery("Stop.listAllStopNamesForUser",
                     new String[] { "user" }, new Object[] { user });
+        } else if (firm != null){
+            stops = getDao().findByNamedQuery("Stop.listAllStopNamesForFirm",
+                    new String[] {"firm"},
+                    new Object[] {firm});
         } else {
             stops = getDao().findByNamedQuery("Stop.listAllStopNames");
         }
@@ -161,13 +165,17 @@ public class SearchServiceImpl extends BaseService implements SearchService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<String> listAllEndStops(String startStopName, User user) {
+    public List<String> listAllEndStops(String startStopName, User user, Firm firm) {
         List<String> stops = null;
         if (user != null && user.isStaff()) {
             stops = getDao().findByNamedQuery(
                     "Stop.listAllEndStopNamesForUser",
                     new String[] { "startStopName", "user" },
                     new Object[] { startStopName, user });
+        } else if (firm != null) {
+            stops = getDao().findByNamedQuery("Stop.listAllEndStopNamesForFirm",
+                    new String[] { "startStopName", "firm"},
+                    new Object[] { startStopName, firm });
         } else {
             stops = getDao().findByNamedQuery("Stop.listAllEndStopNames",
                     new String[] { "startStopName" },

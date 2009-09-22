@@ -49,7 +49,7 @@ public class Route extends DataObject implements Serializable {
     private String name;
 
     @Column
-    private int seats;
+    private int seats = 51; // most common
 
     @OneToMany(mappedBy="route")
     @OrderBy("minutes")

@@ -12,14 +12,16 @@
     <style type="text/css">
 .seat {
     width: 38px;
-    height: 38px;
+    height: 35px;
     text-align: center;
     vertical-align: middle;
 }
 
 .isle {
     width: 20px;
-    height: 38px;
+    height: 35px;
+    padding: 0px;
+    margin: 0px;
     text-align: center;
     vertical-align: middle;
 }
@@ -64,7 +66,8 @@
         </f:facet>
         <a4j:form ajaxSubmit="true">
             <a4j:outputPanel id="seatsViewInner#{modifier}" ajaxRendered="true">
-                <rich:dataTable value="#{seatController[handler].rows}" var="row">
+                <rich:dataTable value="#{seatController[handler].rows}" var="row"
+                style="table-layout: fixed; width: 178px;">
                     <t:selectManyCheckbox layout="spread" id="selectedSeats#{modifier}"
                         value="#{seatController[handler].selectedSeats}"
                         converter="#{seatConverter}">

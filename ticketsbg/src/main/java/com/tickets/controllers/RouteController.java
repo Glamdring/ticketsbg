@@ -98,6 +98,9 @@ public class RouteController extends BaseController implements Serializable {
         if (route.getSellSeatsFrom() == 0) {
             route.setSellSeatsFrom(1);
         }
+        if (route.getSeats() > route.getSellSeatsTo()) {
+            route.setSellSeatsTo(route.getSeats());
+        }
 
         routeService.save(route, Arrays.asList(daysPickList));
         refreshList();

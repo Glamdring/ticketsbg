@@ -188,7 +188,7 @@ public class SearchController extends BaseController {
     public void filterToStops() {
         if (fromStop != null && fromStop.length() > 0) {
             List<String> result = searchService.listAllEndStops(fromStop,
-                    loggedUserHolder.getLoggedUser());
+                    loggedUserHolder.getLoggedUser(), getCurrentFirm());
             if (result.size() > 0) {
                 toStopNames = result;
             }
@@ -342,7 +342,7 @@ public class SearchController extends BaseController {
     public void init() {
         User user = loggedUserHolder.getLoggedUser();
 
-        stopNames = searchService.listAllStops(user);
+        stopNames = searchService.listAllStops(user, getCurrentFirm());
         //toStopNames = searchService.listAllStops(user);
 
         //Setting a default origin
