@@ -46,7 +46,7 @@ public class PersonalInformationController extends BaseController {
 
 
     public void updateCustomer() {
-        System.out.println("ASDf");
+
     }
 
     public String proceedToPayment() {

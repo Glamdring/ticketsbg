@@ -162,7 +162,6 @@ public class SeatHandler {
             }
 
             // If rows are needed that are not initially calculated
-            System.out.println(route.getSeats() - rowCount * 4 + skippedSeats >= 4);
             if (route.getSeats() - rowCount * 4 + skippedSeats >= 4) {
                 rowCount ++;
             }

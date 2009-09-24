@@ -42,6 +42,7 @@ import com.tickets.services.ServiceFunctions;
 import com.tickets.services.StopService;
 import com.tickets.services.TicketService;
 import com.tickets.utils.GeneralUtils;
+
 /**
  * Controller which handles the search process.
  *
@@ -79,6 +80,7 @@ public class SearchController extends BaseController {
     private GMapHandler mapHandler = new GMapHandler();
 
     private TicketCountsHolder ticketCountsHolder = new TicketCountsHolder();
+
     // A variable holding the selected stop in case
     // a purchase is made from the administration panel
     private String toStopPerPurchase;
@@ -122,6 +124,8 @@ public class SearchController extends BaseController {
 
     private UIInput admin;
 
+    private boolean reRenderSeatChoices;
+
     @Action
     public String navigateToSearch() {
         resetSearchFields();
@@ -138,23 +142,24 @@ public class SearchController extends BaseController {
     }
 
     private boolean isAdmin() {
-        return admin.getValue() != null && admin.getValue().equals(Boolean.TRUE);
+        return admin.getValue() != null
+                && admin.getValue().equals(Boolean.TRUE);
     }
 
     private String publicSearch() {
-        //resetting, in case the conversation hasn't ended
+        // resetting, in case the conversation hasn't ended
         resetSelections();
 
         Firm currentFirm = getCurrentFirm();
 
-        List<SearchResultEntry> result = searchService.search(fromStop, toStop, date,
-                fromHour, toHour, timeForDeparture, currentFirm);
+        List<SearchResultEntry> result = searchService.search(fromStop, toStop,
+                date, fromHour, toHour, timeForDeparture, currentFirm);
 
         resultsModel = new ListDataModel(result);
 
         if (travelType.equals(TWO_WAY) && returnDate != null) {
-            List<SearchResultEntry> returnResult = searchService.search(toStop, fromStop,
-                    returnDate, returnFromHour, returnToHour,
+            List<SearchResultEntry> returnResult = searchService.search(toStop,
+                    fromStop, returnDate, returnFromHour, returnToHour,
                     returnTimeForDeparture, currentFirm);
 
             returnResultsModel = new ListDataModel(returnResult);
@@ -164,9 +169,7 @@ public class SearchController extends BaseController {
             addError("choseReturnDate");
         }
 
-        if (result.size() == 101) {
-            selectedEntry = result.get(0);
-            selectedRowId = 0l;
+        if (result.size() == 1) {
             selection = new SimpleSelection();
             selection.addKey(0);
             rowSelectionChanged();
@@ -212,13 +215,15 @@ public class SearchController extends BaseController {
         int nullsCount = 0;
         int total = 0;
 
-        List<Seat> selectedSeats = seatController.getSeatHandler().getSelectedSeats();
+        List<Seat> selectedSeats = seatController.getSeatHandler()
+                .getSelectedSeats();
         List<Seat> selectedReturnSeats = null;
         if (seatController.getReturnSeatHandler() != null) {
-            selectedReturnSeats = seatController.getReturnSeatHandler().getSelectedSeats();
+            selectedReturnSeats = seatController.getReturnSeatHandler()
+                    .getSelectedSeats();
         }
 
-        for (int i = 0; i < ticketCountsHolder.getRegularTicketsCount(); i ++) {
+        for (int i = 0; i < ticketCountsHolder.getRegularTicketsCount(); i++) {
             int seat = -1;
             int returnSeat = -1;
             if (selectedSeats.size() > i) {
@@ -231,10 +236,11 @@ public class SearchController extends BaseController {
                 seat = ticketService.getFirstVacantSeat(selectedEntry);
             }
 
-            Ticket ticket = ticketService.createTicket(selectedEntry, selectedReturnEntry, seat, returnSeat);
-            total ++;
+            Ticket ticket = ticketService.createTicket(selectedEntry,
+                    selectedReturnEntry, seat, returnSeat);
+            total++;
             if (ticket == null) {
-                nullsCount ++;
+                nullsCount++;
             } else {
                 tickets.add(ticket);
             }
@@ -242,10 +248,11 @@ public class SearchController extends BaseController {
 
         for (TicketCount tc : ticketCountsHolder.getTicketCounts()) {
             for (int i = 0; i < tc.getNumberOfTickets(); i++) {
-                Ticket tmpTicket = ticketService.createTicket(selectedEntry, selectedReturnEntry, -1, -1, tc.getDiscount());
-                total ++;
+                Ticket tmpTicket = ticketService.createTicket(selectedEntry,
+                        selectedReturnEntry, -1, -1, tc.getDiscount());
+                total++;
                 if (tmpTicket == null) {
-                    nullsCount ++;
+                    nullsCount++;
                 } else {
                     tickets.add(tmpTicket);
                 }
@@ -276,17 +283,18 @@ public class SearchController extends BaseController {
         User user = loggedUserHolder.getLoggedUser();
         if (user != null && user.isStaff()) {
             purchaseController.finalizePurchase(user);
-            //redo the search
+            // redo the search
             adminSearch();
             return null; // returning null, because the action is
-                         // called from modal window with ajax
+            // called from modal window with ajax
         }
 
         purchaseController.setCurrentStep(Step.PAYMENT);
         return Screen.PAYMENT_SCREEN.getOutcome();
     }
 
-    private Price findPrice(String fromStop, String toStopPerPurchase, Route route) {
+    private Price findPrice(String fromStop, String toStopPerPurchase,
+            Route route) {
         for (Price price : route.getPrices()) {
             if (price.getStartStop().getName().equals(fromStop)
                     && price.getEndStop().getName().equals(toStopPerPurchase)) {
@@ -318,13 +326,14 @@ public class SearchController extends BaseController {
         seatController.setSeatHandler(null);
         seatController.setReturnSeatHandler(null);
         ticketCountsHolder = new TicketCountsHolder();
+        reRenderSeatChoices = false;
     }
 
     private void resetSearchFields() {
         fromStop = null;
         toStop = null;
-        date = GeneralUtils.createEmptyCalendar().getTime();;
-        returnDate = GeneralUtils.createEmptyCalendar().getTime();;
+        date = GeneralUtils.createEmptyCalendar().getTime();
+        returnDate = GeneralUtils.createEmptyCalendar().getTime();
         toHour = 24;
         fromHour = 0;
         returnToHour = 24;
@@ -343,9 +352,9 @@ public class SearchController extends BaseController {
         User user = loggedUserHolder.getLoggedUser();
 
         stopNames = searchService.listAllStops(user, getCurrentFirm());
-        //toStopNames = searchService.listAllStops(user);
+        // toStopNames = searchService.listAllStops(user);
 
-        //Setting a default origin
+        // Setting a default origin
         if (user != null) {
             fromStop = loggedUserHolder.getLoggedUser().getCity();
             filterToStops();
@@ -365,62 +374,70 @@ public class SearchController extends BaseController {
     public void rowSelectionChanged() {
         Integer selectedId = (Integer) selection.getKeys().next();
         selectedRowId = new Long(selectedId);
-        selectedEntry = ((List<SearchResultEntry>) resultsModel.getWrappedData()).get(selectedId);
+        selectedEntry = ((List<SearchResultEntry>) resultsModel
+                .getWrappedData()).get(selectedId);
 
-        ticketCountsHolder.setTicketCounts(new ArrayList<TicketCount>(selectedEntry.getRun().getRoute().getDiscounts().size()));
+        ticketCountsHolder.setTicketCounts(new ArrayList<TicketCount>(
+                selectedEntry.getRun().getRoute().getDiscounts().size()));
 
-        for (Discount discount : selectedEntry.getRun().getRoute().getDiscounts()) {
+        for (Discount discount : selectedEntry.getRun().getRoute()
+                .getDiscounts()) {
             TicketCount pd = new TicketCount();
             pd.setDiscount(discount);
             pd.setNumberOfTickets(0);
             ticketCountsHolder.getTicketCounts().add(pd);
         }
-        seatController.setSeatHandler(new SeatHandler(selectedEntry, ticketCountsHolder));
+
+        seatController.setSeatHandler(new SeatHandler(selectedEntry,
+                ticketCountsHolder));
     }
 
     @SuppressWarnings("unchecked")
     public void returnRowSelectionChanged() {
         Integer selectedId = (Integer) returnSelection.getKeys().next();
         selectedReturnRowId = new Long(selectedId);
-        selectedReturnEntry = ((List<SearchResultEntry>) returnResultsModel.getWrappedData()).get(selectedId);
+        selectedReturnEntry = ((List<SearchResultEntry>) returnResultsModel
+                .getWrappedData()).get(selectedId);
 
-        seatController.setReturnSeatHandler(new SeatHandler(selectedReturnEntry, ticketCountsHolder));
+        seatController.setReturnSeatHandler(new SeatHandler(
+                selectedReturnEntry, ticketCountsHolder));
     }
 
     @SuppressWarnings("unused")
-    public void validateDate(FacesContext ctx,
-            UIComponent c, Object value) {
+    public void validateDate(FacesContext ctx, UIComponent c, Object value) {
         Date date = (Date) value;
         if (date == null)
             return;
 
         if (date.compareTo(GeneralUtils.getPreviousDay().getTime()) < 0) {
-            FacesMessage fm = new FacesMessage(
-                        Messages.getString("dateMustNotBeBeforeToday"));
+            FacesMessage fm = new FacesMessage(Messages
+                    .getString("dateMustNotBeBeforeToday"));
 
             throw new ValidatorException(fm);
         }
     }
 
+
     /* -------------- ADMIN PANEL METHODS FOLLOW ------------------ */
 
     private String adminSearch() {
-        //Clear the vacant seats cache so that it is recalculated
+        // Clear the vacant seats cache so that it is recalculated
         ServiceFunctions.clearCache();
 
         if (toStop != null && toStop.equals("")) {
             toStop = null;
         }
 
-        List<SearchResultEntry> result = searchService.adminSearch(loggedUserHolder.getLoggedUser(),
-                fromStop, toStop, date, fromHour, toHour, timeForDeparture);
+        List<SearchResultEntry> result = searchService.adminSearch(
+                loggedUserHolder.getLoggedUser(), fromStop, toStop, date,
+                fromHour, toHour, timeForDeparture);
 
         resultsModel = new ListDataModel(result);
 
         return Screen.ADMIN_SEARCH_RESULTS.getOutcome();
     }
 
-    @Action(accessLevel=AccessLevel.CASH_DESK)
+    @Action(accessLevel = AccessLevel.CASH_DESK)
     public void purchaseOneWayTicket() {
         currentAvailableTargetStopNames = searchService
                 .listAllEndStopsForRoute(fromStop, selectedEntry.getRun()
@@ -435,7 +452,7 @@ public class SearchController extends BaseController {
         travelType = "ONE_WAY";
     }
 
-    @Action(accessLevel=AccessLevel.CASH_DESK)
+    @Action(accessLevel = AccessLevel.CASH_DESK)
     public void purchaseTwoWayTicket() {
         // the same actions as for one way, with additional ones
         purchaseOneWayTicket();
@@ -445,17 +462,19 @@ public class SearchController extends BaseController {
         travelType = "TWO_WAY";
     }
 
-    @Action(accessLevel=AccessLevel.CASH_DESK)
+    @Action(accessLevel = AccessLevel.CASH_DESK)
     public void returnDateSelected() {
-        returnResultsModel = new ListDataModel(searchService.adminSearch(loggedUserHolder.getLoggedUser(),
-                toStopPerPurchase, fromStop, returnDate, 0, 24, true));
+        returnResultsModel = new ListDataModel(searchService.adminSearch(
+                loggedUserHolder.getLoggedUser(), toStopPerPurchase, fromStop,
+                returnDate, 0, 24, true));
     }
 
-    @Action(accessLevel=AccessLevel.CASH_DESK)
+    @Action(accessLevel = AccessLevel.CASH_DESK)
     public void toStopSelected() {
         // If the search has been from the admin panel,
         // and no target stop has been chosen, locate the appropriate price
-        selectedEntry.setPrice(findPrice(fromStop, toStopPerPurchase, selectedEntry.getRun().getRoute()));
+        selectedEntry.setPrice(findPrice(fromStop, toStopPerPurchase,
+                selectedEntry.getRun().getRoute()));
     }
 
     /* ------------------- GETTERS AND SETTERS FOLLOW ---------------- */
@@ -730,5 +749,13 @@ public class SearchController extends BaseController {
 
     public void setTicketCountsHolder(TicketCountsHolder ticketCountsHolder) {
         this.ticketCountsHolder = ticketCountsHolder;
+    }
+
+    public boolean isReRenderSeatChoices() {
+        return reRenderSeatChoices;
+    }
+
+    public void setReRenderSeatChoices(boolean reRenderSeatChoices) {
+        this.reRenderSeatChoices = reRenderSeatChoices;
     }
 }

@@ -29,7 +29,8 @@ public class RunServiceImpl extends BaseService<Run> implements RunService<Run> 
             if (run == null) {
                 time = GeneralUtils.getPreviousDay();
             } else {
-                time = run.getTime();
+                time = Calendar.getInstance(GeneralUtils.getLocale());
+                time.setTimeInMillis(run.getTime().getTimeInMillis());
             }
             //If the single run is already created
             if (run != null && route.isSingleRun()) {
@@ -55,12 +56,12 @@ public class RunServiceImpl extends BaseService<Run> implements RunService<Run> 
         }
     }
 
+
     public void createRunsForRoute(Route route, Calendar time) {
         int day = time.get(Calendar.DAY_OF_YEAR);
         int dayOfWeek = time.get(Calendar.DAY_OF_WEEK);
         // the current day, starting from Monday
         int currentDay = dayOfWeek; // > 1 ? dayOfWeek - 1 : 7; if locale is EN
-
         CircularLinkedList<RouteDay> routeDays =
             new CircularLinkedList<RouteDay>(route.getRouteDays());
 
@@ -113,7 +114,7 @@ public class RunServiceImpl extends BaseService<Run> implements RunService<Run> 
                 runTime.set(Calendar.MINUTE, rh.getMinutes() % 60);
                 runTime.set(Calendar.SECOND, 0);
                 run.setTime(runTime);
-                //Saving automatically, because attached to session ?
+                //Saving automatically, because attached to session
                 route.addRun(run);
             }
         }

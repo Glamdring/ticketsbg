@@ -79,7 +79,7 @@ public class Route extends DataObject implements Serializable {
     @OneToMany(mappedBy="route")
     @LazyCollection(LazyCollectionOption.TRUE)
     @Cascade({CascadeType.ALL})
-    @OrderBy("time")
+    @OrderBy("time DESC")
     private List<Run> runs = new ArrayList<Run>();
 
 
