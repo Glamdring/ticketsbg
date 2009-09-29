@@ -15,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
@@ -74,6 +75,10 @@ public class Firm implements Serializable, Selectable {
             inverseJoinColumns=@JoinColumn(name="agentId", referencedColumnName="agentId"))
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Agent> agents = new ArrayList<Agent>();
+
+
+    @Lob
+    private String richDescription;
 
     public Set<User> getStaff() {
         return staff;
@@ -207,6 +212,14 @@ public class Firm implements Serializable, Selectable {
 
     public void addAgent(Agent agent) {
         agents.add(agent);
+    }
+
+    public String getRichDescription() {
+        return richDescription;
+    }
+
+    public void setRichDescription(String richDescription) {
+        this.richDescription = richDescription;
     }
 
     @Override

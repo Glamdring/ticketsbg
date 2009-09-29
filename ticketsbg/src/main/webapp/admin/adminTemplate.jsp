@@ -112,7 +112,7 @@
 
 </a4j:form>
 <rich:modalPanel id="firmPanel" autosized="true" width="350"
-    height="120" moveable="true" resizeable="false">
+    height="120" moveable="true" resizeable="false" domElementAttachment="parent">
     <f:facet name="controls">
         <h:panelGroup>
             <h:graphicImage value="/images/close.png" styleClass="hidelink"

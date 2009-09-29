@@ -20,32 +20,39 @@
             <a4j:outputPanel ajaxRendered="true">
                 <h:panelGrid columns="2" styleClass="gridContent">
                     <h:outputLabel for="name" value="#{msg.firmName}: " />
-                    <h:inputText value="#{firmController.firm.name}" id="name" size="30" />
+                    <h:inputText value="#{firmController.firm.name}" id="name"
+                        size="30" />
 
                     <h:outputLabel for="description" value="#{msg.description}: " />
                     <h:inputTextarea value="#{firmController.firm.description}"
                         id="description" rows="4" cols="27" />
 
                     <h:outputLabel for="subdomain" value="#{msg.subdomain}: " />
-                    <h:inputText value="#{firmController.firm.subdomain}" id="subdomain" size="30" />
+                    <h:inputText value="#{firmController.firm.subdomain}"
+                        id="subdomain" size="30" />
 
                     <h:outputLabel for="bulstat" value="#{msg.bulstat}: " />
-                    <h:inputText value="#{firmController.firm.bulstat}" id="bulstat" size="30" />
+                    <h:inputText value="#{firmController.firm.bulstat}" id="bulstat"
+                        size="30" />
 
                     <h:outputLabel for="epayKin" value="#{msg.epayKin}: " />
-                    <h:inputText value="#{firmController.firm.epayKin}" id="epayKin" size="30" />
+                    <h:inputText value="#{firmController.firm.epayKin}" id="epayKin"
+                        size="30" />
 
                     <h:outputLabel for="iban" value="#{msg.iban}: " />
-                    <h:inputText value="#{firmController.firm.iban}" id="iban" size="30"/>
+                    <h:inputText value="#{firmController.firm.iban}" id="iban"
+                        size="30" />
 
                     <h:outputLabel for="bank" value="#{msg.bank}: " />
-                    <h:inputText value="#{firmController.firm.bank}" id="bank" size="30" />
+                    <h:inputText value="#{firmController.firm.bank}" id="bank"
+                        size="30" />
 
                     <h:outputLabel for="bic" value="#{msg.bic}: " />
                     <h:inputText value="#{firmController.firm.bic}" id="bic" size="30" />
 
                     <h:outputLabel for="other" value="#{msg.other}: " />
-                    <h:inputText value="#{firmController.firm.other}" id="other" size="30" />
+                    <h:inputText value="#{firmController.firm.other}" id="other"
+                        size="30" />
 
                     <h:outputLabel for="active" value="#{msg.active}: "
                         rendered="#{loggedUserHolder.loggedUser.administrator}" />
@@ -61,13 +68,47 @@
                         id="hasAnotherTicketSellingSystem"
                         rendered="#{loggedUserHolder.loggedUser.administrator}" />
 
+                    <rich:componentControl attachTo="richDescriptionOpener"
+                        event="onclick" for="richDescriptionPanel" operation="show" />
+                    <h:outputText id="richDescriptionOpener" styleClass="link"
+                        style="color: blue; text-decoration: underline;"
+                        value="#{msg.description}" />
+
                     <h:outputText value="" />
                     <a4j:commandButton value="${msg.save}"
                         action="#{firmController.save}"
-                        oncomplete="#{rich:component('entityPanel')}.hide()"
+                        oncomplete="if (#{rich:component('entityPanel')} != null) {#{rich:component('entityPanel')}.hide();} #{rich:component('firmPanel')}.hide();"
                         reRender="firmsTable" />
                 </h:panelGrid>
             </a4j:outputPanel>
+
+            <rich:modalPanel id="richDescriptionPanel" autosized="true"
+                width="200" height="320" moveable="true" resizeable="false"
+                onmaskclick="#{rich:component('richDescriptionPanel')}.hide()"
+                domElementAttachment="parent">
+                <f:facet name="controls">
+                    <h:panelGroup>
+                        <h:graphicImage value="/images/close.png" styleClass="hidelink"
+                            id="hidelink1"
+                            onclick="#{rich:component('richDescriptionPanel')}.hide()" />
+                        <rich:componentControl for="richDescriptionPanel"
+                            attachTo="hidelink1" operation="hide" event="onclick" />
+                    </h:panelGroup>
+                </f:facet>
+                <f:facet name="header">
+                    <h:outputText value="#{msg.description}" />
+                </f:facet>
+                <h:panelGroup>
+                    <rich:editor readonly="false" viewMode="visual" height="280"
+                        value="#{firmController.firm.richDescription}" theme="advanced">
+                        <f:param name="theme_advanced_toolbar_location" value="top" />
+                        <f:param name="theme_advanced_toolbar_align" value="left" />
+                    </rich:editor>
+                    <a4j:commandButton value="OK"
+                        onclick="#{rich:component('richDescriptionPanel')}.hide()" />
+                </h:panelGroup>
+            </rich:modalPanel>
         </h:form>
+
     </f:view>
 </ui:composition>

@@ -76,5 +76,6 @@
         <ui:include src="statistics.jsp" />
     </h:panelGroup>
 </h:panelGrid>
+<ui:insert name="footer" />
 </body>
 </html>

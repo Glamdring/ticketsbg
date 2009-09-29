@@ -52,8 +52,8 @@
                             <h:outputText value=" #{msg.searchResultsTo} " />
                             <h:outputText value="#{searchController.toStop}"
                                 styleClass="mapLink" id="toStopHeader">
-                                <rich:componentControl for="toMapPanel"
-                                    attachTo="toStopHeader" operation="show" event="onclick"
+                                <rich:componentControl for="toMapPanel" attachTo="toStopHeader"
+                                    operation="show" event="onclick"
                                     rendered="#{searchController.mapHandler.toMapUrl != null}" />
                             </h:outputText>
                                         (<h:outputText
@@ -285,10 +285,11 @@
                         </h:panelGroup>
 
                         <h:panelGroup id="seatChoices">
-                        <!-- Not rendering if there is no run chose, or in case the page is just loaded with
+                            <!-- Not rendering if there is no run chose, or in case the page is just loaded with
                             the only possible run selected. See the end of document for how
                             the panel is rendered afterwards -->
-                            <a4j:region rendered="#{seatController.seatHandler != null and
+                            <a4j:region
+                                rendered="#{seatController.seatHandler != null and
                                 (tc:getSize(searchController.resultsModel.wrappedData) != 1 || searchController.reRenderSeatChoices)}">
                                 <a4j:include viewId="seats.jsp">
                                     <ui:param name="modifier" value="1" />
@@ -411,12 +412,18 @@
                             style="width: 500px; height: 500px;" gmapVar="toMapVar" />
                     </rich:panel>
                 </rich:modalPanel>
+            </a4j:form>
+        </f:view>
+    </ui:define>
+    <ui:define name="footer">
+        <a4j:form ajaxSubmit="true">
+            <a4j:jsFunction name="refreshSeatChoices" reRender="seatChoices"
+                id="refreshSeatChoices" ajaxSingle="true" immediate="true">
+                <a4j:actionparam assignTo="#{searchController.reRenderSeatChoices}"
+                    value="true" id="reRenderParam" name="reRenderParam" />
+            </a4j:jsFunction>
 
-                <a4j:jsFunction name="refreshSeatChoices" reRender="seatChoices" id="refreshSeatChoices" ajaxSingle="true" immediate="true">
-                    <a4j:actionparam assignTo="#{searchController.reRenderSeatChoices}" value="true" id="reRenderParam" name="reRenderParam"/>
-                </a4j:jsFunction>
-
-                <script type="text/javascript">
+            <script type="text/javascript">
                 //<![CDATA[
                     function load() {
                         if (#{tc:getSize(searchController.resultsModel.wrappedData)} == 1) {
@@ -424,10 +431,10 @@
                             refreshSeatChoices();
                         }
                     }
+                    //document.body.onload=load();
                     setTimeout(load, 1000);
                 //]]>
                 </script>
-            </a4j:form>
-        </f:view>
+        </a4j:form>
     </ui:define>
 </ui:composition>
