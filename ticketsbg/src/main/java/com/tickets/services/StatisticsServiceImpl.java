@@ -32,8 +32,7 @@ import com.tickets.utils.GeneralUtils;
  */
 @Service("statisticsService")
 @Scope("singleton")
-public class StatisticsServiceImpl
-    extends BaseService
+public class StatisticsServiceImpl extends BaseService
     implements StatisticsService {
 
     private int companiesCount;
@@ -196,5 +195,16 @@ public class StatisticsServiceImpl
 
         return result;
 
+    }
+
+    @Override
+    public BigDecimal getTotalPrice(List<Ticket> tickets) {
+        BigDecimal totalPrice = BigDecimal.ZERO;
+        for (Ticket ticket : tickets) {
+            totalPrice = totalPrice.add(ticket.isTwoWay() ? ticket.getTotalPrice()
+                    .divide(BigDecimal.valueOf(2)) : ticket.getTotalPrice());
+        }
+
+        return totalPrice;
     }
 }

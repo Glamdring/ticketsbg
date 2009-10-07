@@ -105,11 +105,7 @@ public class StatisticsController extends BaseController {
                 selectedTimeType, firm,
                 fromDate, toDate, selectedDataType, selectedPurchaseMeansType);
 
-        totalPrice = BigDecimal.ZERO;
-        for (Ticket ticket : tickets) {
-            totalPrice = totalPrice.add(ticket.isTwoWay() ? ticket.getTotalPrice()
-                    .divide(BigDecimal.valueOf(2)) : ticket.getTotalPrice());
-        }
+        totalPrice = statsService.getTotalPrice(tickets);
 
         return tickets;
     }

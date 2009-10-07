@@ -1,5 +1,6 @@
 package com.tickets.services;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -105,4 +106,12 @@ public interface StatisticsService extends Service {
             Date toDate,
             StatsDataType dataType,
             PurchaseMeansType selectedPurchaseMeansType);
+
+    /**
+     * Calculates the total price of the tickets
+     *
+     * @param tickets
+     * @return total price
+     */
+    BigDecimal getTotalPrice(List<Ticket> tickets);
 }
