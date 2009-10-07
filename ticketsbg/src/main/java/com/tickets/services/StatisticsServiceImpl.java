@@ -90,8 +90,8 @@ public class StatisticsServiceImpl
             }
             if (dataType == StatsDataType.MONEY) {
                 sh.setValue(sh.getValue().add(ticket.isTwoWay()
-                        ? ticket.getPrice().divide(BigDecimal.valueOf(2))
-                        : ticket.getPrice()));
+                        ? ticket.getTotalPrice().divide(BigDecimal.valueOf(2))
+                        : ticket.getTotalPrice()));
             }
             result.add(sh);
         }

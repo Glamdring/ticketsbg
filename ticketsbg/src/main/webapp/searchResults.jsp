@@ -100,15 +100,6 @@
                     </f:facet>
 
                     <ui:include src="messages.jsp" />
-                    <!-- show this button below the messages only if the message is
-                    asking the question whether tickets are to be cancelled -->
-                    <a4j:outputPanel rendered="#{searchController.proposeCancellation}">
-                        <h:commandButton action="#{searchController.cancelTickets}"
-                            value="#{msg.yes}" />
-                        <h:commandButton action="#{searchController.cancelTickets}"
-                            value="#{msg.noContinue}"
-                            rendered="#{searchController.confirmPartialPurchase}" />
-                    </a4j:outputPanel>
 
                     <h:panelGrid columns="2" columnClasses="gridContent,gridContent"
                         cellpadding="0" cellspacing="0">
@@ -332,7 +323,7 @@
                             <rich:inputNumberSpinner
                                 value="#{searchController.regularTicketsCount}" minValue="0"
                                 maxValue="#{searchController.selectedEntry == null ? 50 : tc:getVacantSeats(searchController.selectedEntry.run, searchController.fromStop, searchController.toStop)}"
-                                inputSize="3">
+                                inputSize="3" disabled="#{searchController.ticketToAlter != null}">
                                 <a4j:support event="onchange" ajaxSingle="true" />
                             </rich:inputNumberSpinner>
                         </h:panelGrid>
@@ -341,7 +332,6 @@
                             rendered="#{searchController.selectedEntry != null}">
                             <!-- TODO rendered="#{searchController.selectedEntry.run.route.firm.allowDiscounts}" -->
                             <a4j:repeat value="#{searchController.ticketCounts}" var="tc">
-
                                 <h:panelGrid columns="2"
                                     columnClasses="firstTicketColumn,secondTicketColumn">
                                     <h:panelGroup>
@@ -352,7 +342,8 @@
 
                                     <rich:inputNumberSpinner value="#{tc.numberOfTickets}"
                                         minValue="0" inputSize="3"
-                                        maxValue="#{tc:getVacantSeats(searchController.selectedEntry.run, searchController.fromStop, searchController.toStop)}">
+                                        maxValue="#{tc:getVacantSeats(searchController.selectedEntry.run, searchController.fromStop, searchController.toStop)}"
+                                        disabled="#{searchController.ticketToAlter != null}">
                                         <a4j:support event="onchange" ajaxSingle="true" />
                                     </rich:inputNumberSpinner>
                                 </h:panelGrid>

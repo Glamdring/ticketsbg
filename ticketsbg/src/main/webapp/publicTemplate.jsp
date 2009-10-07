@@ -35,6 +35,16 @@
             <h:outputText value="#{msg.searchMenuItem}" styleClass="menuContent" />
         </rich:menuItem>
 
+        <rich:menuItem action="alterTicketScreen" id="alterTicketMenuItem">
+            <h:graphicImage value="/images/alterTicket.png" styleClass="menuIcon" />
+            <h:outputText value="#{msg.alterTicketMenuItem}" styleClass="menuContent" />
+        </rich:menuItem>
+
+        <rich:menuItem action="firmDetails" id="firmMenuItem" rendered="#{baseController.currentFirm != null}">
+            <h:graphicImage value="/images/firm.png" styleClass="menuIcon" />
+            <h:outputText value="#{msg.firm}" styleClass="menuContent" />
+        </rich:menuItem>
+
         <rich:menuItem action="registrationScreen" rendered="#{loggedUserHolder.loggedUser == null}">
             <h:graphicImage value="/images/users.png" styleClass="menuIcon" />
             <h:outputText value="#{msg.register}" styleClass="menuContent" />

@@ -12,13 +12,9 @@
 
     <ui:define name="body">
         <f:view>
-            <a4j:form id="searchForm" ajaxSubmit="true">
-                <ui:include src="searchFields.jsp">
-                    <ui:param name="isAdmin" value="false" />
-                </ui:include>
-                <h:inputHidden id="admin" binding="#{searchController.admin}"
-                    value="false" converter="#{booleanConverter}" />
-            </a4j:form>
+            <h:form id="firmDetailsForm">
+                <h:outputText value="#{baseController.currentFirm.richDescription}" />
+            </h:form>
         </f:view>
     </ui:define>
 </ui:composition>

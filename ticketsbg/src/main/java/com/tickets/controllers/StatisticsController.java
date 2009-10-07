@@ -107,8 +107,8 @@ public class StatisticsController extends BaseController {
 
         totalPrice = BigDecimal.ZERO;
         for (Ticket ticket : tickets) {
-            totalPrice = totalPrice.add(ticket.isTwoWay() ? ticket.getPrice()
-                    .divide(BigDecimal.valueOf(2)) : ticket.getPrice());
+            totalPrice = totalPrice.add(ticket.isTwoWay() ? ticket.getTotalPrice()
+                    .divide(BigDecimal.valueOf(2)) : ticket.getTotalPrice());
         }
 
         return tickets;

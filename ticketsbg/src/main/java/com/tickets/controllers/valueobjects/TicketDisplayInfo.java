@@ -3,18 +3,20 @@ package com.tickets.controllers.valueobjects;
 public class TicketDisplayInfo implements Comparable<TicketDisplayInfo>{
 
     private String ticketCode;
-    private int seatNumber;
+    private String seatNumbers;
+
     public String getTicketCode() {
         return ticketCode;
     }
     public void setTicketCode(String ticketCode) {
         this.ticketCode = ticketCode;
     }
-    public int getSeatNumber() {
-        return seatNumber;
+
+    public String getSeatNumbers() {
+        return seatNumbers;
     }
-    public void setSeatNumber(int seatNumber) {
-        this.seatNumber = seatNumber;
+    public void setSeatNumbers(String seatNumbers) {
+        this.seatNumbers = seatNumbers;
     }
     @Override
     public int compareTo(TicketDisplayInfo tdi) {

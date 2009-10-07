@@ -215,13 +215,22 @@
         <property name="timerTask" ref="statisticsTask" />
     </bean>
 
-    <bean id="scheduledTicketsClearingTask" class="org.springframework.scheduling.timer.ScheduledTimerTask"
+    <bean id="scheduledTicketsTimeoutingTask" class="org.springframework.scheduling.timer.ScheduledTimerTask"
         lazy-init="false">
-        <!-- wait 1 minute before starting repeated execution -->
+        <!-- wait 30 sec before starting repeated execution -->
         <property name="delay" value="30000" />
         <!-- run every minute -->
         <property name="period" value="60000" />
-        <property name="timerTask" ref="unusedTicketsClearingTask" />
+        <property name="timerTask" ref="unusedTicketsTimeoutingTask" />
+    </bean>
+
+    <bean id="scheduledTicketsClearingTask" class="org.springframework.scheduling.timer.ScheduledTimerTask"
+        lazy-init="false">
+        <!-- wait 1 minute before starting repeated execution -->
+        <property name="delay" value="60000" />
+        <!-- run every hour -->
+        <property name="period" value="3600000" />
+        <property name="timerTask" ref="timeoutedTicketsClearingTask" />
     </bean>
 
     <bean id="timerFactory" class="org.springframework.scheduling.timer.TimerFactoryBean">
@@ -229,7 +238,8 @@
             <list>
                 <ref bean="scheduledRunTask" />
                 <ref bean="scheduledStatsTask" />
-                <ref bean="scheduledTicketsClearingTask" />
+                <ref bean="scheduledTicketsTimeoutingTask" />
+                <!--ref bean="scheduledTicketsClearingTask" /-->
             </list>
         </property>
     </bean>

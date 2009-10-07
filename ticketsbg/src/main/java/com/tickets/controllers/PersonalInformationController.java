@@ -12,8 +12,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.tickets.controllers.users.LoggedUserHolder;
-import com.tickets.controllers.valueobjects.Screen;
-import com.tickets.controllers.valueobjects.Step;
 import com.tickets.model.Customer;
 import com.tickets.model.CustomerType;
 import com.tickets.model.User;
@@ -46,14 +44,10 @@ public class PersonalInformationController extends BaseController {
 
 
     public void updateCustomer() {
-
-    }
-
-    public String proceedToPayment() {
         //In case the user has come directly to this page
         //without choosing route
         if (purchaseController.getTickets().size() == 0) {
-            return Screen.SEARCH_SCREEN.getOutcome();
+            return;
         }
 
         if (customer instanceof User) {
@@ -61,9 +55,6 @@ public class PersonalInformationController extends BaseController {
         }
 
         purchaseController.setCustomerInformation(customer);
-        purchaseController.setCurrentStep(Step.PAYMENT);
-
-        return Screen.PAYMENT_SCREEN.getOutcome();
     }
 
     public Customer getCustomer() {

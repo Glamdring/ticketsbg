@@ -1,4 +1,4 @@
-package com.tickets.controllers.valueobjects;
+package com.tickets.services.valueobjects;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,5 +30,11 @@ public class TicketCountsHolder {
         this.ticketCounts = ticketCounts;
     }
 
-
+    public int getTotalCount() {
+        int total = regularTicketsCount;
+        for (TicketCount tc : ticketCounts) {
+            total += tc.getNumberOfTickets();
+        }
+        return total;
+    }
 }

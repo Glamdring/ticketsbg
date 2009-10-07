@@ -1,5 +1,7 @@
 package com.tickets.controllers.valueobjects;
 
+import com.tickets.services.valueobjects.Seat;
+
 
 public class Row {
 

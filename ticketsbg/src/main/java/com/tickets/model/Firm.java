@@ -80,6 +80,12 @@ public class Firm implements Serializable, Selectable {
     @Lob
     private String richDescription;
 
+    @Lob
+    private String terms;
+
+    @Column
+    private int hoursBeforeTravelAlterationAllowed;
+
     public Set<User> getStaff() {
         return staff;
     }
@@ -220,6 +226,23 @@ public class Firm implements Serializable, Selectable {
 
     public void setRichDescription(String richDescription) {
         this.richDescription = richDescription;
+    }
+
+    public String getTerms() {
+        return terms;
+    }
+
+    public void setTerms(String terms) {
+        this.terms = terms;
+    }
+
+    public int getHoursBeforeTravelAlterationAllowed() {
+        return hoursBeforeTravelAlterationAllowed;
+    }
+
+    public void setHoursBeforeTravelAlterationAllowed(
+            int hoursBeforeTravelAlterationAllowed) {
+        this.hoursBeforeTravelAlterationAllowed = hoursBeforeTravelAlterationAllowed;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.tickets.controllers.valueobjects;
+package com.tickets.services.valueobjects;
 
 public class Seat {
     private int number;

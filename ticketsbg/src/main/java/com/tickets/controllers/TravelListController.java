@@ -10,6 +10,7 @@ import com.tickets.annotations.Action;
 import com.tickets.controllers.security.AccessLevel;
 import com.tickets.controllers.valueobjects.TicketDisplayInfo;
 import com.tickets.controllers.valueobjects.TravelListSubroute;
+import com.tickets.model.PassengerDetails;
 import com.tickets.model.Price;
 import com.tickets.model.Run;
 import com.tickets.model.Ticket;
@@ -61,11 +62,19 @@ public class TravelListController extends BaseController {
 
             TicketDisplayInfo tdi = new TicketDisplayInfo();
             tdi.setTicketCode(ticket.getTicketCode());
-            if (isReturn) {
-                tdi.setSeatNumber(ticket.getReturnSeat());
-            } else {
-                tdi.setSeatNumber(ticket.getSeat());
+            String numbers = "";
+            String delimiter = "";
+
+            for (PassengerDetails pd : ticket.getPassengerDetails()) {
+                if (isReturn) {
+                    numbers += delimiter + pd.getReturnSeat();
+                } else {
+                    numbers += delimiter + pd.getSeat();
+                }
+                delimiter = ",";
             }
+
+            tdi.setSeatNumbers(numbers);
 
             tmpTLS.getTickets().add(tdi);
 

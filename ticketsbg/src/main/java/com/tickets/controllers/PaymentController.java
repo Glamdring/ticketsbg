@@ -8,6 +8,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.model.SelectItem;
 
 import org.apache.myfaces.orchestra.conversation.annotations.ConversationName;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +23,11 @@ public class PaymentController extends BaseController {
     private List<SelectItem> paymentMethods = new ArrayList<SelectItem>();
     private String selectedPaymentMethod;
 
+    @Autowired
     private PurchaseController purchaseController;
+
+    @Autowired
+    private PersonalInformationController personalInformationController;
 
     @PostConstruct
     public void init() {
@@ -36,9 +41,11 @@ public class PaymentController extends BaseController {
             PaymentMethod paymentMethod = PaymentMethod.valueOf(selectedPaymentMethod);
             purchaseController.setPaymentMethod(paymentMethod);
 
+            // Update the customer information for the purchase
+            personalInformationController.updateCustomer();
             // TODO submit the payment. The "buy" method should be called as an
             // action listener, before a form is submitted to the payment
-            // gateway
+            // gateway.
         } catch (Exception ex) {
             //TODO request a valid payment method
         }

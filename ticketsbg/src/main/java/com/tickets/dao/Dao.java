@@ -134,4 +134,10 @@ public interface Dao {
      * @param obj
      */
     void refresh(Object obj);
+
+    /**
+     * Executes an update/delete named query
+     * @param name
+     */
+    int executeNamedQuery(String name);
 }

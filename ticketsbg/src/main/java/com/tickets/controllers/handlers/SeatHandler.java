@@ -12,15 +12,16 @@ import javax.faces.model.SelectItem;
 import com.tickets.controllers.security.AccessLevel;
 import com.tickets.controllers.users.LoggedUserHolder;
 import com.tickets.controllers.valueobjects.Row;
-import com.tickets.controllers.valueobjects.Seat;
-import com.tickets.controllers.valueobjects.TicketCount;
-import com.tickets.controllers.valueobjects.TicketCountsHolder;
+import com.tickets.model.PassengerDetails;
 import com.tickets.model.Price;
 import com.tickets.model.Route;
 import com.tickets.model.Run;
 import com.tickets.model.SearchResultEntry;
 import com.tickets.model.Ticket;
 import com.tickets.model.User;
+import com.tickets.services.valueobjects.Seat;
+import com.tickets.services.valueobjects.TicketCount;
+import com.tickets.services.valueobjects.TicketCountsHolder;
 
 public class SeatHandler {
 
@@ -292,14 +293,19 @@ public class SeatHandler {
         for (Ticket ticket : run.getTickets()) {
             if (ticket.getStartStop().equals(price.getStartStop())
                     && ticket.getEndStop().equals(price.getEndStop())) {
-                u.add(ticket.getSeat());
+                for (PassengerDetails pd : ticket.getPassengerDetails()) {
+                    u.add(pd.getSeat());
+                }
+
             }
         }
 
         for (Ticket ticket : run.getReturnTickets()) {
             if (ticket.getStartStop().equals(price.getStartStop())
                     && ticket.getEndStop().equals(price.getEndStop())) {
-                u.add(ticket.getReturnSeat());
+                for (PassengerDetails pd : ticket.getPassengerDetails()) {
+                    u.add(pd.getReturnSeat());
+                }
             }
         }
 

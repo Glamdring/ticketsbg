@@ -1,5 +1,6 @@
 package com.tickets.controllers;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,12 +26,11 @@ import com.tickets.controllers.handlers.SeatHandler;
 import com.tickets.controllers.security.AccessLevel;
 import com.tickets.controllers.users.LoggedUserHolder;
 import com.tickets.controllers.valueobjects.Screen;
-import com.tickets.controllers.valueobjects.Seat;
 import com.tickets.controllers.valueobjects.Step;
-import com.tickets.controllers.valueobjects.TicketCount;
-import com.tickets.controllers.valueobjects.TicketCountsHolder;
+import com.tickets.exceptions.TicketCreationException;
 import com.tickets.model.Discount;
 import com.tickets.model.Firm;
+import com.tickets.model.PassengerDetails;
 import com.tickets.model.Price;
 import com.tickets.model.Route;
 import com.tickets.model.Run;
@@ -41,6 +41,9 @@ import com.tickets.services.SearchService;
 import com.tickets.services.ServiceFunctions;
 import com.tickets.services.StopService;
 import com.tickets.services.TicketService;
+import com.tickets.services.valueobjects.Seat;
+import com.tickets.services.valueobjects.TicketCount;
+import com.tickets.services.valueobjects.TicketCountsHolder;
 import com.tickets.utils.GeneralUtils;
 
 /**
@@ -115,16 +118,19 @@ public class SearchController extends BaseController {
     private SimpleSelection returnSelection;
     private Long selectedReturnRowId;
 
-    private List<Ticket> tickets;
-    private boolean proposeCancellation;
+    private Ticket ticket;
 
     private int currentRunVacantSeats;
 
     private List<String> currentAvailableTargetStopNames = new ArrayList<String>();
 
+    private boolean reRenderSeatChoices;
+
     private UIInput admin;
 
-    private boolean reRenderSeatChoices;
+    private UIInput alterTicketIdField;
+
+    private Ticket ticketToAlter;
 
     @Action
     public String navigateToSearch() {
@@ -146,11 +152,32 @@ public class SearchController extends BaseController {
                 && admin.getValue().equals(Boolean.TRUE);
     }
 
+    public Ticket getTicketToAlter() {
+        if (alterTicketIdField == null) {
+            return null;
+        }
+
+        if (ticketToAlter == null && alterTicketIdField.getValue() != null) {
+            int id = Integer.parseInt((String) alterTicketIdField.getValue());
+            Ticket ticket = ticketService.get(Ticket.class, id);
+            ticketToAlter = ticket;
+        }
+        return ticketToAlter;
+    }
+
     private String publicSearch() {
         // resetting, in case the conversation hasn't ended
         resetSelections();
 
         Firm currentFirm = getCurrentFirm();
+
+        // In case this was a search for ticket alteration
+        // allow only the firm from the original ticket
+        Ticket ticketToAlter = getTicketToAlter();
+        if (ticketToAlter != null) {
+            currentFirm = ticketToAlter.getRun().getRoute().getFirm();
+            loadTicketCounts();
+        }
 
         List<SearchResultEntry> result = searchService.search(fromStop, toStop,
                 date, fromHour, toHour, timeForDeparture, currentFirm);
@@ -187,6 +214,28 @@ public class SearchController extends BaseController {
         return Screen.SEARCH_RESULTS.getOutcome();
     }
 
+    private void loadTicketCounts() {
+        int regularTickets = 0;
+        for (PassengerDetails pd : ticketToAlter.getPassengerDetails()) {
+            if (pd.getDiscount() == null) {
+                regularTickets ++;
+            } else {
+                TicketCount tc = new TicketCount();
+                tc.setDiscount(pd.getDiscount());
+                int idx = ticketCountsHolder.getTicketCounts().indexOf(tc);
+                if (idx > -1) {
+                    tc = ticketCountsHolder.getTicketCounts().get(idx);
+                    tc.setNumberOfTickets(tc.getNumberOfTickets() + 1);
+                    ticketCountsHolder.getTicketCounts().set(idx, tc);
+                } else {
+                    tc.setNumberOfTickets(tc.getNumberOfTickets() + 1);
+                    ticketCountsHolder.getTicketCounts().add(tc);
+                }
+            }
+        }
+        ticketCountsHolder.setRegularTicketsCount(currentRunVacantSeats);
+    }
+
     @Action
     public void filterToStops() {
         if (fromStop != null && fromStop.length() > 0) {
@@ -210,74 +259,38 @@ public class SearchController extends BaseController {
         }
 
         // Creating many ticket instances
-        tickets = new ArrayList<Ticket>();
-
-        int nullsCount = 0;
-        int total = 0;
-
         List<Seat> selectedSeats = seatController.getSeatHandler()
                 .getSelectedSeats();
         List<Seat> selectedReturnSeats = null;
+
         if (seatController.getReturnSeatHandler() != null) {
             selectedReturnSeats = seatController.getReturnSeatHandler()
                     .getSelectedSeats();
         }
 
-        for (int i = 0; i < ticketCountsHolder.getRegularTicketsCount(); i++) {
-            int seat = -1;
-            int returnSeat = -1;
-            if (selectedSeats.size() > i) {
-                seat = selectedSeats.get(i).getNumber();
-            }
-            if (selectedReturnSeats != null && selectedReturnSeats.size() > i) {
-                returnSeat = selectedReturnSeats.get(i).getNumber();
-            }
-            if (seat == -1) {
-                seat = ticketService.getFirstVacantSeat(selectedEntry);
-            }
-
-            Ticket ticket = ticketService.createTicket(selectedEntry,
-                    selectedReturnEntry, seat, returnSeat);
-            total++;
+        try {
+            ticket = getTicketToAlter();
             if (ticket == null) {
-                nullsCount++;
+                ticket = ticketService.createTicket(selectedEntry, selectedReturnEntry,
+                    ticketCountsHolder, selectedSeats, selectedReturnSeats);
             } else {
-                tickets.add(ticket);
-            }
-        }
 
-        for (TicketCount tc : ticketCountsHolder.getTicketCounts()) {
-            for (int i = 0; i < tc.getNumberOfTickets(); i++) {
-                Ticket tmpTicket = ticketService.createTicket(selectedEntry,
-                        selectedReturnEntry, -1, -1, tc.getDiscount());
-                total++;
-                if (tmpTicket == null) {
-                    nullsCount++;
-                } else {
-                    tickets.add(tmpTicket);
+                ticketService.alterTicket(ticket, selectedEntry, selectedReturnEntry,
+                        ticketCountsHolder, selectedSeats, selectedReturnSeats);
+
+                if (ticket.getAlterationPriceDifference().compareTo(BigDecimal.ZERO) < 0) {
+                    addMessage("priceDiffereceIsSubstracted");
                 }
             }
-        }
-
-        // Validate selected ticket counts
-        if (total == 0) {
-            addError("mustChooseNonZeroTicketCounts");
+        } catch (TicketCreationException ex) {
+            addError(ex.getMessageKey(), ex.getArguments());
+            if (ex.isRedoSearch()) {
+                return search();
+            }
             return null;
         }
 
-        // If the ticket isn't created - i.e. another user has just
-        // taken the final ticket, redo the search and display an error message
-        // else, if there are some failures in ticket purchases, offer an option
-        // to either cancel all or continue
-        if (nullsCount == total) {
-            addError("lastTicketBoughtByAnotherUser");
-            return search();
-        } else if (nullsCount > 0) {
-            addError("someTicketsWerentReserved", new Integer(nullsCount));
-            return null;
-        }
-
-        purchaseController.getTickets().addAll(tickets);
+        purchaseController.getTickets().add(ticket);
 
         // If the user is staff-member, just mark the tickets as sold
         User user = loggedUserHolder.getLoggedUser();
@@ -286,11 +299,17 @@ public class SearchController extends BaseController {
             // redo the search
             adminSearch();
             return null; // returning null, because the action is
-            // called from modal window with ajax
+                        // called from modal window with ajax
+        }
+
+        if (ticket.isAltered() && ticket.getAlterationPriceDifference().compareTo(BigDecimal.ZERO) == 0) {
+            purchaseController.finalizePurchase(user);
+            return navigateToSearch();
         }
 
         purchaseController.setCurrentStep(Step.PAYMENT);
         return Screen.PAYMENT_SCREEN.getOutcome();
+
     }
 
     private Price findPrice(String fromStop, String toStopPerPurchase,
@@ -306,13 +325,21 @@ public class SearchController extends BaseController {
         return null;
     }
 
+    /**
+     * Cancellation of partially failed purchases not possible anymore
+     */
+    @Deprecated
     public String cancelTickets() {
         return Screen.SEARCH_SCREEN.getOutcome();
     }
 
+    /**
+     * Partial purchases not possible anymore
+     */
+    @Deprecated
     public String confirmPartialPurchase() {
-        purchaseController.getTickets().addAll(tickets);
-        tickets = null;
+        purchaseController.getTickets().add(ticket);
+        ticket = null;
         return Screen.PAYMENT_SCREEN.getOutcome();
     }
 
@@ -382,10 +409,10 @@ public class SearchController extends BaseController {
 
         for (Discount discount : selectedEntry.getRun().getRoute()
                 .getDiscounts()) {
-            TicketCount pd = new TicketCount();
-            pd.setDiscount(discount);
-            pd.setNumberOfTickets(0);
-            ticketCountsHolder.getTicketCounts().add(pd);
+            TicketCount tc = new TicketCount();
+            tc.setDiscount(discount);
+            tc.setNumberOfTickets(0);
+            ticketCountsHolder.getTicketCounts().add(tc);
         }
 
         seatController.setSeatHandler(new SeatHandler(selectedEntry,
@@ -678,20 +705,12 @@ public class SearchController extends BaseController {
         ticketCountsHolder.setRegularTicketsCount(regularTicketsCount);
     }
 
-    public List<Ticket> getTickets() {
-        return tickets;
+    public Ticket getTicket() {
+        return ticket;
     }
 
-    public void setTickets(List<Ticket> tickets) {
-        this.tickets = tickets;
-    }
-
-    public boolean isProposeCancellation() {
-        return proposeCancellation;
-    }
-
-    public void setProposeCancellation(boolean proposeCancellation) {
-        this.proposeCancellation = proposeCancellation;
+    public void setTicket(Ticket ticket) {
+        this.ticket = ticket;
     }
 
     public List<String> getToStopNames() {
@@ -757,5 +776,13 @@ public class SearchController extends BaseController {
 
     public void setReRenderSeatChoices(boolean reRenderSeatChoices) {
         this.reRenderSeatChoices = reRenderSeatChoices;
+    }
+
+    public UIInput getAlterTicket() {
+        return alterTicketIdField;
+    }
+
+    public void setAlterTicket(UIInput alterTicket) {
+        this.alterTicketIdField = alterTicket;
     }
 }

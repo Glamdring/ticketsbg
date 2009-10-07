@@ -69,7 +69,7 @@ public class ServiceFunctions {
                 // in the active stops for the requested criteria
                 // increase the used seats
                 if (ticket.getStartStop().equals(tmpStop.getName())) {
-                    seats--;
+                    seats -= ticket.getPassengersCount();
                     continue ticketCycle;
                 }
                 // If the end stop of the existing ticket is anywhere
@@ -77,7 +77,7 @@ public class ServiceFunctions {
                 // (excluding the first one, because thus there is no
                 // intersection between them)
                 if (ticket.getEndStop().equals(tmpStop.getName()) && i != startStop.getIdx() - 1) {
-                    seats--;
+                    seats -= ticket.getPassengersCount();
                     continue ticketCycle;
                 }
             }

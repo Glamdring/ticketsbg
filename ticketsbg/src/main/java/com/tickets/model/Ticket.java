@@ -1,10 +1,10 @@
 package com.tickets.model;
 
-// Generated 2008-1-20 22:59:52 by Hibernate Tools 3.2.0.b9
-
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -32,7 +33,16 @@ import javax.persistence.TemporalType;
     ),
     @NamedQuery(
         name = "Ticket.findUnconfirmed",
-        query = "SELECT t FROM Ticket t WHERE t.committed=false")
+        query = "SELECT t FROM Ticket t WHERE t.committed=false"
+    ),
+    @NamedQuery(
+        name = "Ticket.deleteTimeouted",
+        query = "DELETE FROM Ticket t WHERE t.timeouted=true"
+    ),
+    @NamedQuery(
+        name = "Ticket.findByCodeAndEmail",
+        query = "SELECT t FROM Ticket t WHERE t.ticketCode=:ticketCode AND " +
+                "t.customerInformation.email=:email")
 })
 public class Ticket implements Serializable, Comparable<Ticket> {
 
@@ -53,9 +63,6 @@ public class Ticket implements Serializable, Comparable<Ticket> {
 
     @Column(length = 30)
     private String ticketCode;
-
-    @Column
-    private BigDecimal price;
 
     @Column
     private String startStop;
@@ -87,17 +94,23 @@ public class Ticket implements Serializable, Comparable<Ticket> {
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar creationTime;
 
-    @ManyToOne
-    private Discount discount;
-
-    @Column
-    private int seat;
-
-    @Column
-    private int returnSeat;
-
     @Column
     private boolean timeouted;
+
+    @Column
+    private boolean altered;
+
+    @Column
+    private BigDecimal alterationPriceDifference = BigDecimal.ZERO;
+
+    @Column
+    private BigDecimal totalPrice;
+
+    @Column
+    private int passengersCount;
+
+    @OneToMany(cascade=CascadeType.ALL)
+    private List<PassengerDetails> passengerDetails = new ArrayList<PassengerDetails>();
 
     public Run getRun() {
         return run;
@@ -148,14 +161,6 @@ public class Ticket implements Serializable, Comparable<Ticket> {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
     }
 
     public String getStartStop() {
@@ -222,36 +227,52 @@ public class Ticket implements Serializable, Comparable<Ticket> {
         this.returnRun = returnRun;
     }
 
-    public Discount getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(Discount discount) {
-        this.discount = discount;
-    }
-
-    public int getSeat() {
-        return seat;
-    }
-
-    public void setSeat(int seat) {
-        this.seat = seat;
-    }
-
-    public int getReturnSeat() {
-        return returnSeat;
-    }
-
-    public void setReturnSeat(int returnSeat) {
-        this.returnSeat = returnSeat;
-    }
-
     public boolean isTimeouted() {
         return timeouted;
     }
 
     public void setTimeouted(boolean timeouted) {
         this.timeouted = timeouted;
+    }
+
+    public boolean isAltered() {
+        return altered;
+    }
+
+    public void setAltered(boolean altered) {
+        this.altered = altered;
+    }
+
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public int getPassengersCount() {
+        return passengersCount;
+    }
+
+    public void setPassengersCount(int passengersCount) {
+        this.passengersCount = passengersCount;
+    }
+
+    public List<PassengerDetails> getPassengerDetails() {
+        return passengerDetails;
+    }
+
+    public void setPassengerDetails(List<PassengerDetails> passengerDetails) {
+        this.passengerDetails = passengerDetails;
+    }
+
+    public BigDecimal getAlterationPriceDifference() {
+        return alterationPriceDifference;
+    }
+
+    public void setAlterationPriceDifference(BigDecimal alterationPriceDifference) {
+        this.alterationPriceDifference = alterationPriceDifference;
     }
 
     @Override
@@ -261,5 +282,9 @@ public class Ticket implements Serializable, Comparable<Ticket> {
         }
 
         return this.getTicketCode().compareTo(t.getTicketCode());
+    }
+
+    public void addPassengerDetails(PassengerDetails passengerDetails) {
+        getPassengerDetails().add(passengerDetails);
     }
 }

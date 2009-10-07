@@ -30,7 +30,7 @@
 }
 </style>
     <f:view>
-        <rich:panel header="#{msg.searchTitle}"
+        <rich:panel header="#{alterTicket == null ? msg.searchTitle : null}"
             headerClass="rich-panel-header-main">
             <ui:include src="messages.jsp" />
 
@@ -38,7 +38,8 @@
                 rendered="#{!isAdmin}">
                 <h:outputLabel value="" for="travelType" />
                 <h:selectOneRadio value="#{searchController.travelType}"
-                    id="travelType" style="font-weight: bold;">
+                    id="travelType" style="font-weight: bold;"
+                    disabled="#{alterTicket != null}">
                     <a4j:support event="onclick" reRender="returnPanel"
                         ajaxSingle="true" />
                     <f:selectItem itemLabel="#{msg.twoWayTravelType}"
@@ -53,7 +54,8 @@
                 <h:panelGroup>
                     <rich:comboBox suggestionValues="#{searchController.stopNames}"
                         directInputSuggestions="false" required="true"
-                        value="#{searchController.fromStop}" id="fromStop">
+                        value="#{searchController.fromStop}" id="fromStop"
+                        disabled="#{alterTicket != null}">
 
                         <f:attribute name="label" value="#{msg.startStop}" />
 
@@ -70,7 +72,8 @@
                 <h:outputLabel value="#{msg.toStop}:" for="toStop" />
                 <rich:comboBox suggestionValues="#{searchController.toStopNames}"
                     directInputSuggestions="false" required="${!isAdmin}"
-                    value="#{searchController.toStop}" id="toStop">
+                    value="#{searchController.toStop}" id="toStop"
+                    disabled="#{alterTicket != null}">
                     <f:attribute name="label" value="#{msg.endStop}" />
                 </rich:comboBox>
             </h:panelGrid>

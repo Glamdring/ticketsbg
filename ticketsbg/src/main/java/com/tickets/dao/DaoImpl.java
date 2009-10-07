@@ -135,4 +135,9 @@ public class DaoImpl implements Dao {
         getSession().refresh(obj);
     }
 
+    @Override
+    public int executeNamedQuery(String name) {
+        return getSession().getNamedQuery(name).executeUpdate();
+    }
+
 }

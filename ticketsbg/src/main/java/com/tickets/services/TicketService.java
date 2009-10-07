@@ -2,18 +2,55 @@ package com.tickets.services;
 
 import java.util.List;
 
-import com.tickets.model.Discount;
+import com.tickets.exceptions.TicketCreationException;
 import com.tickets.model.SearchResultEntry;
 import com.tickets.model.Ticket;
 import com.tickets.model.User;
+import com.tickets.services.valueobjects.Seat;
+import com.tickets.services.valueobjects.TicketCountsHolder;
 
 public interface TicketService extends Service<Ticket> {
 
+    /**
+     * Creates a ticket for the supplied arguments
+     *
+     * @param selectedEntry
+     * @param selectedReturnEntry
+     * @param ticketCountsHolder
+     * @param selectedSeats
+     * @param selectedReturnSeats
+     * @return the created and persisted ticket
+     * @throws TicketCreationException
+     */
     Ticket createTicket(SearchResultEntry selectedEntry,
-            SearchResultEntry selectedReturnEntry, int seat, int returnSeat);
+            SearchResultEntry selectedReturnEntry,
+            TicketCountsHolder ticketCountsHolder,
+            List<Seat> selectedSeats,
+            List<Seat> selectedReturnSeats) throws TicketCreationException;
 
-    Ticket createTicket(SearchResultEntry selectedEntry,
-            SearchResultEntry selectedReturnEntry, int seat, int returnSeat, Discount discount);
+
+    /**
+     * Search for the appropriate ticket
+     * @param ticketCode
+     * @param email
+     * @return the found ticket
+     */
+    Ticket findTicket(String ticketCode, String email);
+
+    /**
+     * Alters the supplied ticket
+     *
+     * @param selectedEntry
+     * @param selectedReturnEntry
+     * @param ticketCountsHolder
+     * @param selectedSeats
+     * @param selectedReturnSeats
+     * @throws TicketCreationException
+     */
+    void alterTicket(Ticket ticket, SearchResultEntry selectedEntry,
+            SearchResultEntry selectedReturnEntry,
+            TicketCountsHolder ticketCountsHolder, List<Seat> selectedSeats,
+            List<Seat> selectedReturnSeats) throws TicketCreationException ;
 
     /**
      * Finalizes the purchase
@@ -24,15 +61,6 @@ public interface TicketService extends Service<Ticket> {
     void finalizePurchase(List<Ticket> tickets, User user);
 
     /**
-     * Gets the number of the first vacant seat
-     * Used when the user hasn't chosen a seat
-     *
-     * @param selectedEntry
-     * @return the seat number
-     */
-    int getFirstVacantSeat(SearchResultEntry selectedEntry);
-
-    /**
      * Lists all tickets purchased by the specified user
      * @param user
      * @return the list
@@ -41,10 +69,16 @@ public interface TicketService extends Service<Ticket> {
     List<Ticket> getTicketsByUser(User user);
 
     /**
-     * Clears unused tickets. The timeout is defined in a setting,
+     * Timeouts unused tickets. The timeout is defined in a setting,
      * in minutes. All tickets that have timeouted and don't have
-     * completed transactions are deleted, and then the user
-     * is notified of the timeout
+     * completed transactions are set as timeouted=true, and then the
+     * user is notified of the timeout by the UI
      */
-    void clearUnusedTickets();
+    void timeoutUnusedTickets();
+
+
+    /**
+     * Deletes all tickets that have been set as timeouted=true.
+     */
+    void clearTimeoutedTickets();
 }

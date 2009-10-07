@@ -7,12 +7,16 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
 import org.apache.myfaces.orchestra.conversation.Conversation;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
 
 import com.tickets.constants.Constants;
 import com.tickets.constants.Messages;
 import com.tickets.model.Firm;
 
-public abstract class BaseController implements Serializable {
+@Controller("baseController")
+@Scope("request")
+public class BaseController implements Serializable {
 
     protected String getRequestValue(String key) {
         return FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(key);
@@ -56,9 +60,10 @@ public abstract class BaseController implements Serializable {
         }
     }
 
-    protected Firm getCurrentFirm() {
+    public Firm getCurrentFirm() {
         return (Firm) getSessionValue(Constants.CURRENT_FIRM_KEY);
     }
+
     public boolean isHasMessages() {
         return FacesContext.getCurrentInstance().getMessages().hasNext();
     }

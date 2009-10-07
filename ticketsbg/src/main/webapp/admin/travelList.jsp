@@ -36,9 +36,7 @@
                             <h:outputText value="#{msg['lt']}tr#{msg['gt']}" rendered="#{idx % 4 == 0}" escape="false" />
                             <td style="font-weight: bold;">
                                 #{ticket.ticketCode}
-                                <h:outputText
-                                value=" (#{ticket.seatNumber})"
-                                rendered="#{ticket.seatNumber > 0}" /></td>
+                                <h:outputText value=" (#{ticket.seatNumbers})" /></td>
                             <h:outputText value="#{msg['lt']}/tr#{msg['gt']}" rendered="#{idx % 4 == 3}" escape="false" />
                         </a4j:repeat>
                     </a4j:repeat>

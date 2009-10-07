@@ -5,7 +5,7 @@
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:rich="http://richfaces.org/rich">
 
-    <rich:messages id="messages" errorClass="error">
+    <rich:messages id="messages#{additionalId}" errorClass="error">
         <f:facet name="errorMarker">
             <h:graphicImage url="/images/validationError.png" width="14" height="14"
                 style="margin-right: 4px;" />

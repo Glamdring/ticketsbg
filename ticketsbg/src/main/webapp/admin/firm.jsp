@@ -68,6 +68,12 @@
                         id="hasAnotherTicketSellingSystem"
                         rendered="#{loggedUserHolder.loggedUser.administrator}" />
 
+                    <h:outputLabel for="hoursBeforeTravelAlterationAllowed" value="#{msg.hoursBeforeTravelAlterationAllowed}: " />
+                    <rich:inputNumberSpinner value="#{firmController.firm.hoursBeforeTravelAlterationAllowed}"
+                        id="hoursBeforeTravelAlterationAllowed" minValue="0" />
+
+
+
                     <rich:componentControl attachTo="richDescriptionOpener"
                         event="onclick" for="richDescriptionPanel" operation="show" />
                     <h:outputText id="richDescriptionOpener" styleClass="link"

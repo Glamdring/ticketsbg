@@ -145,4 +145,9 @@ public class DaoEMImpl implements Dao {
     public void refresh(Object obj) {
         entityManager.refresh(obj);
     }
+
+    @Override
+    public int executeNamedQuery(String name) {
+        return entityManager.createNamedQuery(name).executeUpdate();
+    }
 }
