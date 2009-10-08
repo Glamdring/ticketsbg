@@ -90,7 +90,7 @@
                             <h:outputText value="#{ticket.twoWay ? msg.yes : msg.no}" />
                         </rich:column>
 
-                        <rich:column>
+                        <rich:column sortBy="#{ticket.passengersCount}">
                             <f:facet name="header">
                                 <h:outputText value="#{msg.passengersCount}" />
                             </f:facet>
