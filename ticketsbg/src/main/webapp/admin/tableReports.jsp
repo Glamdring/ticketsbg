@@ -28,6 +28,11 @@
                     <h:outputText value=", #{msg.passengersCount}: " />
                     <h:outputText styleClass="bold" value="#{statisticsController.totalPassengersCount}" />
 
+                    <h:outputText value=", #{msg.passengersPerTicket}: " />
+                    <h:outputText styleClass="bold" value="#{statisticsController.totalPassengersCount / tc:getSize(tickets)}">
+                        <f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
+                    </h:outputText>
+
                     <rich:dataTable value="#{tickets}" var="ticket" rows="50">
 
                         <rich:column sortBy="#{ticket.run.route.name}">
