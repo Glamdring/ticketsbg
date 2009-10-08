@@ -17,7 +17,9 @@
                         headerClass="rich-panel-header-main">
                         <h:messages />
 
-                        <a4j:include viewId="personalInformation.jsp" />
+                        <ui:include src="personalInformation.jsp" />
+
+                        <ui:include src="cart.jsp" />
 
                         <rich:panel header="#{msg.payment}">
                             <div align="center"><h:panelGrid columns="2" width="400px"

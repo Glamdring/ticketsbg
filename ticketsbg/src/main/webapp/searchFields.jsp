@@ -115,7 +115,6 @@
                     <h:outputLabel value="#{msg.departureDate}:" for="date" />
                     <rich:calendar id="date" datePattern="dd.MM.yyyy" firstWeekDay="1"
                         value="#{searchController.date}" required="true"
-                        validator="#{searchController.validateDate}"
                         enableManualInput="true" isDayEnabled="disallowPastDays"
                         boundaryDatesMode="scroll" dayStyleClass="getDayClass">
                         <f:attribute name="label" value="#{msg.departureDate}" />

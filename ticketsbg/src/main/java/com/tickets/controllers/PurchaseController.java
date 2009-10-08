@@ -1,5 +1,6 @@
 package com.tickets.controllers;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -109,5 +110,18 @@ public class PurchaseController extends BaseController {
         tickets.clear();
 
         return Screen.SEARCH_SCREEN.getOutcome();
+    }
+
+    public BigDecimal getTotalPrice() {
+        BigDecimal sum = BigDecimal.ZERO;
+        for (Ticket ticket : tickets) {
+            if (!ticket.isAltered()) {
+                sum = sum.add(ticket.getTotalPrice());
+            } else {
+                sum = sum.add(ticket.getAlterationPriceDifference());
+            }
+        }
+
+        return sum;
     }
 }

@@ -1,6 +1,7 @@
 package com.tickets.services;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -124,15 +125,24 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
             ticket.setTicketCode(generateTicketCode(selectedEntry.getRun()));
 
             int counter = 0;
-            for (counter = 0; counter < ticketCountsHolder.getRegularTicketsCount(); counter++) {
 
+            List<Integer> currentUsedSeats = new ArrayList<Integer>();
+            List<Integer> currentUsedReturnSeats = new ArrayList<Integer>();
+
+            for (counter = 0; counter < ticketCountsHolder.getRegularTicketsCount(); counter++) {
                 Seats seats = getSeatNumbers(selectedEntry,
                         selectedReturnEntry, selectedSeats,
-                        selectedReturnSeats, counter);
+                        selectedReturnSeats, currentUsedSeats,
+                        currentUsedReturnSeats, counter);
 
                 PassengerDetails deatils = createPassengerDetails(selectedEntry,
                         selectedReturnEntry, seats.getSeat(), seats.getReturnSeat());
                 ticket.addPassengerDetails(deatils);
+
+                currentUsedSeats.add(seats.getSeat());
+                if (seats.getReturnSeat() > -1) {
+                    currentUsedReturnSeats.add(seats.getReturnSeat());
+                }
             }
 
             for (TicketCount tc : ticketCountsHolder.getTicketCounts()) {
@@ -140,13 +150,20 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
                     counter ++;
                     Seats seats = getSeatNumbers(selectedEntry,
                             selectedReturnEntry, selectedSeats,
-                            selectedReturnSeats, counter);
+                            selectedReturnSeats, currentUsedSeats,
+                            currentUsedReturnSeats, counter);
+
                     PassengerDetails details = createPassengerDetails(
                             selectedEntry, selectedReturnEntry,
                             seats.getSeat(), seats.getReturnSeat(),
                                 tc.getDiscount());
 
                     ticket.addPassengerDetails(details);
+
+                    currentUsedSeats.add(seats.getSeat());
+                    if (seats.getReturnSeat() > -1) {
+                        currentUsedReturnSeats.add(seats.getReturnSeat());
+                    }
                 }
             }
 
@@ -232,7 +249,8 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
 
     private Seats getSeatNumbers(SearchResultEntry selectedEntry,
             SearchResultEntry selectedReturnEntry, List<Seat> selectedSeats,
-            List<Seat> selectedReturnSeats, int currentCounter) {
+            List<Seat> selectedReturnSeats, List<Integer> currentUsedSeats,
+            List<Integer> currentUsedReturnSeats, int currentCounter) {
 
         int seat = -1;
         int returnSeat = -1;
@@ -244,10 +262,10 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
         }
 
         if (seat == -1) {
-            seat = getFirstVacantSeat(selectedEntry);
+            seat = getFirstVacantSeat(selectedEntry, currentUsedSeats);
         }
-        if (returnSeat == -1) {
-            seat = getFirstVacantSeat(selectedReturnEntry);
+        if (returnSeat == -1 && selectedReturnEntry != null) {
+            returnSeat = getFirstVacantSeat(selectedReturnEntry, currentUsedReturnSeats);
         }
 
         Seats seats = new Seats();
@@ -289,9 +307,10 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
      * @param selectedEntry
      * @return the seat number
      */
-    private int getFirstVacantSeat(SearchResultEntry entry) {
+    private int getFirstVacantSeat(SearchResultEntry entry, List<Integer> currentUsedSeats) {
         List<Integer> usedSeats = SeatHandler.getUsedSeats(entry.getPrice(),
                 entry.getRun());
+        usedSeats.addAll(currentUsedSeats);
 
         Route route = entry.getRun().getRoute();
         for (int i = route.getSellSeatsFrom(); i <= route.getSellSeatsTo(); i++) {

@@ -6,12 +6,8 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
-import javax.faces.context.FacesContext;
 import javax.faces.model.ListDataModel;
-import javax.faces.validator.ValidatorException;
 
 import org.apache.myfaces.orchestra.conversation.annotations.ConversationName;
 import org.richfaces.model.selection.SimpleSelection;
@@ -20,7 +16,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.tickets.annotations.Action;
-import com.tickets.constants.Messages;
 import com.tickets.controllers.handlers.GMapHandler;
 import com.tickets.controllers.handlers.SeatHandler;
 import com.tickets.controllers.security.AccessLevel;
@@ -166,6 +161,12 @@ public class SearchController extends BaseController {
     }
 
     private String publicSearch() {
+
+        if (!validateReturnDate(returnDate)) {
+            addError("returnDateMustNotBeBeforeOutward");
+            return null;
+        }
+
         // resetting, in case the conversation hasn't ended
         resetSelections();
 
@@ -430,18 +431,15 @@ public class SearchController extends BaseController {
                 selectedReturnEntry, ticketCountsHolder));
     }
 
-    @SuppressWarnings("unused")
-    public void validateDate(FacesContext ctx, UIComponent c, Object value) {
-        Date date = (Date) value;
+    public boolean validateReturnDate(Date date) {
         if (date == null)
-            return;
+            return true;
 
-        if (date.compareTo(GeneralUtils.getPreviousDay().getTime()) < 0) {
-            FacesMessage fm = new FacesMessage(Messages
-                    .getString("dateMustNotBeBeforeToday"));
-
-            throw new ValidatorException(fm);
+        if (date.compareTo(this.date) < 0) {
+            return false;
         }
+
+        return true;
     }
 
 

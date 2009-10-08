@@ -17,7 +17,7 @@
                 headerClass="rich-panel-header-main" id="currentTickets">
                 <a4j:repeat var="ticket" value="#{purchaseController.tickets}">
                 #{ticket.startStop}<h:outputText value=" → " />#{ticket.endStop}
-                (<h:outputText value="#{ticket.price}">
+                (<h:outputText value="#{ticket.totalPrice}">
                         <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
                         <f:converter binding="#{currencyConverter}"
                             converterId="currencyConverter" />
