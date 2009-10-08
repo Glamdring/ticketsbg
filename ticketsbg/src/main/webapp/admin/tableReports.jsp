@@ -20,9 +20,13 @@
                 </ui:include>
 
                 <h:panelGroup id="tableHolder">
-                    <h:outputText value="#{msg.ticketsTotal}: " />
                     <c:set var="tickets" value="#{statisticsController.tickets}" />
+
+                    <h:outputText value="#{msg.ticketsTotal}: " />
                     <h:outputText styleClass="bold" value="#{tc:getSize(tickets)}" />
+
+                    <h:outputText value=", #{msg.passengersCount}: " />
+                    <h:outputText styleClass="bold" value="#{statisticsController.totalPassengersCount}" />
 
                     <rich:dataTable value="#{tickets}" var="ticket" rows="50">
 
@@ -53,18 +57,18 @@
                             </h:outputText>
                         </rich:column>
 
-                        <rich:column sortBy="#{ticket.price}">
+                        <rich:column sortBy="#{ticket.totalPrice}">
                             <f:facet name="header">
                                 <h:outputText value="#{msg.price}" />
                             </f:facet>
-                            <h:outputText value="#{ticket.price}"
+                            <h:outputText value="#{ticket.totalPrice}"
                                 rendered="#{!ticket.twoWay}">
                                 <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
                                 <f:converter binding="#{currencyConverter}"
                                     converterId="currencyConverter" />
                             </h:outputText>
 
-                            <h:outputText value="#{ticket.price / 2}"
+                            <h:outputText value="#{ticket.totalPrice / 2}"
                                 rendered="#{ticket.twoWay}">
                                 <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
                                 <f:converter binding="#{currencyConverter}"
@@ -84,6 +88,13 @@
                                 <h:outputText value="#{msg.twoWay}" />
                             </f:facet>
                             <h:outputText value="#{ticket.twoWay ? msg.yes : msg.no}" />
+                        </rich:column>
+
+                        <rich:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{msg.passengersCount}" />
+                            </f:facet>
+                            <h:outputText value="#{ticket.passengersCount}" />
                         </rich:column>
 
                         <rich:column sortBy="#{ticket.customerInformation.customerName}">

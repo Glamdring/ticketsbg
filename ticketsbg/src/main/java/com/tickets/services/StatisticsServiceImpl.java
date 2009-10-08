@@ -92,6 +92,11 @@ public class StatisticsServiceImpl extends BaseService
                         ? ticket.getTotalPrice().divide(BigDecimal.valueOf(2))
                         : ticket.getTotalPrice()));
             }
+
+            if (dataType == StatsDataType.PASSENGERS_COUNT) {
+                sh.setValue(sh.getValue().add(BigDecimal.valueOf(ticket.getPassengersCount())));
+            }
+
             result.add(sh);
         }
         //TODO order day of week
@@ -206,5 +211,15 @@ public class StatisticsServiceImpl extends BaseService
         }
 
         return totalPrice;
+    }
+
+    @Override
+    public int getTotalPassengersCount(List<Ticket> tickets) {
+        int sum = 0;
+        for (Ticket ticket : tickets) {
+            sum += ticket.getPassengersCount();
+        }
+
+        return sum;
     }
 }

@@ -57,6 +57,8 @@ public class StatisticsController extends BaseController {
     private int page;
     private BigDecimal totalPrice = BigDecimal.ZERO;
 
+    private int totalPassengersCount;
+
     @PostConstruct
     public void init() {
         // Don't initialize in case a not in the admin panel
@@ -106,6 +108,8 @@ public class StatisticsController extends BaseController {
                 fromDate, toDate, selectedDataType, selectedPurchaseMeansType);
 
         totalPrice = statsService.getTotalPrice(tickets);
+
+        setTotalPassengersCount(statsService.getTotalPassengersCount(tickets));
 
         return tickets;
     }
@@ -229,5 +233,13 @@ public class StatisticsController extends BaseController {
 
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public int getTotalPassengersCount() {
+        return totalPassengersCount;
+    }
+
+    public void setTotalPassengersCount(int totalPassengersCount) {
+        this.totalPassengersCount = totalPassengersCount;
     }
 }

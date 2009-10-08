@@ -114,4 +114,11 @@ public interface StatisticsService extends Service {
      * @return total price
      */
     BigDecimal getTotalPrice(List<Ticket> tickets);
+
+    /**
+     * Calculates the number of passengers
+     * @param tickets
+     * @return count
+     */
+    int getTotalPassengersCount(List<Ticket> tickets);
 }
