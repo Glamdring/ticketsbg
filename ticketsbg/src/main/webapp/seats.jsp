@@ -52,7 +52,8 @@
             event="onclick" operation="show" />
     </h:outputText>
 
-    <rich:modalPanel id="seatsModalPanel#{modifier}" autosized="true">
+    <rich:modalPanel id="seatsModalPanel#{modifier}" autosized="true"
+        style="overflow: hidden;">
         <f:facet name="header">
             <h:outputText value="#{msg.seats}" />
         </f:facet>
@@ -67,7 +68,7 @@
         <a4j:form ajaxSubmit="true">
             <a4j:outputPanel id="seatsViewInner#{modifier}" ajaxRendered="true">
                 <rich:dataTable value="#{seatController[handler].rows}" var="row"
-                style="table-layout: fixed; width: 178px;">
+                    style="table-layout: fixed; width: 178px;">
                     <t:selectManyCheckbox layout="spread" id="selectedSeats#{modifier}"
                         value="#{seatController[handler].selectedSeats}"
                         converter="#{seatConverter}">

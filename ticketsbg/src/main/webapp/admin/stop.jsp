@@ -13,7 +13,7 @@
         <h:messages />
         <h:form id="stopForm">
             <a4j:outputPanel ajaxRendered="true">
-                <h:panelGrid columns="2" columnClasses="rich-panel">
+                <h:panelGrid columns="2">
                     <h:outputLabel value="#{msg.stopName}" for="stopName" />
                     <h:panelGroup>
                         <tc:autocompleteBox value="#{routeController.stop.name}" id="stopName"

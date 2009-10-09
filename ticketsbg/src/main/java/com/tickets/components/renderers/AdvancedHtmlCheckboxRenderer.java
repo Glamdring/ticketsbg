@@ -15,6 +15,13 @@ import org.apache.myfaces.custom.checkbox.HtmlCheckbox;
 import org.apache.myfaces.renderkit.html.ext.HtmlCheckboxRenderer;
 import org.apache.myfaces.shared_tomahawk.renderkit.RendererUtils;
 
+/**
+ * CheckBox behaving appropriately regarding the disabled property
+ * with spread layout of t:selectManyCheckbox
+ *
+ * @author Bozhidar Bozhanov
+ *
+ */
 public class AdvancedHtmlCheckboxRenderer extends HtmlCheckboxRenderer {
 
     @Override

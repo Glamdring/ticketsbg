@@ -111,14 +111,17 @@
                                 selection="#{searchController.selection}"
                                 headerClass="tableHeader" noDataLabel="#{msg.noSearchResults}"
                                 width="380px;" columnClasses="columnClass" border="0"
-                                style="border-style: none;">
+                                style="border-style: none; table-layout: fixed;">
 
                                 <a4j:support event="onselectionchange"
                                     reRender="selectedEntry,returnResultsTable,ticketCounts,seatChoices"
                                     eventsQueue="selectionSubmit"
                                     action="#{searchController.rowSelectionChanged}" />
 
-                                <rich:column width="35px" sortable="false">
+                                <rich:column width="35px" sortable="false" style="width: 35px;">
+                                    <f:facet name="header">
+                                        <h:outputText value="&#160;"/>
+                                    </f:facet>
                                     <!-- For presentational purposes only -->
                                     <t:selectOneRow groupName="selectedEntry" id="selectedEntry"
                                         value="#{searchController.selectedRowId}">
@@ -127,7 +130,7 @@
                                     </t:selectOneRow>
                                 </rich:column>
 
-                                <rich:column sortable="false" width="345px">
+                                <rich:column sortable="false" width="345px;">
                                     <f:facet name="header">
                                         <h:outputText value="${msg.oneWayHeaderLabel}"
                                             rendered="#{searchController.returnResultsModel != null}" />
@@ -217,7 +220,7 @@
                                         eventsQueue="returnSelectionSubmit"
                                         action="#{searchController.returnRowSelectionChanged}" />
 
-                                    <rich:column width="35px" sortable="false">
+                                    <rich:column width="35px" sortable="false" style="width: 35px;">
                                         <!-- For presentational purposes only -->
                                         <t:selectOneRow groupName="selectedReturnEntry"
                                             id="selectedReturnEntry"
@@ -323,7 +326,8 @@
                             <rich:inputNumberSpinner
                                 value="#{searchController.regularTicketsCount}" minValue="0"
                                 maxValue="#{searchController.selectedEntry == null ? 50 : tc:getVacantSeats(searchController.selectedEntry.run, searchController.fromStop, searchController.toStop)}"
-                                inputSize="3" disabled="#{searchController.ticketToAlter != null}">
+                                inputSize="3"
+                                disabled="#{searchController.ticketToAlter != null}">
                                 <a4j:support event="onchange" ajaxSingle="true" />
                             </rich:inputNumberSpinner>
                         </h:panelGrid>
