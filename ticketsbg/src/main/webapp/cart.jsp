@@ -10,8 +10,8 @@
     xmlns:t="http://myfaces.apache.org/tomahawk">
 
     <rich:panel header="#{msg.tickets}">
-        <rich:messages />
-        <rich:dataTable style="width: 100%;"
+        <rich:messages globalOnly="true" />
+        <rich:dataTable style="width: 100%;" id="cartTable"
             value="#{purchaseController.tickets}" var="ticket">
 
             <rich:column>
@@ -53,7 +53,8 @@
             </rich:column>
             <rich:column>
                 <f:facet name="header">
-                    <h:outputText value="#{msg.seats}" />
+                    <h:outputText
+                        value="#{ticket.passengersCount > 1 ? msg.seats : msg.seat}" />
                 </f:facet>
                 <a4j:repeat value="#{ticket.passengerDetails}" var="detail"
                     rowKeyVar="rowKey">
@@ -106,6 +107,19 @@
                             converterId="currencyConverter" />
                     </h:outputText>
                 </f:facet>
+            </rich:column>
+
+            <rich:column>
+                <a4j:commandLink action="#{purchaseController.removeTicket}"
+                    title="#{msg.remove}" reRender="cartTable"
+                    onclick="if (!confirm('#{msg.confirmTicketRemovalFromCart}')) {return false;}"
+                    immediate="true">
+                    <f:setPropertyActionListener value="#{ticket}"
+                        target="#{purchaseController.currentTicket}" />
+                    <h:graphicImage value="/images/delete.png"
+                        style="width:16; height:16; border-style: none;"
+                        alt="#{msg.remove}" title="#{msg.remove}" />
+                </a4j:commandLink>
             </rich:column>
 
         </rich:dataTable>

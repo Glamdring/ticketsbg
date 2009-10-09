@@ -28,25 +28,12 @@ public class PurchaseController extends BaseController {
     private List<Ticket> tickets = new ArrayList<Ticket>();
     private Step currentStep;
 
+    /** Holding the current ticket when operation with the cart table */
+    private Ticket currentTicket;
+
     @Autowired
     private TicketService service;
 
-    public Step getCurrentStep() {
-        return currentStep;
-    }
-    public void setCurrentStep(Step currentStep) {
-        this.currentStep = currentStep;
-    }
-    public List<Ticket> getTickets() {
-        return tickets;
-    }
-    public void setTickets(List<Ticket> tickets) {
-        this.tickets = tickets;
-    }
-
-    public void addTicket(Ticket ticket) {
-        tickets.add(ticket);
-    }
 
     public void setPaymentMethod(PaymentMethod paymentMethod) {
         for (Ticket ticket : tickets) {
@@ -123,5 +110,33 @@ public class PurchaseController extends BaseController {
         }
 
         return sum;
+    }
+
+    public void removeTicket() {
+        tickets.remove(currentTicket);
+    }
+
+    public Step getCurrentStep() {
+        return currentStep;
+    }
+    public void setCurrentStep(Step currentStep) {
+        this.currentStep = currentStep;
+    }
+    public List<Ticket> getTickets() {
+        return tickets;
+    }
+    public void setTickets(List<Ticket> tickets) {
+        this.tickets = tickets;
+    }
+
+    public void addTicket(Ticket ticket) {
+        tickets.add(ticket);
+    }
+
+    public Ticket getCurrentTicket() {
+        return currentTicket;
+    }
+    public void setCurrentTicket(Ticket currentTicket) {
+        this.currentTicket = currentTicket;
     }
 }

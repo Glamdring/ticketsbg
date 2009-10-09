@@ -21,10 +21,10 @@
                     </ui:include>
 
                     <h:panelGrid columns="2">
-                        <h:outputLabel value="#{msg.ticketCode}" for="ticketCode" />
+                        <h:outputLabel value="#{msg.ticketCode}: " for="ticketCode" />
                         <h:inputText value="#{alterTicketController.ticketCode}" size="40" id="ticketCode"/>
 
-                        <h:outputLabel value="#{msg.email}" for="email" />
+                        <h:outputLabel value="#{msg.email}: " for="email" />
                         <h:inputText value="#{alterTicketController.email}" size="40" id="email"/>
 
                         <h:outputText />
@@ -40,7 +40,7 @@
                                 <ui:param name="alterTicketId" value="#{alterTicketController.ticket.id}" />
                             </ui:include>
                             <h:inputHidden id="alterTicketIdField" binding="#{searchController.alterTicket}"
-                                value="true" />
+                                value="#{alterTicketController.ticket.id}" />
                         </h:panelGroup>
                     </a4j:outputPanel>
 

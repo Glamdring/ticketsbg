@@ -25,13 +25,13 @@
                             <div align="center"><h:panelGrid columns="2" width="400px"
                                 style="text-align: center;">
                                 <a4j:commandLink action="#{paymentController.buy}"
-                                    oncomplete="document.getElementById('ePayForm').submit();">
+                                    oncomplete="if(#{facesContext.maximumSeverity==null}) {document.getElementById('ePayForm').submit();}">
                                     <h:graphicImage url="/images/epay.jpg" style="border: 0px;"
                                         height="43" />
                                 </a4j:commandLink>
 
                                 <a4j:commandLink actionListener="#{paymentController.buy}"
-                                    oncomplete="document.getElementById('creditCardForm').submit();">
+                                    oncomplete="if(#{facesContext.maximumSeverity==null}) {document.getElementById('creditCardForm').submit();}">
                                     <h:graphicImage url="/images/creditCards.gif"
                                         style="border: 0px;" height="45" />
                                 </a4j:commandLink>
