@@ -39,13 +39,16 @@
                         </rich:panel>
                     </rich:panel>
                 </a4j:form>
-                <form action="https://devep2.datamax.bg/ep2/epay2_demo/"
-                    id="ePayForm"><input type="hidden" name="PAGE"
-                    value="paylogin" /> <input type="hidden" name="ENCODED"
-                    value="[ENCODED]" /> <input type="hidden" name="CHECKSUM"
-                    value="[CHECKSUM]" /> <input type="hidden" name="URL_OK"
-                    value="http://..." /> <input type="hidden" name="URL_CANCEL"
-                    value="http://..." /></form>
+                <h:panelGroup id="paymentForms">
+                    <form action="https://devep2.datamax.bg/ep2/epay2_demo/"
+                        id="ePayForm">
+                        <input type="hidden" name="PAGE" value="paylogin" />
+                        <input type="hidden" name="ENCODED" value="#{paymentController.encoded}" />
+                        <input type="hidden" name="CHECKSUM" value="#{paymentController.checksum}" />
+                        <input type="hidden" name="URL_OK" value="http://tickets.bg/payment?outcome=OK" />
+                        <input type="hidden" name="URL_CANCEL" value="http://tickets.bg/payment?outcome=Cancel" />
+                    </form>
+                </h:panelGroup>
             </h:panelGroup>
         </f:view>
     </ui:define>

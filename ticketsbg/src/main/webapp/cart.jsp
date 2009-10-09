@@ -111,9 +111,9 @@
 
             <rich:column>
                 <a4j:commandLink action="#{purchaseController.removeTicket}"
-                    title="#{msg.remove}" reRender="cartTable"
+                    title="#{msg.remove}" reRender="cartTable,paymentForms"
                     onclick="if (!confirm('#{msg.confirmTicketRemovalFromCart}')) {return false;}"
-                    immediate="true">
+                    immediate="true" actionListener="#{paymentController.refreshPaymentData}">
                     <f:setPropertyActionListener value="#{ticket}"
                         target="#{purchaseController.currentTicket}" />
                     <h:graphicImage value="/images/delete.png"
