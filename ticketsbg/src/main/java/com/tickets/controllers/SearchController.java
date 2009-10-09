@@ -432,6 +432,10 @@ public class SearchController extends BaseController {
     }
 
     public boolean validateReturnDate(Date date) {
+        if (!travelType.equals(TWO_WAY)) {
+            return true;
+        }
+
         if (date == null)
             return true;
 

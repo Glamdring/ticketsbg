@@ -20,8 +20,6 @@
 .isle {
     width: 20px;
     height: 35px;
-    padding: 0px;
-    margin: 0px;
     text-align: center;
     vertical-align: middle;
 }
@@ -34,6 +32,14 @@
 
 .separatorRow {
     width: 38px;
+    height: 30px;
+    padding: 0px;
+    margin: 0px;
+    background-color: #C8DCF9;
+}
+
+.separatorRowIsle {
+    width: 20px;
     height: 30px;
     padding: 0px;
     margin: 0px;
@@ -95,7 +101,7 @@
                             for="selectedSeats#{modifier}"
                             rendered="#{row.middleSeat != null and !row.separator}" />
                         <h:panelGroup rendered="#{row.separator}" layout="block"
-                            styleClass="separatorRow">&#160;</h:panelGroup>
+                            styleClass="separatorRowIsle">&#160;</h:panelGroup>
                     </rich:column>
 
                     <rich:column styleClass="seat">

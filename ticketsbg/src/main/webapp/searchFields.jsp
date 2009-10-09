@@ -16,11 +16,11 @@
     padding-right: 5px;
     width: 130px;
     font-weight: bold;
+    vertical-align: middle;
 }
 
 .secondColumn {
-    text-align: right;
-    font-weight: bold;
+    vertical-align: middle;
 }
 
 .disabled-cell {
@@ -129,23 +129,24 @@
                         </h:selectOneMenu>
                         <h:outputText value=":" />
                     </h:panelGroup>
-                    <h:panelGroup>
+                    <h:panelGrid columns="5" cellpadding="0" cellspacing="0" style="font-weight: bold;">
                         <h:outputLabel value="#{msg.fromHour}&#160;" for="fromHour"
-                            style="float: left;" />
+                             />
                         <rich:comboBox suggestionValues="#{searchController.hoursFrom}"
                             value="#{searchController.fromHour}" id="fromHour" width="50"
-                            style="float:left; margin-right: 5px;">
+                            style="margin-right: 5px;">
                             <f:convertNumber minIntegerDigits="2" />
                         </rich:comboBox>
 
                         <h:outputLabel value="#{msg.toHour}&#160;" for="toHour"
-                            style="float:left;" />
+                             />
                         <rich:comboBox suggestionValues="#{searchController.hoursTo}"
                             value="#{searchController.toHour}" id="toHour" width="50"
-                            style="float:left;">
+                            style="margin-right: 5px;">
                             <f:convertNumber minIntegerDigits="2" />
-                        </rich:comboBox> #{msg.hourAbbr}
-                    </h:panelGroup>
+                        </rich:comboBox>
+                        <h:outputText value="#{msg.hourAbbr}"/>
+                    </h:panelGrid>
                 </h:panelGrid>
 
             </h:panelGroup>
@@ -170,23 +171,22 @@
                             </h:selectOneMenu>
                             <h:outputText value=":" />
                         </h:panelGroup>
-                        <h:panelGroup>
-                            <h:outputLabel value="#{msg.fromHour}&#160;" for="returnFromHour"
-                                style="float:left;" />
+                        <h:panelGrid columns="5" cellpadding="0" cellspacing="0"
+                            style="font-weight: bold;">
+                            <h:outputLabel value="#{msg.fromHour}&#160;" for="returnFromHour" />
                             <rich:comboBox suggestionValues="#{searchController.hoursFrom}"
                                 value="#{searchController.returnFromHour}" id="returnFromHour"
-                                width="50" style="float:left; margin-right: 5px;">
+                                width="50" style="margin-right: 5px;">
                                 <f:convertNumber minIntegerDigits="2" />
                             </rich:comboBox>
 
-                            <h:outputLabel value="#{msg.toHour}&#160;" for="returnToHour"
-                                style="float:left;" />
+                            <h:outputLabel value="#{msg.toHour}&#160;" for="returnToHour" />
                             <rich:comboBox suggestionValues="#{searchController.hoursTo}"
                                 value="#{searchController.returnToHour}" id="returnToHour"
-                                width="50" style="float:left;">
+                                width="50" style="margin-right: 5px;">
                                 <f:convertNumber minIntegerDigits="2" />
                             </rich:comboBox> #{msg.hourAbbr}
-                        </h:panelGroup>
+                        </h:panelGrid>
                     </h:panelGrid>
                 </h:panelGroup>
             </a4j:outputPanel>
