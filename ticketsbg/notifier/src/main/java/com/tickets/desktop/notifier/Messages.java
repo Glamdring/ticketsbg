@@ -1,4 +1,4 @@
-package com.tickets.constants;
+package com.tickets.desktop.notifier;
 
 import java.io.Serializable;
 import java.text.MessageFormat;
@@ -45,7 +45,7 @@ public class Messages implements Serializable {
     }
 
     private static void load(Locale locale) {
-        bundles.put(locale, ResourceBundle.getBundle("com.tickets.constants.messages", locale,
+        bundles.put(locale, ResourceBundle.getBundle("com.tickets.desktop.notifier.messages", locale,
                 getCurrentClassLoader(locale)));
     }
 }
