@@ -14,7 +14,14 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.net.ProxySelector;
+import java.net.URI;
+import java.util.List;
 import java.util.Properties;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -22,14 +29,22 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.protocol.Protocol;
+
 public class TicketsNotifier {
 
     protected static final String FIRM_KEY_SETTING = "firm.key";
     protected static final String CONFIG_FILE_NAME = "ticketsNotifierSettings.config";
+    private static final long POLL_INTERVAL = 3 * 60 * 1000;
+
+    private HttpClient httpClient;
 
     private Properties settings = new Properties();
 
     private String firmKey;
+
+    private Timer poller;
 
     public static void main(String[] args) throws IOException {
         new TicketsNotifier();
@@ -39,8 +54,12 @@ public class TicketsNotifier {
         try {
             loadSettings();
         } catch (IOException ex) {
-            //ignore the case when there is no config file
+            // ignore the case when there is no config file
         }
+
+        poller = new Timer();
+
+        poller.schedule(new PollerTask(getHttpClient()), 0, POLL_INTERVAL);
         firmKey = settings.getProperty(FIRM_KEY_SETTING);
         final PopupMenu popUp = new PopupMenu();
         final TrayIcon trayIcon = new TrayIcon(createImage("images/icon.png"));
@@ -105,6 +124,57 @@ public class TicketsNotifier {
         } finally {
             configFileStream.close();
         }
+    }
+
+
+    private HttpClient getHttpClient() {
+        if (httpClient == null) {
+            Protocol myhttps = new Protocol("https",
+                    new EasySSLProtocolSocketFactory(), 443);
+
+            httpClient = new HttpClient();
+
+            String hostname = "tickets.bg";
+            httpClient.getHostConfiguration().setHost(hostname, 443, myhttps);
+
+            // Below is the proxy identification
+            try {
+                String proxyHost = System.getProperty("https.proxyHost");
+                int proxyPort = 0;
+                try {
+                    proxyPort = Integer.parseInt(System
+                            .getProperty("https.proxyPort"));
+                } catch (Exception ex) {
+                    //
+                }
+
+                System.setProperty("java.net.useSystemProxies", "true");
+
+                ProxySelector ps = ProxySelector.getDefault();
+                List<Proxy> proxyList = ps.select(new URI("https://tickets.bg/updates"));
+                Proxy proxy = proxyList.get(0);
+                if (proxy != null) {
+                    InetSocketAddress addr = ((InetSocketAddress) proxy
+                            .address());
+                    if (addr != null) {
+                        proxyHost = addr.getHostName();
+                        proxyPort = addr.getPort();
+                    }
+                }
+
+                boolean useProxy = proxyHost != null && proxyHost.length() > 0;
+
+                if (useProxy) {
+                    httpClient.getHostConfiguration().setProxy(proxyHost,
+                            proxyPort);
+                }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        return httpClient;
     }
 
 }
@@ -177,5 +247,27 @@ class SettingsPanel extends JDialog {
         } finally {
             configFileStream.close();
         }
+    }
+}
+
+class PollerTask extends TimerTask {
+
+    //TODO listeners
+
+    private HttpClient client;
+    public PollerTask(HttpClient client) {
+        this.client = client;
+    }
+
+    @Override
+    public void run() {
+    }
+
+    public HttpClient getClient() {
+        return client;
+    }
+
+    public void setClient(HttpClient client) {
+        this.client = client;
     }
 }
