@@ -66,7 +66,7 @@ public interface TicketService extends Service<Ticket> {
      * @param tickets
      *
      */
-    void finalizePurchase(List<Ticket> tickets);
+    void finalizePurchase(List<Ticket> tickets, String paymentCode);
 
     /**
      * Lists all tickets purchased by the specified user

@@ -6,6 +6,12 @@ import java.util.Locale;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.mail.Email;
+import org.apache.commons.mail.HtmlEmail;
+import org.apache.commons.mail.SimpleEmail;
+
+import com.tickets.constants.Settings;
+
 public class GeneralUtils {
 
     public static Calendar getPreviousDay() {
@@ -46,5 +52,25 @@ public class GeneralUtils {
         }
 
         return subdomain;
+    }
+
+    public static HtmlEmail getPreconfiguredMail() {
+        return (HtmlEmail) getPreconfiguredMail(true);
+    }
+
+    public static Email getPreconfiguredMail(boolean html) {
+        Email se = null;
+        if (html) {
+            se = new HtmlEmail();
+        } else {
+            se = new SimpleEmail();
+        }
+        se.setHostName(Settings.getValue("smtp.host"));
+        String username = Settings.getValue("smtp.user");
+        if (username.length() > 0)
+            se.setAuthentication(username, Settings.getValue("smtp.password"));
+
+        se.setCharset("utf-8");
+        return se;
     }
 }

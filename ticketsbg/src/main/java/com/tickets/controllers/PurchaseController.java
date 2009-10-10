@@ -40,6 +40,7 @@ public class PurchaseController extends BaseController {
         for (Ticket ticket : tickets) {
             ticket.setPaymentMethod(paymentMethod);
             ticket.setPaymentInProcess(true);
+            ticketService.save(ticket);
         }
     }
 

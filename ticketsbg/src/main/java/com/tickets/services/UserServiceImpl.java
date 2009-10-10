@@ -8,8 +8,8 @@ import java.util.List;
 
 import javax.crypto.Cipher;
 
+import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
-import org.apache.commons.mail.HtmlEmail;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +21,7 @@ import com.tickets.exceptions.UserException;
 import com.tickets.model.Firm;
 import com.tickets.model.User;
 import com.tickets.utils.CertificateManager;
+import com.tickets.utils.GeneralUtils;
 import com.tickets.utils.base64.Base64Decoder;
 import com.tickets.utils.base64.Base64Encoder;
 
@@ -107,11 +108,11 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
         user.setRegisteredTimestamp(System.currentTimeMillis());
 
         try {
-            HtmlEmail email = getPreconfiguredMail();
+            Email email = GeneralUtils.getPreconfiguredMail(false);
             email.addTo(user.getEmail());
             email.setFrom(Settings.getValue("confirmation.email.sender"));
             email.setSubject(Messages.getString("confirmation.email.subject"));
-            email.setHtmlMsg(Messages.getString("confirmation.email.content",
+            email.setMsg(Messages.getString("confirmation.email.content",
                     user.getName(), user.getUsername(), user
                             .getRepeatPassword(), Settings.getValue("base.url")
                             + "/users.do?method=activate&code="
@@ -177,12 +178,12 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
             user.setTemporaryPassword(saltAndHashPassword(tempPassword));
 
             try {
-                HtmlEmail mail = getPreconfiguredMail();
+                Email mail = GeneralUtils.getPreconfiguredMail(false);
                 mail.setFrom(Settings.getValue("temp.password.email.sender"));
                 mail.addTo(email);
                 mail.setSubject(Messages
                         .getString("temp.password.email.subject"));
-                mail.setHtmlMsg(Messages.getString(
+                mail.setMsg(Messages.getString(
                         "temp.password.email.content", user.getName(),
                         tempPassword));
                 mail.send();
@@ -200,18 +201,6 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
         user.setPassword(saltAndHashPassword(password));
         user.setTemporaryPassword("");
         getDao().persist(user);
-    }
-
-    private HtmlEmail getPreconfiguredMail() {
-        HtmlEmail se = new HtmlEmail();
-        se.setHostName(Settings.getValue("smtp.host"));
-        String username = Settings.getValue("smtp.user");
-        if (username.length() > 0)
-            se.setAuthentication(username, Settings.getValue("smtp.password"));
-
-        se.setCharset("utf-8");
-        return se;
-
     }
 
     private String generateTemporaryPassword() {

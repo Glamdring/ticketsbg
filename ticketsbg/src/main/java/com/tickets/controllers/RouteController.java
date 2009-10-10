@@ -246,6 +246,7 @@ public class RouteController extends BaseController implements Serializable {
                 }
             } else {
                 price = stopService.getPrice(rowKey, route);
+                //cloning
                 priceValue = new BigDecimal(price.getPrice().toString());
                 twoWayPriceValue = new BigDecimal(price.getTwoWayPrice()
                         .toString());

@@ -62,7 +62,7 @@ public class PaymentServlet extends HttpServlet {
 
                         if (status.equals("PAID")) {
                             try {
-                                if (service.confirmPayment(orderId)) {
+                                if (service.confirmPayment(orderId, bcode)) {
                                     infoData += "OK\n";
                                 } else {
                                     infoData += "NO\n";

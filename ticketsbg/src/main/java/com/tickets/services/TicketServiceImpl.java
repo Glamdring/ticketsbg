@@ -1,15 +1,20 @@
 package com.tickets.services;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.HtmlEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tickets.constants.Constants;
+import com.tickets.constants.Messages;
 import com.tickets.constants.Settings;
 import com.tickets.controllers.handlers.SeatHandler;
 import com.tickets.exceptions.TicketAlterationException;
@@ -331,8 +336,20 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
 
     @Override
     public void finalizePurchase(List<Ticket> tickets, User user) {
+        doFinalizePurchase(tickets, user, null);
+    }
+
+    @Override
+    public void finalizePurchase(List<Ticket> tickets, String paymentCode) {
+        doFinalizePurchase(tickets, null, paymentCode);
+    }
+
+    private void doFinalizePurchase(List<Ticket> tickets, User user, String paymentCode) {
         for (Ticket ticket : tickets) {
             ticket.setCommitted(true);
+            ticket.setPaymentInProcess(false);
+            ticket.setPaymentCode(paymentCode);
+
             if (ticket.getPaymentMethod() == null) {
                 ticket.setPaymentMethod(PaymentMethod.CASH_DESK);
             }
@@ -341,6 +358,65 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
             }
             ticket = save(ticket);
         }
+
+        sendPurchaseEmail(tickets);
+    }
+
+    private void sendPurchaseEmail(List<Ticket> tickets) {
+         try {
+             String customerEmail = tickets.get(0).getCustomerInformation().getEmail();
+             String customerName = tickets.get(0).getCustomerInformation().getName();
+
+             HtmlEmail email = GeneralUtils.getPreconfiguredMail();
+             email.addTo(customerEmail);
+
+             email.setFrom(Settings.getValue("purchase.email.sender"));
+             email.setSubject(Messages.getString("purchase.email.subject"));
+
+             SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm");
+
+             String ticketsTable = "";
+             for (Ticket ticket : tickets) {
+                 String returnTime = "";
+                 if (ticket.isTwoWay()) {
+                     returnTime = sdf.format(ticket.getReturnRun().getTime().getTime());
+                 }
+                 String seats = "";
+                 String delim = "";
+                 for (PassengerDetails pd : ticket.getPassengerDetails()) {
+                     seats += delim + pd.getSeat();
+                     delim = ", ";
+                 }
+                 seats += " / ";
+                 delim = "";
+                 for (PassengerDetails pd : ticket.getPassengerDetails()) {
+                     seats += delim + pd.getReturnSeat();
+                     delim = ", ";
+                 }
+
+                 DecimalFormat df = new DecimalFormat();
+                 df.setMaximumFractionDigits(2);
+                 df.setMinimumFractionDigits(2);
+
+                 ticketsTable += "<tr>";
+                 ticketsTable += "<td>" + ticket.getTicketCode() + "</td>";
+                 ticketsTable += "<td>" + ticket.getStartStop() + " - " + ticket.getEndStop() + "</td>";
+                 ticketsTable += "<td>" + sdf.format(ticket.getRun().getTime().getTime()) + "</td>";
+                 ticketsTable += "<td>" + returnTime + "</td>";
+                 ticketsTable += "<td>" + seats + "</td>";
+                 ticketsTable += "<td>" + ticket.getRun().getRoute().getFirm().getName() + "</td>";
+                 ticketsTable += "<td>" + df.format(ticket.getTotalPrice()) + "</td>";
+                 ticketsTable += "</tr>";
+             }
+
+             email.setHtmlMsg(Messages.getString("information.email.content", customerName, ticketsTable));
+
+             email.send();
+
+         } catch (EmailException eex) {
+             log.error("Mail problem", eex);
+         }
+
     }
 
     @SuppressWarnings("unchecked")
@@ -450,11 +526,6 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
         }
 
         return result;
-    }
-
-    @Override
-    public void finalizePurchase(List<Ticket> tickets) {
-        finalizePurchase(tickets, null);
     }
 }
 

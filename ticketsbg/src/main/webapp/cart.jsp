@@ -53,8 +53,7 @@
             </rich:column>
             <rich:column>
                 <f:facet name="header">
-                    <h:outputText
-                        value="#{ticket.passengersCount > 1 ? msg.seats : msg.seat}" />
+                    <h:outputText value="#{msg.seat}" />
                 </f:facet>
                 <a4j:repeat value="#{ticket.passengerDetails}" var="detail"
                     rowKeyVar="rowKey">

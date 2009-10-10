@@ -1,6 +1,7 @@
 package com.tickets.controllers.converters;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -32,8 +33,10 @@ public class CurrencyConverter implements Converter {
         if (value == null) {
             value = BigDecimal.ZERO;
         }
-
-        return value.toString() + " лв.";
+        DecimalFormat df = new DecimalFormat();
+        df.setMaximumFractionDigits(2);
+        df.setMinimumFractionDigits(2);
+        return df.format(value) + " лв.";
     }
 
     private String stripCurrencyInformation(String value) {

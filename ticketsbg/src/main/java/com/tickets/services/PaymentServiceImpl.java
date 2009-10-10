@@ -1,6 +1,7 @@
 package com.tickets.services;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,7 +31,11 @@ public class PaymentServiceImpl extends BaseService implements PaymentService {
             throws PaymentException {
         String secret = Settings.getValue("epay.secret");
         String min = Settings.getValue("epay.min");
-        String sum = getTotalPrice(tickets).toString();
+
+        DecimalFormat df = new DecimalFormat();
+        df.setMinimumFractionDigits(2);
+        df.setMaximumFractionDigits(2);
+        String sum = df.format(getTotalPrice(tickets));
         String expiryDate = new SimpleDateFormat("dd.MM.yyyy")
                 .format(GeneralUtils.createEmptyCalendar().getTime());
 
@@ -94,7 +99,7 @@ public class PaymentServiceImpl extends BaseService implements PaymentService {
     }
 
     @Override
-    public boolean confirmPayment(String orderId) throws PaymentException {
+    public boolean confirmPayment(String orderId, String paymentCode) throws PaymentException {
         try {
             orderId = stripDummyDigits(orderId);
             String[] ticketIds = orderId.split("-");
@@ -102,13 +107,14 @@ public class PaymentServiceImpl extends BaseService implements PaymentService {
             List<Ticket> tickets = new ArrayList<Ticket>();
             for (String ticketId : ticketIds) {
                 Ticket ticket = ticketService.get(Ticket.class, Integer.parseInt(ticketId));
+                // A ticket from the order is not found
                 if (ticket == null) {
                     return false;
                 }
                 tickets.add(ticket);
             }
 
-            ticketService.finalizePurchase(tickets);
+            ticketService.finalizePurchase(tickets, paymentCode);
 
             return true;
         } catch (Exception ex) {
