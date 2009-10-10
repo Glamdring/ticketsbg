@@ -9,10 +9,8 @@ package com.tickets.model;
  *
  */
 public enum PaymentMethod {
-    MasterCard,
-    VISA,
-    ePay,
-    eBG,
-    PayPal,
+    E_PAY,
+    CREDIT_CARD,
+    PAY_PAL,
     CASH_DESK
 }

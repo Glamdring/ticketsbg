@@ -116,4 +116,19 @@ public class PaymentServiceImpl extends BaseService implements PaymentService {
         }
     }
 
+    @Override
+    public BigDecimal getServiceFee(BigDecimal totalPrice) {
+        BigDecimal fee = totalPrice.multiply(
+                new BigDecimal(Settings.getValue("credit.card.service.fee"))
+                        .divide(new BigDecimal("100")));
+
+        BigDecimal minFee = new BigDecimal(Settings.getValue("credit.card.minimum.fee"));
+
+        if (minFee.compareTo(fee) > 0) {
+            fee = minFee;
+        }
+
+        return fee;
+    }
+
 }

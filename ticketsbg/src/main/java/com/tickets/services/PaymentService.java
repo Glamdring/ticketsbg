@@ -15,4 +15,6 @@ public interface PaymentService extends Service {
 
     boolean confirmPayment(String orderId) throws PaymentException;
 
+    BigDecimal getServiceFee(BigDecimal totalPrice);
+
 }

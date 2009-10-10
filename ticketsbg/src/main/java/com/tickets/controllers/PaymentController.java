@@ -1,5 +1,6 @@
 package com.tickets.controllers;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -49,20 +50,24 @@ public class PaymentController extends BaseController {
         refreshPaymentData(null);
     }
 
-    public void buy() {
+    public void pay() {
         try {
             PaymentMethod paymentMethod = PaymentMethod.valueOf(selectedPaymentMethod);
             purchaseController.setPaymentMethod(paymentMethod);
 
             // Update the customer information for the purchase
             personalInformationController.updateCustomer();
-            // TODO submit the payment. The "buy" method should be called as an
-            // action listener, before a form is submitted to the payment
-            // gateway.
+
         } catch (Exception ex) {
-            //TODO request a valid payment method
+            addError("selectPaymentMethod");
         }
 
+        // After this method completes, if no errors exist, the
+        // payment form is submitted to the payment provider
+    }
+
+    public BigDecimal getServiceFee() {
+        return paymentService.getServiceFee(purchaseController.getTotalPrice());
     }
 
     public void refreshPaymentData(@SuppressWarnings("unused") ActionEvent evt) {

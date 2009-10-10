@@ -15,51 +15,100 @@
                 <a4j:form id="paymentForm">
                     <rich:panel header="#{msg.payment}"
                         headerClass="rich-panel-header-main">
-                        <h:messages />
+                        <rich:messages globalOnly="true" />
 
                         <ui:include src="personalInformation.jsp" />
 
                         <ui:include src="cart.jsp" />
 
-                        <rich:panel header="#{msg.payment}">
-                            <div align="center"><h:panelGrid columns="2" width="400px"
-                                style="text-align: center;">
-                                <a4j:commandLink action="#{paymentController.buy}"
-                                    oncomplete="if(#{facesContext.maximumSeverity==null}) {document.getElementById('ePayForm').submit();}">
+                        <style type="text/css">
+.imageRow {
+    height: 50px;
+    vertical-align: top;
+}
+
+.optionRow {
+    hieght: 20px;
+}
+</style>
+                        <rich:panel header="#{msg.payment}" style="vertical-align: top;">
+                            <div align="center">
+
+                                <t:selectOneRadio layout="spread" onchange="updatePaymentGatewayPage(this.value);"
+                                    id="selectedPaymentMethod" required="true"
+                                    value="#{paymentController.selectedPaymentMethod}">
+                                    <f:selectItem itemValue="E_PAY" itemLabel="" />
+                                    <f:selectItem itemValue="CREDIT_CARD" itemLabel="" />
+                                </t:selectOneRadio>
+                             <h:panelGrid columns="2" rowClasses="imageRow,optionRow"
+                                style="text-align: center;" width="500px">
+
+                                <h:outputLabel id="ePayLabel">
                                     <h:graphicImage url="/images/epay.jpg" style="border: 0px;"
                                         height="43" />
-                                </a4j:commandLink>
+                                </h:outputLabel>
 
-                                <a4j:commandLink actionListener="#{paymentController.buy}"
-                                    oncomplete="if(#{facesContext.maximumSeverity==null}) {document.getElementById('creditCardForm').submit();}">
-                                    <h:graphicImage url="/images/creditCards.gif"
-                                        style="border: 0px;" height="45" />
-                                </a4j:commandLink>
-                            </h:panelGrid></div>
+                                <h:panelGroup>
+                                    <h:outputLabel id="ccLabel">
+                                        <h:graphicImage url="/images/creditCards.gif"
+                                            style="border: 0px; margin-top: -2px" height="45" />
+                                        <br />
+                                        <h:outputText value="#{msg.serviceFee}: "
+                                            style="font-size: 10px;" />
+                                        <h:outputText value="#{paymentController.serviceFee}"
+                                            style="color: red; font-size: 10px;">
+                                            <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                                            <f:converter binding="#{currencyConverter}"
+                                                converterId="currencyConverter" />
+                                        </h:outputText>
+                                    </h:outputLabel>
+                                </h:panelGroup>
+
+                                <t:radio for="selectedPaymentMethod" index="0" />
+                                <t:radio for="selectedPaymentMethod" index="1" />
+
+                            </h:panelGrid>
+
+                            <a4j:commandButton action="#{paymentController.pay}"
+                                value="#{msg.pay}" style="font-size: 16px;"
+                                oncomplete="if(#{facesContext.maximumSeverity==null}) {document.getElementById('paymentGatewayForm').submit();}" />
+
+                            </div>
                         </rich:panel>
                     </rich:panel>
+
+                    <script type="text/javascript">
+                        function updatePaymentGatewayPage(method) {
+                            var page = "";
+                            if (method == "E_PAY") {
+                                page = "paylogin";
+                            }
+                            if (method == "CREDIT_CARD") {
+                                page = "credit_paydirect";
+                            }
+                            document.getElementById("PAGE").value = page;
+                        }
+
+                        window.onload=function() {
+                            #{rich:element('ePayLabel')}.setAttribute("for", "paymentForm:selectedPaymentMethod:0");
+                            #{rich:element('ccLabel')}.setAttribute("for", "paymentForm:selectedPaymentMethod:1");
+
+                            #{rich:element('ePayLabel')}.setAttribute("htmlFor", "paymentForm:selectedPaymentMethod:0");
+                            #{rich:element('ccLabel')}.setAttribute("htmlFor", "paymentForm:selectedPaymentMethod:1");
+                        }
+                    </script>
                 </a4j:form>
-                <h:panelGroup id="paymentForms">
+                <h:panelGroup id="paymentGatewayFormWrapper">
                     <form action="https://devep2.datamax.bg/ep2/epay2_demo/"
-                        id="ePayForm">
-                        <input type="hidden" name="PAGE" value="paylogin" />
-                        <input type="hidden" name="LANG" value="bg" />
-                        <input type="hidden" name="ENCODED" value="#{paymentController.encoded}" />
-                        <input type="hidden" name="CHECKSUM" value="#{paymentController.checksum}" />
-                        <input type="hidden" name="URL_OK" value="http://tickets.bg/paymentSuccess.jsp" />
-                        <input type="hidden" name="URL_CANCEL" value="http://tickets.bg/paymentCancelled.jsp" />
-                    </form>
-
-                    <form action="https://devep2.datamax.bg/ep2/epay2_demo/"
-                        id="creditCardForm">
-                        <input type="hidden" name="PAGE" value="credit_paydirect" />
-                        <input type="hidden" name="LANG" value="bg" />
-                        <input type="hidden" name="ENCODED" value="#{paymentController.encoded}" />
-                        <input type="hidden" name="CHECKSUM" value="#{paymentController.checksum}" />
-                        <input type="hidden" name="URL_OK" value="http://tickets.bg/paymentSuccess.jsp" />
-                        <input type="hidden" name="URL_CANCEL" value="http://tickets.bg/paymentCancelled.jsp" />
-                    </form>
-
+                        id="paymentGatewayForm"><input type="hidden" id="PAGE" name="PAGE"
+                        value="paylogin" /> <input type="hidden" name="LANG" value="bg" />
+                    <input type="hidden" name="ENCODED"
+                        value="#{paymentController.encoded}" /> <input type="hidden"
+                        name="CHECKSUM" value="#{paymentController.checksum}" /> <input
+                        type="hidden" name="URL_OK"
+                        value="http://tickets.bg/paymentSuccess.jsp" /> <input
+                        type="hidden" name="URL_CANCEL"
+                        value="http://tickets.bg/paymentCancelled.jsp" /></form>
                 </h:panelGroup>
             </h:panelGroup>
         </f:view>

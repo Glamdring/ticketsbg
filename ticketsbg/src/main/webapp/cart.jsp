@@ -11,7 +11,7 @@
 
     <rich:panel header="#{msg.tickets}">
         <rich:messages globalOnly="true" />
-        <rich:dataTable style="width: 100%;" id="cartTable"
+        <rich:dataTable style="width: 740px;" id="cartTable"
             value="#{purchaseController.tickets}" var="ticket">
 
             <rich:column>
@@ -111,7 +111,7 @@
 
             <rich:column>
                 <a4j:commandLink action="#{purchaseController.removeTicket}"
-                    title="#{msg.remove}" reRender="cartTable,paymentForms"
+                    title="#{msg.remove}" reRender="cartTable,paymentGatewayFormWrapper"
                     onclick="if (!confirm('#{msg.confirmTicketRemovalFromCart}')) {return false;}"
                     immediate="true" actionListener="#{paymentController.refreshPaymentData}">
                     <f:setPropertyActionListener value="#{ticket}"
