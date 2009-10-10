@@ -29,7 +29,7 @@ public interface Dao {
      * @param <T>
      * @param clazz
      * @param id
-     * @return the entity, if found.
+     * @return the entity, if found. Null otherwise.
      */
     <T> T getById(Class<T> clazz, Serializable id);
 

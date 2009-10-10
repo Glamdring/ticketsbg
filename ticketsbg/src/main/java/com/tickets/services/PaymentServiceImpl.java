@@ -3,8 +3,10 @@ package com.tickets.services;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tickets.constants.Settings;
@@ -19,6 +21,9 @@ import com.tickets.utils.base64.Base64Encoder;
 public class PaymentServiceImpl extends BaseService implements PaymentService {
 
     private static final String E_PAY_DATA_PATTERN = "MIN={0}\nINVOICE={1}\nAMOUNT={2}\nEXP_TIME={3}\nDESCR={4}";
+
+    @Autowired
+    private TicketService ticketService;
 
     @Override
     public PaymentData getPaymentData(List<Ticket> tickets)
@@ -61,8 +66,8 @@ public class PaymentServiceImpl extends BaseService implements PaymentService {
     }
 
     private String addDummyDigits(String orderId) {
-        int prefix = (int) (Math.random() * 88 + 10);
-        int suffix = (int) (Math.random() * 88 + 10);
+        int prefix = (int) (Math.random() * 89 + 10);
+        int suffix = (int) (Math.random() * 89 + 10);
 
         return prefix + orderId + suffix;
     }
@@ -86,6 +91,29 @@ public class PaymentServiceImpl extends BaseService implements PaymentService {
         }
 
         return sum;
+    }
+
+    @Override
+    public boolean confirmPayment(String orderId) throws PaymentException {
+        try {
+            orderId = stripDummyDigits(orderId);
+            String[] ticketIds = orderId.split("-");
+
+            List<Ticket> tickets = new ArrayList<Ticket>();
+            for (String ticketId : ticketIds) {
+                Ticket ticket = ticketService.get(Ticket.class, Integer.parseInt(ticketId));
+                if (ticket == null) {
+                    return false;
+                }
+                tickets.add(ticket);
+            }
+
+            ticketService.finalizePurchase(tickets);
+
+            return true;
+        } catch (Exception ex) {
+            throw new PaymentException(ex);
+        }
     }
 
 }

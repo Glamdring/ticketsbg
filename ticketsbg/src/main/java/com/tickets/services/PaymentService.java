@@ -13,4 +13,6 @@ public interface PaymentService extends Service {
 
     BigDecimal getTotalPrice(List<Ticket> tickets);
 
+    boolean confirmPayment(String orderId) throws PaymentException;
+
 }

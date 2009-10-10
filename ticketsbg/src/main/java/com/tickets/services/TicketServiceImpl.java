@@ -288,20 +288,13 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
 
     String generateTicketCode(Run run) {
         String code = "";
-        try {
-            code += run.getRoute().getFirm().getFirmId();
-        } catch (Exception ex) {
-            // Ignore - only occurs in test environment
-        }
+        code += run.getRoute().getFirm().getFirmId();
+
         code += run.getRunId();
-        code += ("" + run.getTime().getTimeInMillis()).substring(8); // after
-        // the
-        // 7th
-        // digit
-        code += ((int) (Math.random() * 8999 + 100000));
+        code += ((int) (Math.random() * 899999 + 100000));
 
         if (code.length() % 2 == 1) {
-            code += "" + 3;
+            code += "3";
         }
 
         StringBuilder sb = new StringBuilder(code);
@@ -457,6 +450,11 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
         }
 
         return result;
+    }
+
+    @Override
+    public void finalizePurchase(List<Ticket> tickets) {
+        finalizePurchase(tickets, null);
     }
 }
 

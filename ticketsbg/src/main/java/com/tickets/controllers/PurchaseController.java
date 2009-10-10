@@ -30,7 +30,7 @@ public class PurchaseController extends BaseController {
     private Ticket currentTicket;
 
     @Autowired
-    private TicketService ticektService;
+    private TicketService ticketService;
 
     @Autowired
     private PaymentService paymentService;
@@ -46,6 +46,8 @@ public class PurchaseController extends BaseController {
     public void setUser(User user) {
         for (Ticket ticket : tickets) {
             ticket.setUser(user);
+            // Not persisting here, because setCustomerInformation
+            // is always called after this method
         }
 
     }
@@ -53,23 +55,28 @@ public class PurchaseController extends BaseController {
     public void setCustomerInformation(Customer customer) {
         for (Ticket ticket : tickets) {
             ticket.setCustomerInformation(customer);
+            ticketService.save(ticket);
         }
     }
 
     public void finalizePurchase(User user) {
-        ticektService.finalizePurchase(tickets, user);
+        ticketService.finalizePurchase(tickets, user);
+        clearPurchase();
+    }
+
+    public void clearPurchase() {
         setCurrentStep(null);
         setTickets(new ArrayList<Ticket>());
     }
 
     public long getTimeRemaining() {
-        return ticektService.getTimeRemaining(tickets);
+        return ticketService.getTimeRemaining(tickets);
     }
 
     public String timeoutPurchase() {
         for (Ticket ticket : tickets) {
             ticket.setTimeouted(true);
-            ticektService.save(ticket);
+            ticketService.save(ticket);
         }
 
         tickets.clear();

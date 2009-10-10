@@ -60,6 +60,14 @@ public interface TicketService extends Service<Ticket> {
      */
     void finalizePurchase(List<Ticket> tickets, User user);
 
+
+    /**
+     * Finalizes the purchase
+     * @param tickets
+     *
+     */
+    void finalizePurchase(List<Ticket> tickets);
+
     /**
      * Lists all tickets purchased by the specified user
      * @param user

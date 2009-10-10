@@ -9,7 +9,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
 import com.tickets.constants.Settings;
+import com.tickets.exceptions.PaymentException;
+import com.tickets.services.PaymentService;
 import com.tickets.utils.SecurityUtils;
 import com.tickets.utils.base64.Base64Decoder;
 
@@ -41,27 +45,34 @@ public class PaymentServlet extends HttpServlet {
                 String[] lines = data.split("\n");
                 String infoData = "";
 
+                PaymentService service = (PaymentService) WebApplicationContextUtils
+                        .getRequiredWebApplicationContext(getServletContext())
+                        .getBean("paymentService");
+
                 for (String line : lines) {
                     Matcher matcher = RESPONSE_PATTERN.matcher(line);
                     if (matcher.groupCount() > 1) {
-                        String invoice = matcher.group(1);
+                        String orderId = matcher.group(1);
                         String status = matcher.group(2);
                         String paymentDate = matcher.group(4);
                         String stan = matcher.group(5);
                         String bcode = matcher.group(6);
 
-                        /**
-                            # XXX process $invoice, $status, $pay_date, $stan, $bcode here
+                        infoData += "INVOICE=" + orderId + ":STATUS=";
 
-                            # XXX if OK for this invoice
-                            $info_data .= "INVOICE=$invoice:STATUS=OK\n";
-
-                            # XXX if error for this invoice
-                            # XXX $info_data .= "INVOICE=$invoice:STATUS=ERR\n";
-
-                            # XXX if not recognise this invoice
-                            # XXX $info_data .= "INVOICE=$invoice:STATUS=NO\n";
-                        } */
+                        if (status.equals("PAID")) {
+                            try {
+                                if (service.confirmPayment(orderId)) {
+                                    infoData += "OK\n";
+                                } else {
+                                    infoData += "NO\n";
+                                }
+                            } catch (PaymentException ex) {
+                                infoData += "ERROR\n";
+                            }
+                        } else {
+                            infoData += "OK\n"; // TODO ?
+                        }
                     }
                 }
 
