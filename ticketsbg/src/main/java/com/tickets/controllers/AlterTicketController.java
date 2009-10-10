@@ -59,6 +59,8 @@ public class AlterTicketController extends BaseController {
 
         searchController.setFromStop(ticket.getStartStop());
         searchController.setToStop(ticket.getEndStop());
+
+        searchController.setTicketToAlter(ticket);
     }
 
     public String getTicketCode() {

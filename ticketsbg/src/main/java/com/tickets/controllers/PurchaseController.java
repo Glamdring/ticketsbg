@@ -2,7 +2,6 @@ package com.tickets.controllers;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import org.apache.myfaces.orchestra.conversation.annotations.ConversationName;
@@ -10,14 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
-import com.tickets.constants.Constants;
-import com.tickets.constants.Settings;
 import com.tickets.controllers.valueobjects.Screen;
 import com.tickets.controllers.valueobjects.Step;
 import com.tickets.model.Customer;
 import com.tickets.model.PaymentMethod;
 import com.tickets.model.Ticket;
 import com.tickets.model.User;
+import com.tickets.services.PaymentService;
 import com.tickets.services.TicketService;
 
 @Controller("purchaseController")
@@ -32,7 +30,10 @@ public class PurchaseController extends BaseController {
     private Ticket currentTicket;
 
     @Autowired
-    private TicketService service;
+    private TicketService ticektService;
+
+    @Autowired
+    private PaymentService paymentService;
 
 
     public void setPaymentMethod(PaymentMethod paymentMethod) {
@@ -56,42 +57,19 @@ public class PurchaseController extends BaseController {
     }
 
     public void finalizePurchase(User user) {
-        service.finalizePurchase(tickets, user);
+        ticektService.finalizePurchase(tickets, user);
         setCurrentStep(null);
         setTickets(new ArrayList<Ticket>());
     }
 
     public long getTimeRemaining() {
-        Calendar min = null;
-        for (Ticket ticket : tickets) {
-            if (min == null) {
-                min = ticket.getCreationTime();
-            } else if (min.compareTo(ticket.getCreationTime()) < 0){
-                min = ticket.getCreationTime();
-            }
-        }
-
-        if (min == null) {
-            return 0;
-        }
-
-        long timeoutPeriod = Integer.parseInt(Settings
-                .getValue("ticket.timeout"))
-                * Constants.ONE_MINUTE;
-
-        long result = timeoutPeriod - (System.currentTimeMillis() - min.getTimeInMillis());
-
-        if (result > timeoutPeriod || result < 0) {
-            return 0;
-        }
-
-        return result;
+        return ticektService.getTimeRemaining(tickets);
     }
 
     public String timeoutPurchase() {
         for (Ticket ticket : tickets) {
             ticket.setTimeouted(true);
-            service.save(ticket);
+            ticektService.save(ticket);
         }
 
         tickets.clear();
@@ -100,16 +78,7 @@ public class PurchaseController extends BaseController {
     }
 
     public BigDecimal getTotalPrice() {
-        BigDecimal sum = BigDecimal.ZERO;
-        for (Ticket ticket : tickets) {
-            if (!ticket.isAltered()) {
-                sum = sum.add(ticket.getTotalPrice());
-            } else {
-                sum = sum.add(ticket.getAlterationPriceDifference());
-            }
-        }
-
-        return sum;
+        return paymentService.getTotalPrice(tickets);
     }
 
     public void removeTicket() {

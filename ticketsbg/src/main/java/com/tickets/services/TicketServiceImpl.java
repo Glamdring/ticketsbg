@@ -2,6 +2,7 @@ package com.tickets.services;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,25 +35,26 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
     private DiscountService discountService;
 
     public Ticket createTicket(SearchResultEntry selectedEntry,
-            SearchResultEntry selectedReturnEntry, TicketCountsHolder ticketCountsHolder,
-            List<Seat> selectedSeats, List<Seat> selectedReturnSeats) throws TicketCreationException {
+            SearchResultEntry selectedReturnEntry,
+            TicketCountsHolder ticketCountsHolder, List<Seat> selectedSeats,
+            List<Seat> selectedReturnSeats) throws TicketCreationException {
 
         // Allow only one user per run at a time, to avoid collisions
-        String runIdIntern = ("run"
-                + String.valueOf(selectedEntry.getRun().getRunId())).intern();
+        String runIdIntern = ("run" + String.valueOf(selectedEntry.getRun()
+                .getRunId())).intern();
         String returnRunIdIntern = null;
 
         if (selectedReturnEntry != null) {
-            returnRunIdIntern = ("run"
-                    + String.valueOf(selectedEntry.getRun().getRunId()))
-                            .intern();
+            returnRunIdIntern = ("run" + String.valueOf(selectedEntry.getRun()
+                    .getRunId())).intern();
         }
 
         synchronized (runIdIntern) {
             if (returnRunIdIntern != null) {
                 synchronized (returnRunIdIntern) {
                     return doCreateTicket(selectedEntry, selectedReturnEntry,
-                            ticketCountsHolder, selectedSeats, selectedReturnSeats);
+                            ticketCountsHolder, selectedSeats,
+                            selectedReturnSeats);
                 }
             }
 
@@ -62,8 +64,9 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
     }
 
     private Ticket doCreateTicket(SearchResultEntry selectedEntry,
-            SearchResultEntry selectedReturnEntry, TicketCountsHolder ticketCountsHolder,
-            List<Seat> selectedSeats, List<Seat> selectedReturnSeats) throws TicketCreationException {
+            SearchResultEntry selectedReturnEntry,
+            TicketCountsHolder ticketCountsHolder, List<Seat> selectedSeats,
+            List<Seat> selectedReturnSeats) throws TicketCreationException {
 
         Ticket ticket = new Ticket();
         ticket = fillTicketData(ticket, selectedEntry, selectedReturnEntry,
@@ -72,9 +75,11 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
         return ticket;
     }
 
-    private Ticket fillTicketData(Ticket ticket, SearchResultEntry selectedEntry,
-            SearchResultEntry selectedReturnEntry, TicketCountsHolder ticketCountsHolder,
-            List<Seat> selectedSeats, List<Seat> selectedReturnSeats) throws TicketCreationException {
+    private Ticket fillTicketData(Ticket ticket,
+            SearchResultEntry selectedEntry,
+            SearchResultEntry selectedReturnEntry,
+            TicketCountsHolder ticketCountsHolder, List<Seat> selectedSeats,
+            List<Seat> selectedReturnSeats) throws TicketCreationException {
 
         // Validate selected ticket counts
         if (ticketCountsHolder.getTotalCount() == 0) {
@@ -84,13 +89,12 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
         int totalRequestedTickets = ticketCountsHolder.getTotalCount();
 
         Run run = selectedEntry.getRun();
-        //reload the run
+        // reload the run
         getDao().refresh(run);
 
         boolean enoughSeats = ServiceFunctions.getVacantSeats(run,
                 selectedEntry.getPrice().getStartStop().getName(),
                 selectedEntry.getPrice().getEndStop().getName(), false) >= totalRequestedTickets;
-
 
         // defaults to true (in case no return is chosen)
         boolean enoughReturnSeats = true;
@@ -99,9 +103,10 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
         if (selectedReturnEntry != null) {
             returnRun = selectedReturnEntry.getRun();
             getDao().refresh(returnRun);
-            enoughReturnSeats = ServiceFunctions.getVacantSeats(returnRun, selectedReturnEntry.getPrice()
-                .getStartStop().getName(), selectedReturnEntry
-                .getPrice().getEndStop().getName(), false) >= totalRequestedTickets;
+            enoughReturnSeats = ServiceFunctions.getVacantSeats(returnRun,
+                    selectedReturnEntry.getPrice().getStartStop().getName(),
+                    selectedReturnEntry.getPrice().getEndStop().getName(),
+                    false) >= totalRequestedTickets;
         }
 
         if (enoughSeats && enoughReturnSeats) {
@@ -129,14 +134,16 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
             List<Integer> currentUsedSeats = new ArrayList<Integer>();
             List<Integer> currentUsedReturnSeats = new ArrayList<Integer>();
 
-            for (counter = 0; counter < ticketCountsHolder.getRegularTicketsCount(); counter++) {
+            for (counter = 0; counter < ticketCountsHolder
+                    .getRegularTicketsCount(); counter++) {
                 Seats seats = getSeatNumbers(selectedEntry,
                         selectedReturnEntry, selectedSeats,
                         selectedReturnSeats, currentUsedSeats,
                         currentUsedReturnSeats, counter);
 
-                PassengerDetails deatils = createPassengerDetails(selectedEntry,
-                        selectedReturnEntry, seats.getSeat(), seats.getReturnSeat());
+                PassengerDetails deatils = createPassengerDetails(
+                        selectedEntry, selectedReturnEntry, seats.getSeat(),
+                        seats.getReturnSeat());
                 ticket.addPassengerDetails(deatils);
 
                 currentUsedSeats.add(seats.getSeat());
@@ -147,7 +154,7 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
 
             for (TicketCount tc : ticketCountsHolder.getTicketCounts()) {
                 for (int i = 0; i < tc.getNumberOfTickets(); i++) {
-                    counter ++;
+                    counter++;
                     Seats seats = getSeatNumbers(selectedEntry,
                             selectedReturnEntry, selectedSeats,
                             selectedReturnSeats, currentUsedSeats,
@@ -155,8 +162,8 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
 
                     PassengerDetails details = createPassengerDetails(
                             selectedEntry, selectedReturnEntry,
-                            seats.getSeat(), seats.getReturnSeat(),
-                                tc.getDiscount());
+                            seats.getSeat(), seats.getReturnSeat(), tc
+                                    .getDiscount());
 
                     ticket.addPassengerDetails(details);
 
@@ -166,7 +173,6 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
                     }
                 }
             }
-
 
             BigDecimal totalPrice = BigDecimal.ZERO;
             for (PassengerDetails pd : ticket.getPassengerDetails()) {
@@ -202,28 +208,31 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
             // confirmed a ticket, leaving less seats than requested,
             // re-do the search and display an error message
             if (!enoughSeats) {
-                throw new TicketCreationException("remainingSeatsLessThanRequested", true);
+                throw new TicketCreationException(
+                        "remainingSeatsLessThanRequested", true);
             }
 
             if (!enoughReturnSeats) {
-                throw new TicketCreationException("remainingReturnSeatsLessThanRequested", true);
+                throw new TicketCreationException(
+                        "remainingReturnSeatsLessThanRequested", true);
             }
         }
 
         return ticket;
     }
 
-    private PassengerDetails createPassengerDetails(SearchResultEntry selectedEntry,
+    private PassengerDetails createPassengerDetails(
+            SearchResultEntry selectedEntry,
             SearchResultEntry selectedReturnEntry, int seat, int returnSeat) {
 
         return createPassengerDetails(selectedEntry, selectedReturnEntry, seat,
                 returnSeat, null);
     }
 
-    private PassengerDetails createPassengerDetails(SearchResultEntry selectedEntry,
+    private PassengerDetails createPassengerDetails(
+            SearchResultEntry selectedEntry,
             SearchResultEntry selectedReturnEntry, int seat, int returnSeat,
             Discount discount) {
-
 
         PassengerDetails details = new PassengerDetails();
 
@@ -257,7 +266,8 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
         if (selectedSeats.size() > currentCounter) {
             seat = selectedSeats.get(currentCounter).getNumber();
         }
-        if (selectedReturnSeats != null && selectedReturnSeats.size() > currentCounter) {
+        if (selectedReturnSeats != null
+                && selectedReturnSeats.size() > currentCounter) {
             returnSeat = selectedReturnSeats.get(currentCounter).getNumber();
         }
 
@@ -265,7 +275,8 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
             seat = getFirstVacantSeat(selectedEntry, currentUsedSeats);
         }
         if (returnSeat == -1 && selectedReturnEntry != null) {
-            returnSeat = getFirstVacantSeat(selectedReturnEntry, currentUsedReturnSeats);
+            returnSeat = getFirstVacantSeat(selectedReturnEntry,
+                    currentUsedReturnSeats);
         }
 
         Seats seats = new Seats();
@@ -301,13 +312,14 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
     }
 
     /**
-     * Gets the number of the first vacant seat
-     * Used when the user hasn't chosen a seat
+     * Gets the number of the first vacant seat Used when the user hasn't chosen
+     * a seat
      *
      * @param selectedEntry
      * @return the seat number
      */
-    private int getFirstVacantSeat(SearchResultEntry entry, List<Integer> currentUsedSeats) {
+    private int getFirstVacantSeat(SearchResultEntry entry,
+            List<Integer> currentUsedSeats) {
         List<Integer> usedSeats = SeatHandler.getUsedSeats(entry.getPrice(),
                 entry.getRun());
         usedSeats.addAll(currentUsedSeats);
@@ -322,8 +334,7 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
         return -1;
     }
 
-    //------------------ End of Ticket creation methods -------------------
-
+    // ------------------ End of Ticket creation methods -------------------
 
     @Override
     public void finalizePurchase(List<Ticket> tickets, User user) {
@@ -361,8 +372,7 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
             long diff = System.currentTimeMillis()
                     - ticket.getCreationTime().getTimeInMillis();
 
-            if (diff > (ticket.isPaymentInProcess()
-                    ? inProcessTimeoutPeriod
+            if (diff > (ticket.isPaymentInProcess() ? inProcessTimeoutPeriod
                     : timeoutPeriod)) {
                 ticket.setTimeouted(true);
             }
@@ -371,13 +381,10 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
         System.gc();
     }
 
-
     @Override
     public void clearTimeoutedTickets() {
         getDao().executeNamedQuery("Ticket.deleteTimeouted");
     }
-
-
 
     @Override
     public Ticket findTicket(String ticketCode, String email) {
@@ -387,19 +394,21 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
 
         if (result.size() > 0) {
             Ticket ticket = (Ticket) result.get(0);
-            int hoursBeforeTravelAlterationAllowed = ticket.getRun().getRoute().getFirm().getHoursBeforeTravelAlterationAllowed();
+            int hoursBeforeTravelAlterationAllowed = ticket.getRun().getRoute()
+                    .getFirm().getHoursBeforeTravelAlterationAllowed();
 
             // Check whether the ticket can be altered
             if (ticket.getRun().getTime().getTimeInMillis()
-                    - GeneralUtils.createEmptyCalendar().getTimeInMillis()
-                    >= hoursBeforeTravelAlterationAllowed * Constants.ONE_HOUR ) {
+                    - GeneralUtils.createEmptyCalendar().getTimeInMillis() >= hoursBeforeTravelAlterationAllowed
+                    * Constants.ONE_HOUR) {
 
                 if (!ticket.isAltered()) {
                     return ticket;
                 }
                 throw new TicketAlterationException();
             }
-            throw new TicketAlterationException(hoursBeforeTravelAlterationAllowed);
+            throw new TicketAlterationException(
+                    hoursBeforeTravelAlterationAllowed);
         }
 
         return null;
@@ -414,25 +423,59 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
         ticket.setAltered(true);
 
         BigDecimal originalPrice = ticket.getTotalPrice();
-        fillTicketData(ticket, selectedEntry, selectedReturnEntry, ticketCountsHolder, selectedSeats, selectedReturnSeats);
+        fillTicketData(ticket, selectedEntry, selectedReturnEntry,
+                ticketCountsHolder, selectedSeats, selectedReturnSeats);
         BigDecimal newPrice = ticket.getTotalPrice();
 
         ticket.setAlterationPriceDifference(newPrice.subtract(originalPrice));
+    }
+
+    @Override
+    public long getTimeRemaining(List<Ticket> tickets) {
+        Calendar min = null;
+        for (Ticket ticket : tickets) {
+            if (min == null) {
+                min = ticket.getCreationTime();
+            } else if (min.compareTo(ticket.getCreationTime()) < 0) {
+                min = ticket.getCreationTime();
+            }
+        }
+
+        if (min == null) {
+            return 0;
+        }
+
+        long timeoutPeriod = Integer.parseInt(Settings
+                .getValue("ticket.timeout"))
+                * Constants.ONE_MINUTE;
+
+        long result = timeoutPeriod
+                - (System.currentTimeMillis() - min.getTimeInMillis());
+
+        if (result > timeoutPeriod || result < 0) {
+            return 0;
+        }
+
+        return result;
     }
 }
 
 class Seats {
     private int seat;
     private int returnSeat;
+
     public int getSeat() {
         return seat;
     }
+
     public void setSeat(int seat) {
         this.seat = seat;
     }
+
     public int getReturnSeat() {
         return returnSeat;
     }
+
     public void setReturnSeat(int returnSeat) {
         this.returnSeat = returnSeat;
     }

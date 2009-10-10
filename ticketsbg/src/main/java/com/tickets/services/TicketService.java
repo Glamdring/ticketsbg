@@ -81,4 +81,12 @@ public interface TicketService extends Service<Ticket> {
      * Deletes all tickets that have been set as timeouted=true.
      */
     void clearTimeoutedTickets();
+
+
+    /**
+     * Calculates the remaining time before the tickets timeout
+     * @param tickets
+     * @return time remaining
+     */
+    long getTimeRemaining(List<Ticket> tickets);
 }

@@ -45,8 +45,8 @@
                         <input type="hidden" name="PAGE" value="paylogin" />
                         <input type="hidden" name="ENCODED" value="#{paymentController.encoded}" />
                         <input type="hidden" name="CHECKSUM" value="#{paymentController.checksum}" />
-                        <input type="hidden" name="URL_OK" value="http://tickets.bg/payment?outcome=OK" />
-                        <input type="hidden" name="URL_CANCEL" value="http://tickets.bg/payment?outcome=Cancel" />
+                        <input type="hidden" name="URL_OK" value="http://tickets.bg/paymentSuccess.jsp" />
+                        <input type="hidden" name="URL_CANCEL" value="http://tickets.bg/paymentCancelled.jsp" />
                     </form>
                 </h:panelGroup>
             </h:panelGroup>

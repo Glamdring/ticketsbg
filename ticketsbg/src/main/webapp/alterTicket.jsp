@@ -37,10 +37,7 @@
                         <h:panelGroup rendered="#{alterTicketController.ticket != null}">
                             <ui:include src="searchFields.jsp">
                                 <ui:param name="isAdmin" value="false" />
-                                <ui:param name="alterTicketId" value="#{alterTicketController.ticket.id}" />
                             </ui:include>
-                            <h:inputHidden id="alterTicketIdField" binding="#{searchController.alterTicket}"
-                                value="#{alterTicketController.ticket.id}" />
                         </h:panelGroup>
                     </a4j:outputPanel>
 

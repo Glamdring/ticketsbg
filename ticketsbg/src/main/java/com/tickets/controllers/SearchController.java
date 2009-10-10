@@ -123,8 +123,6 @@ public class SearchController extends BaseController {
 
     private UIInput admin;
 
-    private UIInput alterTicketIdField;
-
     private Ticket ticketToAlter;
 
     @Action
@@ -145,19 +143,6 @@ public class SearchController extends BaseController {
     private boolean isAdmin() {
         return admin.getValue() != null
                 && admin.getValue().equals(Boolean.TRUE);
-    }
-
-    public Ticket getTicketToAlter() {
-        if (alterTicketIdField == null) {
-            return null;
-        }
-
-        if (ticketToAlter == null && alterTicketIdField.getValue() != null) {
-            int id = Integer.parseInt((String) alterTicketIdField.getValue());
-            Ticket ticket = ticketService.get(Ticket.class, id);
-            ticketToAlter = ticket;
-        }
-        return ticketToAlter;
     }
 
     private String publicSearch() {
@@ -369,6 +354,7 @@ public class SearchController extends BaseController {
         timeForDeparture = true;
         returnTimeForDeparture = true;
         travelType = TWO_WAY;
+        ticketToAlter = null;
     }
 
     public String toSearchScreen() {
@@ -780,11 +766,11 @@ public class SearchController extends BaseController {
         this.reRenderSeatChoices = reRenderSeatChoices;
     }
 
-    public UIInput getAlterTicket() {
-        return alterTicketIdField;
+    public Ticket getTicketToAlter() {
+        return ticketToAlter;
     }
 
-    public void setAlterTicket(UIInput alterTicket) {
-        this.alterTicketIdField = alterTicket;
+    public void setTicketToAlter(Ticket ticketToAlter) {
+        this.ticketToAlter = ticketToAlter;
     }
 }
