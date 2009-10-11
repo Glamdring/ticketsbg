@@ -62,7 +62,13 @@ import com.tickets.controllers.security.AccessLevel;
 })
 public class User extends Customer implements Serializable {
 
-    @Column(nullable = false, length = 40)
+    /**
+     * nullable = true, to let the column be nullable,
+     * but NotEmpty to disallow creating User objects with no username
+     * This separation is needed because when Customer objects
+     * are inserted the username is allowed to be null.
+     */
+    @Column(nullable = true, length = 40)
     @Length(max=40, min=4)
     @NotEmpty
     private String username;

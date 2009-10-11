@@ -15,7 +15,9 @@
                 <a4j:form id="paymentForm">
                     <rich:panel header="#{msg.payment}"
                         headerClass="rich-panel-header-main">
-                        <rich:messages globalOnly="true" />
+                        <ui:include src="messages.jsp">
+                            <ui:param name="globalOnly" value="true" />
+                        </ui:include>
 
                         <ui:include src="personalInformation.jsp" />
 

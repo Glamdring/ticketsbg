@@ -42,7 +42,15 @@ import javax.persistence.TemporalType;
     @NamedQuery(
         name = "Ticket.findByCodeAndEmail",
         query = "SELECT t FROM Ticket t WHERE t.ticketCode=:ticketCode AND " +
-                "t.customerInformation.email=:email")
+                "t.customerInformation.email=:email"),
+    @NamedQuery(
+        name = "Ticket.findSince",
+        query = "SELECT t FROM Ticket t " +
+                "WHERE t.run.route.firm.firmKey=:firmKey " +
+                "AND t.startStop=:fromStop " +
+                "AND timestamp(t.creationTime) > :lastCheck " +
+                "AND t.committed=true"
+            )
 })
 public class Ticket implements Serializable, Comparable<Ticket> {
 

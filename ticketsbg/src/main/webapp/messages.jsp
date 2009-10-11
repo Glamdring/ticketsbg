@@ -5,10 +5,11 @@
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:rich="http://richfaces.org/rich">
 
-    <rich:messages id="messages#{additionalId}" errorClass="error">
+    <rich:messages id="messages#{additionalId}" errorClass="error"
+        globalOnly="#{globalOnly != null and globalOnly == true}">
         <f:facet name="errorMarker">
-            <h:graphicImage url="/images/validationError.png" width="14" height="14"
-                style="margin-right: 4px;" />
+            <h:graphicImage url="/images/validationError.png" width="14"
+                height="14" style="margin-right: 4px;" />
         </f:facet>
     </rich:messages>
 

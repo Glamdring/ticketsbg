@@ -97,4 +97,16 @@ public interface TicketService extends Service<Ticket> {
      * @return time remaining
      */
     long getTimeRemaining(List<Ticket> tickets);
+
+
+    /**
+     * Returns the number of new tickets since the last check
+     *
+     * @param firmKey
+     * @param fromStop
+     * @param lastCheck
+     * @return count
+     */
+    int getNewTicketsSinceLastChecks(String firmKey, String fromStop,
+            long lastCheck);
 }

@@ -527,6 +527,19 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
 
         return result;
     }
+
+    @Override
+    public int getNewTicketsSinceLastChecks(String firmKey, String fromStop,
+            long lastCheck) {
+        Calendar lastCheckCalendar = Calendar.getInstance();
+        lastCheckCalendar.setTimeInMillis(lastCheck);
+
+        List tickets = getDao().findByNamedQuery("Ticket.findSince",
+                new String[] { "firmKey", "fromStop", "lastCheck" },
+                new Object[] { firmKey, fromStop, lastCheckCalendar.getTime()});
+
+        return tickets.size();
+    }
 }
 
 class Seats {

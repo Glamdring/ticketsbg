@@ -10,7 +10,6 @@
     xmlns:t="http://myfaces.apache.org/tomahawk">
 
     <rich:panel header="#{msg.tickets}">
-        <rich:messages globalOnly="true" />
         <rich:dataTable style="width: 740px;" id="cartTable"
             value="#{purchaseController.tickets}" var="ticket">
 

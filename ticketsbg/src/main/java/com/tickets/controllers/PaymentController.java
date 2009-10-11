@@ -52,6 +52,14 @@ public class PaymentController extends BaseController {
 
     public void pay() {
         try {
+            if (selectedPaymentMethod == null) {
+                addError("selectPaymentMethod");
+                return;
+            }
+            if (purchaseController.getTickets().size() == 0) {
+                addError("atLeastOneTicketNeeded");
+                return;
+            }
             PaymentMethod paymentMethod = PaymentMethod.valueOf(selectedPaymentMethod);
             purchaseController.setPaymentMethod(paymentMethod);
 
@@ -59,7 +67,7 @@ public class PaymentController extends BaseController {
             personalInformationController.updateCustomer();
 
         } catch (Exception ex) {
-            addError("selectPaymentMethod");
+            ex.printStackTrace();
         }
 
         // After this method completes, if no errors exist, the

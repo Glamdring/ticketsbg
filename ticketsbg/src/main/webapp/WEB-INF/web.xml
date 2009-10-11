@@ -131,6 +131,13 @@
         </servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
+
+    <servlet>
+        <servlet-name>UpdatesServlet</servlet-name>
+        <servlet-class>com.tickets.controllers.notifier.UpdatesServlet
+        </servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
     <!--
         servlet> <servlet-name>CXFServlet</servlet-name>
         <servlet-class>org.apache.cxf.transport.servlet.CXFServlet
@@ -152,6 +159,11 @@
     <servlet-mapping>
         <servlet-name>PaymentServlet</servlet-name>
         <url-pattern>/payment</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>UpdatesServlet</servlet-name>
+        <url-pattern>/updates</url-pattern>
     </servlet-mapping>
 
     <!--

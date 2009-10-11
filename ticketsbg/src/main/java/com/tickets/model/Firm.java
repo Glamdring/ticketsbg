@@ -76,7 +76,6 @@ public class Firm implements Serializable, Selectable {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Agent> agents = new ArrayList<Agent>();
 
-
     @Lob
     private String richDescription;
 
@@ -85,6 +84,9 @@ public class Firm implements Serializable, Selectable {
 
     @Column
     private int hoursBeforeTravelAlterationAllowed;
+
+    @Column
+    private String firmKey;
 
     public Set<User> getStaff() {
         return staff;
@@ -243,6 +245,14 @@ public class Firm implements Serializable, Selectable {
     public void setHoursBeforeTravelAlterationAllowed(
             int hoursBeforeTravelAlterationAllowed) {
         this.hoursBeforeTravelAlterationAllowed = hoursBeforeTravelAlterationAllowed;
+    }
+
+    public String getFirmKey() {
+        return firmKey;
+    }
+
+    public void setFirmKey(String firmKey) {
+        this.firmKey = firmKey;
     }
 
     @Override
