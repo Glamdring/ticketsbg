@@ -68,10 +68,23 @@
                         id="hasAnotherTicketSellingSystem"
                         rendered="#{loggedUserHolder.loggedUser.administrator}" />
 
-                    <h:outputLabel for="hoursBeforeTravelAlterationAllowed" value="#{msg.hoursBeforeTravelAlterationAllowed}: " />
-                    <rich:inputNumberSpinner value="#{firmController.firm.hoursBeforeTravelAlterationAllowed}"
-                        id="hoursBeforeTravelAlterationAllowed" minValue="0" />
 
+                    <h:panelGroup>
+                        <h:outputLabel for="requireReceiptAtCashDesk"
+                            value="#{msg.requireReceiptAtCashDesk}: "
+                            id="requireReceiptAtCashDeskLabel" />
+                        <rich:toolTip value="#{msg.requireReceiptAtCashDeskInfo}"
+                            for="requireReceiptAtCashDeskLabel" followMouse="true" />
+                    </h:panelGroup>
+                    <h:selectBooleanCheckbox
+                        value="#{firmController.firm.requireReceiptAtCashDesk}"
+                        id="requireReceiptAtCashDesk" />
+
+                    <h:outputLabel for="hoursBeforeTravelAlterationAllowed"
+                        value="#{msg.hoursBeforeTravelAlterationAllowed}: " />
+                    <rich:inputNumberSpinner
+                        value="#{firmController.firm.hoursBeforeTravelAlterationAllowed}"
+                        id="hoursBeforeTravelAlterationAllowed" minValue="0" />
 
 
                     <rich:componentControl attachTo="richDescriptionOpener"

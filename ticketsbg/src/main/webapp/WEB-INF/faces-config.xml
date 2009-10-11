@@ -343,6 +343,23 @@
         </navigation-case>
     </navigation-rule>
 
+
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>paymentSuccessScreen</from-outcome>
+            <to-view-id>/paymentSuccess.jsp</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>paymentCancelledScreen</from-outcome>
+            <to-view-id>/paymentCancelled.jsp</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+
     <lifecycle>
         <phase-listener>com.tickets.controllers.lifecycle.FirmIdentifier</phase-listener>
     </lifecycle>

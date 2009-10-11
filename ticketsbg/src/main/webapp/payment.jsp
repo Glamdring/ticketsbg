@@ -108,9 +108,9 @@
                         value="#{paymentController.encoded}" /> <input type="hidden"
                         name="CHECKSUM" value="#{paymentController.checksum}" /> <input
                         type="hidden" name="URL_OK"
-                        value="http://tickets.bg/paymentSuccess.jsp" /> <input
+                        value="http://tickets.bg/paymentSuccess.jsp?conversationContext=" /> <input
                         type="hidden" name="URL_CANCEL"
-                        value="http://tickets.bg/paymentCancelled.jsp" /></form>
+                        value="http://tickets.bg/paymentCancelled.jsp?conversationContext=" /></form>
                 </h:panelGroup>
             </h:panelGroup>
         </f:view>

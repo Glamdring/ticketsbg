@@ -128,6 +128,7 @@ public class RouteController extends BaseController implements Serializable {
         daysPickList = new Integer[0];
         route = new Route();
         route.setFirm(loggedUserHolder.getLoggedUser().getFirm());
+        route.setRequireReceiptAtCashDesk(route.getFirm().isRequireReceiptAtCashDesk());
         route.setAllowSeatChoice(!route.getFirm().isHasAnotherTicketSellingSystem());
         return Screen.ROUTE_SCREEN.getOutcome();
     }

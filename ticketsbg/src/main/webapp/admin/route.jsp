@@ -20,6 +20,7 @@
     height: 270px;
     text-align: center;
 }
+
 .subInternalPanel {
     height: 230px;
     text-align: center;
@@ -43,8 +44,21 @@
                             </h:panelGroup>
 
                             <h:panelGroup style="float: right;">
+
+                                <h:panelGroup style="margin-right: 25px;">
+                                    <h:outputLabel for="requireReceiptAtCashDesk"
+                                        value="#{msg.requireReceiptAtCashDesk}: "
+                                        id="requireReceiptAtCashDeskLabel" />
+                                    <rich:toolTip value="#{msg.requireReceiptAtCashDeskInfo}"
+                                        for="requireReceiptAtCashDeskLabel" followMouse="true" />
+                                    <h:selectBooleanCheckbox
+                                        value="#{firmController.firm.requireReceiptAtCashDesk}"
+                                        id="requireReceiptAtCashDesk" />
+                                 </h:panelGroup>
+
                                 <h:outputText value="#{msg.doOnlineSale} " />
-                                <h:outputLabel value="#{msg.sellSeatsFrom}: " for="sellSeatsFrom" />
+                                <h:outputLabel value="#{msg.sellSeatsFrom}: "
+                                    for="sellSeatsFrom" />
                                 <h:inputText value="#{routeController.route.sellSeatsFrom}"
                                     id="sellSeatsFrom" size="3" />
 
@@ -52,12 +66,12 @@
                                 <h:inputText value="#{routeController.route.sellSeatsTo}"
                                     id="sellSeatsTo" size="3" />
                             </h:panelGroup>
-
                         </h:panelGrid>
                     </rich:panel>
 
                     <rich:panel header="#{msg.routeDetailsHeader}" id="routeDetails">
-                        <h:panelGrid columns="3" columnClasses="gridContent,gridContent,gridContent">
+                        <h:panelGrid columns="3"
+                            columnClasses="gridContent,gridContent,gridContent">
                             <rich:panel header="#{msg.daysOfWeek}" styleClass="internalPanel"
                                 id="daysPanel">
                                 <rich:pickList showButtonsLabel="false" id="daysPickList"
@@ -162,7 +176,8 @@
                     </rich:panel>
 
                     <rich:panel id="pricesAndSettingsPanel">
-                        <h:panelGrid columns="3" columnClasses="gridContent,gridContent,gridContent">
+                        <h:panelGrid columns="3"
+                            columnClasses="gridContent,gridContent,gridContent">
                             <rich:panel header="#{msg.prices}" id="pricesPanel"
                                 rendered="#{routeController.route.id > 0}"
                                 styleClass="downInternalPanel">
@@ -188,9 +203,9 @@
                                                     value="#{data.stop.name}" /> <h:outputText value=" (" />
                                                 <h:outputText value="#{data.price.price}"
                                                     converter="#{currencyConverter}">
-                                                    <f:convertNumber maxFractionDigits="2" minFractionDigits="2"/>
-                                                    </h:outputText> <h:outputText
-                                                    value=")" /></div>
+                                                    <f:convertNumber maxFractionDigits="2"
+                                                        minFractionDigits="2" />
+                                                </h:outputText> <h:outputText value=")" /></div>
                                             </rich:treeNode>
                                         </rich:tree>
                                     </rich:panel>
@@ -223,8 +238,8 @@
                                 </h:panelGrid>
                             </rich:panel>
 
-                            <rich:panel styleClass="downInternalPanel" header="#{msg.discounts}"
-                                id="discountsPanel">
+                            <rich:panel styleClass="downInternalPanel"
+                                header="#{msg.discounts}" id="discountsPanel">
                                 <a4j:commandButton value="#{msg.addDiscount}"
                                     action="#{routeController.addDiscount}"
                                     oncomplete="#{rich:component('discountPanel')}.show()" />
@@ -313,20 +328,31 @@
                                         value="#{routeController.route.allowSeatChoice}"
                                         id="allowSeatChoice" />
 
-                                    <h:outputText><hr /></h:outputText>
-                                    <h:outputText><hr /></h:outputText>
+                                    <h:outputText>
+                                        <hr />
+                                    </h:outputText>
+                                    <h:outputText>
+                                        <hr />
+                                    </h:outputText>
 
                                     <a4j:outputPanel>
-                                        <h:outputLabel for="publishedRunsPeriod" value="#{msg.publishedRunsPeriod}: " />
-                                        <rich:toolTip value="#{msg.publishedRunsPeriodInfo}" followMouse="true" />
+                                        <h:outputLabel for="publishedRunsPeriod"
+                                            value="#{msg.publishedRunsPeriod}: " />
+                                        <rich:toolTip value="#{msg.publishedRunsPeriodInfo}"
+                                            followMouse="true" />
                                     </a4j:outputPanel>
-                                    <h:inputText value="#{routeController.route.publishedRunsPeriod}" id="publishedRunsPeriod"
-                                        size="18">
+                                    <h:inputText
+                                        value="#{routeController.route.publishedRunsPeriod}"
+                                        id="publishedRunsPeriod" size="18">
                                         <f:convertNumber maxFractionDigits="0" />
                                     </h:inputText>
 
-                                    <h:outputText><hr /></h:outputText>
-                                    <h:outputText><hr /></h:outputText>
+                                    <h:outputText>
+                                        <hr />
+                                    </h:outputText>
+                                    <h:outputText>
+                                        <hr />
+                                    </h:outputText>
 
                                     <h:outputLabel for="singleRun" value="#{msg.singleRun}: " />
                                     <h:selectBooleanCheckbox
@@ -350,8 +376,12 @@
                                         </rich:calendar>
                                     </a4j:outputPanel>
 
-                                    <h:outputText><hr /></h:outputText>
-                                    <h:outputText><hr /></h:outputText>
+                                    <h:outputText>
+                                        <hr />
+                                    </h:outputText>
+                                    <h:outputText>
+                                        <hr />
+                                    </h:outputText>
 
                                     <!-- TODO: not allow both 'seasonal' and 'singleRun' at the same time -->
                                     <h:outputLabel for="seasonal" value="#{msg.seasonal}: " />
@@ -362,14 +392,12 @@
                                     </h:selectBooleanCheckbox>
 
                                     <a4j:outputPanel id="seasonStartLabel">
-                                        <h:outputLabel for="seasonStart"
-                                            value="#{msg.seasonStart}: "
+                                        <h:outputLabel for="seasonStart" value="#{msg.seasonStart}: "
                                             rendered="#{routeController.route.seasonal == true}" />
                                     </a4j:outputPanel>
                                     <a4j:outputPanel id="seasonStartCalendar">
-                                        <rich:calendar id="seasonStart"
-                                            datePattern="dd.MM.yyyy" firstWeekDay="1"
-                                            inputSize="14"
+                                        <rich:calendar id="seasonStart" datePattern="dd.MM.yyyy"
+                                            firstWeekDay="1" inputSize="14"
                                             value="#{routeController.route.seasonStart.time}"
                                             rendered="#{routeController.route.seasonal == true}"
                                             direction="top-left">
@@ -377,14 +405,12 @@
                                     </a4j:outputPanel>
 
                                     <a4j:outputPanel id="seasonEndLabel">
-                                        <h:outputLabel for="seasonEnd"
-                                            value="#{msg.seasonEnd}: "
+                                        <h:outputLabel for="seasonEnd" value="#{msg.seasonEnd}: "
                                             rendered="#{routeController.route.seasonal == true}" />
                                     </a4j:outputPanel>
                                     <a4j:outputPanel id="seasonEndCalendar">
-                                        <rich:calendar id="seasonEnd"
-                                            datePattern="dd.MM.yyyy" firstWeekDay="1"
-                                            inputSize="14"
+                                        <rich:calendar id="seasonEnd" datePattern="dd.MM.yyyy"
+                                            firstWeekDay="1" inputSize="14"
                                             value="#{routeController.route.seasonEnd.time}"
                                             rendered="#{routeController.route.seasonal == true}"
                                             direction="top-left">
@@ -397,8 +423,11 @@
                     </rich:panel>
 
                     <!-- Seats positioning -->
-                    <rich:panel id="seatsPanel" header="#{msg.seatsSettings}" rendered="#{routeController.route.id > 0}">
-                        <h:selectBooleanCheckbox value="#{routeController.route.seatSettings.startRight}" id="startRight">
+                    <rich:panel id="seatsPanel" header="#{msg.seatsSettings}"
+                        rendered="#{routeController.route.id > 0}">
+                        <h:selectBooleanCheckbox
+                            value="#{routeController.route.seatSettings.startRight}"
+                            id="startRight">
                             <a4j:support event="onchange" ajaxSingle="true"
                                 reRender="seatsViewInner1"
                                 action="#{seatController.seatHandler.refreshRows}" />
@@ -407,16 +436,21 @@
 
                         <h:outputText value=",&#160;" />
 
-                        <h:selectBooleanCheckbox value="#{routeController.route.seatSettings.lastRowHasFourSeats}" id="lastRowHasFourSeats">
+                        <h:selectBooleanCheckbox
+                            value="#{routeController.route.seatSettings.lastRowHasFourSeats}"
+                            id="lastRowHasFourSeats">
                             <a4j:support event="onchange" ajaxSingle="true"
                                 reRender="seatsViewInner1"
                                 action="#{seatController.seatHandler.refreshRows}" />
                         </h:selectBooleanCheckbox>
-                        <h:outputLabel for="lastRowHasFourSeats" value="#{msg.lastRowHasFourSeats}" />
+                        <h:outputLabel for="lastRowHasFourSeats"
+                            value="#{msg.lastRowHasFourSeats}" />
 
                         <h:outputText value=",&#160;" />
 
-                        <h:selectBooleanCheckbox value="#{routeController.route.seatSettings.doubleDecker}" id="doubleDecker">
+                        <h:selectBooleanCheckbox
+                            value="#{routeController.route.seatSettings.doubleDecker}"
+                            id="doubleDecker">
                             <a4j:support event="onchange" ajaxSingle="true"
                                 reRender="seatsViewInner1,downstairsPanel"
                                 action="#{seatController.seatHandler.refreshRows}" />
@@ -433,8 +467,10 @@
                                 value="#{routeController.route.seatSettings.numberOfSeatsDownstairs}"
                                 rendered="#{routeController.route.seatSettings.doubleDecker}"
                                 id="numberOfSeatsDownstairs">
-                                <a4j:support event="onchange" ajaxSingle="true" action="#{seatController.seatHandler.refreshRows}"
-                                    reRender="seatsViewInner1" eventsQueue="seatsDownstairsQueue" requestDelay="200"/>
+                                <a4j:support event="onchange" ajaxSingle="true"
+                                    action="#{seatController.seatHandler.refreshRows}"
+                                    reRender="seatsViewInner1" eventsQueue="seatsDownstairsQueue"
+                                    requestDelay="200" />
                             </h:inputText>
                         </h:panelGroup>
 

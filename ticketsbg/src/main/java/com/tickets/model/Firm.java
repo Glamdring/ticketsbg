@@ -88,6 +88,9 @@ public class Firm implements Serializable, Selectable {
     @Column
     private String firmKey;
 
+    @Column
+    private boolean requireReceiptAtCashDesk;
+
     public Set<User> getStaff() {
         return staff;
     }
@@ -253,6 +256,14 @@ public class Firm implements Serializable, Selectable {
 
     public void setFirmKey(String firmKey) {
         this.firmKey = firmKey;
+    }
+
+    public boolean isRequireReceiptAtCashDesk() {
+        return requireReceiptAtCashDesk;
+    }
+
+    public void setRequireReceiptAtCashDesk(boolean requireReceiptAtCashDesk) {
+        this.requireReceiptAtCashDesk = requireReceiptAtCashDesk;
     }
 
     @Override

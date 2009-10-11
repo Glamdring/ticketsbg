@@ -123,6 +123,9 @@ public class Route extends DataObject implements Serializable {
     @Column
     private int sellSeatsTo;
 
+    @Column
+    private boolean requireReceiptAtCashDesk;
+
     public Route() {
     }
 
@@ -320,5 +323,13 @@ public class Route extends DataObject implements Serializable {
 
     public void setSellSeatsTo(int sellSeatsTo) {
         this.sellSeatsTo = sellSeatsTo;
+    }
+
+    public boolean isRequireReceiptAtCashDesk() {
+        return requireReceiptAtCashDesk;
+    }
+
+    public void setRequireReceiptAtCashDesk(boolean requireReceiptAtCashDesk) {
+        this.requireReceiptAtCashDesk = requireReceiptAtCashDesk;
     }
 }

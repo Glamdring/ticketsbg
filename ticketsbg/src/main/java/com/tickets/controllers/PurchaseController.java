@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.event.PhaseEvent;
+
 import org.apache.myfaces.orchestra.conversation.annotations.ConversationName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -68,6 +70,11 @@ public class PurchaseController extends BaseController {
     public void clearPurchase() {
         setCurrentStep(null);
         setTickets(new ArrayList<Ticket>());
+        endConversation();
+    }
+
+    public void afterPhase(PhaseEvent evt) {
+        System.out.println("Phase: " + evt.getPhaseId());
     }
 
     public long getTimeRemaining() {
