@@ -216,7 +216,7 @@ public class TicketsNotifier {
                 }
 
             } catch (Exception ex) {
-                ex.printStackTrace();
+                System.out.println(ex.getMessage());
             }
         }
 
@@ -224,8 +224,6 @@ public class TicketsNotifier {
     }
 
     class PollerTask extends TimerTask {
-
-        // TODO listeners
 
         private HttpClient client;
 

@@ -47,7 +47,6 @@
                         <manifestEntries>
                             <charmap>utf-8</charmap>
                         </manifestEntries>
-
                     </archive>
                 </configuration>
             </plugin>
@@ -91,7 +90,6 @@
                 </executions>
             </plugin>
 
-
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
@@ -103,6 +101,18 @@
                                 <copy
                                     file="${project.build.directory}/${project.build.finalName}.jar"
                                     todir="${project.build.directory}/package" />
+
+
+                                <taskdef classname="com.orangevolt.tools.ant.JStubTask"
+                                    name="jstub">
+                                    <classpath refid="maven.plugin.classpath" />
+                                </taskdef>
+
+                                <jstub
+                                    archive="${project.build.directory}/package/${project.build.finalName}.jar"
+                                    mode="win32" execute="javaw -Dfile.encoding=utf-8 -jar ticketsNotifier-1.0.jar"
+                                    output="${project.build.directory}/package/ticketsNotifier.exe" />
+
                                 <zip basedir="${project.build.directory}/package"
                                     destfile="${project.build.directory}/package/ticketsNotifier.zip"
                                     excludes="*.zip" />
@@ -113,6 +123,13 @@
                         </goals>
                     </execution>
                 </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.orangevolt</groupId>
+                        <artifactId>orangevolt-ant-tasks</artifactId>
+                        <version>1.3</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
