@@ -59,8 +59,18 @@ public class TicketsNotifier {
 
     private Timer poller;
 
-    public static void main(String[] args) throws IOException {
-        new TicketsNotifier();
+    public static void main(String[] args) {
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    new TicketsNotifier();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        t.start();
     }
 
     public TicketsNotifier() throws IOException {
@@ -252,7 +262,7 @@ public class TicketsNotifier {
                     }
                 }
             } catch (Exception ex) {
-                throw new RuntimeException(ex);
+                ex.printStackTrace();
             } finally {
                 method.releaseConnection();
             }
