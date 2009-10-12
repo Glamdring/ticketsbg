@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.event.PhaseEvent;
+import javax.faces.event.PhaseId;
 
 import org.apache.myfaces.orchestra.conversation.annotations.ConversationName;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,8 +74,16 @@ public class PurchaseController extends BaseController {
         endConversation();
     }
 
+    /**
+     * Method is set as phase listener for
+     * payment success and cancellation pages
+     *
+     * @param evt
+     */
     public void afterPhase(PhaseEvent evt) {
-        System.out.println("Phase: " + evt.getPhaseId());
+        if (evt.getPhaseId() == PhaseId.RENDER_RESPONSE) {
+            clearPurchase();
+        }
     }
 
     public long getTimeRemaining() {

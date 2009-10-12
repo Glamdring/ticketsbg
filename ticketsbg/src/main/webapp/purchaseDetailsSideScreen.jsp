@@ -11,7 +11,7 @@
     xmlns:tc="http://tickets.com/tc"
     xmlns:fn="http://java.sun.com/jsp/jstl/functions">
     <f:view>
-        <a4j:form rendered="#{tc:getSize(purchaseController.tickets) > 0}"
+        <a4j:form rendered="#{tc:getSize(purchaseController.tickets) > 0 and !fn:contains(request.requestURI, 'paymentSuccess.jsp')}"
             id="purchaseDetailsForm">
             <rich:panel header="#{msg.currentTickets}"
                 headerClass="rich-panel-header-main" id="currentTickets">
@@ -33,7 +33,8 @@
                         <h:graphicImage url="/images/timer.png"
                             style="width: 16px; height: 16px;" />
 
-                        <a4j:jsFunction name="timeoutPurchase" oncomplete="document.location='search.jsp';"
+                        <a4j:jsFunction name="timeoutPurchase"
+                            oncomplete="document.location='search.jsp';"
                             action="#{purchaseController.timeoutPurchase}" />
 
                         <script type="text/javascript">

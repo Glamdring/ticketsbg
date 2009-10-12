@@ -12,7 +12,7 @@
     template="publicTemplate.jsp">
 
     <ui:define name="body">
-        <f:view afterPhase="#{paymentController.afterPhase}"><!-- TODO phases -->
+        <f:view afterPhaseListener="#{purchaseController.afterPhase}"><!-- attribute renamed in facelets. -->
             <rich:panel header="#{msg.purchaseSuccessfulTitle}"
                 headerClass="rich-panel-header-main">
                 <a4j:form id="successForm">
@@ -22,6 +22,7 @@
                     <a4j:repeat value="#{purchaseController.tickets}" var="ticket">
                         <rich:separator/>
                         <h:panelGrid style="text-align: center;" columns="1">
+                            <h:outputText value="#{ticket.startStop} → #{ticket.endStop}" style="font-weight: bold;" />
                             <h:outputText value="#{msg.ticketCode}: "/>
                             <h:outputText value="#{ticket.ticketCode}" style="font-size: 18px; font-weight: bold;" />
                             <h:outputText value=" (#{ticket.run.route.requireReceiptAtCashDesk ? msg.requireReceiptAtCashDeskUserMessage : msg.showTicketAtVehicle})" />
