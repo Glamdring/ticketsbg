@@ -41,7 +41,6 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
         else
             passParam = saltAndHashPassword(new String(password));
 
-        System.out.println(passParam);
         List<User> result = getDao().findByNamedQuery("User.login",
                 new String[] { "username", "password" },
                 new Object[] { username, passParam });
@@ -58,13 +57,14 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
             } else {
                 User user = result.get(0);
                 user.setChangePasswordAfterLogin(true);
-                // getDao().save(user);
                 return user;
             }
         } else if (!result.get(0).isActive()) {
             throw UserException.USER_INACTIVE;
         } else {
-            return result.get(0);
+            User user = result.get(0);
+            user.setChangePasswordAfterLogin(false);
+            return user;
         }
     }
 
@@ -197,7 +197,6 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
         if (list.size() > 0) {
             User user = (User) list.get(0);
             String tempPassword = generateTemporaryPassword();
-            user.setTemporaryPassword(saltAndHashPassword(tempPassword));
 
             try {
                 Email mail = GeneralUtils.getPreconfiguredMail(false);
@@ -209,6 +208,9 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
                         "temp.password.email.content", user.getName(),
                         tempPassword, user.getUsername()));
                 mail.send();
+
+                //Set after the mail, so that no update is triggered
+                user.setTemporaryPassword(saltAndHashPassword(tempPassword));
                 getDao().persist(user);
             } catch (EmailException eex) {
                 log.error("Mail server not configured", eex);

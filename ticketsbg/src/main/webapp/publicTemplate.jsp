@@ -62,13 +62,13 @@
             <h:outputText value="#{msg.login}" styleClass="menuContent" />
         </rich:menuItem>
 
-        <rich:menuItem style="text-align: right;" action="history"
+        <rich:menuItem action="history"
             rendered="#{loggedUserHolder.loggedUser != null}">
             <h:graphicImage value="/images/routes.png" styleClass="menuIcon" />
             <h:outputText value="#{msg.travelHistory}" />
         </rich:menuItem>
 
-        <rich:menuItem style="text-align: right;" action="profile"
+        <rich:menuItem action="profile"
             rendered="#{loggedUserHolder.loggedUser != null}">
             <h:graphicImage value="/images/profile.png" styleClass="menuIcon" />
             <h:outputText value="#{msg.profile}" />
@@ -86,7 +86,7 @@
     <a4j:status forceId="generalStatus">
         <f:facet name="start">
             <h:graphicImage value="/images/ajaxloadingBig.gif" id="statusImage"
-                style="position: absolute; top: 110px; left: 970px;" />
+                style="position: absolute; top: 110px; left: 965px;" />
         </f:facet>
     </a4j:status>
 

@@ -7,9 +7,10 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.PhaseEvent;
+import javax.faces.event.PhaseId;
 import javax.faces.model.SelectItem;
 
-import org.apache.myfaces.orchestra.conversation.annotations.ConversationName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -21,18 +22,17 @@ import com.tickets.services.valueobjects.PaymentData;
 import com.tickets.utils.SelectItemUtils;
 
 @Component("paymentController")
-@Scope("conversation.manual")
-@ConversationName("purchaseConversation")
+@Scope("session")
 public class PaymentController extends BaseController {
 
     private List<SelectItem> paymentMethods = new ArrayList<SelectItem>();
     private String selectedPaymentMethod;
 
     @Autowired
-    private PaymentService paymentService;
+    private transient PaymentService paymentService;
 
     @Autowired
-    private PurchaseController purchaseController;
+    private transient PurchaseController purchaseController;
 
     @Autowired
     private PersonalInformationController personalInformationController;
@@ -41,13 +41,15 @@ public class PaymentController extends BaseController {
     private String encoded;
     private String checksum;
 
-    @PostConstruct
-    public void init() {
+    {
         //List all except the CASH_DESK option
         paymentMethods = SelectItemUtils.formSelectItems(PaymentMethod.class,
                 EnumSet.of(PaymentMethod.CASH_DESK));
+    }
 
-        refreshPaymentData(null);
+    @PostConstruct
+    public void init() {
+        refreshPaymentData();
     }
 
     public void pay() {
@@ -64,7 +66,7 @@ public class PaymentController extends BaseController {
             purchaseController.setPaymentMethod(paymentMethod);
 
             // Update the customer information for the purchase
-            personalInformationController.updateCustomer();
+            personalInformationController.updateCustomerInPurchase();
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -78,7 +80,12 @@ public class PaymentController extends BaseController {
         return paymentService.getServiceFee(purchaseController.getTotalPrice());
     }
 
-    public void refreshPaymentData(@SuppressWarnings("unused") ActionEvent evt) {
+    /**
+     * Method is called after modification in the tickets list (removal),
+     * and on loading of the page (before RENDER RESPONSE phase)
+     * @param evt
+     */
+    public void refreshPaymentData() {
         try {
             PaymentData paymentData = paymentService.getPaymentData(purchaseController.getTickets());
             setEncoded(paymentData.getEncoded());
@@ -89,6 +96,16 @@ public class PaymentController extends BaseController {
                 messageKey = "unexpectedErrorReloadThePage";
             }
             addError(messageKey);
+        }
+    }
+
+    public void refreshPaymentData(@SuppressWarnings("unused") ActionEvent evt) {
+        refreshPaymentData();
+    }
+
+    public void refreshPaymentData(PhaseEvent evt) {
+        if (evt.getPhaseId() == PhaseId.RENDER_RESPONSE) {
+            refreshPaymentData();
         }
     }
 

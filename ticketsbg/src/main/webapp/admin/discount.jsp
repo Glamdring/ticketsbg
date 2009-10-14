@@ -13,8 +13,8 @@
         <h:messages />
         <h:form id="discountForm">
             <a4j:outputPanel ajaxRendered="true">
-                <h:panelGrid columns="2" columnClasses="rich-panel">
-                    <h:outputLabel value="#{msg.discountName}" for="discountName" />
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{msg.discountName}: " for="discountName" />
                     <rich:comboBox value="#{routeController.discount.name}"
                         id="discountName"
                         suggestionValues="#{routeController.genericDiscountNames}">
@@ -23,13 +23,13 @@
                             reRender="description" />
                     </rich:comboBox>
 
-                    <h:outputLabel value="#{msg.discountType}" for="discountType" />
+                    <h:outputLabel value="#{msg.discountType}: " for="discountType" />
                     <h:selectOneMenu value="#{routeController.discount.discountType}" id="discountType">
                         <f:selectItems value="#{routeController.discountTypeSelectItems}" />
                     </h:selectOneMenu>
 
                     <a4j:outputPanel>
-                        <h:outputLabel value="#{msg.discountValue}" for="discountValue" />
+                        <h:outputLabel value="#{msg.discountValue}: " for="discountValue" />
                         <rich:toolTip followMouse="true" value="#{msg.discountValueHint}"/>
                     </a4j:outputPanel>
                     <h:inputText value="#{routeController.discount.value}" id="discountValue">
@@ -37,14 +37,14 @@
                     </h:inputText>
 
                     <a4j:outputPanel>
-                        <h:outputLabel value="#{msg.discountTwoWayValue}" for="discountTwoWayValue" />
+                        <h:outputLabel value="#{msg.discountTwoWayValue}: " for="discountTwoWayValue" />
                         <rich:toolTip followMouse="true" value="#{msg.discountValueHint}"/>
                     </a4j:outputPanel>
                     <h:inputText value="#{routeController.discount.twoWayValue}" id="discountTwoWayValue">
                         <f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
                     </h:inputText>
 
-                    <h:outputLabel value="#{msg.description}" for="description" />
+                    <h:outputLabel value="#{msg.description}: " for="description" />
                     <h:inputTextarea value="#{routeController.discount.description}"
                         id="description" rows="5" cols="20" />
 
@@ -52,7 +52,6 @@
                     <a4j:commandButton action="#{routeController.saveDiscount}"
                         value="#{msg.save}" reRender="discountsPanel"
                         oncomplete="#{rich:component('discountPanel')}.hide();">
-                        <tc:defaultAction />
                     </a4j:commandButton>
                     <h:outputText></h:outputText>
                 </h:panelGrid>

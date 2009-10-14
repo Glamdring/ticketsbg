@@ -1,12 +1,11 @@
 package com.tickets.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
+import javax.faces.event.PhaseEvent;
+import javax.faces.event.PhaseId;
 import javax.faces.model.SelectItem;
 
-import org.apache.myfaces.orchestra.conversation.annotations.ConversationName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -18,8 +17,7 @@ import com.tickets.model.User;
 import com.tickets.utils.SelectItemUtils;
 
 @Component("personalInformationController")
-@Scope("conversation.manual")
-@ConversationName("purchaseConversation")
+@Scope("session")
 public class PersonalInformationController extends BaseController {
 
     @Autowired
@@ -28,30 +26,41 @@ public class PersonalInformationController extends BaseController {
     @Autowired
     private PurchaseController purchaseController;
 
-    private Customer customer;
+    private Customer customer = new Customer();
 
-    private List<SelectItem> customerTypeItems = new ArrayList<SelectItem>();
+    private List<SelectItem> customerTypeItems = SelectItemUtils
+            .formSelectItems(CustomerType.class);
 
-    @PostConstruct
-    public void init() {
-        customer = loggedUserHolder.getLoggedUser();
-        if (customer == null) {
-            customer = new Customer();
+    /**
+     * Copies the data from the currently logged user (if such exists)
+     * to the customer object
+     * @param evt
+     */
+    public void beforeRenderResponse(PhaseEvent evt) {
+        if (evt.getPhaseId() == PhaseId.RENDER_RESPONSE) {
+            if (customer.getName() == null) {
+                User logged = loggedUserHolder.getLoggedUser();
+                if (logged != null) {
+                    customer.setName(logged.getName());
+                    customer.setContactPhone(logged.getContactPhone());
+                    customer.setCustomerType(logged.getCustomerType());
+                    customer.setCompanyName(logged.getCompanyName());
+                    customer.setEmail(logged.getEmail());
+                }
+            }
         }
-
-        customerTypeItems = SelectItemUtils.formSelectItems(CustomerType.class);
     }
 
-
-    public void updateCustomer() {
-        //In case the user has come directly to this page
-        //without choosing route
+    public void updateCustomerInPurchase() {
+        // In case the user has come directly to this page
+        // without choosing run, return
         if (purchaseController.getTickets().size() == 0) {
             return;
         }
 
-        if (customer instanceof User) {
-            purchaseController.setUser((User) customer);
+        User loggedUser = loggedUserHolder.getLoggedUser();
+        if (loggedUser != null) {
+            purchaseController.setUser(loggedUser);
         }
 
         purchaseController.setCustomerInformation(customer);

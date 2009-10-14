@@ -30,7 +30,8 @@
 }
 </style>
     <f:view>
-        <rich:panel header="#{searchController.ticketToAlter == null ? msg.searchTitle : null}"
+        <rich:panel
+            header="#{searchController.ticketToAlter == null ? msg.searchTitle : null}"
             headerClass="rich-panel-header-main">
             <ui:include src="messages.jsp" />
 
@@ -129,23 +130,22 @@
                         </h:selectOneMenu>
                         <h:outputText value=":" />
                     </h:panelGroup>
-                    <h:panelGrid columns="5" cellpadding="0" cellspacing="0" style="font-weight: bold;">
-                        <h:outputLabel value="#{msg.fromHour}&#160;" for="fromHour"
-                             />
+                    <h:panelGrid columns="5" cellpadding="0" cellspacing="0"
+                        style="font-weight: bold;">
+                        <h:outputLabel value="#{msg.fromHour}&#160;" for="fromHour" />
                         <rich:comboBox suggestionValues="#{searchController.hoursFrom}"
                             value="#{searchController.fromHour}" id="fromHour" width="50"
                             style="margin-right: 5px;">
                             <f:convertNumber minIntegerDigits="2" />
                         </rich:comboBox>
 
-                        <h:outputLabel value="#{msg.toHour}&#160;" for="toHour"
-                             />
+                        <h:outputLabel value="#{msg.toHour}&#160;" for="toHour" />
                         <rich:comboBox suggestionValues="#{searchController.hoursTo}"
                             value="#{searchController.toHour}" id="toHour" width="50"
                             style="margin-right: 5px;">
                             <f:convertNumber minIntegerDigits="2" />
                         </rich:comboBox>
-                        <h:outputText value="#{msg.hourAbbr}"/>
+                        <h:outputText value="#{msg.hourAbbr}" />
                     </h:panelGrid>
                 </h:panelGrid>
 

@@ -9,7 +9,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.component.UIInput;
 import javax.faces.model.ListDataModel;
 
-import org.apache.myfaces.orchestra.conversation.annotations.ConversationName;
 import org.richfaces.model.selection.SimpleSelection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -48,15 +47,14 @@ import com.tickets.utils.GeneralUtils;
  *
  */
 @Controller("searchController")
-@Scope("conversation.manual")
-@ConversationName("purchaseConversation")
+@Scope("session")
 public class SearchController extends BaseController {
 
     @Autowired
-    private SearchService searchService;
+    private transient SearchService searchService;
 
     @Autowired
-    private TicketService ticketService;
+    private transient TicketService ticketService;
 
     @Autowired
     private StopService stopService;

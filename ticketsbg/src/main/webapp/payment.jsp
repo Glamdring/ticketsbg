@@ -10,7 +10,7 @@
     xmlns:t="http://myfaces.apache.org/tomahawk"
     template="publicTemplate.jsp">
     <ui:define name="body">
-        <f:view>
+        <f:view beforePhaseListener="#{paymentController.refreshPaymentData}"><!-- Facelets changed attr name -->
             <h:panelGroup>
                 <a4j:form id="paymentForm">
                     <rich:panel header="#{msg.payment}"

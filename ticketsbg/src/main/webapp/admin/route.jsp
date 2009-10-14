@@ -484,7 +484,6 @@
                     <rich:panel id="buttonsPanel">
                         <h:commandButton action="#{routeController.save}"
                             value="#{msg.save}">
-                            <tc:defaultAction />
                         </h:commandButton>
                         <h:commandButton action="#{routeController.cancel}"
                             value="#{msg.cancel}" immediate="true" />

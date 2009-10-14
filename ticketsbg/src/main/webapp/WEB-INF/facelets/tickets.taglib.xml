@@ -21,12 +21,12 @@
         </component>
     </tag>
 
-    <tag>
+    <!-- tag>
         <tag-name>defaultAction</tag-name>
         <component>
             <component-type>org.j4j.defaultAction</component-type>
         </component>
-    </tag>
+    </tag-->
 
     <function>
         <function-name>getVacantSeats</function-name>

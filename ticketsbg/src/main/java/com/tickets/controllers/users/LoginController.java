@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import com.tickets.annotations.Action;
 import com.tickets.controllers.BaseController;
 import com.tickets.controllers.PurchaseController;
-import com.tickets.controllers.RouteController;
 import com.tickets.controllers.security.AccessLevel;
 import com.tickets.controllers.valueobjects.Screen;
 import com.tickets.exceptions.UserException;
@@ -32,9 +31,6 @@ public class LoginController extends BaseController {
     private LoggedUserHolder loggedUserHolder;
 
     @Autowired
-    private RouteController routeController;
-
-    @Autowired
     private PurchaseController purchaseController;
 
     @Action
@@ -52,16 +48,13 @@ public class LoginController extends BaseController {
             }
 
             if (Boolean.parseBoolean(admin.getValue().toString())) {
-                return "adminPanel";
+                return Screen.ADMIN_HOME.getOutcome();
             } else if (purchaseController != null && purchaseController.getCurrentStep() != null){
                 return purchaseController.getCurrentStep().getScreen().getOutcome();
             }
 
-            if (loggedUser.isStaff()) {
-                routeController.init();
-            }
 
-            return Screen.HOME.getOutcome(); //TODO referer, or at least the active step
+            return Screen.HOME.getOutcome();
         } catch (UserException ex) {
             addError(ex.getMessageKey());
             return null;

@@ -47,6 +47,9 @@ public class Customer extends DataObject implements Serializable {
     @Column
     private CustomerType customerType;
 
+    public Customer() {
+    }
+
     public String getEmail() {
         return email;
     }

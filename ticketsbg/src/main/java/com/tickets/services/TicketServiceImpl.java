@@ -94,8 +94,8 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
         int totalRequestedTickets = ticketCountsHolder.getTotalCount();
 
         Run run = selectedEntry.getRun();
-        // reload the run
-        getDao().refresh(run);
+        // reload the run (JPA refresh throws exception, so attach instead)
+        getDao().attach(run);
 
         boolean enoughSeats = ServiceFunctions.getVacantSeats(run,
                 selectedEntry.getPrice().getStartStop().getName(),
@@ -107,7 +107,8 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
         Run returnRun = null;
         if (selectedReturnEntry != null) {
             returnRun = selectedReturnEntry.getRun();
-            getDao().refresh(returnRun);
+            // reload the run (JPA refresh throws exception, so attach instead)
+            getDao().attach(returnRun);
             enoughReturnSeats = ServiceFunctions.getVacantSeats(returnRun,
                     selectedReturnEntry.getPrice().getStartStop().getName(),
                     selectedReturnEntry.getPrice().getEndStop().getName(),

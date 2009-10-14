@@ -1,6 +1,5 @@
 package com.tickets.controllers;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -242,8 +241,12 @@ public class RouteController extends BaseController implements Serializable {
             if (rowKey.depth() == 1) {
                 try {
                     tree.queueNodeExpand(rowKey);
-                } catch (IOException ex) {
+                } catch (Exception ex) {
                     // Ignore
+                    // No excepetion is expected to be thrown,
+                    // but in previous versions of RichFaces,
+                    // an IOException was thrown, so retaining
+                    // the clause just in case
                 }
             } else {
                 price = stopService.getPrice(rowKey, route);

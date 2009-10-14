@@ -4,10 +4,12 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
-import org.apache.myfaces.orchestra.conversation.annotations.ConversationName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -22,8 +24,7 @@ import com.tickets.services.PaymentService;
 import com.tickets.services.TicketService;
 
 @Controller("purchaseController")
-@Scope("conversation.manual")
-@ConversationName("purchaseConversation")
+@Scope("session")
 public class PurchaseController extends BaseController {
 
     private List<Ticket> tickets = new ArrayList<Ticket>();
@@ -71,7 +72,14 @@ public class PurchaseController extends BaseController {
     public void clearPurchase() {
         setCurrentStep(null);
         setTickets(new ArrayList<Ticket>());
-        endConversation();
+        HttpSession session = ((HttpServletRequest) FacesContext
+                .getCurrentInstance().getExternalContext().getRequest())
+                .getSession();
+
+        session.removeAttribute("searchController");
+        session.removeAttribute("paymentController");
+        session.removeAttribute("purchaseController");
+        session.removeAttribute("personalInformationController");
     }
 
     /**
