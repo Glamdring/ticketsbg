@@ -46,7 +46,12 @@ public class LoginController extends BaseController {
 
             loggedUserHolder.setLoggedUser(loggedUser);
 
-            if ((Boolean) admin.getValue()) {
+            if (loggedUser.isChangePasswordAfterLogin()) {
+                addMessage("changePasswordAfterTempLogin");
+                return Screen.PROFILE_SCREEN.getOutcome();
+            }
+
+            if (Boolean.parseBoolean(admin.getValue().toString())) {
                 return "adminPanel";
             } else if (purchaseController != null && purchaseController.getCurrentStep() != null){
                 return purchaseController.getCurrentStep().getScreen().getOutcome();

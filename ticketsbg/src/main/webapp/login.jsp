@@ -13,7 +13,7 @@
                 <ui:include src="loginFields.jsp">
                     <ui:param name="isAdmin" value="false" />
                 </ui:include>
-                <h:inputHidden id="admin" converter="#{booleanConverter}"
+                <h:inputHidden id="admin"
                     value="false" binding="#{loginController.admin}" />
             </rich:panel>
         </a4j:form>

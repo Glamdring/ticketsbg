@@ -8,22 +8,27 @@
     xmlns:c="http://java.sun.com/jstl/core"
     xmlns:tc="http://tickets.bg/tickets">
     <f:view>
-        <rich:messages errorClass="error" />
-        <h:panelGrid columns="2">
-            <h:outputLabel value="#{msg.username}" for="username" />
-            <h:inputText id="username" value="#{loginController.username}" />
+        <ui:include src="messages.jsp" />
+        <a4j:region>
+            <h:panelGrid columns="2">
+                <h:outputLabel value="#{msg.username}" for="username" />
+                <h:inputText id="username" value="#{loginController.username}" />
 
-            <h:outputLabel value="#{msg.password}" for="password" />
-            <h:inputSecret id="password" value="#{loginController.password}" />
+                <h:outputLabel value="#{msg.password}" for="password" />
+                <h:inputSecret id="password" value="#{loginController.password}" />
 
-            <a4j:commandButton action="#{loginController.login}"
-                value="#{msg.login}" type="submit" />
+                <a4j:commandButton action="#{loginController.login}"
+                    value="#{msg.login}" type="submit" />
+                <a4j:commandLink value="#{msg.forgottenPassword}?"
+                    onclick="#{rich:component('forgottenPasswordPanel')}.show()" />
 
-            <a4j:status id="loginStatus">
-                <f:facet name="start">
-                    <h:graphicImage value="/images/ajaxloading.gif" />
-                </f:facet>
-            </a4j:status>
-        </h:panelGrid>
+                <a4j:status id="loginStatus">
+                    <f:facet name="start">
+                        <h:graphicImage value="/images/ajaxloading.gif" />
+                    </f:facet>
+                </a4j:status>
+            </h:panelGrid>
+            <ui:include src="forgottenPasswordPanel.jsp" />
+        </a4j:region>
     </f:view>
 </ui:composition>

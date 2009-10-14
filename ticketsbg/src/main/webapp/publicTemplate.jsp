@@ -30,28 +30,34 @@
         immediate="true" ajaxSingle="true" />
 
     <rich:toolBar itemSeparator="line" height="34" width="1005">
-        <rich:menuItem action="#{searchController.navigateToSearch}" id="searchMenuItem">
+        <rich:menuItem action="#{searchController.navigateToSearch}"
+            id="searchMenuItem">
             <h:graphicImage value="/images/search.png" styleClass="menuIcon" />
             <h:outputText value="#{msg.searchMenuItem}" styleClass="menuContent" />
         </rich:menuItem>
 
         <rich:menuItem action="alterTicketScreen" id="alterTicketMenuItem">
             <h:graphicImage value="/images/alterTicket.png" styleClass="menuIcon" />
-            <h:outputText value="#{msg.alterTicketMenuItem}" styleClass="menuContent" />
+            <h:outputText value="#{msg.alterTicketMenuItem}"
+                styleClass="menuContent" />
         </rich:menuItem>
 
-        <rich:menuItem action="firmDetails" id="firmMenuItem" rendered="#{baseController.currentFirm != null}">
+        <rich:menuItem action="firmDetails" id="firmMenuItem"
+            rendered="#{baseController.currentFirm != null}">
             <h:graphicImage value="/images/firm.png" styleClass="menuIcon" />
             <h:outputText value="#{msg.firm}" styleClass="menuContent" />
         </rich:menuItem>
 
-        <rich:menuItem action="registrationScreen" rendered="#{loggedUserHolder.loggedUser == null}">
+        <rich:menuItem action="registrationScreen"
+            rendered="#{loggedUserHolder.loggedUser == null}">
             <h:graphicImage value="/images/users.png" styleClass="menuIcon" />
             <h:outputText value="#{msg.register}" styleClass="menuContent" />
         </rich:menuItem>
 
-        <rich:menuItem submitMode="ajax" rendered="#{loggedUserHolder.loggedUser == null}"
-            onclick="#{rich:component('loginPanel')}.show()" ajaxSingle="true" immediate="true">
+        <rich:menuItem submitMode="ajax"
+            rendered="#{loggedUserHolder.loggedUser == null}"
+            onclick="#{rich:component('loginPanel')}.show()" ajaxSingle="true"
+            immediate="true">
             <h:graphicImage value="/images/login.png" styleClass="menuIcon" />
             <h:outputText value="#{msg.login}" styleClass="menuContent" />
         </rich:menuItem>
@@ -59,7 +65,7 @@
         <rich:menuItem style="text-align: right;" action="history"
             rendered="#{loggedUserHolder.loggedUser != null}">
             <h:graphicImage value="/images/routes.png" styleClass="menuIcon" />
-            <h:outputText value="#{msg.travelHistory}"/>
+            <h:outputText value="#{msg.travelHistory}" />
         </rich:menuItem>
 
         <rich:menuItem style="text-align: right;" action="profile"
@@ -69,12 +75,21 @@
             <h:outputText value=" (#{loggedUserHolder.loggedUser.username})" />
         </rich:menuItem>
 
-        <rich:menuItem action="#{loggedUserHolder.logout}" rendered="#{loggedUserHolder.loggedUser != null}">
+        <rich:menuItem action="#{loggedUserHolder.logout}"
+            rendered="#{loggedUserHolder.loggedUser != null}">
             <h:graphicImage value="/images/logout.png" styleClass="menuIcon" />
             <h:outputText value="#{msg.logout}" styleClass="menuContent" />
         </rich:menuItem>
 
     </rich:toolBar>
+
+    <a4j:status forceId="generalStatus">
+        <f:facet name="start">
+            <h:graphicImage value="/images/ajaxloadingBig.gif" id="statusImage"
+                style="position: absolute; top: 110px; left: 970px;" />
+        </f:facet>
+    </a4j:status>
+
 </a4j:form>
 
 <a4j:include viewId="loginPanel.jsp" />

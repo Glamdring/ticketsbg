@@ -88,4 +88,22 @@ public interface UserService extends Service<User> {
     void changePassword(User user, String newPassword);
 
 
+    /**
+     * Activates user
+     *
+     * @param code
+     * @return user
+     * @throws UserException
+     */
+    User activateUserWithCode(String code) throws UserException;
+
+
+    /**
+     * Sends a mail with tempPassword
+     * @param email
+     * @throws UserException
+     */
+    void sendTemporaryPassword(String email) throws UserException;
+
+
 }

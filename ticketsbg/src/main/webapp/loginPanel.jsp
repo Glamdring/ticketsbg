@@ -25,7 +25,7 @@
             <ui:include src="loginFields.jsp">
                 <ui:param name="isAdmin" value="false" />
             </ui:include>
-            <h:inputHidden id="admin" converter="#{booleanConverter}"
+            <h:inputHidden id="admin"
                 value="false" binding="#{loginController.admin}" />
             <a4j:support event="hide"
                 action="#{personalInformationController.updateCustomer}" />

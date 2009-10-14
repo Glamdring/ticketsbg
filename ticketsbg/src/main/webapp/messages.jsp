@@ -3,9 +3,10 @@
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:rich="http://richfaces.org/rich">
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j">
 
-    <rich:messages id="messages#{additionalId}" errorClass="error"
+    <rich:messages id="messages#{additionalId}" errorClass="error" infoClass="message"
         globalOnly="#{globalOnly != null and globalOnly == true}">
         <f:facet name="errorMarker">
             <h:graphicImage url="/images/validationError.png" width="14"

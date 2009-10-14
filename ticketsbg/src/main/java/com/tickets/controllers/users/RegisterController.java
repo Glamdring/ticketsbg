@@ -45,14 +45,14 @@ public class RegisterController extends BaseController {
             user = userService.register(user);
             loggedUserHolder.setLoggedUser(user);
         } catch (UserException uex) {
-            addError("emailProblem", "email");
+            addError(uex.getMessageKey());
             return null;
         }
 
         if (purchaseController != null && purchaseController.getCurrentStep() != null) {
             return purchaseController.getCurrentStep().getScreen().getOutcome();
         }
-        return Screen.HOME.getOutcome(); // TODO referer
+        return Screen.REGISTRATION_SUCCESS_SCREEN.getOutcome();
     }
 
     @PostConstruct
@@ -64,11 +64,11 @@ public class RegisterController extends BaseController {
         boolean valid = true;
 
         if (!user.getPassword().equals(user.getRepeatPassword())) {
-            addError("passwordMustMatch", "repeatPassword");
+            addError("passwordMustMatch");
             valid = false;
         }
         if (!user.isAgreedToTerms()) {
-            addError("mustAgreeToTerms", "agreedToTerms");
+            addError("mustAgreeToTerms");
             valid = false;
         }
 

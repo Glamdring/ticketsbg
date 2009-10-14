@@ -11,6 +11,9 @@
             <a4j:form id="registerForm">
                 <rich:panel headerClass="rich-panel-header-main"
                     header="#{msg.register}">
+                    <ui:include src="messages.jsp">
+                        <ui:param name="globalOnly" value="true" />
+                    </ui:include>
                     <rich:graphValidator>
                         <h:panelGrid columns="3">
                             <h:panelGroup>
@@ -94,7 +97,9 @@
                                 <h:outputText value=" *" styleClass="asterisk" />
                             </h:panelGroup>
                             <h:inputText value="#{registerController.user.contactPhone}"
-                                id="contactPhone" size="35" />
+                                id="contactPhone" size="35">
+                                <rich:ajaxValidator event="onblur" />
+                            </h:inputText>
                             <rich:message for="contactPhone" errorClass="error" />
 
                             <h:outputLabel value="#{msg.city}" for="city" />

@@ -8,6 +8,7 @@ import java.awt.PopupMenu;
 import java.awt.SystemColor;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
+import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileInputStream;
@@ -27,7 +28,6 @@ import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import org.apache.commons.httpclient.HttpClient;
@@ -59,6 +59,8 @@ public class TicketsNotifier {
 
     private Timer poller;
 
+    private TrayIcon trayIcon;
+
     public static void main(String[] args) {
         Thread t = new Thread(new Runnable() {
             @Override
@@ -85,7 +87,7 @@ public class TicketsNotifier {
         poller.schedule(new PollerTask(getHttpClient()), 0, POLL_INTERVAL);
 
         final PopupMenu popUp = new PopupMenu();
-        final TrayIcon trayIcon = new TrayIcon(createImage("images/icon.png"));
+        trayIcon = new TrayIcon(createImage("images/icon.png"));
         trayIcon.setImageAutoSize(true);
 
         final SystemTray tray = SystemTray.getSystemTray();
@@ -251,13 +253,15 @@ public class TicketsNotifier {
                 saveLastCheck();
 
                 if (newTickets > 0) {
+                    String message = "";
                     if (newTickets == 1) {
-                        JOptionPane.showMessageDialog(null, Messages
-                                .getString("newTicket"));
+                        message = Messages.getString("newTicket");
                     } else {
-                        JOptionPane.showMessageDialog(null, Messages.getString(
-                                "newTickets", newTickets));
+                        message =  Messages.getString("newTickets", newTickets);
                     }
+                    trayIcon.displayMessage(Messages
+                            .getString("notificationCaption"), message,
+                            MessageType.INFO);
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();

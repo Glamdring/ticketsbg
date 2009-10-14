@@ -11,6 +11,8 @@ import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.mail.SimpleEmail;
 
 import com.tickets.constants.Settings;
+import com.tickets.model.User;
+import com.tickets.services.UserServiceImpl;
 
 public class GeneralUtils {
 
@@ -59,18 +61,35 @@ public class GeneralUtils {
     }
 
     public static Email getPreconfiguredMail(boolean html) {
-        Email se = null;
+        Email e = null;
         if (html) {
-            se = new HtmlEmail();
+            e = new HtmlEmail();
         } else {
-            se = new SimpleEmail();
+            e = new SimpleEmail();
         }
-        se.setHostName(Settings.getValue("smtp.host"));
+        e.setHostName(Settings.getValue("smtp.host"));
         String username = Settings.getValue("smtp.user");
-        if (username.length() > 0)
-            se.setAuthentication(username, Settings.getValue("smtp.password"));
+        if (username.length() > 0) {
+            e.setAuthentication(username, Settings.getValue("smtp.password"));
+        }
 
-        se.setCharset("utf-8");
-        return se;
+        e.setTLS(true);
+        e.setCharset("UTF8");
+
+        //e.setDebug(true);
+
+        return e;
+    }
+
+    public static void main(String[] args) throws Exception {
+        User user = new User();
+        user.setName("алабала портокала");
+        user.setPassword("asdf");
+        user.setRepeatPassword("asdf");
+        user.setUsername("asdfkofar");
+        user.setEmail("glamd@abv.bg");
+
+        UserServiceImpl impl = new UserServiceImpl();
+        impl.register(user);
     }
 }

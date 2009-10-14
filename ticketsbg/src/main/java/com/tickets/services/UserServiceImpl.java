@@ -102,27 +102,48 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
         if (user == null)
             return null;
 
+        List existingUser = getDao().findByNamedQuery("User.getByUsername",
+                new String[] { "username" },
+                new Object[] { user.getUsername() });
+
+        if (existingUser.size() > 0) {
+            throw UserException.USER_ALREADY_EXISTS;
+        }
+
+        List existingEmail = getDao().findByNamedQuery("User.getByEmail",
+                new String[] { "email" }, new Object[] { user.getEmail() });
+
+        if (existingEmail.size() > 0) {
+            throw UserException.EMAIL_ALREADY_EXISTS;
+        }
+
         user.setPassword(saltAndHashPassword(user.getPassword()));
-        user.setActivationCode(getHexString(salt(user.getUsername()).getBytes()));
+
+        try {
+            MessageDigest digester = MessageDigest.getInstance("SHA-1");
+            digester.update(user.getPassword().getBytes());
+            user.setActivationCode(getHexString(digester.digest()));
+        } catch (NoSuchAlgorithmException e) {
+            user.setActivationCode(getHexString(user.getUsername().getBytes()));
+        }
 
         user.setRegisteredTimestamp(System.currentTimeMillis());
 
         try {
             Email email = GeneralUtils.getPreconfiguredMail(false);
-            email.addTo(user.getEmail());
+            email.addTo(user.getEmail(), user.getName());
             email.setFrom(Settings.getValue("confirmation.email.sender"));
             email.setSubject(Messages.getString("confirmation.email.subject"));
             email.setMsg(Messages.getString("confirmation.email.content",
                     user.getName(), user.getUsername(), user
                             .getRepeatPassword(), Settings.getValue("base.url")
-                            + "/users.do?method=activate&code="
+                            + "/activate.jsp?code="
                             + user.getActivationCode()));
 
             email.send();
-
         } catch (EmailException eex) {
             log.error("Mail problem", eex);
-            //throw UserException.EMAIL_PROBLEM; TODO throw
+            throw UserException.EMAIL_PROBLEM;
         }
         //Save after a successful email
         user = (User) getDao().persist(user);
@@ -131,7 +152,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
     }
 
     @SuppressWarnings("unchecked")
-    public void activateUserWithCode(String code) throws UserException {
+    public User activateUserWithCode(String code) throws UserException {
         List<User> list = getDao().findByQuery(
                 "select u from User u " + "where u.activationCode=:code",
                 new String[] { "code" }, new Object[] { code });
@@ -141,6 +162,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
             if (!user.isActive()) {
                 user.setActive(true);
                 getDao().persist(user);
+                return user;
             }
             throw UserException.USER_ALREADY_ACTIVE;
         }
@@ -168,7 +190,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
         log.info("Cleaning inactive users : " + result);
     }
 
-    public void remindPassword(String email) throws UserException {
+    public void sendTemporaryPassword(String email) throws UserException {
         List list = getDao().findByNamedQuery("User.getByEmail",
                 new String[] { "email" }, new Object[] { email });
 
@@ -180,36 +202,43 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
             try {
                 Email mail = GeneralUtils.getPreconfiguredMail(false);
                 mail.setFrom(Settings.getValue("temp.password.email.sender"));
-                mail.addTo(email);
+                mail.addTo(email, user.getName());
                 mail.setSubject(Messages
                         .getString("temp.password.email.subject"));
                 mail.setMsg(Messages.getString(
                         "temp.password.email.content", user.getName(),
-                        tempPassword));
+                        tempPassword, user.getUsername()));
                 mail.send();
                 getDao().persist(user);
             } catch (EmailException eex) {
                 log.error("Mail server not configured", eex);
-                throw UserException.UNEXPECTED_PROBLEM;
+                throw UserException.EMAIL_PROBLEM;
             }
         } else {
             throw UserException.INVALID_EMAIL;
         }
     }
 
-    public void changePassword(String password, User user) {
-        user.setPassword(saltAndHashPassword(password));
+    @Override
+    public void changePassword(User user, String newPassword) {
+        user.setPassword(saltAndHashPassword(newPassword));
         user.setTemporaryPassword("");
         getDao().persist(user);
     }
 
     private String generateTemporaryPassword() {
-        int length = 6 + (int) (Math.random() * 6);
+        int length = 8 + (int) (Math.random() * 4);
         byte[] chars = new byte[length];
         for (int i = 0; i < chars.length; i++) {
-            chars[i] = (byte) (33 + (Math.random() * 93));
+            chars[i] = (byte) (48 + (Math.random() * 89));
         }
-        return new String(chars).trim();
+        try {
+            MessageDigest digester = MessageDigest.getInstance("SHA-1");
+            digester.update(new String(chars).getBytes());
+            return getHexString(digester.digest()).substring(0, length);
+        } catch (NoSuchAlgorithmException ex) {
+            return new String(chars).trim();
+        }
     }
 
     private char[] saltChars = new char[] { '!', 'b', '0', 'z', 'h', 'o' };
@@ -295,12 +324,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
         return password.length() == 37 && password.matches("[0-9abcdef]+");
     }
 
-    @Override
-    public void changePassword(User user, String newPassword) {
-        user.setPassword(saltAndHashPassword(newPassword));
-        user.setTemporaryPassword("");
-        getDao().persist(user);
-    }
+
 
     @Override
     public User save(User user) {

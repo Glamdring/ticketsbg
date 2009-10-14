@@ -6,7 +6,9 @@ public enum Screen {
     SEARCH_RESULTS("searchResults"),
     HOME("home"),
     REGISTRATION_SCREEN("registrationScreen"),
+    REGISTRATION_SUCCESS_SCREEN("registrationSuccessScreen"),
     LOGIN_SCREEN("loginScreen"),
+    PROFILE_SCREEN("profile"),
 
     ROUTE_SCREEN("routeScreen"),
     ROUTES_LIST("routesList"),
@@ -15,7 +17,7 @@ public enum Screen {
     RUNS_LIST("runsList"),
     ADMIN_SEARCH_RESULTS("adminSearchResults"),
 
-    UNAUTHORIZED("unauthorized")
+    UNAUTHORIZED("unauthorized");
     ;
 
 

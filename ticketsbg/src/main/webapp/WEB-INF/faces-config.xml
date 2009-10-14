@@ -360,6 +360,14 @@
         </navigation-case>
     </navigation-rule>
 
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>registrationSuccessScreen</from-outcome>
+            <to-view-id>/registrationSuccess.jsp</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+
     <lifecycle>
         <phase-listener>com.tickets.controllers.lifecycle.FirmIdentifier</phase-listener>
     </lifecycle>

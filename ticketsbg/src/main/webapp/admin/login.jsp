@@ -11,7 +11,7 @@
             <ui:include src="../loginFields.jsp">
                 <ui:param name="isAdmin" value="true" />
             </ui:include>
-            <h:inputHidden id="admin" converter="#{booleanConverter}"
+            <h:inputHidden id="admin"
                 value="true" binding="#{loginController.admin}" />
         </a4j:form>
     </ui:define>

@@ -148,7 +148,7 @@ public class SearchController extends BaseController {
     private String publicSearch() {
 
         if (!validateReturnDate(returnDate)) {
-            addError("returnDateMustNotBeBeforeOutward");
+            addError("returnDateMustNotBeBeforeOutbound");
             return null;
         }
 
