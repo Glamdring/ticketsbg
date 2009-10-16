@@ -7,7 +7,8 @@
     xmlns:rich="http://richfaces.org/rich"
     xmlns:c="http://java.sun.com/jstl/core"
     xmlns:fmt="http://java.sun.com/jstl/fmt"
-    xmlns:t="http://myfaces.apache.org/tomahawk" template="adminTemplate.jsp">
+    xmlns:t="http://myfaces.apache.org/tomahawk"
+    template="adminTemplate.jsp">
     <ui:define name="body">
         <f:view>
             <h:form id="firmForm">
@@ -65,15 +66,11 @@
         </f:view>
 
         <rich:modalPanel id="entityPanel" autosized="true" width="350"
-            height="120" moveable="true" resizeable="false" domElementAttachment="parent">
-            <f:facet name="controls">
-                <h:panelGroup>
-                    <h:graphicImage value="/images/close.png" styleClass="hidelink"
-                        id="hidelink" onclick="#{rich:component('entityPanel')}.hide()" />
-                    <rich:componentControl for="entityPanel" attachTo="hidelink"
-                        operation="hide" event="onclick" />
-                </h:panelGroup>
-            </f:facet>
+            height="120" moveable="true" resizeable="false"
+            domElementAttachment="parent" style="overflow: hidden;">
+            <ui:include src="/modalPanelCommons.jsp">
+                <ui:param name="dialogId" value="entityPanel" />
+            </ui:include>
             <f:facet name="header">
                 <h:outputText value="#{msg.firm}" />
             </f:facet>

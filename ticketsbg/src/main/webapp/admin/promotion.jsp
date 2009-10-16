@@ -20,8 +20,8 @@
             <a4j:outputPanel ajaxRendered="true">
                 <h:panelGrid columns="2" styleClass="gridContent">
                     <h:outputLabel for="shortText" value="#{msg.promotionShortText}: " />
-                    <h:inputText value="#{promotionController.promotion.shortText}" id="shortText"
-                        size="30" />
+                    <h:inputText value="#{promotionController.promotion.shortText}"
+                        id="shortText" size="30" />
 
                     <h:outputLabel for="startDate" value="#{msg.startDate}: " />
                     <rich:calendar value="#{promotionController.promotion.start.time}"
@@ -31,7 +31,7 @@
                     <h:outputLabel for="endDate" value="#{msg.endDate}: " />
                     <rich:calendar value="#{promotionController.promotion.end.time}"
                         id="endDate" datePattern="dd.MM.yyyy" firstWeekDay="1"
-                        boundaryDatesMode="scroll"/>
+                        boundaryDatesMode="scroll" />
 
                     <h:outputLabel for="sendToEmail" value="#{msg.sendToEmail}: " />
                     <h:selectBooleanCheckbox id="sendToEmail"
@@ -41,8 +41,8 @@
                     <h:selectBooleanCheckbox id="showInSite"
                         value="#{promotionController.promotion.showInSite}" />
 
-                    <rich:componentControl attachTo="richTextOpener"
-                        event="onclick" for="richTextPanel" operation="show" />
+                    <rich:componentControl attachTo="richTextOpener" event="onclick"
+                        for="richTextPanel" operation="show" />
                     <h:outputText id="richTextOpener" styleClass="link"
                         style="color: blue; text-decoration: underline;"
                         value="#{msg.description}" />
@@ -55,19 +55,13 @@
                 </h:panelGrid>
             </a4j:outputPanel>
 
-            <rich:modalPanel id="richTextPanel" autosized="true"
-                width="200" height="320" moveable="true" resizeable="false"
+            <rich:modalPanel id="richTextPanel" autosized="true" width="200"
+                height="320" moveable="true" resizeable="false"
                 onmaskclick="#{rich:component('richTextPanel')}.hide()"
-                domElementAttachment="parent">
-                <f:facet name="controls">
-                    <h:panelGroup>
-                        <h:graphicImage value="/images/close.png" styleClass="hidelink"
-                            id="hidelink1"
-                            onclick="#{rich:component('richTextPanel')}.hide()" />
-                        <rich:componentControl for="richTextPanel"
-                            attachTo="hidelink1" operation="hide" event="onclick" />
-                    </h:panelGroup>
-                </f:facet>
+                domElementAttachment="parent" style="overflow: hidden;">
+                <ui:include src="/modalPanelCommons.jsp">
+                    <ui:param name="dialogId" value="richTextPanel" />
+                </ui:include>
                 <f:facet name="header">
                     <h:outputText value="#{msg.description}" />
                 </f:facet>

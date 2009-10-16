@@ -7,7 +7,8 @@
     xmlns:rich="http://richfaces.org/rich"
     xmlns:c="http://java.sun.com/jstl/core"
     xmlns:fmt="http://java.sun.com/jstl/fmt"
-    xmlns:t="http://myfaces.apache.org/tomahawk" template="adminTemplate.jsp">
+    xmlns:t="http://myfaces.apache.org/tomahawk"
+    template="adminTemplate.jsp">
     <ui:define name="body">
         <f:view>
             <h:form id="promotionForm">
@@ -20,7 +21,8 @@
                         onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
                         onRowMouseOut="this.style.backgroundColor='white'" cellpadding="0"
                         cellspacing="0" width="700" border="0" var="promotion"
-                        value="#{promotionController.promotionsModel}" id="promotionsTable">
+                        value="#{promotionController.promotionsModel}"
+                        id="promotionsTable">
 
                         <rich:column>
                             <f:facet name="header">
@@ -41,7 +43,8 @@
                                 <h:outputText value="#{msg.startDate}" />
                             </f:facet>
                             <h:outputText value="#{promotion.startDate.time}">
-                                <f:convertDateTime pattern="dd.MM.yyyy" timeZone="#{timeZoneController.timeZone}"/>
+                                <f:convertDateTime pattern="dd.MM.yyyy"
+                                    timeZone="#{timeZoneController.timeZone}" />
                             </h:outputText>
                         </rich:column>
 
@@ -50,7 +53,8 @@
                                 <h:outputText value="#{msg.endDate}" />
                             </f:facet>
                             <h:outputText value="#{promotion.endDate.time}">
-                                <f:convertDateTime pattern="dd.MM.yyyy" timeZone="#{timeZoneController.timeZone}"/>
+                                <f:convertDateTime pattern="dd.MM.yyyy"
+                                    timeZone="#{timeZoneController.timeZone}" />
                             </h:outputText>
                         </rich:column>
 
@@ -58,16 +62,20 @@
                             <f:facet name="header">
                                 <h:outputText value="#{msg.sendToEmail}" />
                             </f:facet>
-                            <h:outputText value="#{msg.yes}" rendered="#{promotion.sendToEmail}" />
-                            <h:outputText value="#{msg.no}" rendered="#{!promotion.sendToEmail}" />
+                            <h:outputText value="#{msg.yes}"
+                                rendered="#{promotion.sendToEmail}" />
+                            <h:outputText value="#{msg.no}"
+                                rendered="#{!promotion.sendToEmail}" />
                         </rich:column>
 
                         <rich:column>
                             <f:facet name="header">
                                 <h:outputText value="#{msg.showInSite}" />
                             </f:facet>
-                            <h:outputText value="#{msg.yes}" rendered="#{promotion.showInSite}" />
-                            <h:outputText value="#{msg.no}" rendered="#{!promotion.showInSite}" />
+                            <h:outputText value="#{msg.yes}"
+                                rendered="#{promotion.showInSite}" />
+                            <h:outputText value="#{msg.no}"
+                                rendered="#{!promotion.showInSite}" />
                         </rich:column>
 
                         <rich:column>
@@ -93,15 +101,11 @@
         </f:view>
 
         <rich:modalPanel id="entityPanel" autosized="true" width="350"
-            height="120" moveable="true" resizeable="false" domElementAttachment="parent">
-            <f:facet name="controls">
-                <h:panelGroup>
-                    <h:graphicImage value="/images/close.png" styleClass="hidelink"
-                        id="hidelink" onclick="#{rich:component('entityPanel')}.hide()" />
-                    <rich:componentControl for="entityPanel" attachTo="hidelink"
-                        operation="hide" event="onclick" />
-                </h:panelGroup>
-            </f:facet>
+            height="120" moveable="true" resizeable="false"
+            domElementAttachment="parent" style="overflow: hidden;">
+            <ui:include src="/modalPanelCommons.jsp">
+                <ui:param name="dialogId" value="entityPanel" />
+            </ui:include>
             <f:facet name="header">
                 <h:outputText value="#{msg.promotion}" />
             </f:facet>

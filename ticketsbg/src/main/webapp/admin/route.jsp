@@ -54,7 +54,7 @@
                                     <h:selectBooleanCheckbox
                                         value="#{firmController.firm.requireReceiptAtCashDesk}"
                                         id="requireReceiptAtCashDesk" />
-                                 </h:panelGroup>
+                                </h:panelGroup>
 
                                 <h:outputText value="#{msg.doOnlineSale} " />
                                 <h:outputLabel value="#{msg.sellSeatsFrom}: "
@@ -492,33 +492,25 @@
             </h:form>
         </f:view>
 
-        <rich:modalPanel id="stopPanel" autosized="true" width="400">
+        <rich:modalPanel id="stopPanel" autosized="true" width="400"
+            style="overflow: hidden;">
             <f:facet name="header">
                 <h:outputText value="#{msg.addOrModifyStop}" />
             </f:facet>
-            <f:facet name="controls">
-                <h:panelGroup>
-                    <h:graphicImage value="/images/close.png" id="hidelink"
-                        styleClass="hidelink" />
-                    <rich:componentControl for="stopPanel" attachTo="hidelink"
-                        operation="hide" event="onclick" />
-                </h:panelGroup>
-            </f:facet>
+            <ui:include src="/modalPanelCommons.jsp">
+                <ui:param name="dialogId" value="stopPanel" />
+            </ui:include>
             <a4j:include viewId="stop.jsp" />
         </rich:modalPanel>
 
-        <rich:modalPanel id="discountPanel" autosized="true" width="300">
+        <rich:modalPanel id="discountPanel" autosized="true" width="300"
+            style="overflow: hidden;">
             <f:facet name="header">
                 <h:outputText value="#{msg.addOrModifyDiscount}" />
             </f:facet>
-            <f:facet name="controls">
-                <h:panelGroup>
-                    <h:graphicImage value="/images/close.png" id="hidelink1"
-                        styleClass="hidelink" />
-                    <rich:componentControl for="discountPanel" attachTo="hidelink1"
-                        operation="hide" event="onclick" />
-                </h:panelGroup>
-            </f:facet>
+            <ui:include src="/modalPanelCommons.jsp">
+                <ui:param name="dialogId" value="discountPanel" />
+            </ui:include>
             <a4j:include viewId="discount.jsp" />
         </rich:modalPanel>
     </ui:define>

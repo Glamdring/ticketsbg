@@ -1,3 +1,10 @@
+body {
+    margin-left: 0px;
+    margin-top: 0px;
+    margin-right: 0px;
+    background-image: url('../images/background.gif');
+}
+
 td {
     font-family: Arial, Verdana, sans-serif;
     font-size: 12px;
@@ -58,10 +65,17 @@ span {
 }
 
 .rich-menu-list-border {
-    filter: alpha(opacity = 100);
+    filter: alpha(opacity =   100);
     opacity: 1;
 }
 
 .link {
     cursor: pointer;
+}
+
+.dottedLine {
+    border-bottom: 1px dotted grey;
+    width: 100%;
+    border-collapse: collapse;
+    padding-top: 5px;
 }

@@ -22,8 +22,9 @@
                         <rich:dataTable
                             onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
                             onRowMouseOut="this.style.backgroundColor='white'"
-                            cellpadding="0" cellspacing="0" width="700" border="0" var="discount"
-                            value="#{discountController.discountsModel}" id="discountsTable">
+                            cellpadding="0" cellspacing="0" width="700" border="0"
+                            var="discount" value="#{discountController.discountsModel}"
+                            id="discountsTable">
 
                             <f:facet name="header">
                                 <rich:columnGroup>
@@ -77,15 +78,10 @@
         </f:view>
 
         <rich:modalPanel id="entityPanel" autosized="true" width="300"
-            height="120" moveable="true" resizeable="false">
-            <f:facet name="controls">
-                <h:panelGroup>
-                    <h:graphicImage value="/images/close.png" styleClass="hidelink"
-                        id="hidelink" onclick="#{rich:component('entityPanel')}.hide()" />
-                    <rich:componentControl for="entityPanel" attachTo="hidelink"
-                        operation="hide" event="onclick" />
-                </h:panelGroup>
-            </f:facet>
+            height="120" moveable="true" resizeable="false" style="overflow: hidden;">
+            <ui:include src="/modalPanelCommons.jsp">
+                <ui:param name="dialogId" value="entityPanel" />
+            </ui:include>
             <f:facet name="header">
                 <h:outputText value="#{msg.addOrModifyDiscount}" />
             </f:facet>

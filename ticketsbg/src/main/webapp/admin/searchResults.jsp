@@ -201,15 +201,10 @@
 </style>
 
             <rich:modalPanel id="purchasePanel" autosized="true" width="200"
-                height="120" moveable="true" resizeable="false">
-                <f:facet name="controls">
-                    <h:panelGroup>
-                        <h:graphicImage value="/images/close.png" styleClass="hidelink"
-                            id="hidelink" onclick="#{rich:component('purchasePanel')}.hide()" />
-                        <rich:componentControl for="purchasePanel" attachTo="hidelink"
-                            operation="hide" event="onclick" />
-                    </h:panelGroup>
-                </f:facet>
+                height="120" moveable="true" resizeable="false" style="overflow: hidden;">
+                <ui:include src="/modalPanelCommons.jsp">
+                    <ui:param name="dialogId" value="purchasePanel" />
+                </ui:include>
                 <f:facet name="header">
                     <h:outputText
                         value="#{searchController.travelType == 'TWO_WAY' ? msg.twoWayTicket : msg.oneWayTicket}" />

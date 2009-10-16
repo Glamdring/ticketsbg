@@ -14,7 +14,7 @@
 .firstColumn {
     text-align: right;
     padding-right: 5px;
-    width: 130px;
+    width: 50px;
     font-weight: bold;
     vertical-align: middle;
 }
@@ -28,21 +28,41 @@
     background-color: lightgrey;
     background-image: none;
 }
+
+.searchFieldLabel {
+    width: 50px;
+    font-weight: bold;
+}
 </style>
+    <script type="text/javascript">
+//<![CDATA[
+function showOrHideReturn() {
+
+    var oneWayChecked = document.getElementById("searchForm:travelType:1").checked;
+    if (oneWayChecked || oneWayChecked == 'checked') {
+        #{rich:element('returnPanel')}.style.display="none";
+    } else {
+        #{rich:element('returnPanel')}.style.display="block";
+    }
+}
+//]]>
+</script>
     <f:view>
         <rich:panel
             header="#{searchController.ticketToAlter == null ? msg.searchTitle : null}"
             headerClass="rich-panel-header-main">
-            <ui:include src="messages.jsp" />
 
+            <ui:include src="messages.jsp">
+                <ui:param name="ajaxRendered" value="false" />
+            </ui:include>
             <h:panelGrid columns="2" columnClasses="firstColumn,secondColumn"
                 rendered="#{!isAdmin}">
                 <h:outputLabel value="" for="travelType" />
                 <h:selectOneRadio value="#{searchController.travelType}"
                     id="travelType" style="font-weight: bold;"
-                    disabled="#{searchController.ticketToAlter != null}">
-                    <a4j:support event="onclick" reRender="returnPanel"
-                        ajaxSingle="true" />
+                    disabled="#{searchController.ticketToAlter != null}"
+                    onclick="showOrHideReturn();">
+                    <a4j:support event="onchange" ajaxSingle="true" />
                     <f:selectItem itemLabel="#{msg.twoWayTravelType}"
                         itemValue="twoWay" />
                     <f:selectItem itemLabel="#{msg.oneWayTravelType}"
@@ -50,13 +70,14 @@
                 </h:selectOneRadio>
             </h:panelGrid>
 
-            <h:panelGrid columns="2" columnClasses="firstColumn,secondColumn">
+            <h:panelGrid columns="2" columnClasses="firstColumn,secondColumn"
+                cellpadding="5">
                 <h:outputLabel value="#{msg.fromStop}:" for="fromStop" />
                 <h:panelGroup>
                     <rich:comboBox suggestionValues="#{searchController.stopNames}"
                         directInputSuggestions="false" required="true"
                         value="#{searchController.fromStop}" id="fromStop"
-                        disabled="#{searchController.ticketToAlter != null}">
+                        disabled="#{searchController.ticketToAlter != null}" width="165">
 
                         <f:attribute name="label" value="#{msg.startStop}" />
 
@@ -74,9 +95,12 @@
                 <rich:comboBox suggestionValues="#{searchController.toStopNames}"
                     directInputSuggestions="false" required="${!isAdmin}"
                     value="#{searchController.toStop}" id="toStop"
-                    disabled="#{searchController.ticketToAlter != null}">
+                    disabled="#{searchController.ticketToAlter != null}" width="165">
                     <f:attribute name="label" value="#{msg.endStop}" />
                 </rich:comboBox>
+
+                <h:outputText />
+                <h:panelGroup layout="block" styleClass="dottedLine" />
             </h:panelGrid>
 
             <script type="text/javascript">
@@ -113,25 +137,49 @@
             <!-- One way fields -->
             <h:panelGroup id="oneWayPanel">
                 <h:panelGrid columns="2" columnClasses="firstColumn,secondColumn">
-                    <h:outputLabel value="#{msg.departureDate}:" for="date" />
-                    <rich:calendar id="date" datePattern="dd.MM.yyyy" firstWeekDay="1"
-                        value="#{searchController.date}" required="true"
-                        enableManualInput="true" isDayEnabled="disallowPastDays"
-                        boundaryDatesMode="scroll" dayStyleClass="getDayClass">
-                        <f:attribute name="label" value="#{msg.departureDate}" />
-                    </rich:calendar>
+                    <h:outputText />
+                    <h:panelGrid columns="1">
+                        <h:outputLabel value="#{msg.departureDate}:" for="date"
+                            styleClass="searchFieldLabel" />
 
-                    <h:panelGroup>
+                        <h:panelGroup>
+                            <rich:calendar id="date" datePattern="dd.MM.yyyy"
+                                firstWeekDay="1" value="#{searchController.date}"
+                                required="true" enableManualInput="true"
+                                isDayEnabled="disallowPastDays" boundaryDatesMode="scroll"
+                                dayStyleClass="getDayClass">
+                                <f:attribute name="label" value="#{msg.departureDate}" />
+                            </rich:calendar>
+                            <h:outputText value="&#160;" />
+                            <h:graphicImage url="/images/timer.png"
+                                style="width: 16px; height: 16px; cursor: pointer; vertical-align: middle;"
+                                onclick="#{rich:component('outboundTimePanel')}.show()" />
+                        </h:panelGroup>
+                    </h:panelGrid>
+                </h:panelGrid>
+
+
+                <rich:modalPanel id="outboundTimePanel" autosized="true"
+                    onmaskclick="#{rich:component('outboundTimePanel')}.hide()"
+                    style="overflow: hidden;">
+                    <ui:include src="/modalPanelCommons.jsp">
+                        <ui:param name="dialogId" value="outboundTimePanel" />
+                    </ui:include>
+                    <f:facet name="header">
+                        <h:outputText value="#{msg.hoursSpan} (#{msg.oneWayHeaderLabel})" />
+                    </f:facet>
+
+
+                    <h:panelGrid columns="7" cellpadding="0" cellspacing="2"
+                        style="font-weight: bold;">
+
                         <h:selectOneMenu id="departureOrArival"
                             value="#{searchController.timeForDeparture}"
                             converter="#{booleanConverter}">
                             <f:selectItem itemLabel="#{msg.departureTime}" itemValue="true" />
                             <f:selectItem itemLabel="#{msg.arrivalTime}" itemValue="false" />
                         </h:selectOneMenu>
-                        <h:outputText value=":" />
-                    </h:panelGroup>
-                    <h:panelGrid columns="5" cellpadding="0" cellspacing="0"
-                        style="font-weight: bold;">
+
                         <h:outputLabel value="#{msg.fromHour}&#160;" for="fromHour" />
                         <rich:comboBox suggestionValues="#{searchController.hoursFrom}"
                             value="#{searchController.fromHour}" id="fromHour" width="50"
@@ -146,56 +194,101 @@
                             <f:convertNumber minIntegerDigits="2" />
                         </rich:comboBox>
                         <h:outputText value="#{msg.hourAbbr}" />
+
+                        <input type="button" value="OK"
+                            onclick="#{rich:component('outboundTimePanel')}.hide(); " />
+                    </h:panelGrid>
+                </rich:modalPanel>
+            </h:panelGroup>
+
+
+            <!--  Return fields -->
+            <h:panelGroup id="returnPanel" rendered="#{!isAdmin}">
+                <h:panelGrid columns="2" columnClasses="firstColumn,secondColumn">
+                    <h:outputText />
+                    <h:panelGroup layout="block" styleClass="dottedLine" />
+
+                    <h:outputText />
+                    <h:panelGrid columns="1">
+                        <h:outputLabel value="#{msg.returnDate}:" for="returnDate"
+                            styleClass="searchFieldLabel" />
+                        <h:panelGroup>
+                            <rich:calendar id="returnDate" datePattern="dd.MM.yyyy"
+                                firstWeekDay="1" value="#{searchController.returnDate}"
+                                enableManualInput="true" isDayEnabled="disallowPastDays"
+                                boundaryDatesMode="scroll" dayStyleClass="getDayClass" />
+
+                            <h:outputText value="&#160;" />
+                            <h:graphicImage url="/images/timer.png"
+                                style="width: 16px; height: 16px; cursor: pointer; vertical-align: middle;"
+                                onclick="#{rich:component('returnTimePanel')}.show()" />
+                        </h:panelGroup>
                     </h:panelGrid>
                 </h:panelGrid>
 
-            </h:panelGroup>
-            <!--  Return fields -->
-            <a4j:outputPanel ajaxRendered="true" rendered="#{!isAdmin}">
-                <h:panelGroup id="returnPanel"
-                    rendered="#{searchController.travelType == 'twoWay'}">
-                    <h:panelGrid columns="2" columnClasses="firstColumn,secondColumn">
-                        <h:outputLabel value="#{msg.returnDate}:" for="returnDate" />
-                        <rich:calendar id="returnDate" datePattern="dd.MM.yyyy"
-                            firstWeekDay="1" value="#{searchController.returnDate}"
-                            enableManualInput="true" isDayEnabled="disallowPastDays"
-                            boundaryDatesMode="scroll" dayStyleClass="getDayClass" />
+                <rich:modalPanel id="returnTimePanel" autosized="true"
+                    onmaskclick="#{rich:component('returnTimePanel')}.hide()"
+                    style="overflow: hidden;">
+                    <ui:include src="/modalPanelCommons.jsp">
+                        <ui:param name="dialogId" value="returnTimePanel" />
+                    </ui:include>
+                    <f:facet name="header">
+                        <h:outputText value="#{msg.hoursSpan} (#{msg.returnHeaderLabel})" />
+                    </f:facet>
 
-                        <h:panelGroup>
-                            <h:selectOneMenu id="returnDepartureOrArival"
-                                value="#{searchController.returnTimeForDeparture}"
-                                converter="#{booleanConverter}">
+                    <h:panelGrid columns="7" cellpadding="0" cellspacing="2"
+                        style="font-weight: bold;">
 
-                                <f:selectItem itemLabel="#{msg.departureTime}" itemValue="true" />
-                                <f:selectItem itemLabel="#{msg.arrivalTime}" itemValue="false" />
-                            </h:selectOneMenu>
-                            <h:outputText value=":" />
-                        </h:panelGroup>
-                        <h:panelGrid columns="5" cellpadding="0" cellspacing="0"
-                            style="font-weight: bold;">
-                            <h:outputLabel value="#{msg.fromHour}&#160;" for="returnFromHour" />
-                            <rich:comboBox suggestionValues="#{searchController.hoursFrom}"
-                                value="#{searchController.returnFromHour}" id="returnFromHour"
-                                width="50" style="margin-right: 5px;">
-                                <f:convertNumber minIntegerDigits="2" />
-                            </rich:comboBox>
+                        <h:selectOneMenu id="returnDepartureOrArival"
+                            value="#{searchController.returnTimeForDeparture}"
+                            converter="#{booleanConverter}">
 
-                            <h:outputLabel value="#{msg.toHour}&#160;" for="returnToHour" />
-                            <rich:comboBox suggestionValues="#{searchController.hoursTo}"
-                                value="#{searchController.returnToHour}" id="returnToHour"
-                                width="50" style="margin-right: 5px;">
-                                <f:convertNumber minIntegerDigits="2" />
-                            </rich:comboBox> #{msg.hourAbbr}
-                        </h:panelGrid>
+                            <f:selectItem itemLabel="#{msg.departureTime}" itemValue="true" />
+                            <f:selectItem itemLabel="#{msg.arrivalTime}" itemValue="false" />
+                        </h:selectOneMenu>
+
+                        <h:outputLabel value="#{msg.fromHour}&#160;" for="returnFromHour" />
+                        <rich:comboBox suggestionValues="#{searchController.hoursFrom}"
+                            value="#{searchController.returnFromHour}" id="returnFromHour"
+                            width="50" style="margin-right: 5px;">
+                            <f:convertNumber minIntegerDigits="2" />
+                        </rich:comboBox>
+
+                        <h:outputLabel value="#{msg.toHour}&#160;" for="returnToHour" />
+                        <rich:comboBox suggestionValues="#{searchController.hoursTo}"
+                            value="#{searchController.returnToHour}" id="returnToHour"
+                            width="50" style="margin-right: 5px;">
+                            <f:convertNumber minIntegerDigits="2" />
+                        </rich:comboBox> #{msg.hourAbbr}
+
+                        <input type="button" value="OK"
+                            onclick="#{rich:component('returnTimePanel')}.hide(); " />
                     </h:panelGrid>
-                </h:panelGroup>
-            </a4j:outputPanel>
+                </rich:modalPanel>
+            </h:panelGroup>
 
-            <h:panelGrid columns="2" columnClasses="firstColumn,secondColumn">
+            <h:panelGrid columns="2" columnClasses="firstColumn,secondColumn"
+                style="margin-top: 5px;">
                 <h:outputText></h:outputText>
                 <h:commandButton value="#{msg.search}"
+                    style="width: 170px; height: 25px;"
                     action="#{searchController.search}" />
             </h:panelGrid>
         </rich:panel>
     </f:view>
+
+    <script type="text/javascript">
+//<![CDATA[
+    window.onload = function() {
+        if (#{!admin}) {
+            var oneWay = #{searchController.travelType == 'oneWay'};
+            if (oneWay) {
+                #{rich:element('returnPanel')}.style.display="none";
+            } else {
+                #{rich:element('returnPanel')}.style.display="block";
+            }
+        }
+    }
+//]]>
+</script>
 </ui:composition>

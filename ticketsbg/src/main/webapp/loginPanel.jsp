@@ -8,25 +8,21 @@
     xmlns:c="http://java.sun.com/jstl/core"
     xmlns:tc="http://tickets.bg/tickets">
 
-    <rich:modalPanel id="loginPanel" autosized="true" width="250" style="overflow: hidden;">
+    <rich:modalPanel id="loginPanel" autosized="true" width="250"
+        style="overflow: hidden;">
         <f:facet name="header">
             <h:outputText value="#{msg.login}" />
         </f:facet>
-        <f:facet name="controls">
-            <h:panelGroup>
-                <h:graphicImage value="/images/close.png" id="hidelink"
-                    styleClass="hidelink" />
-                <rich:componentControl for="loginPanel" attachTo="hidelink"
-                    operation="hide" event="onclick" />
-            </h:panelGroup>
-        </f:facet>
+        <ui:include src="/modalPanelCommons.jsp">
+            <ui:param name="dialogId" value="loginPanel" />
+        </ui:include>
 
         <a4j:form ajaxSubmit="true" id="loginForm">
             <ui:include src="loginFields.jsp">
                 <ui:param name="isAdmin" value="false" />
             </ui:include>
-            <h:inputHidden id="admin"
-                value="false" binding="#{loginController.admin}" />
+            <h:inputHidden id="admin" value="false"
+                binding="#{loginController.admin}" />
             <a4j:support event="hide"
                 action="#{personalInformationController.updateCustomer}" />
         </a4j:form>

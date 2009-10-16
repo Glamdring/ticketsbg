@@ -8,50 +8,47 @@
     xmlns:c="http://java.sun.com/jstl/core"
     xmlns:tc="http://tickets.bg/tickets">
 
-    <rich:modalPanel id="changePasswordPanel" autosized="true" width="500">
+    <rich:modalPanel id="changePasswordPanel" autosized="true" width="500"
+        style="overflow: hidden;">
         <f:facet name="header">
             <h:outputText value="#{msg.changePassword}" />
         </f:facet>
-        <f:facet name="controls">
-            <h:panelGroup>
-                <h:graphicImage value="/images/close.png" id="hidelink"
-                    styleClass="hidelink" />
-                <rich:componentControl for="changePasswordPanel" attachTo="hidelink"
-                    operation="hide" event="onclick" />
-            </h:panelGroup>
-        </f:facet>
+        <ui:include src="/modalPanelCommons.jsp">
+            <ui:param name="dialogId" value="changePasswordPanel" />
+        </ui:include>
 
         <a4j:form ajaxSubmit="true" id="changePasswordForm">
             <h:panelGrid columns="3">
 
                 <h:outputLabel value="#{msg.oldPassword}" for="oldPassword" />
-                <h:inputSecret value="#{changePasswordController.oldPassword}" id="oldPassword"
-                    size="35">
+                <h:inputSecret value="#{changePasswordController.oldPassword}"
+                    id="oldPassword" size="35">
                     <a4j:support event="onblur" ajaxSingle="true" />
                 </h:inputSecret>
                 <rich:message for="oldPassword" errorClass="error" />
 
                 <h:outputLabel value="#{msg.newPassword}" for="newPassword" />
-                <h:inputSecret value="#{changePasswordController.newPassword}" id="newPassword"
-                    size="35" label="#{msg.newPassword}">
-                    <f:validateLength minimum="4" maximum="40"/>
+                <h:inputSecret value="#{changePasswordController.newPassword}"
+                    id="newPassword" size="35" label="#{msg.newPassword}">
+                    <f:validateLength minimum="4" maximum="40" />
                     <rich:ajaxValidator event="onblur" />
                 </h:inputSecret>
                 <rich:message for="newPassword" errorClass="error" />
 
                 <h:outputLabel value="#{msg.newPassword2}" for="newPassword2" />
-                <h:inputSecret value="#{changePasswordController.newPassword2}" id="newPassword2"
-                    size="35" label="#{msg.newPassword2}">
-                    <f:validateLength minimum="4" maximum="40"/>
+                <h:inputSecret value="#{changePasswordController.newPassword2}"
+                    id="newPassword2" size="35" label="#{msg.newPassword2}">
+                    <f:validateLength minimum="4" maximum="40" />
                     <rich:ajaxValidator event="onblur" />
                 </h:inputSecret>
                 <rich:message for="newPassword2" errorClass="error" />
 
-                <h:outputText/>
-                <a4j:commandButton action="#{changePasswordController.changePassword}"
+                <h:outputText />
+                <a4j:commandButton
+                    action="#{changePasswordController.changePassword}"
                     oncomplete="#{rich:component('changePasswordPanel')}.hide()"
                     value="#{msg.doChangePassword}" reRender="messages" />
-                <h:outputText/>
+                <h:outputText />
 
             </h:panelGrid>
         </a4j:form>

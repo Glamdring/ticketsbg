@@ -115,15 +115,11 @@
 
 </a4j:form>
 <rich:modalPanel id="firmPanel" autosized="true" width="350"
-    height="120" moveable="true" resizeable="false" domElementAttachment="parent">
-    <f:facet name="controls">
-        <h:panelGroup>
-            <h:graphicImage value="/images/close.png" styleClass="hidelink"
-                id="hidelinkFirm" onclick="#{rich:component('firmPanel')}.hide()" />
-            <rich:componentControl for="firmPanel" attachTo="hidelinkFirm"
-                operation="hide" event="onclick" />
-        </h:panelGroup>
-    </f:facet>
+    height="120" moveable="true" resizeable="false"
+    domElementAttachment="parent" style="overflow: hidden;">
+    <ui:include src="/modalPanelCommons.jsp">
+        <ui:param name="dialogId" value="firmPanel" />
+    </ui:include>
     <f:facet name="header">
         <h:outputText value="#{msg.firm}" />
     </f:facet>

@@ -63,14 +63,9 @@
         <f:facet name="header">
             <h:outputText value="#{msg.seats}" />
         </f:facet>
-        <f:facet name="controls">
-            <h:panelGroup>
-                <h:graphicImage value="/images/close.png" id="hidelink#{modifier}"
-                    styleClass="hidelink" />
-                <rich:componentControl for="seatsModalPanel#{modifier}"
-                    attachTo="hidelink#{modifier}" operation="hide" event="onclick" />
-            </h:panelGroup>
-        </f:facet>
+        <ui:include src="/modalPanelCommons.jsp">
+            <ui:param name="dialogId" value="seatsModalPanel#{modifier}" />
+        </ui:include>
         <a4j:form ajaxSubmit="true">
             <a4j:outputPanel id="seatsViewInner#{modifier}" ajaxRendered="true">
                 <rich:dataTable value="#{seatController[handler].rows}" var="row"

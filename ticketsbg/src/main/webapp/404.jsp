@@ -7,11 +7,14 @@
     xmlns:rich="http://richfaces.org/rich"
     xmlns:c="http://java.sun.com/jstl/core"
     xmlns:fmt="http://java.sun.com/jstl/fmt"
-    xmlns:t="http://myfaces.apache.org/tomahawk" template="publicTemplate.jsp">
+    xmlns:t="http://myfaces.apache.org/tomahawk"
+    template="publicTemplate.jsp">
 
     <ui:define name="body">
         <f:view>
-            <h:outputText value="#{msg.pageDoesNotExist}" styleClass="error" />
+            <rich:panel headerClass="rich-panel-header-main" header="#{msg.resourceNotFound}">
+               <h:outputText value="#{msg.pageDoesNotExist}" styleClass="error" />
+            </rich:panel>
         </f:view>
     </ui:define>
 </ui:composition>

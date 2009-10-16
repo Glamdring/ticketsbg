@@ -7,7 +7,7 @@
     xmlns:a4j="http://richfaces.org/a4j">
 
     <rich:messages id="messages#{additionalId}" errorClass="error" infoClass="message"
-        globalOnly="#{globalOnly != null and globalOnly == true}">
+        globalOnly="#{globalOnly != null and globalOnly == true}" ajaxRendered="#{ajaxRendered != false}">
         <f:facet name="errorMarker">
             <h:graphicImage url="/images/validationError.png" width="14"
                 height="14" style="margin-right: 4px;" />

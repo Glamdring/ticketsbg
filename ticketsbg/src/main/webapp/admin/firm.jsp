@@ -104,16 +104,10 @@
             <rich:modalPanel id="richDescriptionPanel" autosized="true"
                 width="200" height="320" moveable="true" resizeable="false"
                 onmaskclick="#{rich:component('richDescriptionPanel')}.hide()"
-                domElementAttachment="parent">
-                <f:facet name="controls">
-                    <h:panelGroup>
-                        <h:graphicImage value="/images/close.png" styleClass="hidelink"
-                            id="hidelink1"
-                            onclick="#{rich:component('richDescriptionPanel')}.hide()" />
-                        <rich:componentControl for="richDescriptionPanel"
-                            attachTo="hidelink1" operation="hide" event="onclick" />
-                    </h:panelGroup>
-                </f:facet>
+                domElementAttachment="parent" style="overflow: hidden;">
+                <ui:include src="/modalPanelCommons.jsp">
+                    <ui:param name="dialogId" value="richDescriptionPanel" />
+                </ui:include>
                 <f:facet name="header">
                     <h:outputText value="#{msg.description}" />
                 </f:facet>

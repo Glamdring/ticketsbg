@@ -13,7 +13,8 @@
     <ui:define name="head">
         <script type="text/javascript"
             src="http://maps.google.com/maps?file=api&amp;v=2&amp;hl=bg&amp;key=abcdefg"></script>
-        <script type="text/javascript" src="http://www.google.com/jsapi?key=ABCDEFG"></script>
+        <script type="text/javascript"
+            src="http://www.google.com/jsapi?key=ABCDEFG"></script>
         <style type="text/css">
 .tableHeader {
     border-style: none;
@@ -375,14 +376,9 @@
                     resizeable="false"
                     rendered="#{!empty searchController.mapHandler.fromMapUrl}">
 
-                    <f:facet name="controls">
-                        <h:panelGroup>
-                            <h:graphicImage value="/images/close.png"
-                                id="hidelinkFromMapPanel" styleClass="hidelink" />
-                            <rich:componentControl for="fromMapPanel"
-                                attachTo="hidelinkFromMapPanel" operation="hide" event="onclick" />
-                        </h:panelGroup>
-                    </f:facet>
+                    <ui:include src="/modalPanelCommons.jsp">
+                        <ui:param name="dialogId" value="fromMapPanel" />
+                    </ui:include>
 
                     <rich:panel id="fromMapHolder">
                         <a4j:include viewId="gmap.jsp">
@@ -398,16 +394,12 @@
 
                 <rich:modalPanel id="toMapPanel" autosized="true"
                     onmaskclick="#{rich:component('toMapPanel')}.hide()"
-                    resizeable="false" onshow="preparetoMap(); toMapVar.checkResize(); initToMap();"
+                    resizeable="false"
+                    onshow="preparetoMap(); toMapVar.checkResize(); initToMap();"
                     rendered="#{!empty searchController.mapHandler.toMapUrl}">
-                    <f:facet name="controls">
-                        <h:panelGroup>
-                            <h:graphicImage value="/images/close.png" id="hidelinkToMapPanel"
-                                styleClass="hidelink" />
-                            <rich:componentControl for="toMapPanel"
-                                attachTo="hidelinkToMapPanel" operation="hide" event="onclick" />
-                        </h:panelGroup>
-                    </f:facet>
+                    <ui:include src="/modalPanelCommons.jsp">
+                        <ui:param name="dialogId" value="toMapPanel" />
+                    </ui:include>
                     <rich:panel id="toMapHolder">
                         <a4j:include viewId="gmap.jsp">
                             <ui:param name="lat"

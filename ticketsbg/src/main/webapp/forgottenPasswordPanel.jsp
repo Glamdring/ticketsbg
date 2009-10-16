@@ -15,14 +15,9 @@
             <f:facet name="header">
                 <h:outputText value="#{msg.forgottenPassword}" />
             </f:facet>
-            <f:facet name="controls">
-                <h:panelGroup>
-                    <h:graphicImage value="/images/close.png" id="hidelinkFP"
-                        styleClass="hidelink" />
-                    <rich:componentControl for="forgottenPasswordPanel"
-                        attachTo="hidelinkFP" operation="hide" event="onclick" />
-                </h:panelGroup>
-            </f:facet>
+            <ui:include src="/modalPanelCommons.jsp">
+                <ui:param name="dialogId" value="forgottenPasswordPanel" />
+            </ui:include>
 
 
             <ui:include src="messages.jsp">
@@ -30,7 +25,9 @@
             </ui:include>
             <h:outputLabel for="email" value="#{msg.email}: " />
             <h:inputText id="email" value="#{forgottenPasswordController.email}" />
-            <a4j:commandButton value="#{msg.sendTempPassword}" reRender="#{facesContext.maximumSeverity.ordinal == 1 ? 'messages' : 'messagesforgotten'}" limitToList="true"
+            <a4j:commandButton value="#{msg.sendTempPassword}"
+                reRender="#{facesContext.maximumSeverity.ordinal == 1 ? 'messages' : 'messagesforgotten'}"
+                limitToList="true"
                 action="#{forgottenPasswordController.sendTemporaryPassword}"
                 oncomplete="if(#{facesContext.maximumSeverity == null || facesContext.maximumSeverity.ordinal == 1}) {#{rich:component('forgottenPasswordPanel')}.hide();}" />
 

@@ -20,11 +20,13 @@
 </style>
 <ui:insert name="head" />
 </head>
-<body style="margin-left: 0px; margin-top: 0px; margin-right: 0px">
+<body>
 <f:loadBundle var="msg" basename="com.tickets.constants.messages" />
 
 
-<img src="images/logo.jpg" alt="bus.bg" width="1005" height="100" />
+<a href="#{facesContext.externalContext.context.contextPath}/">
+    <img src="images/logo.png" alt="avtogara.com" style="border-style: none;" />
+</a>
 <a4j:form style="padding: 0px; margin: 0px;">
     <a4j:poll action="#{keepAliveController.poll}" interval="500000"
         immediate="true" ajaxSingle="true" />
@@ -86,7 +88,7 @@
     <a4j:status forceId="generalStatus">
         <f:facet name="start">
             <h:graphicImage value="/images/ajaxloadingBig.gif" id="statusImage"
-                style="position: absolute; top: 110px; left: 965px;" />
+                style="position: absolute; top: 103px; left: 965px;" />
         </f:facet>
     </a4j:status>
 

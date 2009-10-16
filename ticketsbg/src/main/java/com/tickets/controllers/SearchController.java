@@ -394,7 +394,6 @@ public class SearchController extends BaseController {
     @SuppressWarnings("unchecked")
     public void rowSelectionChanged() {
         Integer selectedId = (Integer) selection.getKeys().next();
-        System.out.println(selectedId);
         selectedRowId = new Long(selectedId);
         selectedEntry = ((List<SearchResultEntry>) resultsModel
                 .getWrappedData()).get(selectedId);
