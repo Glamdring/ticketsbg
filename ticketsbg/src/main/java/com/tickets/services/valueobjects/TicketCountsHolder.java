@@ -1,10 +1,11 @@
 package com.tickets.services.valueobjects;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class TicketCountsHolder {
+public class TicketCountsHolder implements Serializable {
 
     // defaults to 1 for user-friendliness, as this is the most common case
     private int regularTicketsCount = 1;

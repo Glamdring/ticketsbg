@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.tickets.controllers.valueobjects.Screen;
 import com.tickets.controllers.valueobjects.Step;
@@ -34,10 +35,10 @@ public class PurchaseController extends BaseController {
     private Ticket currentTicket;
 
     @Autowired
-    private TicketService ticketService;
+    private transient TicketService ticketService;
 
     @Autowired
-    private PaymentService paymentService;
+    private transient PaymentService paymentService;
 
 
     public void setPaymentMethod(PaymentMethod paymentMethod) {
@@ -76,10 +77,12 @@ public class PurchaseController extends BaseController {
                 .getCurrentInstance().getExternalContext().getRequest())
                 .getSession();
 
-        session.removeAttribute("searchController");
-        session.removeAttribute("paymentController");
-        session.removeAttribute("purchaseController");
-        session.removeAttribute("personalInformationController");
+
+        String prefix = ServletRequestAttributes.DESTRUCTION_CALLBACK_NAME_PREFIX;
+        session.removeAttribute(prefix + "searchController");
+        session.removeAttribute(prefix + "paymentController");
+        session.removeAttribute(prefix + "purchaseController");
+        session.removeAttribute(prefix + "personalInformationController");
     }
 
     /**

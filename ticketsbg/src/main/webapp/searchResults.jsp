@@ -11,6 +11,9 @@
     xmlns:tc="http://tickets.com/tc" template="publicTemplate.jsp">
 
     <ui:define name="head">
+        <script type="text/javascript"
+            src="http://maps.google.com/maps?file=api&amp;v=2&amp;hl=bg&amp;key=abcdefg"></script>
+        <script type="text/javascript" src="http://www.google.com/jsapi?key=ABCDEFG"></script>
         <style type="text/css">
 .tableHeader {
     border-style: none;
@@ -37,7 +40,8 @@
 </style>
     </ui:define>
     <ui:define name="body">
-        <f:view>
+        <f:view contentType="text/html">
+            <!-- Needed by Gmap, according to documentation -->
             <a4j:form id="searchResults">
                 <rich:panel headerClass="rich-panel-header-main">
                     <f:facet name="header">
@@ -120,7 +124,7 @@
 
                                 <rich:column width="35px" sortable="false" style="width: 35px;">
                                     <f:facet name="header">
-                                        <h:outputText value="&#160;"/>
+                                        <h:outputText value="&#160;" />
                                     </f:facet>
                                     <!-- For presentational purposes only -->
                                     <t:selectOneRow groupName="selectedEntry" id="selectedEntry"
@@ -279,7 +283,7 @@
                         </h:panelGroup>
 
                         <h:panelGroup id="seatChoices">
-                            <!-- Not rendering if there is no run chose, or in case the page is just loaded with
+                            <!-- Not rendering if there is no run chosen, or in case the page is just loaded with
                             the only possible run selected. See the end of document for how
                             the panel is rendered afterwards -->
                             <a4j:region
@@ -366,7 +370,7 @@
 
 
                 <rich:modalPanel id="fromMapPanel" autosized="true"
-                    onshow="fromMapVar.checkResize(); initFromMap();"
+                    onshow="preparefromMap(); fromMapVar.checkResize(); initFromMap();"
                     onmaskclick="#{rich:component('fromMapPanel')}.hide()"
                     resizeable="false"
                     rendered="#{!empty searchController.mapHandler.fromMapUrl}">
@@ -381,16 +385,20 @@
                     </f:facet>
 
                     <rich:panel id="fromMapHolder">
-                        <rich:gmap lat="#{searchController.mapHandler.fromMapLat}"
-                            lng="#{searchController.mapHandler.fromMapLng}" zoom="17"
-                            mapType="G_HYBRID_MAP" showGMapTypeControl="false"
-                            style="width: 500px; height: 500px;" gmapVar="fromMapVar" />
+                        <a4j:include viewId="gmap.jsp">
+                            <ui:param name="lat"
+                                value="#{searchController.mapHandler.fromMapLat}" />
+                            <ui:param name="lng"
+                                value="#{searchController.mapHandler.fromMapLng}" />
+                            <ui:param name="mapVar" value="fromMapVar" />
+                            <ui:param name="componentId" value="fromMap" />
+                        </a4j:include>
                     </rich:panel>
                 </rich:modalPanel>
 
                 <rich:modalPanel id="toMapPanel" autosized="true"
                     onmaskclick="#{rich:component('toMapPanel')}.hide()"
-                    resizeable="false" onshow="toMapVar.checkResize(); initToMap();"
+                    resizeable="false" onshow="preparetoMap(); toMapVar.checkResize(); initToMap();"
                     rendered="#{!empty searchController.mapHandler.toMapUrl}">
                     <f:facet name="controls">
                         <h:panelGroup>
@@ -401,10 +409,14 @@
                         </h:panelGroup>
                     </f:facet>
                     <rich:panel id="toMapHolder">
-                        <rich:gmap lat="#{searchController.mapHandler.toMapLat}"
-                            lng="#{searchController.mapHandler.toMapLng}" zoom="17"
-                            mapType="G_HYBRID_MAP" showGMapTypeControl="false"
-                            style="width: 500px; height: 500px;" gmapVar="toMapVar" />
+                        <a4j:include viewId="gmap.jsp">
+                            <ui:param name="lat"
+                                value="#{searchController.mapHandler.toMapLat}" />
+                            <ui:param name="lng"
+                                value="#{searchController.mapHandler.toMapLng}" />
+                            <ui:param name="mapVar" value="toMapVar" />
+                            <ui:param name="componentId" value="toMap" />
+                        </a4j:include>
                     </rich:panel>
                 </rich:modalPanel>
             </a4j:form>
@@ -425,8 +437,12 @@
                             //document.getElementById('searchResults:resultsTable:n:0').click();
                             refreshSeatChoices();
                         }
+
+                        google.load("maps", "2", {callback : mapsLoaded});
                     }
-                    //document.body.onload=load();
+                    function mapsLoaded() {
+                       //do nothing. The maps are loaded on click of the respective links
+                    }
                     setTimeout(load, 1000);
                 //]]>
                 </script>

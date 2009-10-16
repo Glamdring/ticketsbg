@@ -123,6 +123,9 @@ public class SearchController extends BaseController {
 
     private Ticket ticketToAlter;
 
+    private boolean renderMaps = false;
+
+
     @Action
     public String navigateToSearch() {
         resetSearchFields();
@@ -338,6 +341,7 @@ public class SearchController extends BaseController {
         seatController.setReturnSeatHandler(null);
         ticketCountsHolder = new TicketCountsHolder();
         reRenderSeatChoices = false;
+        renderMaps = false;
     }
 
     private void resetSearchFields() {
@@ -353,6 +357,11 @@ public class SearchController extends BaseController {
         returnTimeForDeparture = true;
         travelType = TWO_WAY;
         ticketToAlter = null;
+        renderMaps = false;
+    }
+
+    public void setRenderMaps() {
+        renderMaps = true;
     }
 
     public String toSearchScreen() {
@@ -385,6 +394,7 @@ public class SearchController extends BaseController {
     @SuppressWarnings("unchecked")
     public void rowSelectionChanged() {
         Integer selectedId = (Integer) selection.getKeys().next();
+        System.out.println(selectedId);
         selectedRowId = new Long(selectedId);
         selectedEntry = ((List<SearchResultEntry>) resultsModel
                 .getWrappedData()).get(selectedId);
@@ -770,5 +780,13 @@ public class SearchController extends BaseController {
 
     public void setTicketToAlter(Ticket ticketToAlter) {
         this.ticketToAlter = ticketToAlter;
+    }
+
+    public boolean isRenderMaps() {
+        return renderMaps;
+    }
+
+    public void setRenderMaps(boolean renderMaps) {
+        this.renderMaps = renderMaps;
     }
 }
