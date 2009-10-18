@@ -3,6 +3,7 @@ body {
     margin-top: 0px;
     margin-right: 0px;
     background-image: url('../images/background.gif');
+    background-repeat: repeat-x;
 }
 
 td {

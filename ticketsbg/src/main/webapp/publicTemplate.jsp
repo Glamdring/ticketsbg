@@ -74,7 +74,7 @@
             rendered="#{loggedUserHolder.loggedUser != null}">
             <h:graphicImage value="/images/profile.png" styleClass="menuIcon" />
             <h:outputText value="#{msg.profile}" />
-            <h:outputText value=" (#{loggedUserHolder.loggedUser.username})" />
+            <!-- h:outputText value=" (#{loggedUserHolder.loggedUser.username})" /-->
         </rich:menuItem>
 
         <rich:menuItem action="#{loggedUserHolder.logout}"

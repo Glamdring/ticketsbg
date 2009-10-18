@@ -107,8 +107,8 @@
                                 <h:outputText value="#{msg.customerName}" />
                             </f:facet>
                             <h:outputText value="#{ticket.customerInformation.name}" />
-                            <h:outputText value=" (#{ticket.customerInformation.name})"
-                                rendered="#{ticket.customerInformation.customerType == 'FIRM'}" />
+                            <h:outputText value=" (#{ticket.customerInformation.companyName})"
+                                rendered="#{ticket.customerInformation.customerType == 'BUSINESS'}" />
                         </rich:column>
 
                         <rich:column>
