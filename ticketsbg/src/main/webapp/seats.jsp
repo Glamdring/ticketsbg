@@ -9,7 +9,7 @@
     xmlns:fmt="http://java.sun.com/jstl/fmt"
     xmlns:t="http://myfaces.apache.org/tomahawk">
 
-    <style type="text/css">
+ <style type="text/css">
 .seat {
     width: 38px;
     height: 35px;
@@ -53,20 +53,21 @@
 
     <h:outputText
         value="#{seatController[handler].run == null ? msg.showSeatsView : msg.chooseSeat}"
-        styleClass="hyperlink">
+        styleClass="hyperlink" style="color: darkblue; text-decoration: underline; cursor: pointer;">
+        <!-- Style is set in addition to class because of IE6 -->
         <rich:componentControl for="seatsModalPanel#{modifier}"
             event="onclick" operation="show" />
     </h:outputText>
 
     <rich:modalPanel id="seatsModalPanel#{modifier}" autosized="true"
-        style="overflow: hidden;">
+        style="overflow: hidden;" domElementAttachment="parent">
         <f:facet name="header">
             <h:outputText value="#{msg.seats}" />
         </f:facet>
         <ui:include src="/modalPanelCommons.jsp">
             <ui:param name="dialogId" value="seatsModalPanel#{modifier}" />
         </ui:include>
-        <a4j:form ajaxSubmit="true">
+        <a4j:region selfRendered="true" renderRegionOnly="true">
             <a4j:outputPanel id="seatsViewInner#{modifier}" ajaxRendered="true">
                 <rich:dataTable value="#{seatController[handler].rows}" var="row"
                     style="table-layout: fixed; width: 178px;">
@@ -118,6 +119,6 @@
                 <rich:componentControl for="seatsModalPanel#{modifier}"
                     event="onclick" operation="hide" />
             </a4j:commandButton></div>
-        </a4j:form>
+        </a4j:region>
     </rich:modalPanel>
 </ui:composition>
