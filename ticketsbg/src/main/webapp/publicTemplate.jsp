@@ -101,6 +101,7 @@
     <h:panelGroup>
         <ui:include src="purchaseDetailsSideScreen.jsp" />
         <ui:include src="statistics.jsp" />
+        <ui:include src="paymentMethods.jsp" />
     </h:panelGroup>
 </h:panelGrid> <ui:insert name="footer" /></div>
 </body>
