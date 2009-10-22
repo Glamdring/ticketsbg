@@ -77,7 +77,8 @@ function showOrHideReturn() {
                     <rich:comboBox suggestionValues="#{searchController.stopNames}"
                         directInputSuggestions="false" required="true"
                         value="#{searchController.fromStop}" id="fromStop"
-                        disabled="#{searchController.ticketToAlter != null}" width="165">
+                        disabled="#{searchController.ticketToAlter != null}"
+                        width="165" listStyle="text-align: left;">
 
                         <f:attribute name="label" value="#{msg.startStop}" />
 
@@ -95,7 +96,8 @@ function showOrHideReturn() {
                 <rich:comboBox suggestionValues="#{searchController.toStopNames}"
                     directInputSuggestions="false" required="${!isAdmin}"
                     value="#{searchController.toStop}" id="toStop"
-                    disabled="#{searchController.ticketToAlter != null}" width="165">
+                    disabled="#{searchController.ticketToAlter != null}" width="165"
+                    listStyle="text-align: left;">
                     <f:attribute name="label" value="#{msg.endStop}" />
                 </rich:comboBox>
 

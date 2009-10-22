@@ -18,7 +18,7 @@
                 <h:inputSecret id="password" value="#{loginController.password}" />
 
                 <a4j:commandButton action="#{loginController.login}"
-                    value="#{msg.login}" type="submit" />
+                    value="#{msg.login}" type="submit" limitToList="true" reRender="messages" />
                 <a4j:commandLink value="#{msg.forgottenPassword}?"
                     onclick="#{rich:component('forgottenPasswordPanel')}.show()" />
 

@@ -21,38 +21,38 @@
 <ui:insert name="head" />
 </head>
 <body>
+
 <f:loadBundle var="msg" basename="com.tickets.constants.messages" />
 
-
-<a href="#{facesContext.externalContext.context.contextPath}/">
-    <img src="images/logo.png" alt="avtogara.com" style="border-style: none;" />
-</a>
-<a4j:form style="padding: 0px; margin: 0px;">
+<div class="container">
+<a href="#{facesContext.externalContext.context.contextPath}/"> <img
+    src="images/logo.png" alt="avtogara.com" style="border-style: none;" />
+</a> <a4j:form style="padding: 0px; margin: 0px;">
     <a4j:poll action="#{keepAliveController.poll}" interval="500000"
         immediate="true" ajaxSingle="true" />
 
     <rich:toolBar itemSeparator="line" height="34" width="1005">
         <rich:menuItem action="#{searchController.navigateToSearch}"
             id="searchMenuItem">
-            <h:graphicImage value="/images/search.png" styleClass="menuIcon" />
+            <h:graphicImage value="/images/small/search.png" styleClass="menuIcon" />
             <h:outputText value="#{msg.searchMenuItem}" styleClass="menuContent" />
         </rich:menuItem>
 
         <rich:menuItem action="alterTicketScreen" id="alterTicketMenuItem">
-            <h:graphicImage value="/images/alterTicket.png" styleClass="menuIcon" />
+            <h:graphicImage value="/images/small/alterTicket.png" styleClass="menuIcon" />
             <h:outputText value="#{msg.alterTicketMenuItem}"
                 styleClass="menuContent" />
         </rich:menuItem>
 
         <rich:menuItem action="firmDetails" id="firmMenuItem"
             rendered="#{baseController.currentFirm != null}">
-            <h:graphicImage value="/images/firm.png" styleClass="menuIcon" />
+            <h:graphicImage value="/images/small/firm.png" styleClass="menuIcon" />
             <h:outputText value="#{msg.firm}" styleClass="menuContent" />
         </rich:menuItem>
 
         <rich:menuItem action="registrationScreen"
             rendered="#{loggedUserHolder.loggedUser == null}">
-            <h:graphicImage value="/images/users.png" styleClass="menuIcon" />
+            <h:graphicImage value="/images/small/users.png" styleClass="menuIcon" />
             <h:outputText value="#{msg.register}" styleClass="menuContent" />
         </rich:menuItem>
 
@@ -60,26 +60,26 @@
             rendered="#{loggedUserHolder.loggedUser == null}"
             onclick="#{rich:component('loginPanel')}.show()" ajaxSingle="true"
             immediate="true">
-            <h:graphicImage value="/images/login.png" styleClass="menuIcon" />
+            <h:graphicImage value="/images/small/login.png" styleClass="menuIcon" />
             <h:outputText value="#{msg.login}" styleClass="menuContent" />
         </rich:menuItem>
 
         <rich:menuItem action="history"
             rendered="#{loggedUserHolder.loggedUser != null}">
-            <h:graphicImage value="/images/routes.png" styleClass="menuIcon" />
+            <h:graphicImage value="/images/small/history.png" styleClass="menuIcon" />
             <h:outputText value="#{msg.travelHistory}" />
         </rich:menuItem>
 
         <rich:menuItem action="profile"
             rendered="#{loggedUserHolder.loggedUser != null}">
-            <h:graphicImage value="/images/profile.png" styleClass="menuIcon" />
+            <h:graphicImage value="/images/small/profile.png" styleClass="menuIcon" />
             <h:outputText value="#{msg.profile}" />
             <!-- h:outputText value=" (#{loggedUserHolder.loggedUser.username})" /-->
         </rich:menuItem>
 
         <rich:menuItem action="#{loggedUserHolder.logout}"
             rendered="#{loggedUserHolder.loggedUser != null}">
-            <h:graphicImage value="/images/logout.png" styleClass="menuIcon" />
+            <h:graphicImage value="/images/small/logout.png" styleClass="menuIcon" />
             <h:outputText value="#{msg.logout}" styleClass="menuContent" />
         </rich:menuItem>
 
@@ -95,14 +95,13 @@
 </a4j:form>
 
 <a4j:include viewId="loginPanel.jsp" />
-
-<h:panelGrid columns="2" columnClasses="main,side">
+<h:panelGrid columns="2" columnClasses="main,side" cellpadding="0"
+    cellspacing="0" style="margin-top: 4px; text-align: left;">
     <ui:insert name="body" />
     <h:panelGroup>
         <ui:include src="purchaseDetailsSideScreen.jsp" />
         <ui:include src="statistics.jsp" />
     </h:panelGroup>
-</h:panelGrid>
-<ui:insert name="footer" />
+</h:panelGrid> <ui:insert name="footer" /></div>
 </body>
 </html>

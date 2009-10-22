@@ -1,13 +1,5 @@
 package com.tickets.components.renderers;
 
-import java.io.IOException;
-
-import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
-
-import org.ajax4jsf.renderkit.ComponentVariables;
-import org.richfaces.component.UIComboBox;
-import org.richfaces.component.util.HtmlUtil;
 import org.richfaces.renderkit.html.ComboBoxRenderer;
 
 public class AutocompleteRenderer331 extends ComboBoxRenderer {
