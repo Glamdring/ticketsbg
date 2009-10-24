@@ -61,16 +61,6 @@
                     </rich:panel>
 
                     <rich:messages errorClass="error" ajaxRendered="true" />
-                    <!-- show this button below the messages only if the message is
-                    asking the question whether tickets are to be cancelled -->
-                    <a4j:outputPanel rendered="#{searchController.proposeCancellation}">
-                        <h:commandButton action="#{searchController.cancelTickets}"
-                            value="#{msg.yes}" />
-                        <h:commandButton action="#{searchController.cancelTickets}"
-                            value="#{msg.noContinue}"
-                            rendered="#{searchController.confirmPartialPurchase}" />
-                    </a4j:outputPanel>
-
 
                     <h:panelGroup id="resultsPanel"
                         style="border-style: none; width: 100%;">

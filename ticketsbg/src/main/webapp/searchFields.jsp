@@ -70,15 +70,16 @@ function showOrHideReturn() {
                 </h:selectOneRadio>
             </h:panelGrid>
 
-            <h:panelGrid columns="2" columnClasses="firstColumn,secondColumn"
-                cellpadding="5">
+            <h:panelGrid columns="#{isAdmin ? 4 : 2}"
+                columnClasses="firstColumn,secondColumn#{isAdmin ? ',firstColumn,secondCoumns' : ''}"
+                cellpadding="5" style="#{isAdmin ? 'float: left;' : ''}">
                 <h:outputLabel value="#{msg.fromStop}:" for="fromStop" />
                 <h:panelGroup>
                     <rich:comboBox suggestionValues="#{searchController.stopNames}"
                         directInputSuggestions="false" required="true"
                         value="#{searchController.fromStop}" id="fromStop"
-                        disabled="#{searchController.ticketToAlter != null}"
-                        width="165" listStyle="text-align: left;">
+                        disabled="#{searchController.ticketToAlter != null}" width="165"
+                        listStyle="text-align: left;">
 
                         <f:attribute name="label" value="#{msg.startStop}" />
 
@@ -137,10 +138,10 @@ function showOrHideReturn() {
             //]]>
             </script>
             <!-- One way fields -->
-            <h:panelGroup id="oneWayPanel">
+            <h:panelGroup id="oneWayPanel" style="#{isAdmin ? 'float: left;' : ''}">
                 <h:panelGrid columns="2" columnClasses="firstColumn,secondColumn">
                     <h:outputText />
-                    <h:panelGrid columns="1">
+                    <h:panelGrid columns="#{isAdmin ? 2 : 1}">
                         <h:outputLabel value="#{msg.departureDate}:" for="date"
                             styleClass="searchFieldLabel" />
 

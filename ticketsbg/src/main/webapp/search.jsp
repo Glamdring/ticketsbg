@@ -10,14 +10,29 @@
     xmlns:t="http://myfaces.apache.org/tomahawk"
     template="publicTemplate.jsp">
 
+<ui:define name="head">
+    <style type="text/css">
+        .heightClass {
+            height: 315px;
+        }
+    </style>
+</ui:define>
     <ui:define name="body">
         <f:view>
             <a4j:form id="searchForm" ajaxSubmit="true">
-                <ui:include src="searchFields.jsp">
-                    <ui:param name="isAdmin" value="false" />
-                </ui:include>
-                <h:inputHidden id="admin" binding="#{searchController.admin}"
-                    value="false" converter="#{booleanConverter}" />
+                <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                    <a4j:outputPanel>
+                        <ui:include src="searchFields.jsp">
+                            <ui:param name="isAdmin" value="false" />
+                        </ui:include>
+                        <h:inputHidden id="admin" binding="#{searchController.admin}"
+                            value="false" converter="#{booleanConverter}" />
+                    </a4j:outputPanel>
+                    <rich:panel header=" " headerClass="rich-panel-header-main"
+                        style="text-align: center; width: 495px; margin-left: 5px;">
+                        <h:graphicImage url="/images/banner.png" />
+                    </rich:panel>
+                </h:panelGrid>
             </a4j:form>
         </f:view>
     </ui:define>
