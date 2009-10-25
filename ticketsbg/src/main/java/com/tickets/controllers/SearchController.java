@@ -465,11 +465,17 @@ public class SearchController extends BaseController {
                 .listAllEndStopsForRoute(fromStop, selectedEntry.getRun()
                         .getRoute());
 
-        seatController.setSeatHandler(new SeatHandler(selectedEntry));
+        seatController.setSeatHandler(new SeatHandler(selectedEntry, ticketCountsHolder));
 
         // If there is a selected end stop for the search,
         // have it displayed in the panel
         toStopPerPurchase = toStop;
+
+        // If there is only one option, and there hasn't been a pre-chosen
+        // end stop, select the only option by default
+        if (toStopPerPurchase == null && currentAvailableTargetStopNames.size() == 1) {
+            toStopPerPurchase = currentAvailableTargetStopNames.get(0);
+        }
 
         travelType = "ONE_WAY";
     }

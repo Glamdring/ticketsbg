@@ -478,8 +478,7 @@
                         <a4j:include viewId="../seats.jsp">
                             <ui:param name="return" value="false" />
                             <ui:param name="modifier" value="1" />
-                        </a4j:include>
-
+                        </a4j:include><br />
                     </rich:panel>
                     <rich:panel id="buttonsPanel">
                         <h:commandButton action="#{routeController.save}"

@@ -435,6 +435,10 @@ public class SeatHandler {
             return 0;
         }
 
+        if (ticketCountsHolder == null) {
+            return 0;
+        }
+
         int total = ticketCountsHolder.getRegularTicketsCount();
         for (TicketCount tc : ticketCountsHolder.getTicketCounts()) {
             total += tc.getNumberOfTickets();

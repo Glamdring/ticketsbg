@@ -38,17 +38,19 @@
 //<![CDATA[
 function showOrHideReturn() {
 
-    var oneWayChecked = document.getElementById("searchForm:travelType:1").checked;
-    if (oneWayChecked || oneWayChecked == 'checked') {
-        #{rich:element('returnPanel')}.style.display="none";
-    } else {
-        #{rich:element('returnPanel')}.style.display="block";
+    if (#{!isAdmin}) {
+        var oneWayChecked = document.getElementById("searchForm:travelType:1").checked;
+        if (oneWayChecked || oneWayChecked == 'checked') {
+            #{rich:element('returnPanel')}.style.display="none";
+        } else {
+            #{rich:element('returnPanel')}.style.display="block";
+        }
     }
 }
 //]]>
 </script>
     <f:view>
-        <rich:panel
+        <rich:panel style="#{isAdmin ? '' : 'height: 100%;'}"
             header="#{searchController.ticketToAlter == null ? msg.searchTitle : null}"
             headerClass="rich-panel-header-main">
 
@@ -283,7 +285,7 @@ function showOrHideReturn() {
     <script type="text/javascript">
 //<![CDATA[
     window.onload = function() {
-        if (#{!admin}) {
+        if (#{!isAdmin}) {
             var oneWay = #{searchController.travelType == 'oneWay'};
             if (oneWay) {
                 #{rich:element('returnPanel')}.style.display="none";

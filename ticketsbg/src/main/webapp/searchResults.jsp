@@ -110,7 +110,7 @@
                         cellpadding="0" cellspacing="0">
                         <h:panelGroup id="oneWay" style="border-style: none;">
                             <rich:extendedDataTable value="#{searchController.resultsModel}"
-                                height="#{searchController.resultsModel.rowCount == 0 ? 50 : searchController.resultsModel.rowCount * (searchController.returnResultsModel == null ? 179 : 199) + 32}"
+                                height="#{searchController.resultsModel.rowCount == 0 ? 50 : searchController.resultsModel.rowCount * (searchController.returnResultsModel == null ? 182 : 202) + 31}"
                                 var="result" rowKeyVar="rowId" selectionMode="single"
                                 enableContextMenu="false" id="resultsTable"
                                 selection="#{searchController.selection}"
@@ -294,6 +294,25 @@
                                     <ui:param name="modifier" value="1" />
                                     <ui:param name="return" value="falase" />
                                 </a4j:include>
+                                <h:outputText value="&#160;" />
+                                <a4j:commandButton type="button"
+                                    value="#{msg.transportCompanyTerms}"
+                                    onclick="#{rich:component('termsPanel')}.show();" />
+                                <rich:modalPanel id="termsPanel" width="300" height="400"
+                                    resizeable="false"
+                                    onmaskclick="#{rich:component('termsPanel')}.hide();">
+                                    <ui:include src="/modalPanelCommons.jsp">
+                                        <ui:param name="dialogId" value="termsPanel" />
+                                    </ui:include>
+                                    <f:facet name="header">
+                                        <h:outputText
+                                            value="#{msg.transportCompanyTerms}: #{searchController.selectedEntry.run.route.firm.name}" />
+                                    </f:facet>
+                                    <h:inputTextarea id="termsTextarea"
+                                        value="#{searchController.selectedEntry.run.route.firm.terms}"
+                                        readonly="true" disabled="true"
+                                        style="width: 100%; height: 100%;" />
+                                </rich:modalPanel>
                             </a4j:region>
                         </h:panelGroup>
 

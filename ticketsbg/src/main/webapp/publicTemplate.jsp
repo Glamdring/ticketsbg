@@ -102,15 +102,25 @@
         </f:facet>
     </a4j:status>
 
-</a4j:form> <a4j:include viewId="loginPanel.jsp" /> <h:panelGrid columns="2"
-    columnClasses="main,side" cellpadding="0" cellspacing="0"
-    style="margin-top: 4px; text-align: left;">
+</a4j:form> <a4j:include viewId="loginPanel.jsp" />
+<h:panelGrid columns="2" columnClasses="main,side" cellpadding="0"
+    cellspacing="0" style="margin-top: 4px; text-align: left;">
     <ui:insert name="body" />
     <h:panelGroup>
         <ui:include src="purchaseDetailsSideScreen.jsp" />
         <ui:include src="statistics.jsp" />
         <ui:include src="paymentMethods.jsp" />
     </h:panelGroup>
-</h:panelGrid> <ui:insert name="footer" /></div>
+</h:panelGrid>
+
+<h:panelGroup styleClass="footer" layout="block">
+    <a href="#">#{msg.footerAbout}</a> |
+    <a href="#">#{msg.footerHelp}</a> |
+    <a href="#">#{msg.footerContacts}</a> |
+    <a href="#">#{msg.footerFacebook}</a> |
+    <a href="#">#{msg.footerForFirms}</a>
+    <ui:insert name="footer"/>
+</h:panelGroup>
+</div>
 </body>
 </html>

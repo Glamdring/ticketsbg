@@ -16,7 +16,7 @@
                 <h:panelGrid columns="2">
                     <h:outputLabel value="#{msg.discountName}: " for="discountName" />
                     <rich:comboBox value="#{routeController.discount.name}"
-                        id="discountName"
+                        id="discountName" listStyle="text-align: left;"
                         suggestionValues="#{routeController.genericDiscountNames}">
                         <a4j:support event="onselect"
                             action="#{routeController.genericDiscountSelected}"

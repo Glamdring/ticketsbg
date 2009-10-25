@@ -1,5 +1,7 @@
 package com.tickets.controllers;
 
+import java.util.Collections;
+
 import org.apache.myfaces.orchestra.conversation.annotations.ConversationName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -34,8 +36,12 @@ public class RunController extends BaseController {
 
     @Action
     public void delete() {
-        route.getRuns().remove(run);
-        service.delete(run);
+        try {
+            service.delete(run);
+            route.getRuns().remove(run);
+        } catch (Exception ex) {
+            addError("runDeletionImpossible");
+        }
     }
 
     @Action
@@ -47,8 +53,12 @@ public class RunController extends BaseController {
     @Action
     public void addRun() {
         // saving the route, which will cascade the newly added runs
-        route.addRun(run);
-        service.saveObject(route);
+        System.out.println(run.getTime());
+        if (run.getTime() != null) {
+            route.addRun(run);
+            route = (Route) service.saveObject(route);
+            Collections.sort(route.getRuns());
+        }
     }
 
     @Action(accessLevel=AccessLevel.CASH_DESK)

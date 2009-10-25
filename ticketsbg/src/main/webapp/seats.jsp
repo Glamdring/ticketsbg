@@ -51,10 +51,10 @@
         <c:set var="handler" value="returnSeatHandler" />
     </c:if>
 
-    <a4j:commandButton type="button" ajaxSingle="true" immediate="true"
+    <a4j:commandButton type="button" ajaxSingle="true" immediate="true" style="float: left;"
         value="#{seatController[handler].run == null ? msg.showSeatsView : msg.chooseSeat}">
         <rich:componentControl for="seatsModalPanel#{modifier}"
-            event="onclick" operation="show" />
+            event="oncomplete" operation="show" />
     </a4j:commandButton>
 
     <rich:modalPanel id="seatsModalPanel#{modifier}" autosized="true"

@@ -75,7 +75,7 @@ import org.hibernate.annotations.LazyCollectionOption;
                         "ORDER BY run.time, price.price"
         )
 })
-public class Run implements Serializable {
+public class Run implements Serializable, Comparable<Run> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -156,4 +156,46 @@ public class Run implements Serializable {
     public void setSeatsExceeded(boolean seatsExceeded) {
         this.seatsExceeded = seatsExceeded;
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((route == null) ? 0 : route.getId());
+        result = prime * result + ((time == null) ? 0 : time.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Run other = (Run) obj;
+        if (route == null) {
+            if (other.route != null)
+                return false;
+        } else if (!(route.getId() == other.route.getId()))
+            return false;
+        if (time == null) {
+            if (other.time != null)
+                return false;
+        } else if (!time.equals(other.time))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int compareTo(Run r) {
+        if (this.time == null || r.getTime() == null) {
+            return 0;
+        }
+        // returning reversed, so that elements are ordered DESC
+        return (-1) * this.time.compareTo(r.getTime());
+    }
+
+
 }

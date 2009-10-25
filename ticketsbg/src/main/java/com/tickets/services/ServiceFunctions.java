@@ -104,6 +104,16 @@ public class ServiceFunctions {
         return collection.size();
     }
 
+
+    public static int getSeatsCount(Collection<Ticket> tickets) {
+        int sum = 0;
+        for (Ticket ticket : tickets) {
+            sum += ticket.getPassengersCount();
+        }
+
+        return sum;
+    }
+
     public static void clearCache() {
         cache.set(null);
     }

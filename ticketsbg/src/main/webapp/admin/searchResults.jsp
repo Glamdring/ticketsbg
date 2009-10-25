@@ -113,7 +113,7 @@
                                     <f:facet name="header">
                                         <h:outputText value="#{msg.soldSeats}" />
                                     </f:facet>
-                                    <h:outputText value="#{tc:getSize(result.run.tickets)}" />
+                                    <h:outputText value="#{tc:getSeatsCount(result.run.tickets) + tc:getSeatsCount(result.run.returnTickets)}" />
                                 </rich:column>
 
                                 <rich:column sortable="true">
@@ -171,7 +171,6 @@
                                             alt="#{msg.remove}" title="#{msg.remove}" />
                                     </h:commandLink>
 
-
                                 </rich:column>
                             </rich:dataTable>
                         </rich:panel>
@@ -209,7 +208,8 @@
                             <h:outputLabel for="purchaseStartStop" value="#{msg.toStop}" />
                             <rich:comboBox
                                 suggestionValues="#{searchController.currentAvailableTargetStopNames}"
-                                value="#{searchController.toStopPerPurchase}">
+                                value="#{searchController.toStopPerPurchase}"
+                                listStyle="text-align: left;">
                                 <a4j:support event="onselect"
                                     action="#{searchController.toStopSelected}"
                                     reRender="returnDate,oneWayPrice" />
@@ -320,6 +320,7 @@
                                     <ui:param name="modifier" value="1" />
                                     <ui:param name="return" value="false" />
                                 </a4j:include>
+                                <div style="clear: both;"/>
                             </a4j:region>
                         </h:panelGroup>
 
@@ -342,7 +343,6 @@
                                 </rich:inputNumberSpinner>
                             </h:panelGrid>
 
-                            <!-- TODO rendered="#{searchController.selectedEntry.run.route.firm.allowDiscounts}" -->
                             <a4j:repeat value="#{searchController.ticketCounts}" var="tc">
 
                                 <h:panelGrid columns="2"

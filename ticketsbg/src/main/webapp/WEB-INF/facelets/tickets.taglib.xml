@@ -39,4 +39,9 @@
         <function-class>com.tickets.services.ServiceFunctions</function-class>
         <function-signature>int getSize(java.util.Collection)</function-signature>
     </function>
+    <function>
+        <function-name>getSeatsCount</function-name>
+        <function-class>com.tickets.services.ServiceFunctions</function-class>
+        <function-signature>int getSeatsCount(java.util.Collection)</function-signature>
+    </function>
 </facelet-taglib>

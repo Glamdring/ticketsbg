@@ -13,12 +13,12 @@
         <f:view>
             <a4j:form id="runsForm">
                 <h:messages />
-                <rich:panel style="border-style: none;">
+                <h:panelGroup>
                     <h:outputText value="#{msg.runsForRoute} " />
                     <h:outputText value="#{runController.route.name}"
                         style="font-weight: bold;" />
-                </rich:panel>
-
+                </h:panelGroup>
+                <br />
                 <a4j:commandButton value="#{msg.addRun}"
                     action="#{runController.newRun}" reRender="newRunHolder"
                     oncomplete="#{rich:component('newRunPanel')}.show()" />
@@ -47,7 +47,8 @@
 
                     <rich:column>
                         <h:outputText value="#{run.time.time}">
-                            <f:convertDateTime pattern="dd.MM.yyyy hh:mm" />
+                            <f:convertDateTime pattern="dd.MM.yyyy hh:mm"
+                                timeZone="#{timeZoneController.timeZone}" />
                         </h:outputText>
                     </rich:column>
 
@@ -97,25 +98,30 @@
             </a4j:form>
 
             <a4j:form id="newRunHolder" ajaxSubmit="true">
-                <rich:modalPanel id="newRunPanel" autosized="true" moveable="true"
-                    resizeable="false" style="overflow: hidden;" width="220"
-                    rendered="#{runController.run != null}">
-                    <ui:include src="/modalPanelCommons.jsp">
-                        <ui:param name="dialogId" value="newRunPanel" />
-                    </ui:include>
-                    <f:facet name="header">
-                        <h:outputText value="#{msg.addRun}" />
-                    </f:facet>
-                    <rich:calendar id="singleRunDateTime"
-                        datePattern="dd.MM.yyyy HH:mm" firstWeekDay="1" inputSize="16"
-                        value="#{runController.run.time.time}" showApplyButton="true"
-                        direction="top-left">
-                    </rich:calendar>
-                    <a4j:commandButton value="#{msg.add}" process="singleRunDateTime"
-                        oncomplete="#{rich:component('newRunPanel')}.hide();"
-                        action="#{runController.addRun}" reRender="runsTable" />
-                </rich:modalPanel>
+                    <rich:modalPanel id="newRunPanel" autosized="true" moveable="true"
+                        resizeable="false" style="overflow: hidden;" width="220"
+                        rendered="#{runController.run != null}" domElementAttachment="form">
+                        <ui:include src="/modalPanelCommons.jsp">
+                            <ui:param name="dialogId" value="newRunPanel" />
+                        </ui:include>
+                        <f:facet name="header">
+                            <h:outputText value="#{msg.addRun}" />
+                        </f:facet>
+                        <rich:messages ajaxRendered="true" />
+                        <rich:calendar id="singleRunDateTime"
+                            datePattern="dd.MM.yyyy HH:mm" firstWeekDay="1" inputSize="16"
+                            value="#{runController.run.time.time}" showApplyButton="true"
+                            direction="top-left">
+                        </rich:calendar>
+
+                        <a4j:commandButton value="#{msg.add}"
+                            oncomplete="#{rich:component('newRunPanel')}.hide();"
+                            action="#{runController.addRun}" reRender="runsTable" />
+
+
+                    </rich:modalPanel>
             </a4j:form>
+
         </f:view>
     </ui:define>
 </ui:composition>

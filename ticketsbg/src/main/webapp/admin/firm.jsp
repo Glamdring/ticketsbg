@@ -23,9 +23,13 @@
                     <h:inputText value="#{firmController.firm.name}" id="name"
                         size="30" />
 
-                    <h:outputLabel for="description" value="#{msg.description}: " />
+                    <h:outputLabel for="description" value="#{msg.shortDescription}: " />
                     <h:inputTextarea value="#{firmController.firm.description}"
-                        id="description" rows="4" cols="27" />
+                        id="description" rows="2" cols="27" />
+
+                    <h:outputLabel for="terms" value="#{msg.termsOfUse}: " />
+                    <h:inputTextarea value="#{firmController.firm.terms}"
+                        id="terms" rows="4" cols="27" />
 
                     <h:outputLabel for="subdomain" value="#{msg.subdomain}: " />
                     <h:inputText value="#{firmController.firm.subdomain}"
@@ -61,13 +65,16 @@
                         rendered="#{loggedUserHolder.loggedUser.administrator}" />
 
                     <h:outputLabel for="hasAnotherTicketSellingSystem"
-                        value="#{msg.hasAnotherTicketSellingSystem}: "
-                        rendered="#{loggedUserHolder.loggedUser.administrator}" />
+                        value="#{msg.hasAnotherTicketSellingSystem}: "/>
                     <h:selectBooleanCheckbox
                         value="#{firmController.firm.hasAnotherTicketSellingSystem}"
-                        id="hasAnotherTicketSellingSystem"
-                        rendered="#{loggedUserHolder.loggedUser.administrator}" />
+                        id="hasAnotherTicketSellingSystem" />
 
+                    <h:outputLabel for="allowDiscounts"
+                        value="#{msg.allowDiscounts}: "/>
+                    <h:selectBooleanCheckbox
+                        value="#{firmController.firm.allowDiscounts}"
+                        id="allowDiscounts" />
 
                     <h:panelGroup>
                         <h:outputLabel for="requireReceiptAtCashDesk"
@@ -96,7 +103,7 @@
                     <h:outputText value="" />
                     <a4j:commandButton value="${msg.save}"
                         action="#{firmController.save}"
-                        oncomplete="if (#{rich:component('entityPanel')} != null) {#{rich:component('entityPanel')}.hide();} #{rich:component('firmPanel')}.hide();"
+                        oncomplete="if (#{rich:component('entityPanel') != null}) {#{rich:component('entityPanel') != null ? rich:component('entityPanel') : 'this'}.hide();} #{rich:component('firmPanel')}.hide();"
                         reRender="firmsTable" />
                 </h:panelGrid>
             </a4j:outputPanel>

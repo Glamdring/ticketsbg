@@ -15,12 +15,17 @@
         .heightClass {
             height: 315px;
         }
+        .innerColumn {
+            vertical-align: top;
+            height: 100%;
+        }
     </style>
 </ui:define>
     <ui:define name="body">
         <f:view>
             <a4j:form id="searchForm" ajaxSubmit="true">
-                <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                <h:panelGrid columns="2" cellpadding="0" cellspacing="0"
+                    columnClasses="innerColumn, innerColumn" style="height: 320px;">
                     <a4j:outputPanel>
                         <ui:include src="searchFields.jsp">
                             <ui:param name="isAdmin" value="false" />
@@ -29,7 +34,7 @@
                             value="false" converter="#{booleanConverter}" />
                     </a4j:outputPanel>
                     <rich:panel header=" " headerClass="rich-panel-header-main"
-                        style="text-align: center; width: 495px; margin-left: 5px;">
+                        style="text-align: center; width: 495px; margin-left: 5px; height: 100%;">
                         <h:graphicImage url="/images/banner.png" />
                     </rich:panel>
                 </h:panelGrid>
