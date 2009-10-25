@@ -360,7 +360,9 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
             ticket = save(ticket);
         }
 
-        sendPurchaseEmail(tickets);
+        if (!user.isStaff()) {
+            sendPurchaseEmail(tickets);
+        }
     }
 
     private void sendPurchaseEmail(List<Ticket> tickets) {

@@ -11,6 +11,7 @@ import com.tickets.controllers.valueobjects.Screen;
 import com.tickets.model.Route;
 import com.tickets.model.Run;
 import com.tickets.services.RunService;
+import com.tickets.utils.GeneralUtils;
 
 @Controller("runController")
 @Scope("conversation.manual")
@@ -35,6 +36,19 @@ public class RunController extends BaseController {
     public void delete() {
         route.getRuns().remove(run);
         service.delete(run);
+    }
+
+    @Action
+    public void newRun() {
+        run = new Run();
+        run.setTime(GeneralUtils.createEmptyCalendar());
+    }
+
+    @Action
+    public void addRun() {
+        // saving the route, which will cascade the newly added runs
+        route.addRun(run);
+        service.saveObject(route);
     }
 
     @Action(accessLevel=AccessLevel.CASH_DESK)

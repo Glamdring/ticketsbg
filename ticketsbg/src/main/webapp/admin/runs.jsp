@@ -11,13 +11,17 @@
     template="adminTemplate.jsp">
     <ui:define name="body">
         <f:view>
-            <h:form id="runsForm">
+            <a4j:form id="runsForm">
                 <h:messages />
                 <rich:panel style="border-style: none;">
                     <h:outputText value="#{msg.runsForRoute} " />
                     <h:outputText value="#{runController.route.name}"
                         style="font-weight: bold;" />
                 </rich:panel>
+
+                <a4j:commandButton value="#{msg.addRun}"
+                    action="#{runController.newRun}" reRender="newRunHolder"
+                    oncomplete="#{rich:component('newRunPanel')}.show()" />
 
                 <rich:dataTable
                     onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
@@ -62,7 +66,7 @@
                                 target="#{travelListController.run}" />
                             <h:graphicImage value="/images/runs.png"
                                 style="width:16; height:16; border-style: none;"
-                                alt="#{msg.seatsExceeded}" title="#{msg.seatsExceeded}" />
+                                alt="#{msg.seatsTravelList}" title="#{msg.travelList}" />
                         </h:commandLink>
                         <h:commandLink title="#{msg.setSeatsExceeded}"
                             action="#{runController.setSeatsExceeded}"
@@ -71,7 +75,7 @@
                                 target="#{runController.run}" />
                             <h:graphicImage value="/images/close.png"
                                 style="width:16; height:16; border-style: none;"
-                                alt="#{msg.travelList}" title="#{msg.travelList}" />
+                                alt="#{msg.seatsExceeded}" title="#{msg.seatsExceeded}" />
                         </h:commandLink>
 
                         <h:commandLink title="#{msg.undoSeatsExceeded}"
@@ -90,7 +94,28 @@
                             page="#{runController.page}" id="scroller" />
                     </f:facet>
                 </rich:dataTable>
-            </h:form>
+            </a4j:form>
+
+            <a4j:form id="newRunHolder" ajaxSubmit="true">
+                <rich:modalPanel id="newRunPanel" autosized="true" moveable="true"
+                    resizeable="false" style="overflow: hidden;" width="220"
+                    rendered="#{runController.run != null}">
+                    <ui:include src="/modalPanelCommons.jsp">
+                        <ui:param name="dialogId" value="newRunPanel" />
+                    </ui:include>
+                    <f:facet name="header">
+                        <h:outputText value="#{msg.addRun}" />
+                    </f:facet>
+                    <rich:calendar id="singleRunDateTime"
+                        datePattern="dd.MM.yyyy HH:mm" firstWeekDay="1" inputSize="16"
+                        value="#{runController.run.time.time}" showApplyButton="true"
+                        direction="top-left">
+                    </rich:calendar>
+                    <a4j:commandButton value="#{msg.add}" process="singleRunDateTime"
+                        oncomplete="#{rich:component('newRunPanel')}.hide();"
+                        action="#{runController.addRun}" reRender="runsTable" />
+                </rich:modalPanel>
+            </a4j:form>
         </f:view>
     </ui:define>
 </ui:composition>

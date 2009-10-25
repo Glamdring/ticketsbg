@@ -51,13 +51,11 @@
         <c:set var="handler" value="returnSeatHandler" />
     </c:if>
 
-    <h:outputText
-        value="#{seatController[handler].run == null ? msg.showSeatsView : msg.chooseSeat}"
-        styleClass="hyperlink" style="color: darkblue; text-decoration: underline; cursor: pointer;">
-        <!-- Style is set in addition to class because of IE6 -->
+    <a4j:commandButton type="button" ajaxSingle="true" immediate="true"
+        value="#{seatController[handler].run == null ? msg.showSeatsView : msg.chooseSeat}">
         <rich:componentControl for="seatsModalPanel#{modifier}"
             event="onclick" operation="show" />
-    </h:outputText>
+    </a4j:commandButton>
 
     <rich:modalPanel id="seatsModalPanel#{modifier}" autosized="true"
         style="overflow: hidden;" domElementAttachment="parent">

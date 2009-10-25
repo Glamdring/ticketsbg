@@ -236,6 +236,7 @@
         <navigation-case>
             <from-outcome>travelList</from-outcome>
             <to-view-id>/admin/travelList.jsp</to-view-id>
+            <!-- No redirect here on purpose -->
         </navigation-case>
     </navigation-rule>
 

@@ -125,6 +125,8 @@
     </f:facet>
     <a4j:include viewId="firm.jsp" />
 </rich:modalPanel>
+<h:panelGroup style="text-align: left;">
 <ui:insert name="body" />
+</h:panelGroup>
 </body>
 </html>

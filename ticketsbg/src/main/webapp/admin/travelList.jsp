@@ -11,6 +11,11 @@
     xmlns:tc="http://tickets.com/tc"
     template="printTemplate.jsp">
     <ui:define name="body">
+    <style type="text/css">
+        body {
+            background-color: white;
+        }
+    </style>
         <f:view>
             <h:form id="runsForm">
                 <rich:panel style="border-style: none;">
