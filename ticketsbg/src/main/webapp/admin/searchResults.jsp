@@ -105,7 +105,7 @@
                                         <h:outputText value="#{msg.departureTime}" />
                                     </f:facet>
                                     <h:outputText value="#{result.run.time.time}">
-                                        <f:convertDateTime pattern="hh:mm" />
+                                        <f:convertDateTime pattern="HH:mm" />
                                     </h:outputText> #{msg.hourAbbr}
                                 </rich:column>
 
@@ -360,6 +360,18 @@
                                     </rich:inputNumberSpinner>
                                 </h:panelGrid>
                             </a4j:repeat>
+                        </rich:panel>
+
+                        <rich:panel header="#{msg.totalPrice}"
+                            style="width: 380px; margin-top: 10px;">
+                            <a4j:outputPanel ajaxRendered="true" id="totalPriceHolder">
+                                <h:outputText style="font-weight: bold"
+                                    value="#{searchController.totalPrice}">
+                                    <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                                    <f:converter binding="#{currencyConverter}"
+                                        converterId="currencyConverter" />
+                                </h:outputText>
+                            </a4j:outputPanel>
                         </rich:panel>
 
                         <a4j:commandButton

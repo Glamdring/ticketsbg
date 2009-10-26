@@ -55,6 +55,7 @@ public class RunController extends BaseController {
         // saving the route, which will cascade the newly added runs
         System.out.println(run.getTime());
         if (run.getTime() != null) {
+            run.setManuallyAdded(true);
             route.addRun(run);
             route = (Route) service.saveObject(route);
             Collections.sort(route.getRuns());

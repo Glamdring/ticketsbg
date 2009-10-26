@@ -33,7 +33,7 @@ import org.hibernate.annotations.LazyCollectionOption;
         // No other decent way of taking the greatest element in group-by queries
         @NamedQuery(
                 name = "Run.getLastRuns",
-                query = "SELECT DISTINCT new list(route, MAX(run), MAX(run.time)) FROM Route AS route LEFT OUTER JOIN route.runs AS run GROUP BY route"
+                query = "SELECT DISTINCT new list(route, MAX(run), MAX(run.time)) FROM Route AS route LEFT OUTER JOIN route.runs AS run WHERE run.manuallyAdded = false GROUP BY route"
         ),
         //TODO optimize. Now does a query for each run (to match a price)
         @NamedQuery(
@@ -105,6 +105,9 @@ public class Run implements Serializable, Comparable<Run> {
     @Column
     private boolean seatsExceeded;
 
+    @Column
+    private boolean manuallyAdded;
+
     public Run() {
     }
 
@@ -155,6 +158,14 @@ public class Run implements Serializable, Comparable<Run> {
 
     public void setSeatsExceeded(boolean seatsExceeded) {
         this.seatsExceeded = seatsExceeded;
+    }
+
+    public boolean isManuallyAdded() {
+        return manuallyAdded;
+    }
+
+    public void setManuallyAdded(boolean manuallyAdded) {
+        this.manuallyAdded = manuallyAdded;
     }
 
     @Override

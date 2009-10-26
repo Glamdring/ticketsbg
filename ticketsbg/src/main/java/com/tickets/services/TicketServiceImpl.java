@@ -68,6 +68,43 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
         }
     }
 
+    public BigDecimal calculatePrice(SearchResultEntry selectedEntry, SearchResultEntry selectedReturnEntry,
+            TicketCountsHolder ticketCountsHolder) {
+        BigDecimal price = BigDecimal.ZERO;
+        if (ticketCountsHolder == null || selectedEntry == null) {
+            return price;
+        }
+
+        for (int i = 0; i < ticketCountsHolder.getRegularTicketsCount(); i ++) {
+            BigDecimal tmpPrice = BigDecimal.ZERO;
+            if (selectedReturnEntry == null) {
+                tmpPrice = selectedEntry.getPrice().getPrice();
+            } else {
+                tmpPrice = selectedEntry.getPrice().getTwoWayPrice();
+            }
+            price = price.add(tmpPrice);
+        }
+
+        for (TicketCount tc : ticketCountsHolder.getTicketCounts()) {
+            for (int i = 0; i < tc.getNumberOfTickets(); i++) {
+                BigDecimal tmpPrice = BigDecimal.ZERO;
+                if (selectedReturnEntry == null) {
+                    tmpPrice = selectedEntry.getPrice().getPrice();
+                } else {
+                    tmpPrice = selectedEntry.getPrice().getTwoWayPrice();
+                }
+
+                if (tc.getDiscount() != null) {
+                    tmpPrice = discountService.calculatePrice(tmpPrice, tc.getDiscount());
+                }
+                price = price.add(tmpPrice);
+            }
+        }
+
+        return price;
+    }
+
+
     private Ticket doCreateTicket(SearchResultEntry selectedEntry,
             SearchResultEntry selectedReturnEntry,
             TicketCountsHolder ticketCountsHolder, List<Seat> selectedSeats,
@@ -135,17 +172,17 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
             ticket.setCreationTime(GeneralUtils.createEmptyCalendar());
             ticket.setTicketCode(generateTicketCode(selectedEntry.getRun()));
 
-            int counter = 0;
+            int seatsCounter = 0;
 
             List<Integer> currentUsedSeats = new ArrayList<Integer>();
             List<Integer> currentUsedReturnSeats = new ArrayList<Integer>();
 
-            for (counter = 0; counter < ticketCountsHolder
-                    .getRegularTicketsCount(); counter++) {
+            for (seatsCounter = 0; seatsCounter < ticketCountsHolder
+                    .getRegularTicketsCount(); seatsCounter++) {
                 Seats seats = getSeatNumbers(selectedEntry,
                         selectedReturnEntry, selectedSeats,
                         selectedReturnSeats, currentUsedSeats,
-                        currentUsedReturnSeats, counter);
+                        currentUsedReturnSeats, seatsCounter);
 
                 PassengerDetails deatils = createPassengerDetails(
                         selectedEntry, selectedReturnEntry, seats.getSeat(),
@@ -160,11 +197,11 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
 
             for (TicketCount tc : ticketCountsHolder.getTicketCounts()) {
                 for (int i = 0; i < tc.getNumberOfTickets(); i++) {
-                    counter++;
+                    seatsCounter++;
                     Seats seats = getSeatNumbers(selectedEntry,
                             selectedReturnEntry, selectedSeats,
                             selectedReturnSeats, currentUsedSeats,
-                            currentUsedReturnSeats, counter);
+                            currentUsedReturnSeats, seatsCounter);
 
                     PassengerDetails details = createPassengerDetails(
                             selectedEntry, selectedReturnEntry,
@@ -376,7 +413,7 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
              email.setFrom(Settings.getValue("purchase.email.sender"));
              email.setSubject(Messages.getString("purchase.email.subject"));
 
-             SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm");
+             SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 
              String ticketsTable = "";
              for (Ticket ticket : tickets) {

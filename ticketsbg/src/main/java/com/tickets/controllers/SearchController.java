@@ -133,6 +133,12 @@ public class SearchController extends BaseController {
     }
 
     @Action
+    public String nagivationToAdminSearch() {
+        resetSearchFields();
+        return Screen.ADMIN_SEARCH_SCREEN.getOutcome();
+    }
+
+    @Action
     public String search() {
         if (isAdmin()) {
             return adminSearch();
@@ -199,6 +205,12 @@ public class SearchController extends BaseController {
         purchaseController.setCurrentStep(Step.SEARCH_RESULTS);
 
         return Screen.SEARCH_RESULTS.getOutcome();
+    }
+
+    public BigDecimal getTotalPrice() {
+        return ticketService.calculatePrice(selectedEntry,
+                selectedReturnEntry,
+                ticketCountsHolder);
     }
 
     private void loadTicketCounts() {
@@ -445,6 +457,8 @@ public class SearchController extends BaseController {
     private String adminSearch() {
         // Clear the vacant seats cache so that it is recalculated
         ServiceFunctions.clearCache();
+
+        resetSelections();
 
         if (toStop != null && toStop.equals("")) {
             toStop = null;

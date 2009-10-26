@@ -17,7 +17,8 @@ public enum Screen {
     RUNS_LIST("runsList"),
     ADMIN_SEARCH_RESULTS("adminSearchResults"),
 
-    UNAUTHORIZED("unauthorized");
+    UNAUTHORIZED("unauthorized"),
+    ADMIN_SEARCH_SCREEN("adminSearchScreen")
     ;
 
 

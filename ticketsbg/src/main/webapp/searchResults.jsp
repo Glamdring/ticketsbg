@@ -379,6 +379,17 @@
                         </a4j:outputPanel>
                     </rich:panel>
 
+                    <rich:panel header="#{msg.totalPrice}" style="width: 380px; margin-top: 10px;">
+                        <a4j:outputPanel ajaxRendered="true" id="totalPriceHolder">
+                            <h:outputText style="font-weight: bold"
+                                value="#{searchController.totalPrice}">
+                                <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                                <f:converter binding="#{currencyConverter}"
+                                    converterId="currencyConverter" />
+                            </h:outputText>
+                        </a4j:outputPanel>
+                    </rich:panel>
+
                     <h:panelGroup>
                         <h:commandButton value="#{msg.backToSearchScreen}"
                             action="#{searchController.toSearchScreen}" />

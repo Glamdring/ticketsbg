@@ -1,5 +1,6 @@
 package com.tickets.services;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.tickets.exceptions.TicketCreationException;
@@ -109,4 +110,17 @@ public interface TicketService extends Service<Ticket> {
      */
     int getNewTicketsSinceLastChecks(String firmKey, String fromStop,
             long lastCheck);
+
+
+    /**
+     * Calculates the price of the current selection
+     *
+     * @param selectedEntry
+     * @param selectedReturnEntry
+     * @param ticketCountsHolder
+     *
+     * @return the total price
+     */
+    BigDecimal calculatePrice(SearchResultEntry selectedEntry, SearchResultEntry selectedReturnEntry,
+            TicketCountsHolder ticketCountsHolder);
 }

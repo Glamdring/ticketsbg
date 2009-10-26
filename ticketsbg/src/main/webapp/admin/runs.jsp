@@ -47,7 +47,7 @@
 
                     <rich:column>
                         <h:outputText value="#{run.time.time}">
-                            <f:convertDateTime pattern="dd.MM.yyyy hh:mm"
+                            <f:convertDateTime pattern="dd.MM.yyyy HH:mm"
                                 timeZone="#{timeZoneController.timeZone}" />
                         </h:outputText>
                     </rich:column>
