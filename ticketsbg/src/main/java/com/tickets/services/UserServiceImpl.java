@@ -46,9 +46,11 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
                 new Object[] { username, passParam });
 
         if (result == null || result.size() != 1) {
-            result = getDao().findByNamedQuery("User.tempLogin",
+            result = getDao().findByNamedQuery(
+                    "User.tempLogin",
                     new String[] { "username", "password" },
-                    new Object[] { username, saltAndHashPassword(new String(password)) });
+                    new Object[] { username,
+                            saltAndHashPassword(new String(password)) });
 
             if (result == null || result.size() != 1) {
                 throw UserException.INCORRECT_LOGIN_DATA;
@@ -102,18 +104,11 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
         if (user == null)
             return null;
 
-        List existingUser = getDao().findByNamedQuery("User.getByUsername",
-                new String[] { "username" },
-                new Object[] { user.getUsername() });
-
-        if (existingUser.size() > 0) {
+        if (usernameExists(user.getUsername())) {
             throw UserException.USER_ALREADY_EXISTS;
         }
 
-        List existingEmail = getDao().findByNamedQuery("User.getByEmail",
-                new String[] { "email" }, new Object[] { user.getEmail() });
-
-        if (existingEmail.size() > 0) {
+        if (emailExists(user.getEmail())) {
             throw UserException.EMAIL_ALREADY_EXISTS;
         }
 
@@ -134,10 +129,9 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
             email.addTo(user.getEmail(), user.getName());
             email.setFrom(Settings.getValue("confirmation.email.sender"));
             email.setSubject(Messages.getString("confirmation.email.subject"));
-            email.setMsg(Messages.getString("confirmation.email.content",
-                    user.getName(), user.getUsername(), user
-                            .getRepeatPassword(), Settings.getValue("base.url")
-                            + "/activate.jsp?code="
+            email.setMsg(Messages.getString("confirmation.email.content", user
+                    .getName(), user.getUsername(), user.getRepeatPassword(),
+                    Settings.getValue("base.url") + "/activate.jsp?code="
                             + user.getActivationCode()));
 
             email.send();
@@ -145,7 +139,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
             log.error("Mail problem", eex);
             throw UserException.EMAIL_PROBLEM;
         }
-        //Save after a successful email
+        // Save after a successful email
         user = (User) getDao().persist(user);
 
         return user;
@@ -204,12 +198,11 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
                 mail.addTo(email, user.getName());
                 mail.setSubject(Messages
                         .getString("temp.password.email.subject"));
-                mail.setMsg(Messages.getString(
-                        "temp.password.email.content", user.getName(),
-                        tempPassword, user.getUsername()));
+                mail.setMsg(Messages.getString("temp.password.email.content",
+                        user.getName(), tempPassword, user.getUsername()));
                 mail.send();
 
-                //Set after the mail, so that no update is triggered
+                // Set after the mail, so that no update is triggered
                 user.setTemporaryPassword(saltAndHashPassword(tempPassword));
                 getDao().persist(user);
             } catch (EmailException eex) {
@@ -291,10 +284,10 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
     @SuppressWarnings("unchecked")
     @Override
     public User findUser(String userName) {
-        List<User> result = getDao().findByNamedQuery("User.getByUsername", new String[] {
-                "username"}, new Object[] {userName});
+        List<User> result = getDao().findByNamedQuery("User.getByUsername",
+                new String[] { "username" }, new Object[] { userName });
 
-        if(result != null && result.size() > 0) {
+        if (result != null && result.size() > 0) {
             return result.get(0);
         }
 
@@ -305,8 +298,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
     @Override
     public List<User> fetchUsers(Firm firm) {
         List result = getDao().findByNamedQuery("User.getByFirm",
-                new String[] { "firm" },
-                new Object[] { firm });
+                new String[] { "firm" }, new Object[] { firm });
 
         return result;
     }
@@ -315,8 +307,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
     @Override
     public List<User> fetchAgentsUsers(Firm firm) {
         List result = getDao().findByNamedQuery("User.getAgentsUsersByFirm",
-                new String[] { "firm" },
-                new Object[] { firm });
+                new String[] { "firm" }, new Object[] { firm });
 
         return result;
     }
@@ -326,8 +317,6 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
         return password.length() == 37 && password.matches("[0-9abcdef]+");
     }
 
-
-
     @Override
     public User save(User user) {
         ValidationBypassingEventListener.turnValidationOff();
@@ -336,5 +325,19 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
         } finally {
             ValidationBypassingEventListener.turnValidationOn();
         }
+    }
+
+    public boolean usernameExists(String username) {
+        List existingUser = getDao().findByNamedQuery("User.getByUsername",
+                new String[] { "username" }, new Object[] { username });
+
+        return existingUser.size() > 0;
+    }
+
+    public boolean emailExists(String email) {
+        List existingEmail = getDao().findByNamedQuery("User.getByEmail",
+                new String[] { "email" }, new Object[] { email });
+
+        return existingEmail.size() > 0;
     }
 }

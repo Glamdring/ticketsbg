@@ -113,7 +113,10 @@
     </h:panelGroup>
 </h:panelGrid>
 
+<h:form style="margin: 0px; padding: 0px;">
 <h:panelGroup styleClass="footer" layout="block">
+    <a4j:commandLink onclick="#{rich:component('termsPanel')}.show();"
+        value="#{msg.generalTerms}" />  |
     <a href="#">#{msg.footerAbout}</a> |
     <a href="#">#{msg.footerHelp}</a> |
     <a href="#">#{msg.footerContacts}</a> |
@@ -121,6 +124,22 @@
     <a href="#">#{msg.footerForFirms}</a>
     <ui:insert name="footer"/>
 </h:panelGroup>
+</h:form>
+
+<rich:modalPanel id="termsPanel" autosized="true"
+    style="overflow: hidden;" width="400" height="300"
+    onmaskclick="#{rich:component('termsPanel')}.hide();">
+    <ui:include src="modalPanelCommons.jsp">
+        <ui:param name="dialogId" value="termsPanel" />
+    </ui:include>
+    <f:facet name="header">
+        #{msg.generalTerms}
+    </f:facet>
+    <h:panelGrid style="overflow: auto;">
+        <ui:include src="terms_#{facesContext.viewRoot.locale.language}.jsp" />
+    </h:panelGrid>
+</rich:modalPanel>
+
 </div>
 </body>
 </html>

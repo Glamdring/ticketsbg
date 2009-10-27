@@ -105,5 +105,19 @@ public interface UserService extends Service<User> {
      */
     void sendTemporaryPassword(String email) throws UserException;
 
+    /**
+     * Checks whether a username is taken
+     * @param username
+     * @return true if the username is taken, false otherwise
+     */
+    boolean usernameExists(String username);
+
+
+    /**
+     * Checks whether a email is taken
+     * @param email
+     * @return true if the email is taken, false otherwise
+     */
+    boolean emailExists(String email);
 
 }

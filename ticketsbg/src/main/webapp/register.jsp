@@ -14,6 +14,7 @@
                     <ui:include src="messages.jsp">
                         <ui:param name="globalOnly" value="true" />
                     </ui:include>
+
                     <rich:graphValidator>
                         <h:panelGrid columns="3">
                             <h:panelGroup>
@@ -21,7 +22,7 @@
                                 <h:outputText value=" *" styleClass="asterisk" />
                             </h:panelGroup>
                             <h:inputText value="#{registerController.user.username}"
-                                id="regUsername" size="35">
+                                id="regUsername" size="35" validator="#{registerController.validateUsername}">
                                 <rich:ajaxValidator event="onblur" />
                             </h:inputText>
                             <rich:message for="regUsername" errorClass="error" />
@@ -52,7 +53,7 @@
                                 <h:outputText value=" *" styleClass="asterisk" />
                             </h:panelGroup>
                             <h:inputText value="#{registerController.user.email}" id="email"
-                                size="35">
+                                size="35" validator="#{registerController.validateEmail}">
                                 <rich:ajaxValidator event="onblur" />
                             </h:inputText>
                             <rich:message for="email" errorClass="error" />
@@ -140,6 +141,10 @@
                                     value="#{registerController.user.agreedToTerms}"
                                     id="agreedToTerms" label="#{msg.agreedToterms}" />
                                 <h:outputLabel for="agreedToTerms" value="#{msg.agreedToTerms}" />
+                                <h:outputText value=" [ " />
+                                <a4j:commandLink value="#{msg.doView}" immediate="true" ajaxSingle="true"
+                                    onclick="#{rich:component('termsPanel')}.show(); " />
+                                 <h:outputText value=" ] " />
                                 <h:outputText value=" *" styleClass="asterisk" />
                             </h:panelGroup>
                             <rich:message for="agreedToTerms" errorClass="error" />

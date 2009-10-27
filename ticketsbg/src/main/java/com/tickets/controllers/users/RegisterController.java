@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,5 +91,17 @@ public class RegisterController extends BaseController {
 
     public void setcustomerTypeItems(List<SelectItem> customerTypeItems) {
         this.customerTypeItems = customerTypeItems;
+    }
+
+    public void validateUsername(FacesContext ctx, UIComponent component, Object value) {
+        if (userService.usernameExists((String) value)) {
+            addError("userAlreadyExists", component.getClientId(ctx));
+        }
+    }
+
+    public void validateEmail(FacesContext ctx, UIComponent component, Object value) {
+        if (userService.emailExists((String) value)) {
+            addError("emailAlreadyExists", component.getClientId(ctx));
+        }
     }
 }

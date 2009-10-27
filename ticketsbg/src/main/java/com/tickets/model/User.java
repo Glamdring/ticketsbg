@@ -69,7 +69,7 @@ public class User extends Customer implements Serializable {
      * are inserted the username is allowed to be null.
      */
     @Column(nullable = true, length = 40)
-    @Length(max=40, min=4)
+    @Length(max=20, min=4)
     @NotEmpty
     private String username;
 

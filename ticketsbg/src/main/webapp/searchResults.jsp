@@ -395,7 +395,8 @@
                             action="#{searchController.toSearchScreen}" />
                         <h:outputText value=" " />
                         <h:commandButton action="#{searchController.proceed}"
-                            value="#{msg.toPayment}" />
+                            value="#{msg.toPayment} *" />
+                        <br />* #{msg.agreeingToBothTerms}
                     </h:panelGroup>
                 </rich:panel>
 
