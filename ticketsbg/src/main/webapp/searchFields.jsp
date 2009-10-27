@@ -73,6 +73,7 @@ function showOrHideReturn() {
             </h:panelGrid>
 
             <h:panelGrid columns="#{isAdmin ? 4 : 2}"
+                id="stopSelectionsHolder"
                 columnClasses="firstColumn,secondColumn#{isAdmin ? ',firstColumn,secondCoumns' : ''}"
                 cellpadding="5" style="#{isAdmin ? 'float: left;' : ''}">
                 <h:outputLabel value="#{msg.fromStop}:" for="fromStop" />
@@ -143,7 +144,7 @@ function showOrHideReturn() {
             <h:panelGroup id="oneWayPanel" style="#{isAdmin ? 'float: left;' : ''}">
                 <h:panelGrid columns="2" columnClasses="firstColumn,secondColumn">
                     <h:outputText />
-                    <h:panelGrid columns="#{isAdmin ? 2 : 1}">
+                    <h:panelGrid columns="#{isAdmin ? 2 : 1}" id="oneWayPanelTable">
                         <h:outputLabel value="#{msg.departureDate}:" for="date"
                             styleClass="searchFieldLabel" />
 

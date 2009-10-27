@@ -119,7 +119,7 @@
                                 style="border-style: none; table-layout: fixed;">
 
                                 <a4j:support event="onselectionchange"
-                                    reRender="selectedEntry,returnResultsTable,ticketCounts,seatChoices"
+                                    reRender="selectedEntry,returnResultsTable,ticketCounts,seatChoices,returnSeatChoices"
                                     eventsQueue="selectionSubmit"
                                     action="#{searchController.rowSelectionChanged}" />
 
@@ -215,7 +215,8 @@
                                     rowKeyVar="rowId" selectionMode="single"
                                     enableContextMenu="false" id="returnResultsTable"
                                     selection="#{searchController.returnSelection}"
-                                    headerClass="tableHeader" noDataLabel="#{msg.noSearchResults}"
+                                    headerClass="tableHeader"
+                                    noDataLabel="#{searchController.selectedEntry == null ? msg.selectOutbound : msg.noSearchResults}"
                                     width="380px;" columnClasses="columnClass"
                                     rendered="#{searchController.returnResultsModel != null}"
                                     style="border-style: none;" border="0">
@@ -237,7 +238,7 @@
                                     </rich:column>
 
                                     <rich:column sortable="false" width="345px"
-                                        filterExpression="#{searchController.selectedEntry == null || result.run.route.firm.firmId == searchController.selectedEntry.run.route.firm.firmId}">
+                                        filterExpression="#{searchController.selectedEntry != null and result.run.route.firm.firmId == searchController.selectedEntry.run.route.firm.firmId}">
                                         <f:facet name="header">
                                             #{msg.returnHeaderLabel}
                                         </f:facet>
@@ -297,12 +298,12 @@
                                 <h:outputText value="&#160;" />
                                 <a4j:commandButton type="button"
                                     value="#{msg.transportCompanyTerms}"
-                                    onclick="#{rich:component('termsPanel')}.show();" />
-                                <rich:modalPanel id="termsPanel" width="300" height="400"
+                                    onclick="#{rich:component('firmTermsPanel')}.show();" />
+                                <rich:modalPanel id="firmTermsPanel" width="300" height="400"
                                     resizeable="false"
-                                    onmaskclick="#{rich:component('termsPanel')}.hide();">
+                                    onmaskclick="#{rich:component('firmTermsPanel')}.hide();">
                                     <ui:include src="/modalPanelCommons.jsp">
-                                        <ui:param name="dialogId" value="termsPanel" />
+                                        <ui:param name="dialogId" value="firmTermsPanel" />
                                     </ui:include>
                                     <f:facet name="header">
                                         <h:outputText
@@ -379,7 +380,8 @@
                         </a4j:outputPanel>
                     </rich:panel>
 
-                    <rich:panel header="#{msg.totalPrice}" style="width: 380px; margin-top: 10px;">
+                    <rich:panel header="#{msg.totalPrice}"
+                        style="width: 380px; margin-top: 10px;">
                         <a4j:outputPanel ajaxRendered="true" id="totalPriceHolder">
                             <h:outputText style="font-weight: bold"
                                 value="#{searchController.totalPrice}">
@@ -442,33 +444,31 @@
                         </a4j:include>
                     </rich:panel>
                 </rich:modalPanel>
+
+                <a4j:jsFunction name="refreshSeatChoices" reRender="seatChoices"
+                    id="refreshSeatChoices" ajaxSingle="true" immediate="true">
+                    <a4j:actionparam assignTo="#{searchController.reRenderSeatChoices}"
+                        value="true" id="reRenderParam" name="reRenderParam" />
+                </a4j:jsFunction>
             </a4j:form>
         </f:view>
     </ui:define>
     <ui:define name="footer">
-        <a4j:form ajaxSubmit="true">
-            <a4j:jsFunction name="refreshSeatChoices" reRender="seatChoices"
-                id="refreshSeatChoices" ajaxSingle="true" immediate="true">
-                <a4j:actionparam assignTo="#{searchController.reRenderSeatChoices}"
-                    value="true" id="reRenderParam" name="reRenderParam" />
-            </a4j:jsFunction>
+        <script type="text/javascript">
+           //<![CDATA[
+               function load() {
+                   if (#{tc:getSize(searchController.resultsModel.wrappedData)} == 1) {
+                       //document.getElementById('searchResults:resultsTable:n:0').click();
+                       refreshSeatChoices();
+                   }
 
-            <script type="text/javascript">
-                //<![CDATA[
-                    function load() {
-                        if (#{tc:getSize(searchController.resultsModel.wrappedData)} == 1) {
-                            //document.getElementById('searchResults:resultsTable:n:0').click();
-                            refreshSeatChoices();
-                        }
-
-                        google.load("maps", "2", {callback : mapsLoaded});
-                    }
-                    function mapsLoaded() {
-                       //do nothing. The maps are loaded on click of the respective links
-                    }
-                    setTimeout(load, 1000);
-                //]]>
-                </script>
-        </a4j:form>
+                   google.load("maps", "2", {callback : mapsLoaded});
+               }
+               function mapsLoaded() {
+                  //do nothing. The maps are loaded on click of the respective links
+               }
+               setTimeout(load, 1000);
+           //]]>
+           </script>
     </ui:define>
 </ui:composition>

@@ -3,6 +3,7 @@ package com.tickets.controllers;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -359,8 +360,8 @@ public class SearchController extends BaseController {
     private void resetSearchFields() {
         fromStop = null;
         toStop = null;
-        date = GeneralUtils.createEmptyCalendar().getTime();
-        returnDate = GeneralUtils.createEmptyCalendar().getTime();
+        date = null; //GeneralUtils.createEmptyCalendar().getTime();
+        returnDate = null; //GeneralUtils.createEmptyCalendar().getTime();
         toHour = 24;
         fromHour = 0;
         returnToHour = 24;
@@ -405,6 +406,12 @@ public class SearchController extends BaseController {
 
     @SuppressWarnings("unchecked")
     public void rowSelectionChanged() {
+        // resetting returns
+        selectedReturnEntry = null;
+        returnSelection = null;
+        selectedReturnRowId = null;
+        seatController.setReturnSeatHandler(null);
+
         Integer selectedId = (Integer) selection.getKeys().next();
         selectedRowId = new Long(selectedId);
         selectedEntry = ((List<SearchResultEntry>) resultsModel
@@ -677,6 +684,14 @@ public class SearchController extends BaseController {
     }
 
     public void setReturnSelection(SimpleSelection returnSelection) {
+        // If internal extendedDataTable mechanisms trigger a setter with
+        // the first row, set it also as selectedId
+        if (selectedReturnRowId == null) {
+            Iterator keys = returnSelection.getKeys();
+            if (keys.hasNext()) {
+                selectedReturnRowId = ((Integer) keys.next()).longValue();
+            }
+        }
         this.returnSelection = returnSelection;
     }
 

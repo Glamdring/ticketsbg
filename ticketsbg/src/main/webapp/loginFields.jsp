@@ -27,6 +27,7 @@
                         <h:graphicImage value="/images/ajaxloading.gif" />
                     </f:facet>
                 </a4j:status>
+                <h:outputText />
             </h:panelGrid>
             <ui:include src="forgottenPasswordPanel.jsp" />
         </a4j:region>

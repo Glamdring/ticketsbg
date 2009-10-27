@@ -202,10 +202,6 @@
                     <artifactId>asm</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>asm</groupId>
-                    <artifactId>asm</artifactId>
-                </exclusion>
-                <exclusion>
                     <groupId>org.apache.geronimo.specs</groupId>
                     <artifactId>geronimo-javamail_1.4_spec</artifactId>
                 </exclusion>
@@ -295,7 +291,17 @@
         <dependency>
             <groupId>org.richfaces.samples</groupId>
             <artifactId>laguna</artifactId>
-            <version>3.3.1.GA</version>
+            <version>3.3.2.SR1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.faces</groupId>
+                    <artifactId>jsf-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.faces</groupId>
+                    <artifactId>jsf-impl</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.myfaces.tomahawk</groupId>

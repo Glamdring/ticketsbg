@@ -135,9 +135,9 @@
     <f:facet name="header">
         #{msg.generalTerms}
     </f:facet>
-    <h:panelGrid style="overflow: auto;">
+    <h:panelGroup style="overflow: auto;">
         <ui:include src="terms_#{facesContext.viewRoot.locale.language}.jsp" />
-    </h:panelGrid>
+    </h:panelGroup>
 </rich:modalPanel>
 
 </div>
