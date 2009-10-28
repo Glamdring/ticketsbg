@@ -27,7 +27,7 @@
 <div class="container"><a
     href="#{facesContext.externalContext.context.contextPath}/"> <img
     src="images/logo.png" alt="avtogara.com" style="border-style: none;" />
-</a> <a4j:form style="padding: 0px; margin: 0px;">
+</a> <a4j:form style="padding: 0px; margin: 0px; clear: both;">
     <a4j:poll action="#{keepAliveController.poll}" interval="500000"
         immediate="true" ajaxSingle="true" />
 
@@ -102,7 +102,9 @@
         </f:facet>
     </a4j:status>
 
-</a4j:form> <a4j:include viewId="loginPanel.jsp" />
+</a4j:form>
+<a4j:include viewId="loginPanel.jsp" />
+
 <h:panelGrid columns="2" columnClasses="main,side" cellpadding="0"
     cellspacing="0" style="margin-top: 4px; text-align: left;">
     <ui:insert name="body" />
