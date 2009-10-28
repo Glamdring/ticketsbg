@@ -210,7 +210,7 @@
                         <h:panelGroup id="return" style="border-style: none;">
                             <a4j:region>
                                 <rich:extendedDataTable
-                                    height="#{searchController.returnResultsModel.rowCount * 123 + 30}"
+                                    height="#{searchController.returnResultsModel.rowCount == 0 ? 50 : searchController.returnResultsModel.rowCount * 123 + 30}"
                                     value="#{searchController.returnResultsModel}" var="result"
                                     rowKeyVar="rowId" selectionMode="single"
                                     enableContextMenu="false" id="returnResultsTable"

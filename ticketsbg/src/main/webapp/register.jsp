@@ -14,6 +14,7 @@
                     <ui:include src="messages.jsp">
                         <ui:param name="globalOnly" value="true" />
                     </ui:include>
+                    (#{msg.registrationNotRequiredForPurchase})
 
                     <rich:graphValidator>
                         <h:panelGrid columns="3">

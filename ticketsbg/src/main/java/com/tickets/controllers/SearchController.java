@@ -178,8 +178,9 @@ public class SearchController extends BaseController {
 
         resultsModel = new ListDataModel(result);
 
+        List<SearchResultEntry> returnResult = null;
         if (travelType.equals(TWO_WAY) && returnDate != null) {
-            List<SearchResultEntry> returnResult = searchService.search(toStop,
+            returnResult = searchService.search(toStop,
                     fromStop, returnDate, returnFromHour, returnToHour,
                     returnTimeForDeparture, currentFirm);
 
@@ -258,6 +259,11 @@ public class SearchController extends BaseController {
             return null;
         }
 
+        if (TWO_WAY.equals(travelType) && selectedReturnEntry == null) {
+            addError("mustSelectReturnEntry");
+            return null;
+        }
+
         // Creating many ticket instances
         List<Seat> selectedSeats = seatController.getSeatHandler()
                 .getSelectedSeats();
@@ -307,6 +313,9 @@ public class SearchController extends BaseController {
             return navigateToSearch();
         }
 
+        // before redirecting to the payments page, reset the selections
+        // in order to have a fresh page if a back button is pressed
+        resetSelectionsPartial();
         purchaseController.setCurrentStep(Step.PAYMENT);
         return Screen.PAYMENT_SCREEN.getOutcome();
 
@@ -345,6 +354,10 @@ public class SearchController extends BaseController {
 
     private void resetSelections() {
         returnResultsModel = null;
+        resetSelectionsPartial();
+    }
+
+    private void resetSelectionsPartial() {
         selectedEntry = null;
         selectedReturnEntry = null;
         selectedRowId = null;
@@ -427,6 +440,13 @@ public class SearchController extends BaseController {
             tc.setNumberOfTickets(0);
             ticketCountsHolder.getTicketCounts().add(tc);
         }
+
+        // pre-select the first option, for user-friendlyness
+        // in case there is nothing for selection (the filter expression
+        // leaves no appropriate result, this wouldn't cause problems
+        returnSelection = new SimpleSelection();
+        returnSelection.addKey(0);
+        returnRowSelectionChanged();
 
         seatController.setSeatHandler(new SeatHandler(selectedEntry,
                 ticketCountsHolder));
