@@ -169,7 +169,7 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
 
             // Creation time set in order to remove it after a certain
             // idle time without payment
-            ticket.setCreationTime(GeneralUtils.createEmptyCalendar());
+            ticket.setCreationTime(GeneralUtils.createCalendar());
             ticket.setTicketCode(generateTicketCode(selectedEntry.getRun()));
 
             int seatsCounter = 0;
@@ -508,7 +508,7 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
 
             // Check whether the ticket can be altered
             if (ticket.getRun().getTime().getTimeInMillis()
-                    - GeneralUtils.createEmptyCalendar().getTimeInMillis() >= hoursBeforeTravelAlterationAllowed
+                    - GeneralUtils.createCalendar().getTimeInMillis() >= hoursBeforeTravelAlterationAllowed
                     * Constants.ONE_HOUR) {
 
                 if (!ticket.isAltered()) {

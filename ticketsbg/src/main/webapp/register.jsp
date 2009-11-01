@@ -19,7 +19,7 @@
                     <rich:graphValidator>
                         <h:panelGrid columns="3">
                             <h:panelGroup>
-                                <h:outputLabel value="#{msg.username}" for="username" />
+                                <h:outputLabel value="#{msg.username}" for="regUsername" />
                                 <h:outputText value=" *" styleClass="asterisk" />
                             </h:panelGroup>
                             <h:inputText value="#{registerController.user.username}"
@@ -29,7 +29,7 @@
                             <rich:message for="regUsername" errorClass="error" />
 
                             <h:panelGroup>
-                                <h:outputLabel value="#{msg.password}" for="password" />
+                                <h:outputLabel value="#{msg.password}" for="regPassword" />
                                 <h:outputText value=" *" styleClass="asterisk" />
                             </h:panelGroup>
                             <h:inputSecret value="#{registerController.user.password}"

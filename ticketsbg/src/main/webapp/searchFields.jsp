@@ -146,7 +146,7 @@ function showOrHideReturn() {
                     <h:outputText />
                     <h:panelGrid columns="#{isAdmin ? 2 : 1}" id="oneWayPanelTable">
                         <h:outputLabel value="#{msg.departureDate}:" for="date"
-                            styleClass="searchFieldLabel" />
+                            styleClass="searchFieldLabel" style="width: 100%;"/>
 
                         <h:panelGroup>
                             <rich:calendar id="date" datePattern="dd.MM.yyyy"
@@ -157,8 +157,8 @@ function showOrHideReturn() {
                                 <f:attribute name="label" value="#{msg.departureDate}" />
                             </rich:calendar>
                             <h:outputText value="&#160;" />
-                            <h:graphicImage url="/images/timer.png"
-                                style="width: 16px; height: 16px; cursor: pointer; vertical-align: middle;"
+                            <h:graphicImage url="/images/small/timer.png"
+                                style="cursor: pointer; vertical-align: middle;"
                                 onclick="#{rich:component('outboundTimePanel')}.show()" />
                         </h:panelGroup>
                     </h:panelGrid>
@@ -217,7 +217,7 @@ function showOrHideReturn() {
                     <h:outputText />
                     <h:panelGrid columns="1">
                         <h:outputLabel value="#{msg.returnDate}:" for="returnDate"
-                            styleClass="searchFieldLabel" />
+                            styleClass="searchFieldLabel" style="width: 100%;" />
                         <h:panelGroup>
                             <rich:calendar id="returnDate" datePattern="dd.MM.yyyy"
                                 firstWeekDay="1" value="#{searchController.returnDate}"
@@ -225,8 +225,8 @@ function showOrHideReturn() {
                                 boundaryDatesMode="scroll" dayStyleClass="getDayClass" />
 
                             <h:outputText value="&#160;" />
-                            <h:graphicImage url="/images/timer.png"
-                                style="width: 16px; height: 16px; cursor: pointer; vertical-align: middle;"
+                            <h:graphicImage url="/images/small/timer.png"
+                                style="cursor: pointer; vertical-align: middle;"
                                 onclick="#{rich:component('returnTimePanel')}.show()" />
                         </h:panelGroup>
                     </h:panelGrid>

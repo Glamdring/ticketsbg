@@ -84,7 +84,7 @@ public class SearchController extends BaseController {
 
     private int fromHour = 0;
     private int toHour = 24;
-    private Date date = GeneralUtils.createEmptyCalendar().getTime();
+    private Date date = GeneralUtils.createCalendar().getTime();
     private boolean timeForDeparture = true;
 
     private int returnFromHour = 0;
@@ -444,9 +444,11 @@ public class SearchController extends BaseController {
         // pre-select the first option, for user-friendlyness
         // in case there is nothing for selection (the filter expression
         // leaves no appropriate result, this wouldn't cause problems
-        returnSelection = new SimpleSelection();
-        returnSelection.addKey(0);
-        returnRowSelectionChanged();
+        if (TWO_WAY.equals(travelType)) {
+            returnSelection = new SimpleSelection();
+            returnSelection.addKey(0);
+            returnRowSelectionChanged();
+        }
 
         seatController.setSeatHandler(new SeatHandler(selectedEntry,
                 ticketCountsHolder));

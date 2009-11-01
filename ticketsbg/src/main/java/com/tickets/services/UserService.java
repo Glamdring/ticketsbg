@@ -120,4 +120,10 @@ public interface UserService extends Service<User> {
      */
     boolean emailExists(String email);
 
+
+    /**
+     * Creates an initial administrator user
+     */
+    void createInitialUser();
+
 }

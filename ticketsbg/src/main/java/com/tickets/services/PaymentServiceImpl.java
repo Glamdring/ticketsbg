@@ -37,7 +37,7 @@ public class PaymentServiceImpl extends BaseService implements PaymentService {
         df.setMaximumFractionDigits(2);
         String sum = df.format(getTotalPrice(tickets));
         String expiryDate = new SimpleDateFormat("dd.MM.yyyy")
-                .format(GeneralUtils.createEmptyCalendar().getTime());
+                .format(GeneralUtils.createCalendar().getTime());
 
         String description = "";
 

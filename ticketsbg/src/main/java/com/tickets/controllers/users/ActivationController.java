@@ -23,7 +23,7 @@ public class ActivationController extends BaseController {
     LoggedUserHolder loggedUserHolder;
 
     public void performActivation(PhaseEvent evt){
-        if (evt.getPhaseId() == PhaseId.INVOKE_APPLICATION) {
+        if (evt.getPhaseId() == PhaseId.RENDER_RESPONSE) {
             String activationCode = evt.getFacesContext().getExternalContext().getRequestParameterMap().get("code");
             if (activationCode != null) {
                 try {

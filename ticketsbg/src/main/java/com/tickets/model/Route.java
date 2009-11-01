@@ -98,7 +98,7 @@ public class Route extends DataObject implements Serializable {
     //directly with the model
     @Column
     @Temporal(TemporalType.TIMESTAMP)
-    private Calendar singleRunDateTime = GeneralUtils.createEmptyCalendar();
+    private Calendar singleRunDateTime = GeneralUtils.createCalendar();
 
     @Column
     private boolean allowSeatChoice;
@@ -108,11 +108,11 @@ public class Route extends DataObject implements Serializable {
 
     @Column
     @Temporal(TemporalType.TIMESTAMP)
-    private Calendar seasonStart = GeneralUtils.createEmptyCalendar();
+    private Calendar seasonStart = GeneralUtils.createCalendar();
 
     @Column
     @Temporal(TemporalType.TIMESTAMP)
-    private Calendar seasonEnd = GeneralUtils.createEmptyCalendar();
+    private Calendar seasonEnd = GeneralUtils.createCalendar();
 
     @Embedded
     private SeatSettings seatSettings = new SeatSettings();

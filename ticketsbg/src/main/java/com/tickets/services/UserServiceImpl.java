@@ -4,6 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.crypto.Cipher;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.tickets.constants.Constants;
 import com.tickets.constants.Messages;
 import com.tickets.constants.Settings;
+import com.tickets.controllers.security.AccessLevel;
 import com.tickets.dao.ValidationBypassingEventListener;
 import com.tickets.exceptions.UserException;
 import com.tickets.model.Firm;
@@ -339,5 +341,20 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
                 new String[] { "email" }, new Object[] { email });
 
         return existingEmail.size() > 0;
+    }
+
+    @Override
+    public void createInitialUser() {
+        List<User> users = list(User.class);
+        if (users.size() == 0) {
+            User user = new User();
+            user.setUsername("admin");
+            user.setActive(true);
+            user.setPassword(saltAndHashPassword("admin"));
+            user.setRegisteredTimestamp(Calendar.getInstance().getTimeInMillis());
+            user.setAccessLevel(AccessLevel.ADMINISTRATOR);
+
+            getDao().persist(user);
+        }
     }
 }

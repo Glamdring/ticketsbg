@@ -18,6 +18,13 @@
     vertical-align: middle;
 }
 </style>
+<script type="text/javascript" src="js/jquery.pngFix.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(document).pngFix();
+    });
+</script>
+
 <ui:insert name="head" />
 </head>
 <body>
@@ -27,7 +34,7 @@
 <div class="container"><a
     href="#{facesContext.externalContext.context.contextPath}/"> <img
     src="images/logo.png" alt="avtogara.com" style="border-style: none;" />
-</a> <a4j:form style="padding: 0px; margin: 0px; clear: both;">
+</a> <h:form style="padding: 0px; margin: 0px; clear: both;">
     <a4j:poll action="#{keepAliveController.poll}" interval="500000"
         immediate="true" ajaxSingle="true" />
 
@@ -101,8 +108,8 @@
                 style="float: right; margin-left: -40px; padding-right: 3px; padding-top: 3px;" />
         </f:facet>
     </a4j:status>
+</h:form>
 
-</a4j:form>
 <a4j:include viewId="loginPanel.jsp" />
 
 <h:panelGrid columns="2" columnClasses="main,side" cellpadding="0"

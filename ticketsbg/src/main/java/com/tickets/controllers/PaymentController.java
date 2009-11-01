@@ -7,8 +7,6 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.event.ActionEvent;
-import javax.faces.event.PhaseEvent;
-import javax.faces.event.PhaseId;
 import javax.faces.model.SelectItem;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +20,7 @@ import com.tickets.services.valueobjects.PaymentData;
 import com.tickets.utils.SelectItemUtils;
 
 @Component("paymentController")
-@Scope("session")
+@Scope("request")
 public class PaymentController extends BaseController {
 
     private List<SelectItem> paymentMethods = new ArrayList<SelectItem>();
@@ -35,9 +33,8 @@ public class PaymentController extends BaseController {
     private transient PurchaseController purchaseController;
 
     @Autowired
-    private PersonalInformationController personalInformationController;
+    private transient PersonalInformationController personalInformationController;
 
-    private String submitUrl;
     private String encoded;
     private String checksum;
 
@@ -103,12 +100,6 @@ public class PaymentController extends BaseController {
         refreshPaymentData();
     }
 
-    public void refreshPaymentData(PhaseEvent evt) {
-        if (evt.getPhaseId() == PhaseId.RENDER_RESPONSE) {
-            refreshPaymentData();
-        }
-    }
-
     public List<SelectItem> getPaymentMethods() {
         return paymentMethods;
     }
@@ -123,14 +114,6 @@ public class PaymentController extends BaseController {
 
     public void setSelectedPaymentMethod(String selectedPaymentMethod) {
         this.selectedPaymentMethod = selectedPaymentMethod;
-    }
-
-    public String getSubmitUrl() {
-        return submitUrl;
-    }
-
-    public void setSubmitUrl(String submitUrl) {
-        this.submitUrl = submitUrl;
     }
 
     public String getEncoded() {

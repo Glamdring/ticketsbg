@@ -32,6 +32,8 @@ public class LoggedUserHolder implements Serializable {
 
     public String logout() {
         loggedUser = null;
+        ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+                .getSession(false)).invalidate();
         return Screen.HOME.getOutcome();
     }
 

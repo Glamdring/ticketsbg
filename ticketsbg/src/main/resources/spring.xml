@@ -233,12 +233,23 @@
         <property name="timerTask" ref="timeoutedTicketsClearingTask" />
     </bean>
 
+    <bean id="scheduledInitTask" class="org.springframework.scheduling.timer.ScheduledTimerTask"
+        lazy-init="false">
+        <!-- wait 10 seconds before starting repeated execution -->
+        <property name="delay" value="10000" />
+        <!-- run only once -->
+        <property name="period" value="0" />
+        <property name="timerTask" ref="initTask" />
+    </bean>
+
+
     <bean id="timerFactory" class="org.springframework.scheduling.timer.TimerFactoryBean">
         <property name="scheduledTimerTasks">
             <list>
                 <ref bean="scheduledRunTask" />
                 <ref bean="scheduledStatsTask" />
                 <ref bean="scheduledTicketsTimeoutingTask" />
+                <ref bean="scheduledInitTask" />
                 <!--ref bean="scheduledTicketsClearingTask" /-->
             </list>
         </property>

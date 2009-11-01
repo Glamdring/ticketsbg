@@ -23,11 +23,11 @@ public class Promotion extends DataObject implements Serializable{
 
     @Column
     @Temporal(TemporalType.TIMESTAMP)
-    private Calendar start = GeneralUtils.createEmptyCalendar();
+    private Calendar start = GeneralUtils.createCalendar();
 
     @Column
     @Temporal(TemporalType.TIMESTAMP)
-    private Calendar end = GeneralUtils.createEmptyCalendar();
+    private Calendar end = GeneralUtils.createCalendar();
 
     @Column
     private String shortText;

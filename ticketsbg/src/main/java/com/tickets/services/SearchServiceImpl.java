@@ -71,11 +71,11 @@ public class SearchServiceImpl extends BaseService implements SearchService {
     private void filterSearchResults(String fromStop, String toStop, Date date,
             int fromHour, int toHour, boolean isTimeForDeparture,
             List<SearchResultEntry> result) {
-        Calendar fromTime = GeneralUtils.createEmptyCalendar();
+        Calendar fromTime = GeneralUtils.createCalendar();
         fromTime.setTime(date);
         fromTime.add(Calendar.HOUR_OF_DAY, fromHour);
 
-        Calendar toTime = GeneralUtils.createEmptyCalendar();
+        Calendar toTime = GeneralUtils.createCalendar();
         toTime.setTime(date);
         toTime.add(Calendar.HOUR_OF_DAY, toHour);
         // toTime.roll(Calendar.MINUTE, 1);

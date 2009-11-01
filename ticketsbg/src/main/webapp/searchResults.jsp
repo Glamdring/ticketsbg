@@ -12,9 +12,9 @@
 
     <ui:define name="head">
         <script type="text/javascript"
-            src="http://maps.google.com/maps?file=api&amp;v=2&amp;hl=bg&amp;key=abcdefg"></script>
+            src="http://maps.google.com/maps?file=api&amp;v=2&amp;hl=bg&amp;key=ABQIAAAAcS1gbQG8pb3-5DubTX566BQq5bQxlGIBYwxxbERPytfXE9xIuBSTrnBXT_ko6RzcLF5J7Z6fcnJ7oQ"></script>
         <script type="text/javascript"
-            src="http://www.google.com/jsapi?key=ABCDEFG"></script>
+            src="http://www.google.com/jsapi?key=ABQIAAAAcS1gbQG8pb3-5DubTX566BQq5bQxlGIBYwxxbERPytfXE9xIuBSTrnBXT_ko6RzcLF5J7Z6fcnJ7oQ"></script>
         <style type="text/css">
 .tableHeader {
     border-style: none;

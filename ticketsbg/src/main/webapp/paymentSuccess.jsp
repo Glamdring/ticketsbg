@@ -9,6 +9,7 @@
     xmlns:fmt="http://java.sun.com/jstl/fmt"
     xmlns:t="http://myfaces.apache.org/tomahawk"
     xmlns:p="http://primefaces.prime.com.tr/ui"
+    xmlns:tc="http://tickets.com/tc"
     template="publicTemplate.jsp">
 
     <ui:define name="body">
@@ -34,7 +35,7 @@
                                 style="font-size: 18px; font-weight: bold;" />
 
                             <h:panelGroup>
-                                <h:outputText value="#{msg.seats}: " />
+                                <h:outputText value="#{tc:getSize(ticket.passengerDetails) > 1 ? msg.seats : msg.seat}: " />
                                 <a4j:repeat value="#{ticket.passengerDetails}" var="detail"
                                     rowKeyVar="rowKey">
                                     <h:outputText value=", " rendered="#{rowKey > 0}" />

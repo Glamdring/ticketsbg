@@ -37,7 +37,7 @@ public class Firm implements Serializable, Selectable {
     private String description;
 
     @Column
-    private String bulstat;
+    private String eik;
 
     @Column
     private String epayKin;
@@ -118,12 +118,12 @@ public class Firm implements Serializable, Selectable {
         this.name = name;
     }
 
-    public String getBulstat() {
-        return this.bulstat;
+    public String getEik() {
+        return eik;
     }
 
-    public void setBulstat(String bulstat) {
-        this.bulstat = bulstat;
+    public void setEik(String eik) {
+        this.eik = eik;
     }
 
     public String getEpayKin() {

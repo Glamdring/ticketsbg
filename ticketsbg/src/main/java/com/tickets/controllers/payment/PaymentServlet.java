@@ -39,7 +39,7 @@ public class PaymentServlet extends HttpServlet {
             String secret = Settings.getValue("epay.secret");
             String hmac  = SecurityUtils.hmac(encoded, secret);
 
-            if (checksum.equals(hmac)) {
+            if (checksum.equalsIgnoreCase(hmac)) {
 
                 String data = new String(Base64Decoder.toByteArray(encoded));
                 String[] lines = data.split("\n");
@@ -58,6 +58,7 @@ public class PaymentServlet extends HttpServlet {
                         String stan = matcher.group(5);
                         String bcode = matcher.group(6);
 
+                        System.out.println(stan);
                         infoData += "INVOICE=" + orderId + ":STATUS=";
 
                         if (status.equals("PAID")) {

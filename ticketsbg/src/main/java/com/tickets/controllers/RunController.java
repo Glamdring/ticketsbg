@@ -47,7 +47,7 @@ public class RunController extends BaseController {
     @Action
     public void newRun() {
         run = new Run();
-        run.setTime(GeneralUtils.createEmptyCalendar());
+        run.setTime(GeneralUtils.createCalendar());
     }
 
     @Action

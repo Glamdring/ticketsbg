@@ -3,6 +3,7 @@ package com.tickets.services;
 import java.util.Calendar;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.tickets.model.Route;
@@ -16,11 +17,15 @@ import com.tickets.utils.ListNode;
 @Service("runService")
 public class RunServiceImpl extends BaseService<Run> implements RunService<Run> {
 
+    private static final Logger logger = Logger.getLogger(RunServiceImpl.class);
+
     @SuppressWarnings("unchecked")
     @Override
     public void createRuns() {
 
         List<List> runsAndRoutes = getDao().findByNamedQuery("Run.getLastRuns");
+
+        logger.debug("Found for run creation: " + runsAndRoutes.size());
 
         for (List result : runsAndRoutes) {
             Route route = (Route) result.get(0);
@@ -32,7 +37,7 @@ public class RunServiceImpl extends BaseService<Run> implements RunService<Run> 
                 time = Calendar.getInstance(GeneralUtils.getLocale());
                 time.setTimeInMillis(run.getTime().getTimeInMillis());
             }
-            //If the single run is already created
+            //If the single run is already created, skip
             if (run != null && route.isSingleRun()) {
                 continue;
             }
@@ -80,14 +85,23 @@ public class RunServiceImpl extends BaseService<Run> implements RunService<Run> 
         if (dayNode == null)
             return; // no day found
 
-        Calendar now = GeneralUtils.createEmptyCalendar();
+        Calendar now = GeneralUtils.createCalendar();
 
-        int daysToGenerate = route.getPublishedRunsPeriod() -
-            (day - now.get(Calendar.DAY_OF_YEAR));
+        int diff = day - now.get(Calendar.DAY_OF_YEAR);
+        // check whether the 'now' or 'day' (whichever is greater) isn't in the
+        // next year recalculate the difference in days
+        if (diff > 300) {
+            diff = now.get(Calendar.DAY_OF_YEAR) + (getDaysInYear(time) - day);
+        } else if (diff < -300) {
+            diff = day + (getDaysInYear(time) - now.get(Calendar.DAY_OF_YEAR));
+        }
 
-        //TODO new year?
+        int daysToGenerate = route.getPublishedRunsPeriod() - diff;
+
+        logger.debug("Generating runs for " + daysToGenerate + " days, for route " + route.getId());
+
         //Starting either from the last already generated day + 1, or from today (=yesterday + 1)
-        now.add(Calendar.DAY_OF_YEAR, day - now.get(Calendar.DAY_OF_YEAR) + 1);
+        now.add(Calendar.DAY_OF_YEAR, diff + 1);
         while (daysToGenerate > 0) {
             int tmpDay = dayNode.getValue().getDay().getId();
             // 'scrolling' to the next date where a run is needed
@@ -117,6 +131,31 @@ public class RunServiceImpl extends BaseService<Run> implements RunService<Run> 
                 //Saving automatically, because attached to session
                 route.addRun(run);
             }
+        }
+    }
+
+    private static int getDaysInYear(Calendar time) {
+        int year = time.get(Calendar.YEAR);
+        if (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) {
+            return 366;
+        }
+        return 365;
+    }
+
+    public static void main(String[] args) {
+        Calendar time = GeneralUtils.getPreviousDay();
+        Calendar now = GeneralUtils.createCalendar();
+
+        int day = time.get(Calendar.DAY_OF_YEAR);
+        int diff = day - now.get(Calendar.DAY_OF_YEAR);
+
+        System.out.println(diff);
+        // check whether the 'now' or 'day' (whichever is greater) isn't in the
+        // next year recalculate the difference in days
+        if (diff > 300) {
+            diff = now.get(Calendar.DAY_OF_YEAR) + (getDaysInYear(time) - day);
+        } else if (diff < -300) {
+            diff = day + (getDaysInYear(time) - now.get(Calendar.DAY_OF_YEAR));
         }
     }
 }

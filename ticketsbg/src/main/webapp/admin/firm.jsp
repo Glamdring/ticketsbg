@@ -35,8 +35,8 @@
                     <h:inputText value="#{firmController.firm.subdomain}"
                         id="subdomain" size="30" />
 
-                    <h:outputLabel for="bulstat" value="#{msg.bulstat}: " />
-                    <h:inputText value="#{firmController.firm.bulstat}" id="bulstat"
+                    <h:outputLabel for="eik" value="#{msg.eik}: " />
+                    <h:inputText value="#{firmController.firm.eik}" id="eik"
                         size="30" />
 
                     <h:outputLabel for="epayKin" value="#{msg.epayKin}: " />

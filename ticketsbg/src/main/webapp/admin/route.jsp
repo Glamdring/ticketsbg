@@ -52,7 +52,7 @@
                                     <rich:toolTip value="#{msg.requireReceiptAtCashDeskInfo}"
                                         for="requireReceiptAtCashDeskLabel" followMouse="true" />
                                     <h:selectBooleanCheckbox
-                                        value="#{firmController.firm.requireReceiptAtCashDesk}"
+                                        value="#{routeController.route.requireReceiptAtCashDesk}"
                                         id="requireReceiptAtCashDesk" />
                                 </h:panelGroup>
 

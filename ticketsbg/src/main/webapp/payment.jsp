@@ -9,8 +9,13 @@
     xmlns:fmt="http://java.sun.com/jstl/fmt"
     xmlns:t="http://myfaces.apache.org/tomahawk"
     template="publicTemplate.jsp">
+    <ui:define name="header">
+        <meta http-equiv="pragma" content="no-cache" />
+        <meta http-equiv="cache-control" content="no-cache" />
+        <meta http-equiv="expires" content="0" />
+    </ui:define>
     <ui:define name="body">
-        <f:view beforePhaseListener="#{paymentController.refreshPaymentData}"><!-- Facelets changed attr name -->
+        <f:view>
             <h:panelGroup>
                 <a4j:form id="paymentForm">
                     <rich:panel header="#{msg.payment}"
@@ -45,13 +50,13 @@
                              <h:panelGrid columns="2" rowClasses="imageRow,optionRow"
                                 style="text-align: center;" width="500px">
 
-                                <h:outputLabel id="ePayLabel">
+                                <h:outputLabel id="ePayLabel" for="selectedPaymentMethod">
                                     <h:graphicImage url="/images/epay.jpg" style="border: 0px;"
                                         height="43" />
                                 </h:outputLabel>
 
                                 <h:panelGroup>
-                                    <h:outputLabel id="ccLabel">
+                                    <h:outputLabel id="ccLabel" for="selectedPaymentMethod">
                                         <h:graphicImage url="/images/creditCards.gif"
                                             style="border: 0px; margin-top: -2px" height="45" />
                                         <br />
@@ -100,6 +105,9 @@
                         }
                     </script>
                 </a4j:form>
+                <c:set var="url"
+                    value="http://#{facesContext.externalContext.request.serverName}:#{facesContext.externalContext.request.serverPort}#{facesContext.externalContext.request.contextPath}" />
+
                 <h:panelGroup id="paymentGatewayFormWrapper">
                     <form action="https://devep2.datamax.bg/ep2/epay2_demo/"
                         id="paymentGatewayForm"><input type="hidden" id="PAGE" name="PAGE"
@@ -108,9 +116,9 @@
                         value="#{paymentController.encoded}" /> <input type="hidden"
                         name="CHECKSUM" value="#{paymentController.checksum}" /> <input
                         type="hidden" name="URL_OK"
-                        value="http://tickets.bg/paymentSuccess.jsp?conversationContext=" /> <input
+                        value="#{url}/paymentSuccess.jsp" /> <input
                         type="hidden" name="URL_CANCEL"
-                        value="http://tickets.bg/paymentCancelled.jsp?conversationContext=" /></form>
+                        value="#{url}/paymentCancelled.jsp" /></form>
                 </h:panelGroup>
             </h:panelGroup>
         </f:view>

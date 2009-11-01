@@ -11,14 +11,12 @@ import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.mail.SimpleEmail;
 
 import com.tickets.constants.Settings;
-import com.tickets.model.User;
-import com.tickets.services.UserServiceImpl;
 
 public class GeneralUtils {
 
     public static Calendar getPreviousDay() {
-        Calendar c = Calendar.getInstance(getLocale());
-        c.roll(Calendar.DAY_OF_MONTH, false);
+        Calendar c = GeneralUtils.createCalendar();
+        c.add(Calendar.DAY_OF_YEAR, -1);
         return c;
     }
 
@@ -27,7 +25,7 @@ public class GeneralUtils {
      *
      * @return calendar
      */
-    public static Calendar createEmptyCalendar() {
+    public static Calendar createCalendar() {
         return Calendar.getInstance(getLocale());
     }
 
@@ -76,20 +74,8 @@ public class GeneralUtils {
         e.setTLS(true);
         e.setCharset("UTF8");
 
-        //e.setDebug(true);
+        // e.setDebug(true);
 
         return e;
-    }
-
-    public static void main(String[] args) throws Exception {
-        User user = new User();
-        user.setName("алабала портокала");
-        user.setPassword("asdf");
-        user.setRepeatPassword("asdf");
-        user.setUsername("asdfkofar");
-        user.setEmail("glamd@abv.bg");
-
-        UserServiceImpl impl = new UserServiceImpl();
-        impl.register(user);
     }
 }

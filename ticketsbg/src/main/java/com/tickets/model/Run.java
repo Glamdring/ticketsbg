@@ -33,7 +33,7 @@ import org.hibernate.annotations.LazyCollectionOption;
         // No other decent way of taking the greatest element in group-by queries
         @NamedQuery(
                 name = "Run.getLastRuns",
-                query = "SELECT DISTINCT new list(route, MAX(run), MAX(run.time)) FROM Route AS route LEFT OUTER JOIN route.runs AS run WHERE run.manuallyAdded = false GROUP BY route"
+                query = "SELECT DISTINCT new list(route, MAX(run), MAX(run.time)) FROM Route AS route LEFT OUTER JOIN route.runs AS run WHERE (run.manuallyAdded = false OR run.manuallyAdded IS NULL) GROUP BY route"
         ),
         //TODO optimize. Now does a query for each run (to match a price)
         @NamedQuery(

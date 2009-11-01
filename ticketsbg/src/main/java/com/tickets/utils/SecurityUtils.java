@@ -3,7 +3,7 @@ package com.tickets.utils;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-import com.tickets.utils.base64.Base64Encoder;
+import org.apache.commons.codec.binary.Hex;
 
 public final class SecurityUtils {
 
@@ -26,8 +26,8 @@ public final class SecurityUtils {
             // compute the hmac on input data bytes
             byte[] rawHmac = mac.doFinal(data.getBytes());
 
-            String result = Base64Encoder.toBase64String(rawHmac);
-            return result;
+            String result = new String(Hex.encodeHex(rawHmac));
+            return result.toUpperCase();
         } catch (Exception ex) {
             throw new RuntimeException("Problem with calculating hmac", ex);
         }
