@@ -37,7 +37,9 @@ public class PaymentServlet extends HttpServlet {
             String checksum = request.getParameter("CHECKSUM");
 
             String secret = Settings.getValue("epay.secret");
-            String hmac  = SecurityUtils.hmac(encoded, secret);
+            String hmac = SecurityUtils.hmac(encoded, secret);
+
+            System.out.println(checksum + " : " + hmac);
 
             if (checksum.equalsIgnoreCase(hmac)) {
 

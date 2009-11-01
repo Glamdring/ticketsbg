@@ -5,12 +5,14 @@ import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tickets.constants.Settings;
+import com.tickets.desktop.notifier.Messages;
 import com.tickets.exceptions.PaymentException;
 import com.tickets.model.Ticket;
 import com.tickets.services.valueobjects.PaymentData;
@@ -36,10 +38,12 @@ public class PaymentServiceImpl extends BaseService implements PaymentService {
         df.setMinimumFractionDigits(2);
         df.setMaximumFractionDigits(2);
         String sum = df.format(getTotalPrice(tickets));
-        String expiryDate = new SimpleDateFormat("dd.MM.yyyy")
-                .format(GeneralUtils.createCalendar().getTime());
+        Calendar inTenMinutes = GeneralUtils.createCalendar();
+        inTenMinutes.add(Calendar.MINUTE, 10);
+        String expiryDate = new SimpleDateFormat("dd.MM.yyyy HH:mm")
+                .format(inTenMinutes.getTime());
 
-        String description = "";
+        String description = Messages.getString("paymentDescriptionPrefix") + ":\\n";
 
         for (Ticket ticket : tickets) {
             description += ticket.getStartStop() + " - " + ticket.getEndStop()
@@ -60,7 +64,7 @@ public class PaymentServiceImpl extends BaseService implements PaymentService {
         try {
             PaymentData paymentData = new PaymentData();
             paymentData.setEncoded(Base64Encoder
-                    .toBase64String(data.getBytes()));
+                    .toBase64String(data.getBytes("cp1251")));
             paymentData.setChecksum(SecurityUtils.hmac(
                     paymentData.getEncoded(), secret));
 

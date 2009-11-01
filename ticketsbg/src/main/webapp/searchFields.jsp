@@ -265,7 +265,8 @@ function showOrHideReturn() {
                             value="#{searchController.returnToHour}" id="returnToHour"
                             width="50" style="margin-right: 5px;">
                             <f:convertNumber minIntegerDigits="2" />
-                        </rich:comboBox> #{msg.hourAbbr}
+                        </rich:comboBox>
+                        <h:outputText value="#{msg.hourAbbr}" />
 
                         <input type="button" value="OK"
                             onclick="#{rich:component('returnTimePanel')}.hide(); " />
