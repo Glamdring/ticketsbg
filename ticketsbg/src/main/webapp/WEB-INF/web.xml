@@ -63,6 +63,10 @@
         <param-name>org.apache.myfaces.SECRET</param-name>
         <param-value>Njc1MzE0MDI=</param-value>
     </context-param>
+    <context-param>
+        <param-name>org.apache.myfaces.ERROR_HANDLER</param-name>
+        <param-value>com.tickets.utils.JSFErrorHandler</param-value>
+    </context-param>
     <!-- context-param>
         <param-name>org.apache.myfaces.redirectTracker.POLICY</param-name>
         <param-value>

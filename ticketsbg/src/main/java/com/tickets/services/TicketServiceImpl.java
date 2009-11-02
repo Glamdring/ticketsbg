@@ -397,7 +397,7 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
             ticket = save(ticket);
         }
 
-        if (!user.isStaff()) {
+        if (user == null || !user.isStaff()) {
             sendPurchaseEmail(tickets);
         }
     }

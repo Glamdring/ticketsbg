@@ -10,7 +10,7 @@ import java.util.ResourceBundle;
 
 public class Messages implements Serializable {
     private static Map<Locale, ResourceBundle> bundles = new HashMap<Locale, ResourceBundle>();
-    private static final Locale DEFAULT_LOCALE = new Locale("bg");
+    public static final Locale DEFAULT_LOCALE = new Locale("bg");
 
     private static ClassLoader getCurrentClassLoader(Object defaultObject) {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();

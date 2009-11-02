@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tickets.constants.Settings;
-import com.tickets.desktop.notifier.Messages;
+import com.tickets.constants.Messages;
 import com.tickets.exceptions.PaymentException;
 import com.tickets.model.Ticket;
 import com.tickets.services.valueobjects.PaymentData;
@@ -51,10 +51,9 @@ public class PaymentServiceImpl extends BaseService implements PaymentService {
         }
 
         String orderId = "";
-        String delim = "";
+        //TODO delimit somehow!
         for (Ticket ticket : tickets) {
-            orderId += delim + ticket.getId();
-            delim = "-";
+            orderId += ticket.getId();
         }
         orderId = addDummyDigits(orderId);
 
