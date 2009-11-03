@@ -54,6 +54,9 @@ function showOrHideReturn() {
             header="#{searchController.ticketToAlter == null ? msg.searchTitle : null}"
             headerClass="rich-panel-header-main">
 
+            <h:outputText value="#{msg[param.errorKey]}"
+                rendered="#{param.errorKey != null}" styleClass="error" />
+
             <ui:include src="messages.jsp">
                 <ui:param name="ajaxRendered" value="false" />
             </ui:include>

@@ -19,6 +19,7 @@ import com.tickets.constants.Settings;
 import com.tickets.controllers.handlers.SeatHandler;
 import com.tickets.exceptions.TicketAlterationException;
 import com.tickets.exceptions.TicketCreationException;
+import com.tickets.model.Customer;
 import com.tickets.model.Discount;
 import com.tickets.model.PassengerDetails;
 import com.tickets.model.PaymentMethod;
@@ -397,6 +398,8 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
             ticket = save(ticket);
         }
 
+        log.debug("Committing purchase. Number of tickets: " + tickets.size());
+
         if (user == null || !user.isStaff()) {
             sendPurchaseEmail(tickets);
         }
@@ -404,14 +407,21 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
 
     private void sendPurchaseEmail(List<Ticket> tickets) {
          try {
-             String customerEmail = tickets.get(0).getCustomerInformation().getEmail();
-             String customerName = tickets.get(0).getCustomerInformation().getName();
+             Ticket firstTicket = tickets.get(0);
+             Customer customerInfo = firstTicket.getCustomerInformation();
+             String customerEmail = customerInfo.getEmail();
+             String customerName = customerInfo.getName();
 
              HtmlEmail email = GeneralUtils.getPreconfiguredMail();
              email.addTo(customerEmail);
 
              email.setFrom(Settings.getValue("purchase.email.sender"));
-             email.setSubject(Messages.getString("purchase.email.subject"));
+             if (tickets.size() > 1 || tickets.get(0).getPassengerDetails().size() > 1) {
+                 email.setSubject(Messages.getString("purchase.email.subject.multiple"));
+             } else {
+                 email.setSubject(Messages.getString("purchase.email.subject.single"));
+             }
+
 
              SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 
@@ -427,11 +437,13 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
                      seats += delim + pd.getSeat();
                      delim = ", ";
                  }
-                 seats += " / ";
-                 delim = "";
-                 for (PassengerDetails pd : ticket.getPassengerDetails()) {
-                     seats += delim + pd.getReturnSeat();
-                     delim = ", ";
+                 if (ticket.isTwoWay()) {
+                     seats += " / ";
+                     delim = "";
+                     for (PassengerDetails pd : ticket.getPassengerDetails()) {
+                         seats += delim + pd.getReturnSeat();
+                         delim = ", ";
+                     }
                  }
 
                  DecimalFormat df = new DecimalFormat();
@@ -449,7 +461,7 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
                  ticketsTable += "</tr>";
              }
 
-             email.setHtmlMsg(Messages.getString("information.email.content", customerName, ticketsTable));
+             email.setHtmlMsg(Messages.getString("purchase.email.content", customerName, ticketsTable));
 
              email.send();
 
