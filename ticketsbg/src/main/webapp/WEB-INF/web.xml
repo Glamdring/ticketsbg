@@ -83,6 +83,10 @@
         <param-name>org.apache.myfaces.RENDER_VIEWSTATE_ID</param-name>
         <param-value>false</param-value>
     </context-param>
+    <context-param>
+        <param-name>org.apache.myfaces.PRETTY_HTML</param-name>
+        <param-value>false</param-value>
+    </context-param>
     <!-- context-param>
         <param-name>org.apache.myfaces.redirectTracker.POLICY</param-name>
         <param-value>
