@@ -46,12 +46,6 @@ public class BaseService<E> implements Service<E> {
 
     public <T> T get(Class<T> clazz, Serializable id) {
         T result = getDao().getById(clazz, id);
-        if (result == null)
-            try {
-                result = clazz.newInstance();
-            } catch (Exception ex) {
-            }
-
         return result;
     }
 

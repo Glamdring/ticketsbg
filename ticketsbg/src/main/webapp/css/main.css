@@ -41,9 +41,11 @@ span {
 .main {
     margin-right: 0px;
     vertical-align: top;
-    width: 800px;
+    width: 795px;
     text-align: left;
     height: 100%;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
 }
 
 .rich-panel-header-main {
@@ -74,7 +76,7 @@ span {
 }
 
 .rich-menu-list-border {
-    filter: alpha(opacity =     100);
+    filter: alpha(opacity = 100);
     opacity: 1;
 }
 
@@ -83,20 +85,26 @@ span {
 }
 
 .dottedLine {
-    border-bottom: 1px dotted grey;
+    border-bottom-style: dotted;
+    border-bottom-color: #808080;
+    border-bottom-width: 1px;
+    margin: 0px;
     width: 100%;
     border-collapse: collapse;
-    padding-top: 5px;
+    padding: 0px 0px 5px 0px;
+    height: 1px;
 }
 
 .container {
-    width: 1005px;
+    width: 1000px;
     margin-left: auto;
     margin-right: auto;
     text-align: left;
 }
+
 .footer {
     width: 100%;
+    margin-top: 9px;
     text-align: center;
     border-top-style: solid;
     border-bottom-style: solid;
@@ -108,4 +116,17 @@ span {
 }
 .protectionField {
     display: none;
+}
+
+form {
+    margin: 0px;
+    padding: 0px;
+}
+
+.rich-modalpanel {
+    text-align: left;
+}
+/* Fix for old FireFoxes */
+.rich-mpnl-body {
+    width: 100%;
 }

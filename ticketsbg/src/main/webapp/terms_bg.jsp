@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8" ?>
 <ol>
     <li><span style="font-weight: bold;">Общи положения</span>
         <p>avtogara.com е портал, който свързва крайните потребители с

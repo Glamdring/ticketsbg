@@ -21,6 +21,7 @@
 
 .secondColumn {
     vertical-align: middle;
+    padding: 0px;
 }
 
 .disabled-cell {
@@ -50,7 +51,7 @@ function showOrHideReturn() {
 //]]>
 </script>
     <f:view>
-        <rich:panel style="#{isAdmin ? '' : 'height: 100%;'}"
+        <rich:panel style="#{isAdmin ? '' : 'height: 100%; width: 305px;'}"
             header="#{searchController.ticketToAlter == null ? msg.searchTitle : null}"
             headerClass="rich-panel-header-main">
 

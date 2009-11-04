@@ -13,8 +13,9 @@
             <rich:panel header="#{msg.paymentMethods}"
                 headerClass="rich-panel-header-main" id="statistics">
                 <h:panelGrid columns="1" style="text-align: center;">
-                    <h:graphicImage url="/images/epay.jpg" />
-                    <h:graphicImage url="/images/creditCards.gif" />
+                    <h:graphicImage url="/images/epay.jpg" alt="ePay" title="ePay" />
+                    <h:graphicImage url="/images/creditCards.gif"
+                        alt="#{msg.CREDIT_CARD}" title="#{msg.CREDIT_CARD}" />
                 </h:panelGrid>
             </rich:panel>
         </a4j:form>

@@ -18,6 +18,8 @@
         .innerColumn {
             vertical-align: top;
             height: 100%;
+            margin-bottom: 0px;
+            padding-bottom: 0px;
         }
     </style>
 </ui:define>
@@ -25,7 +27,7 @@
         <f:view>
             <a4j:form id="searchForm" ajaxSubmit="true">
                 <h:panelGrid columns="2" cellpadding="0" cellspacing="0"
-                    columnClasses="innerColumn, innerColumn" style="height: 320px;">
+                    columnClasses="innerColumn, innerColumn" style="height: 320px; margin: 0px; padding: 0px;">
                     <a4j:outputPanel>
                         <ui:include src="searchFields.jsp">
                             <ui:param name="isAdmin" value="false" />
@@ -34,7 +36,7 @@
                             value="false" converter="#{booleanConverter}" />
                     </a4j:outputPanel>
                     <rich:panel header=" " headerClass="rich-panel-header-main"
-                        style="text-align: center; width: 495px; margin-left: 5px; height: 100%;">
+                        style="text-align: center; width: 485px; margin-left: 5px; height: 100%;">
                         <h:graphicImage url="/images/banner.png" />
                     </rich:panel>
                 </h:panelGrid>

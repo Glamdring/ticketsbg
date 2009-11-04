@@ -24,7 +24,7 @@
 
                 <a4j:status id="loginStatus">
                     <f:facet name="start">
-                        <h:graphicImage value="/images/ajaxloading.gif" />
+                        <h:graphicImage value="/images/ajaxloading.gif" alt="loading..."/>
                     </f:facet>
                 </a4j:status>
                 <h:outputText />

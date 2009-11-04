@@ -10,7 +10,8 @@
     <f:facet name="controls">
         <h:panelGroup>
             <h:graphicImage value="/images/close.png" styleClass="hidelink"
-                onclick="#{rich:component(dialogId)}.hide()" />
+                onclick="#{rich:component(dialogId)}.hide()" alt="#{msg.close}"
+                title="#{msg.close}" />
         </h:panelGroup>
     </f:facet>
     <rich:hotKey key="esc" handler="#{rich:component(dialogId)}.hide();" />

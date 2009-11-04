@@ -408,6 +408,8 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
     private void sendPurchaseEmail(List<Ticket> tickets) {
          try {
              Ticket firstTicket = tickets.get(0);
+             log.debug("Sending mail. First ticket is: " + firstTicket.getId());
+
              Customer customerInfo = firstTicket.getCustomerInformation();
              String customerEmail = customerInfo.getEmail();
              String customerName = customerInfo.getName();

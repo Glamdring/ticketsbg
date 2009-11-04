@@ -69,7 +69,9 @@ public class PaymentServlet extends HttpServlet {
             }
         } catch (Exception ex) {
             logger.error("", ex);
-            throw new ServletException(ex);
+
+            // don't throw
+            // throw new ServletException(ex);
         }
     }
 
@@ -90,6 +92,8 @@ public class PaymentServlet extends HttpServlet {
                 String bcode = matcher.group(6);
 
                 infoData += "INVOICE=" + orderId + ":STATUS=";
+
+                logger.debug("Processing payment for orderId=" + orderId);
 
                 if (status.equals("PAID")) {
                     try {

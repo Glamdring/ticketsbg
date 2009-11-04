@@ -1,3 +1,4 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:h="http://java.sun.com/jsf/html"
@@ -5,7 +6,7 @@
     xmlns:a4j="http://richfaces.org/a4j"
     xmlns:rich="http://richfaces.org/rich">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Type" content="text/xhtml; charset=UTF-8" />
 <title>Tickets</title>
 <link href="css/main.css" type="text/css" rel="stylesheet" />
 <style type="text/css">
@@ -18,7 +19,6 @@
     vertical-align: middle;
 }
 </style>
-<script type="text/javascript" src="js/jquery.pngFix.js"></script>
 <!-- script type="text/javascript">
     $(document).ready(function(){
         $(document).pngFix();
@@ -34,33 +34,35 @@
 <div class="container"><a
     href="#{facesContext.externalContext.context.contextPath}/"> <img
     src="images/logo.png" alt="avtogara.com" style="border-style: none;" />
-</a> <h:form style="padding: 0px; margin: 0px; float: left" id="menuForm">
+</a> <h:form style="float: left" id="menuForm">
 
-    <rich:toolBar itemSeparator="line" height="34" width="1005"
-        style="float: left;" id="toolbar">
+    <rich:toolBar itemSeparator="line" width="1000" height="34"
+        style="float: left; padding: 0px; margin: 0px;" id="toolbar">
         <rich:menuItem action="#{searchController.navigateToSearch}"
             id="searchMenuItem">
             <h:graphicImage value="/images/small/search.png"
-                styleClass="menuIcon" />
+                styleClass="menuIcon" alt="#{msg.searchMenuItem}" />
             <h:outputText value="#{msg.searchMenuItem}" styleClass="menuContent" />
         </rich:menuItem>
 
         <rich:menuItem action="alterTicketScreen" id="alterTicketMenuItem">
             <h:graphicImage value="/images/small/alterTicket.png"
-                styleClass="menuIcon" />
+                styleClass="menuIcon" alt="#{msg.alterTicketMenuItem}" />
             <h:outputText value="#{msg.alterTicketMenuItem}"
                 styleClass="menuContent" />
         </rich:menuItem>
 
         <rich:menuItem action="firmDetails" id="firmMenuItem"
             rendered="#{baseController.currentFirm != null}">
-            <h:graphicImage value="/images/small/firm.png" styleClass="menuIcon" />
+            <h:graphicImage value="/images/small/firm.png" styleClass="menuIcon"
+                alt="#{msg.firm}" />
             <h:outputText value="#{msg.firm}" styleClass="menuContent" />
         </rich:menuItem>
 
         <rich:menuItem action="registrationScreen"
             rendered="#{loggedUserHolder.loggedUser == null}">
-            <h:graphicImage value="/images/small/users.png" styleClass="menuIcon" />
+            <h:graphicImage value="/images/small/users.png" styleClass="menuIcon"
+                alt="#{msg.register}" />
             <h:outputText value="#{msg.register}" styleClass="menuContent" />
         </rich:menuItem>
 
@@ -68,21 +70,22 @@
             rendered="#{loggedUserHolder.loggedUser == null}"
             onclick="#{rich:component('loginPanel')}.show()" ajaxSingle="true"
             immediate="true">
-            <h:graphicImage value="/images/small/login.png" styleClass="menuIcon" />
+            <h:graphicImage value="/images/small/login.png" styleClass="menuIcon"
+                alt="#{msg.login}" />
             <h:outputText value="#{msg.login}" styleClass="menuContent" />
         </rich:menuItem>
 
         <rich:menuItem action="history"
             rendered="#{loggedUserHolder.loggedUser != null}">
             <h:graphicImage value="/images/small/history.png"
-                styleClass="menuIcon" />
+                styleClass="menuIcon" alt="#{msg.travelHistory}" />
             <h:outputText value="#{msg.travelHistory}" />
         </rich:menuItem>
 
         <rich:menuItem action="profile"
             rendered="#{loggedUserHolder.loggedUser != null}">
             <h:graphicImage value="/images/small/profile.png"
-                styleClass="menuIcon" />
+                styleClass="menuIcon" alt="#{msg.profile}" />
             <h:outputText value="#{msg.profile}" />
             <!-- h:outputText value=" (#{loggedUserHolder.loggedUser.username})" /-->
         </rich:menuItem>
@@ -90,7 +93,7 @@
         <rich:menuItem action="#{loggedUserHolder.logout}"
             rendered="#{loggedUserHolder.loggedUser != null}">
             <h:graphicImage value="/images/small/logout.png"
-                styleClass="menuIcon" />
+                styleClass="menuIcon" alt="#{msg.logout}" />
             <h:outputText value="#{msg.logout}" styleClass="menuContent" />
         </rich:menuItem>
     </rich:toolBar>
@@ -99,20 +102,23 @@
 <a4j:status forceId="generalStatus">
     <f:facet name="start">
         <h:graphicImage value="/images/ajaxloadingBig.gif" id="statusImage"
-            style="float: right; margin-left: -40px; padding-right: 3px; padding-top: 3px; clear: right;" />
+            style="float: right; margin-left: -40px; padding-right: 3px; padding-top: 3px;"
+            alt="loading..." />
     </f:facet>
 </a4j:status>
 
-<a4j:include viewId="loginPanel.jsp" /> <h:panelGrid columns="2"
+<ui:include src="loginPanel.jsp" />
+<h:panelGrid columns="2"
     columnClasses="main,side" cellpadding="0" cellspacing="0"
-    style="margin-top: 4px; text-align: left;">
+    style="margin-top: 4px; margin-bottom: 0px; text-align: left; clear: both;">
     <ui:insert name="body" />
     <h:panelGroup>
         <ui:include src="purchaseDetailsSideScreen.jsp" />
         <ui:include src="statistics.jsp" />
         <ui:include src="paymentMethods.jsp" />
     </h:panelGroup>
-</h:panelGrid> <h:form style="margin: 0px; padding: 0px;">
+</h:panelGrid>
+<h:form>
     <h:panelGroup styleClass="footer" layout="block">
         <a4j:commandLink onclick="#{rich:component('termsPanel')}.show();"
             value="#{msg.generalTerms}" />  |
@@ -123,7 +129,9 @@
     <a href="#">#{msg.footerForFirms}</a>
         <ui:insert name="footer" />
     </h:panelGroup>
-</h:form> <rich:modalPanel id="termsPanel" autosized="true"
+</h:form>
+
+<rich:modalPanel id="termsPanel" autosized="true"
     style="overflow: hidden;" width="400" height="300"
     onmaskclick="#{rich:component('termsPanel')}.hide();">
     <ui:include src="modalPanelCommons.jsp">
@@ -132,7 +140,7 @@
     <f:facet name="header">
         #{msg.generalTerms}
     </f:facet>
-    <h:panelGroup style="overflow: auto;">
+    <h:panelGroup style="overflow: auto;" layout="block">
         <ui:include src="terms_#{facesContext.viewRoot.locale.language}.jsp" />
     </h:panelGroup>
 </rich:modalPanel></div>

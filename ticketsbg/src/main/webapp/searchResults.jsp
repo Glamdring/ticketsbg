@@ -16,6 +16,7 @@
         <script type="text/javascript"
             src="http://www.google.com/jsapi?key=ABQIAAAAcS1gbQG8pb3-5DubTX566BQq5bQxlGIBYwxxbERPytfXE9xIuBSTrnBXT_ko6RzcLF5J7Z6fcnJ7oQ"></script>
         <style type="text/css">
+
 .tableHeader {
     border-style: none;
     background-color: white;
@@ -37,6 +38,14 @@
 
 .gridContent {
     vertical-align: top;
+}
+
+.firstTicketColumn {
+    width: 340px;
+}
+
+.secondTicketColumn {
+    width: 40px;
 }
 </style>
     </ui:define>
@@ -110,13 +119,13 @@
                         cellpadding="0" cellspacing="0">
                         <h:panelGroup id="oneWay" style="border-style: none;">
                             <rich:extendedDataTable value="#{searchController.resultsModel}"
-                                height="#{searchController.resultsModel.rowCount == 0 ? 50 : searchController.resultsModel.rowCount * (searchController.returnResultsModel == null ? 182 : 202) + 31}"
+                                height="#{searchController.resultsModel.rowCount == 0 ? 50 : searchController.resultsModel.rowCount * (searchController.returnResultsModel == null ? 182 : 202) + 31}px"
                                 var="result" rowKeyVar="rowId" selectionMode="single"
                                 enableContextMenu="false" id="resultsTable"
                                 selection="#{searchController.selection}"
                                 headerClass="tableHeader" noDataLabel="#{msg.noSearchResults}"
-                                width="380px;" columnClasses="columnClass" border="0"
-                                style="border-style: none; table-layout: fixed;">
+                                width="380px" columnClasses="columnClass" border="0"
+                                style="border-style: none; table-layout: fixed">
 
                                 <a4j:support event="onselectionchange"
                                     reRender="selectedEntry,returnResultsTable,ticketCounts,seatChoices,returnSeatChoices"
@@ -210,16 +219,16 @@
                         <h:panelGroup id="return" style="border-style: none;">
                             <a4j:region>
                                 <rich:extendedDataTable
-                                    height="#{searchController.returnResultsModel.rowCount == 0 ? 50 : searchController.returnResultsModel.rowCount * 123 + 30}"
+                                    height="#{searchController.returnResultsModel.rowCount == 0 ? 50 : searchController.returnResultsModel.rowCount * 123 + 30}px"
                                     value="#{searchController.returnResultsModel}" var="result"
                                     rowKeyVar="rowId" selectionMode="single"
                                     enableContextMenu="false" id="returnResultsTable"
                                     selection="#{searchController.returnSelection}"
                                     headerClass="tableHeader"
                                     noDataLabel="#{searchController.selectedEntry == null ? msg.selectOutbound : msg.noSearchResults}"
-                                    width="380px;" columnClasses="columnClass"
+                                    width="380px" columnClasses="columnClass"
                                     rendered="#{searchController.returnResultsModel != null}"
-                                    style="border-style: none;" border="0">
+                                    style="border-style: none" border="0">
 
                                     <a4j:support event="onselectionchange"
                                         reRender="selectedReturnEntry,ticketCounts,returnSeatChoices"
@@ -327,16 +336,8 @@
                             </a4j:region>
                         </h:panelGroup>
                     </h:panelGrid>
-                    <!-- Ticket counts & discounts -->
-                    <style type="text/css">
-.firstTicketColumn {
-    width: 340px;
-}
 
-.secondTicketColumn {
-    width: 40px;
-}
-</style>
+                    <!-- Ticket counts & discounts -->
                     <rich:panel header="#{msg.tickets}" id="ticketCounts"
                         style="width: 380px; margin-top: 15px;">
                         <h:panelGrid columns="2"
