@@ -170,8 +170,7 @@ function showOrHideReturn() {
 
 
                 <rich:modalPanel id="outboundTimePanel" autosized="true"
-                    onmaskclick="#{rich:component('outboundTimePanel')}.hide()"
-                    style="overflow: hidden;">
+                    onmaskclick="#{rich:component('outboundTimePanel')}.hide()">
                     <ui:include src="/modalPanelCommons.jsp">
                         <ui:param name="dialogId" value="outboundTimePanel" />
                     </ui:include>
@@ -237,8 +236,7 @@ function showOrHideReturn() {
                 </h:panelGrid>
 
                 <rich:modalPanel id="returnTimePanel" autosized="true"
-                    onmaskclick="#{rich:component('returnTimePanel')}.hide()"
-                    style="overflow: hidden;">
+                    onmaskclick="#{rich:component('returnTimePanel')}.hide()">
                     <ui:include src="/modalPanelCommons.jsp">
                         <ui:param name="dialogId" value="returnTimePanel" />
                     </ui:include>

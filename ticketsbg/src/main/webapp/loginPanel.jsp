@@ -8,8 +8,7 @@
     xmlns:c="http://java.sun.com/jstl/core"
     xmlns:tc="http://tickets.bg/tickets">
 
-    <rich:modalPanel id="loginPanel" autosized="true" width="250"
-        style="overflow: hidden;">
+    <rich:modalPanel id="loginPanel" autosized="true" trimOverlayedElements="false">
         <f:facet name="header">
             <h:outputText value="#{msg.login}" />
         </f:facet>

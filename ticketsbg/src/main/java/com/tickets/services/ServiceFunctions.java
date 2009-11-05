@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+
 import com.tickets.model.Route;
 import com.tickets.model.Run;
 import com.tickets.model.Stop;
@@ -116,5 +119,9 @@ public class ServiceFunctions {
 
     public static void clearCache() {
         cache.set(null);
+    }
+
+    public static String concat(String string1, String string2) {
+        return string1.concat(string2);
     }
 }

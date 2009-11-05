@@ -120,19 +120,17 @@
 </h:panelGrid>
 <h:form>
     <h:panelGroup styleClass="footer" layout="block">
-        <a4j:commandLink onclick="#{rich:component('termsPanel')}.show();"
-            value="#{msg.generalTerms}" />  |
-    <a href="#">#{msg.footerAbout}</a> |
-    <a href="#">#{msg.footerHelp}</a> |
-    <a href="#">#{msg.footerContacts}</a> |
+    <a4j:commandLink onclick="#{rich:component('termsPanel')}.show();"
+            value="#{msg.generalTerms}" /> |&#160;
+    <a4j:commandLink onclick="#{rich:component('contactsPanel')}.show();"
+            value="#{msg.footerContacts}" /> |
     <a href="#">#{msg.footerFacebook}</a> |
-    <a href="#">#{msg.footerForFirms}</a>
+    <a href="#">Twitter</a>
         <ui:insert name="footer" />
     </h:panelGroup>
 </h:form>
 
-<rich:modalPanel id="termsPanel" autosized="true"
-    style="overflow: hidden;" width="400" height="300"
+<rich:modalPanel id="termsPanel" width="400" height="300"
     onmaskclick="#{rich:component('termsPanel')}.hide();">
     <ui:include src="modalPanelCommons.jsp">
         <ui:param name="dialogId" value="termsPanel" />
@@ -141,8 +139,23 @@
         #{msg.generalTerms}
     </f:facet>
     <h:panelGroup style="overflow: auto;" layout="block">
-        <ui:include src="terms_#{facesContext.viewRoot.locale.language}.jsp" />
+        <ui:include src="infopages/terms_#{facesContext.viewRoot.locale.language}.jsp" />
     </h:panelGroup>
-</rich:modalPanel></div>
+</rich:modalPanel>
+
+<rich:modalPanel id="contactsPanel" autosized="true"
+    onmaskclick="#{rich:component('aboutPanel')}.hide();">
+    <ui:include src="modalPanelCommons.jsp">
+        <ui:param name="dialogId" value="contactsPanel" />
+    </ui:include>
+    <f:facet name="header">
+        #{msg.footerContacts}
+    </f:facet>
+    <h:panelGroup style="overflow: auto;" layout="block">
+        <ui:include src="infopages/contacts_#{facesContext.viewRoot.locale.language}.jsp" />
+    </h:panelGroup>
+</rich:modalPanel>
+
+</div>
 </body>
 </html>

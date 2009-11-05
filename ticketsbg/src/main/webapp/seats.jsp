@@ -58,7 +58,7 @@
     </a4j:commandButton>
 
     <rich:modalPanel id="seatsModalPanel#{modifier}" autosized="true"
-        style="overflow: hidden;" domElementAttachment="parent">
+        domElementAttachment="parent">
         <f:facet name="header">
             <h:outputText value="#{msg.seats}" />
         </f:facet>
