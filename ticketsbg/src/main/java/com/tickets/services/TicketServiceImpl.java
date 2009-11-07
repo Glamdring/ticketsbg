@@ -386,6 +386,11 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
 
     private void doFinalizePurchase(List<Ticket> tickets, User user, String paymentCode) {
         for (Ticket ticket : tickets) {
+            if (ticket.isCommitted()) {
+                // if there are committed tickets, return. Sometimes ePay may
+                // send multiple confirmations for the same order
+                return;
+            }
             ticket.setCommitted(true);
             ticket.setPaymentInProcess(false);
             ticket.setPaymentCode(paymentCode);

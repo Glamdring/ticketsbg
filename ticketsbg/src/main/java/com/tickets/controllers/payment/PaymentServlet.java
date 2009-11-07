@@ -110,6 +110,6 @@ public class PaymentServlet extends HttpServlet {
                 }
             }
         }
-        return infoData;
+        return infoData + "\n";
     }
 }
