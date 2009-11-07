@@ -112,8 +112,8 @@
             </f:facet>
         </rich:dropDownMenu>
     </rich:toolBar>
-
 </a4j:form>
+
 <rich:modalPanel id="firmPanel" autosized="true" width="350"
     height="120" moveable="true" resizeable="false"
     domElementAttachment="parent" style="overflow: hidden;">

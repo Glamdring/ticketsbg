@@ -34,10 +34,10 @@
 <div class="container"><a
     href="#{facesContext.externalContext.context.contextPath}/"> <img
     src="images/logo.png" alt="avtogara.com" style="border-style: none;" />
-</a> <h:form style="float: left" id="menuForm">
-
+</a>
+<h:form style="float: left" id="menuForm">
     <rich:toolBar itemSeparator="line" width="1000" height="34"
-        style="float: left; padding: 0px; margin: 0px;" id="toolbar">
+        style="float: left; padding: 0px; margin: 0px;" id="menuToolbar">
         <rich:menuItem action="#{searchController.navigateToSearch}"
             id="searchMenuItem">
             <h:graphicImage value="/images/small/search.png"

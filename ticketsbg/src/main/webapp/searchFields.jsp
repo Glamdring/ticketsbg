@@ -68,7 +68,8 @@ function showOrHideReturn() {
                     id="travelType" style="font-weight: bold;"
                     disabled="#{searchController.ticketToAlter != null}"
                     onclick="showOrHideReturn();">
-                    <a4j:support event="onchange" ajaxSingle="true" />
+                    <a4j:support event="onchange" ajaxSingle="true" limitToList="true" />
+
                     <f:selectItem itemLabel="#{msg.twoWayTravelType}"
                         itemValue="twoWay" />
                     <f:selectItem itemLabel="#{msg.oneWayTravelType}"
@@ -94,7 +95,7 @@ function showOrHideReturn() {
                             eventsQueue="fromStopOnchange"
                             action="#{searchController.filterToStops}" ajaxSingle="true"
                             requestDelay="500" />
-                        <a4j:support event="onselect" reRender="toStop"
+                        <a4j:support event="onselect" reRender="toStop" limitToList="true"
                             action="#{searchController.filterToStops}" ajaxSingle="true" />
 
                     </rich:comboBox>
