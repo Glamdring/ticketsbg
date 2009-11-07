@@ -1,6 +1,6 @@
 <table>
 <tr>
-    <td style="text-align: right;">e-mail:</td>
+    <td style="text-align: right; ">email:</td>
     <td><strong>contact@avtogara.com</strong></td>
 </tr>
 <tr>

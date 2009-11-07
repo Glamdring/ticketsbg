@@ -144,7 +144,7 @@
 </rich:modalPanel>
 
 <rich:modalPanel id="contactsPanel" autosized="true"
-    onmaskclick="#{rich:component('aboutPanel')}.hide();">
+    onmaskclick="#{rich:component('contactsPanel')}.hide();">
     <ui:include src="modalPanelCommons.jsp">
         <ui:param name="dialogId" value="contactsPanel" />
     </ui:include>
@@ -155,7 +155,6 @@
         <ui:include src="infopages/contacts_#{facesContext.viewRoot.locale.language}.jsp" />
     </h:panelGroup>
 </rich:modalPanel>
-
 </div>
 </body>
 </html>
