@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import com.tickets.constants.Constants;
 import com.tickets.constants.Messages;
 import com.tickets.constants.Settings;
-import com.tickets.controllers.handlers.SeatHandler;
 import com.tickets.exceptions.TicketAlterationException;
 import com.tickets.exceptions.TicketCreationException;
 import com.tickets.model.Customer;
@@ -134,6 +133,7 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
         Run run = selectedEntry.getRun();
         // reload the run (JPA refresh throws exception, so attach instead)
         getDao().attach(run);
+
 
         boolean enoughSeats = ServiceFunctions.getVacantSeats(run,
                 selectedEntry.getPrice().getStartStop().getName(),
@@ -357,8 +357,9 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
      */
     private int getFirstVacantSeat(SearchResultEntry entry,
             List<Integer> currentUsedSeats) {
-        List<Integer> usedSeats = SeatHandler.getUsedSeats(entry.getPrice(),
-                entry.getRun());
+        List<Integer> usedSeats = ServiceFunctions.getUsedSeats(entry.getRun(),
+                entry.getPrice().getStartStop().getName(), entry.getPrice()
+                        .getEndStop().getName());
         usedSeats.addAll(currentUsedSeats);
 
         Route route = entry.getRun().getRoute();

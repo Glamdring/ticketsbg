@@ -47,6 +47,9 @@
 .secondTicketColumn {
     width: 40px;
 }
+.extdt-empty-cell {
+    width: 0px;
+}
 </style>
     </ui:define>
     <ui:define name="body">

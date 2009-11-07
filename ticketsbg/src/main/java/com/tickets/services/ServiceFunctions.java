@@ -2,17 +2,19 @@ package com.tickets.services;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-
+import com.tickets.controllers.security.AccessLevel;
+import com.tickets.controllers.users.LoggedUserHolder;
+import com.tickets.model.PassengerDetails;
 import com.tickets.model.Route;
 import com.tickets.model.Run;
 import com.tickets.model.Stop;
 import com.tickets.model.Ticket;
+import com.tickets.model.User;
 
 public class ServiceFunctions {
 
@@ -25,9 +27,6 @@ public class ServiceFunctions {
     }
 
     public static int getVacantSeats(Run run, String fromStop, String toStop, boolean useCache) {
-        if (run == null || fromStop == null) {
-            return 0;
-        }
 
         //lazily initialize the cache
         if (cache.get() == null)
@@ -40,10 +39,48 @@ public class ServiceFunctions {
             return result;
         }
 
-        Route route = run.getRoute();
-        int seats = route.getSellSeatsTo() - route.getSellSeatsFrom() + 1;
+        int seats = run.getRoute().getSeats() - getUsedSeats(run, fromStop, toStop).size();
 
-        List<Stop> stops = run.getRoute().getStops();
+        cache.get().put(run, seats);
+
+        return seats;
+    }
+
+    /**
+     * Method for listing all used seats on a run
+     *
+     * The ones that are configured not to be sold online
+     * are also marked as used, but only for the public
+     * part of the site.
+     *
+     * @param price
+     * @param run
+     * @return a sorted list
+     */
+
+    public static List<Integer> getUsedSeats(Run run, String fromStop, String toStop) {
+        if (run == null || fromStop == null) {
+            return Collections.<Integer>emptyList();
+        }
+
+        Route route = run.getRoute();
+
+        List<Integer> u = new ArrayList<Integer>();
+
+        // If this is not the admin part, mark all seats beyond the
+        // configured 'sell online' seats as used
+        User user = LoggedUserHolder.getUser();
+        if (user == null || user.getAccessLevel() == null ||
+                user.getAccessLevel() == AccessLevel.PUBLIC) {
+            for (int i = 1; i < run.getRoute().getSellSeatsFrom(); i ++) {
+                u.add(i);
+            }
+            for (int i = route.getSellSeatsTo() + 1; i < route.getSeats(); i ++) {
+                u.add(i);
+            }
+        }
+
+        List<Stop> stops = route.getStops();
         Stop startStop = getStopByName(fromStop, stops);
         Stop endStop = getStopByName(toStop, stops);
 
@@ -72,7 +109,9 @@ public class ServiceFunctions {
                 // in the active stops for the requested criteria
                 // increase the used seats
                 if (ticket.getStartStop().equals(tmpStop.getName())) {
-                    seats -= ticket.getPassengersCount();
+                    for (PassengerDetails pd : ticket.getPassengerDetails()) {
+                        u.add(pd.getSeat());
+                    }
                     continue ticketCycle;
                 }
                 // If the end stop of the existing ticket is anywhere
@@ -80,15 +119,16 @@ public class ServiceFunctions {
                 // (excluding the first one, because thus there is no
                 // intersection between them)
                 if (ticket.getEndStop().equals(tmpStop.getName()) && i != startStop.getIdx() - 1) {
-                    seats -= ticket.getPassengersCount();
+                    for (PassengerDetails pd : ticket.getPassengerDetails()) {
+                        u.add(pd.getSeat());
+                    }
                     continue ticketCycle;
                 }
             }
         }
 
-        cache.get().put(run, seats);
-
-        return seats;
+        Collections.sort(u);
+        return u;
     }
 
     private static Stop getStopByName(String name, List<Stop> stops) {

@@ -9,16 +9,12 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.faces.model.SelectItem;
 
-import com.tickets.controllers.security.AccessLevel;
-import com.tickets.controllers.users.LoggedUserHolder;
 import com.tickets.controllers.valueobjects.Row;
-import com.tickets.model.PassengerDetails;
 import com.tickets.model.Price;
 import com.tickets.model.Route;
 import com.tickets.model.Run;
 import com.tickets.model.SearchResultEntry;
-import com.tickets.model.Ticket;
-import com.tickets.model.User;
+import com.tickets.services.ServiceFunctions;
 import com.tickets.services.valueobjects.Seat;
 import com.tickets.services.valueobjects.TicketCount;
 import com.tickets.services.valueobjects.TicketCountsHolder;
@@ -54,7 +50,7 @@ public class SeatHandler {
         this.run = entry.getRun();
         this.route = run.getRoute();
         this.price = entry.getPrice();
-        initVacantSeats();
+        initUsedSeats();
         refreshRows();
     }
 
@@ -269,61 +265,11 @@ public class SeatHandler {
         return false;
     }
 
-    public void initVacantSeats() {
+    public void initUsedSeats() {
 
-        List<Integer> u = SeatHandler.getUsedSeats(price, run);
+        List<Integer> u = ServiceFunctions.getUsedSeats(run, price
+                .getStartStop().getName(), price.getEndStop().getName());
         used = u.toArray(new Integer[u.size()]);
-    }
-
-    /**
-     * Static method for listing all used seats on a run
-     * (static, because of external usage)
-     *
-     * The ones that are configured not to be sold online
-     * are also marked as used, but only for the public
-     * part of the site.
-     *
-     * @param price
-     * @param run
-     * @return a sorted list
-     */
-    public static List<Integer> getUsedSeats(Price price, Run run) {
-        List<Integer> u = new ArrayList<Integer>();
-
-        for (Ticket ticket : run.getTickets()) {
-            if (ticket.getStartStop().equals(price.getStartStop())
-                    && ticket.getEndStop().equals(price.getEndStop())) {
-                for (PassengerDetails pd : ticket.getPassengerDetails()) {
-                    u.add(pd.getSeat());
-                }
-
-            }
-        }
-
-        for (Ticket ticket : run.getReturnTickets()) {
-            if (ticket.getStartStop().equals(price.getStartStop())
-                    && ticket.getEndStop().equals(price.getEndStop())) {
-                for (PassengerDetails pd : ticket.getPassengerDetails()) {
-                    u.add(pd.getReturnSeat());
-                }
-            }
-        }
-
-        // If this is not the admin part, mark all seats beyond the
-        // configured 'sell online' seats as used
-        User user = LoggedUserHolder.getUser();
-        if (user == null || user.getAccessLevel() == null ||
-                user.getAccessLevel() == AccessLevel.PUBLIC) {
-            for (int i = 1; i < run.getRoute().getSellSeatsFrom(); i ++) {
-                u.add(i);
-            }
-            for (int i = run.getRoute().getSellSeatsTo() + 1; i < run.getRoute().getSeats(); i ++) {
-                u.add(i);
-            }
-        }
-
-        Collections.sort(u);
-        return u;
     }
 
     public Run getRun() {
