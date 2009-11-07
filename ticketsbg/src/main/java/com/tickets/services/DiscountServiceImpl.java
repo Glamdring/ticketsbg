@@ -28,7 +28,6 @@ public class DiscountServiceImpl extends BaseService<Discount> implements
         return BigDecimal.ZERO;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public List<GenericDiscount> getGenericDiscounts(Firm firm) {
         return getDao().findByQuery(
@@ -36,7 +35,6 @@ public class DiscountServiceImpl extends BaseService<Discount> implements
                 new String[] { "firm" }, new Object[] { firm });
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public GenericDiscount findGenericDiscount(String name, Firm firm) {
         List<GenericDiscount> result = getDao()

@@ -33,7 +33,6 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
     private static Logger log = Logger.getLogger(UserServiceImpl.class);
     public static final String ENCODING = "ISO-8859-1";
 
-    @SuppressWarnings("unchecked")
     public User login(String username, char[] password,
             boolean passwordAlreadyHashed) throws UserException {
 
@@ -142,12 +141,11 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
             throw UserException.EMAIL_PROBLEM;
         }
         // Save after a successful email
-        user = (User) getDao().persist(user);
+        user = getDao().persist(user);
 
         return user;
     }
 
-    @SuppressWarnings("unchecked")
     public User activateUserWithCode(String code) throws UserException {
         List<User> list = getDao().findByQuery(
                 "select u from User u " + "where u.activationCode=:code",
@@ -283,7 +281,6 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
         return listOrdered(User.class, orderColumn);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public User findUser(String userName) {
         List<User> result = getDao().findByNamedQuery("User.getByUsername",

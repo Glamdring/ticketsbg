@@ -11,7 +11,6 @@ import com.tickets.model.Firm;
 public class AgentServiceImpl extends BaseService<Agent> implements
         AgentService {
 
-    @SuppressWarnings("unchecked")
     @Override
     public List<Agent> getAgents(Firm firm) {
         return getDao().findByNamedQuery("Agent.findByFirm",

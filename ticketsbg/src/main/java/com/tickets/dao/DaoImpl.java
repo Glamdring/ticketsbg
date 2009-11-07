@@ -30,12 +30,13 @@ public class DaoImpl implements Dao {
         return (T) getSession().get(clazz, id);
     }
 
-    public Object persist(Object o) {
+    public <T> T persist(T o) {
         getSession().saveOrUpdate(o);
         return o;
     }
 
-    public List findByQuery(String query, String[] names, Object[] args) {
+    @SuppressWarnings("unchecked")
+    public <T> List<T> findByQuery(String query, String[] names, Object[] args) {
         if (names == null)
             names = new String[] {};
 
@@ -50,7 +51,8 @@ public class DaoImpl implements Dao {
         return q.list();
     }
 
-    public List findByNamedQuery(String name, String[] names, Object[] args) {
+    @SuppressWarnings("unchecked")
+    public <T> List<T> findByNamedQuery(String name, String[] names, Object[] args) {
         if (names == null)
             names = new String[] {};
 
@@ -93,15 +95,16 @@ public class DaoImpl implements Dao {
         return getSession().connection();
     }
 
-    public List findByQuery(String query) {
+    public <T> List<T> findByQuery(String query) {
         return findByQuery(query, null, null);
     }
 
-    public List findByNamedQuery(String query) {
+    public <T> List<T> findByNamedQuery(String query) {
         return findByNamedQuery(query, null, null);
     }
 
-    public List findByQuery(Query query) {
+    @SuppressWarnings("unchecked")
+    public <T> List<T> findByQuery(Query query) {
         return query.list();
     }
 

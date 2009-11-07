@@ -34,10 +34,9 @@ public class BaseService<E> implements Service<E> {
         return dao;
     }
 
-    @SuppressWarnings("unchecked")
     public E save(E e) throws RuntimeException {
         try {
-            return (E) getDao().persist(e);
+            return getDao().persist(e);
         } catch (Exception ex) {
             log.error("Error saving", ex);
             return null;
@@ -57,14 +56,12 @@ public class BaseService<E> implements Service<E> {
         getDao().delete(clazz, id);
     }
 
-    @SuppressWarnings("unchecked")
     public <T> List<T> list(Class<T> clazz) {
         List<T> result = getDao().findByQuery("from " + clazz.getName(), null,
                 null);
         return result;
     }
 
-    @SuppressWarnings("unchecked")
     public <T> List<T> listOrdered(Class<T> clazz, String orderColumn) {
         List<T> result = getDao().findByQuery(
                 "from " + clazz.getName() + " order by " + orderColumn, null,

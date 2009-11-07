@@ -54,7 +54,8 @@ public class DaoEMImpl implements Dao {
         return q.executeUpdate();
     }
 
-    public List findByNamedQuery(String name, String[] names, Object[] args) {
+    @SuppressWarnings("unchecked")
+    public <T> List<T> findByNamedQuery(String name, String[] names, Object[] args) {
         if (names == null)
             names = new String[] {};
 
@@ -69,11 +70,12 @@ public class DaoEMImpl implements Dao {
         return q.getResultList();
     }
 
-    public List findByNamedQuery(String query) {
+    public <T> List<T> findByNamedQuery(String query) {
         return findByNamedQuery(query, null, null);
     }
 
-    public List findByQuery(String query, String[] names, Object[] args) {
+    @SuppressWarnings("unchecked")
+    public <T> List<T> findByQuery(String query, String[] names, Object[] args) {
         if (names == null)
             names = new String[] {};
 
@@ -88,7 +90,7 @@ public class DaoEMImpl implements Dao {
         return q.getResultList();
     }
 
-    public List findByQuery(String query) {
+    public <T> List<T> findByQuery(String query) {
         return findByQuery(query, null, null);
     }
 
@@ -103,7 +105,7 @@ public class DaoEMImpl implements Dao {
                 "Connection not available via EntityManager");
     }
 
-    public Object persist(Object e) {
+    public <T> T persist(T e) {
         // if e is already in the persistence context (session), no action is
         // taken, except for cascades
         // if e is detached, a copy (e') is returned, which is attached
@@ -116,7 +118,8 @@ public class DaoEMImpl implements Dao {
         return e;
     }
 
-    public List findByQuery(org.hibernate.Query query) {
+    @SuppressWarnings("unchecked")
+    public <T> List<T> findByQuery(org.hibernate.Query query) {
         return query.list();
     }
 

@@ -479,14 +479,12 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
 
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public List<Ticket> getTicketsByUser(User user) {
         return getDao().findByNamedQuery("Ticket.findByUser",
                 new String[] { "user" }, new Object[] { user });
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void timeoutUnusedTickets() {
         List<Ticket> unconfirmed = getDao().findByNamedQuery(

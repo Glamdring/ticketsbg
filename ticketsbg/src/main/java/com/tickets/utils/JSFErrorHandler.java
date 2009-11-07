@@ -1,6 +1,5 @@
 package com.tickets.utils;
 
-import java.io.IOException;
 import java.util.Locale;
 
 import javax.faces.application.FacesMessage;
@@ -11,7 +10,7 @@ import com.tickets.constants.Messages;
 
 public final class JSFErrorHandler {
 
-    public static void handleThrowable(FacesContext facesContext, Throwable t) throws IOException {
+    public static void handleThrowable(FacesContext facesContext, Throwable t) {
         String msg = "";
         String msgKey = "";
         Locale locale = Messages.DEFAULT_LOCALE;
@@ -38,7 +37,7 @@ public final class JSFErrorHandler {
         }
     }
 
-    public static void handleException(FacesContext facesContext, Exception ex) throws IOException {
+    public static void handleException(FacesContext facesContext, Exception ex) {
         JSFErrorHandler.handleThrowable(facesContext, ex);
     }
 }

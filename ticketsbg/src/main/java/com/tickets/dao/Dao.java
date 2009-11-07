@@ -41,7 +41,7 @@ public interface Dao {
      * @param entity
      * @return the persistent entity
      */
-    Object persist(Object e);
+    <T> T persist(T e);
 
     /**
      * Removes the specified object from the session
@@ -57,7 +57,7 @@ public interface Dao {
      * @param args
      * @return the result list
      */
-    List findByQuery(String query, String[] names, Object[] args);
+    <T> List<T> findByQuery(String query, String[] names, Object[] args);
 
     /**
      * Lists the result of the specified named query
@@ -67,7 +67,7 @@ public interface Dao {
      * @param args
      * @return the result list
      */
-    List findByNamedQuery(String name, String[] names, Object[] args);
+    <T> List<T> findByNamedQuery(String name, String[] names, Object[] args);
 
     int executeQuery(final String query, final String[] names,
             final Object[] args);
@@ -84,7 +84,7 @@ public interface Dao {
      * @param query
      * @return result list
      */
-    List findByQuery(String query);
+    <T> List<T> findByQuery(String query);
 
     /**
      * Convenient method for calling no-param named queries
@@ -92,7 +92,7 @@ public interface Dao {
      * @param query
      * @return result list
      */
-    List findByNamedQuery(String query);
+    <T> List<T> findByNamedQuery(String query);
 
     /**
      * Executes the specified query. Use only in case of specific Query-object
@@ -100,7 +100,7 @@ public interface Dao {
      * @param query
      * @return the result list
      */
-    List findByQuery(Query query);
+    <T> List<T> findByQuery(Query query);
 
     /**
      * Re-attaches the entity to the session

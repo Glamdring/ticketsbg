@@ -160,7 +160,6 @@ public class StopServiceImpl extends BaseService<Stop> implements StopService {
         return null;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public List<String> getExistingStopNames(Firm firm) {
         List<String> result = getDao()

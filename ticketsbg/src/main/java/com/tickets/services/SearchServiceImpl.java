@@ -19,7 +19,6 @@ import com.tickets.utils.GeneralUtils;
 @Service("searchService")
 public class SearchServiceImpl extends BaseService implements SearchService {
 
-    @SuppressWarnings("unchecked")
     @Override
     public List<SearchResultEntry> search(String fromStop, String toStop,
             Date date, int fromHour, int toHour, boolean isTimeForDeparture,
@@ -43,7 +42,6 @@ public class SearchServiceImpl extends BaseService implements SearchService {
         return result;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public List<SearchResultEntry> adminSearch(User user, String startStop,
             String endStop, Date date, int fromHour, int toHour,
@@ -145,7 +143,6 @@ public class SearchServiceImpl extends BaseService implements SearchService {
         return null;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public List<String> listAllStops(User user, Firm firm) {
         List<String> stops = null;
@@ -163,7 +160,6 @@ public class SearchServiceImpl extends BaseService implements SearchService {
         return stops;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public List<String> listAllEndStops(String startStopName, User user, Firm firm) {
         List<String> stops = null;

@@ -19,7 +19,6 @@ public class RunServiceImpl extends BaseService<Run> implements RunService<Run> 
 
     private static final Logger logger = Logger.getLogger(RunServiceImpl.class);
 
-    @SuppressWarnings("unchecked")
     @Override
     public void createRuns() {
 

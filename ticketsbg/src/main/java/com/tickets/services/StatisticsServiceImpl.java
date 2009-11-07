@@ -106,7 +106,6 @@ public class StatisticsServiceImpl extends BaseService
     }
 
 
-    @SuppressWarnings("unchecked")
     public List<Ticket> getTickets(Route route, int period,
             int timeType, Firm firm, Date fromDate, Date toDate,
             StatsDataType dataType, PurchaseMeansType purchaseMeansType) {
@@ -146,7 +145,7 @@ public class StatisticsServiceImpl extends BaseService
                 paramNames.toArray(new String[]{}),
                 values.toArray());
 
-        result.addAll(getDao().findByQuery(returnQuery,
+        result.addAll(getDao().<Ticket>findByQuery(returnQuery,
                 paramNames.toArray(new String[]{}),
                 values.toArray()));
 
