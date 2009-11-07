@@ -27,7 +27,7 @@
                     onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
                     id="runsTable" onRowMouseOut="this.style.backgroundColor='white'"
                     cellpadding="0" cellspacing="0" width="300" border="0" var="run"
-                    value="#{runController.route.runs}" rows="20">
+                    value="#{runController.route.runs}" rows="20" columnClasses="tableColumn">
 
                     <f:facet name="header">
                         <rich:columnGroup>
@@ -37,7 +37,7 @@
                             <rich:column>
                                 <h:outputText value="#{msg.dateTime}" />
                             </rich:column>
-                            <rich:column width="35" />
+                            <rich:column width="55" />
                         </rich:columnGroup>
                     </f:facet>
 

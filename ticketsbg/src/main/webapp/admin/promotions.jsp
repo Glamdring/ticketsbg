@@ -82,7 +82,7 @@
                             <a4j:commandLink title="#{msg.edit}" ajaxSingle="true"
                                 oncomplete="#{rich:component('entityPanel')}.show()">
                                 <h:graphicImage value="/images/edit.png"
-                                    style="width:16; height:16; border-style: none;"
+                                    style="border-style: none;"
                                     alt="#{msg.edit}" title="#{msg.edit}" />
                                 <f:setPropertyActionListener value="${promotion}"
                                     target="#{promotionController.promotion}" />
@@ -91,7 +91,7 @@
                             <h:commandLink action="#{promotionController.delete}"
                                 title="#{msg.remove}">
                                 <h:graphicImage value="/images/delete.png"
-                                    style="width:16; height:16; border-style: none;"
+                                    style="border-style: none;"
                                     alt="#{msg.delete}" title="#{msg.delete}" />
                             </h:commandLink>
                         </rich:column>

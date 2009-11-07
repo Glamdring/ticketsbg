@@ -26,8 +26,8 @@
                     <h:inputTextarea value="#{agentController.agent.description}"
                         id="description" rows="4" cols="27" />
 
-                    <h:outputLabel for="bulstat" value="#{msg.bulstat}: " />
-                    <h:inputText value="#{agentController.agent.bulstat}" id="bulstat" size="30" />
+                    <h:outputLabel for="eik" value="#{msg.eik}: " />
+                    <h:inputText value="#{agentController.agent.eik}" id="bulstat" size="30" />
 
                     <h:outputLabel for="other" value="#{msg.other}: " />
                     <h:inputText value="#{agentController.agent.other}" id="other" size="30" />
@@ -36,14 +36,6 @@
                         rendered="#{loggedUserHolder.loggedUser.administrator}" />
                     <h:selectBooleanCheckbox value="#{agentController.agent.active}"
                         id="active"
-                        rendered="#{loggedUserHolder.loggedUser.administrator}" />
-
-                    <h:outputLabel for="hasAnotherTicketSellingSystem"
-                        value="#{msg.hasAnotherTicketSellingSystem}: "
-                        rendered="#{loggedUserHolder.loggedUser.administrator}" />
-                    <h:selectBooleanCheckbox
-                        value="#{agentController.agent.hasAnotherTicketSellingSystem}"
-                        id="hasAnotherTicketSellingSystem"
                         rendered="#{loggedUserHolder.loggedUser.administrator}" />
 
                     <h:outputText value="" />

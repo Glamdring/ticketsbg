@@ -411,6 +411,11 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
              log.debug("Sending mail. First ticket is: " + firstTicket.getId());
 
              Customer customerInfo = firstTicket.getCustomerInformation();
+             if (customerInfo == null) {
+                 log.debug("Customer is null; returning");
+                 return;
+             }
+
              String customerEmail = customerInfo.getEmail();
              String customerName = customerInfo.getName();
 

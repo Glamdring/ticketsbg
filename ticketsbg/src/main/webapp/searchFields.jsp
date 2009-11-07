@@ -110,7 +110,7 @@ function showOrHideReturn() {
                 </rich:comboBox>
 
                 <h:outputText />
-                <h:panelGroup layout="block" styleClass="dottedLine" />
+                <h:panelGroup layout="block" styleClass="dottedLine" rendered="#{!isAdmin}" />
             </h:panelGrid>
 
             <script type="text/javascript">

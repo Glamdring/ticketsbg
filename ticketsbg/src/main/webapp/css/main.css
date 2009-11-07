@@ -130,3 +130,7 @@ form {
 .rich-mpnl-body {
     width: 100%;
 }
+
+.tableColumn {
+    font-size: 14px;
+}

@@ -68,7 +68,7 @@
                             <rich:dataTable value="#{searchController.resultsModel}"
                                 var="result" id="resultsTable" headerClass="tableHeader"
                                 width="100%" columnClasses="columnClass" border="0"
-                                style="border-style: none;">
+                                style="border-style: none; text-align: left;">
 
                                 <a4j:support event="onselectionchange"
                                     reRender="selectedEntry,returnResultsTable,ticketCounts,seatChoices"
@@ -144,7 +144,7 @@
                                         <f:setPropertyActionListener value="#{result.run}"
                                             target="#{travelListController.run}" />
                                         <h:graphicImage value="/images/runs.png"
-                                            style="width:16; height:16; border-style: none; vertical-align: middle;"
+                                            style="width: 22px; height: 22px; border-style: none; vertical-align: middle;"
                                             alt="#{msg.travelList}" title="#{msg.travelList}" />
                                     </h:commandLink>
 
@@ -156,7 +156,7 @@
                                         <f:setPropertyActionListener value="#{result.run}"
                                             target="#{runController.run}" />
                                         <h:graphicImage value="/images/close.png"
-                                            style="width:16; height:16; border-style: none; vertical-align: middle;"
+                                            style="width: 22px; height: 22px; border-style: none; vertical-align: middle;"
                                             alt="#{msg.remove}" title="#{msg.remove}" />
                                     </h:commandLink>
 
@@ -167,7 +167,7 @@
                                         <f:setPropertyActionListener value="#{result.run}"
                                             target="#{runController.run}" />
                                         <h:graphicImage value="/images/undo.png"
-                                            style="width:16; height:16; border-style: none; vertical-align: middle;"
+                                            style="width: 22px; height: 22px; border-style: none; vertical-align: middle;"
                                             alt="#{msg.remove}" title="#{msg.remove}" />
                                     </h:commandLink>
 
@@ -190,7 +190,7 @@
 </style>
 
             <rich:modalPanel id="purchasePanel" autosized="true" width="200"
-                height="120" moveable="true" resizeable="false" style="overflow: hidden;">
+                height="120" moveable="true" resizeable="false">
                 <ui:include src="/modalPanelCommons.jsp">
                     <ui:param name="dialogId" value="purchasePanel" />
                 </ui:include>

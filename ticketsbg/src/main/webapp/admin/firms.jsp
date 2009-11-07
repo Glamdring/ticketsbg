@@ -21,7 +21,7 @@
                         onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
                         onRowMouseOut="this.style.backgroundColor='white'" cellpadding="0"
                         cellspacing="0" width="700" border="0" var="firm"
-                        value="#{firmController.firmsModel}" id="firmsTable">
+                        value="#{firmController.firmsModel}" id="firmsTable" columnClasses="tableColumn">
 
                         <f:facet name="header">
                             <rich:columnGroup>
@@ -31,7 +31,7 @@
                                 <rich:column>
                                     <h:outputText value="#{msg.firmName}" />
                                 </rich:column>
-                                <rich:column width="35" />
+                                <rich:column width="55" />
                             </rich:columnGroup>
                         </f:facet>
 
@@ -47,7 +47,7 @@
                             <a4j:commandLink title="#{msg.edit}" ajaxSingle="true"
                                 oncomplete="#{rich:component('entityPanel')}.show()">
                                 <h:graphicImage value="/images/edit.png"
-                                    style="width:16; height:16; border-style: none;"
+                                    style="border-style: none;"
                                     alt="#{msg.edit}" title="#{msg.edit}" />
                                 <f:setPropertyActionListener value="${firm}"
                                     target="#{firmController.firm}" />
@@ -56,7 +56,7 @@
                             <h:commandLink action="#{firmController.delete}"
                                 title="#{msg.remove}">
                                 <h:graphicImage value="/images/delete.png"
-                                    style="width:16; height:16; border-style: none;"
+                                    style="border-style: none;"
                                     alt="#{msg.delete}" title="#{msg.delete}" />
                             </h:commandLink>
                         </rich:column>

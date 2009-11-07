@@ -24,7 +24,7 @@
                             onRowMouseOut="this.style.backgroundColor='white'"
                             cellpadding="0" cellspacing="0" width="700" border="0"
                             var="discount" value="#{discountController.discountsModel}"
-                            id="discountsTable">
+                            id="discountsTable" columnClasses="tableColumn">
 
                             <f:facet name="header">
                                 <rich:columnGroup>
@@ -37,7 +37,7 @@
                                     <rich:column>
                                         <h:outputText value="#{msg.description}" />
                                     </rich:column>
-                                    <rich:column width="35" />
+                                    <rich:column width="50" />
                                 </rich:columnGroup>
                             </f:facet>
 
@@ -56,7 +56,7 @@
                                     oncomplete="#{rich:component('entityPanel')}.show()"
                                     title="#{msg.edit}">
                                     <h:graphicImage value="/images/edit.png"
-                                        style="width:16; height:16; border-style: none;"
+                                        style="border-style: none;"
                                         alt="#{msg.edit}" title="#{msg.edit}" />
                                     <f:setPropertyActionListener value="#{discount}"
                                         target="#{discountController.discount}" />
@@ -67,7 +67,7 @@
                                 <h:commandLink action="#{discountController.delete}"
                                     title="#{msg.remove}">
                                     <h:graphicImage value="/images/delete.png"
-                                        style="width:16; height:16; border-style: none;"
+                                        style="border-style: none;"
                                         alt="#{msg.delete}" title="#{msg.delete}" />
                                 </h:commandLink>
                             </rich:column>

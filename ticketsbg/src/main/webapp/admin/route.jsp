@@ -13,17 +13,17 @@
         <style type="text/css">
 .internalPanel {
     height: 230px;
-    text-align: center;
+    text-align: left;
 }
 
 .downInternalPanel {
     height: 270px;
-    text-align: center;
+    text-align: left;
 }
 
 .subInternalPanel {
     height: 230px;
-    text-align: center;
+    text-align: left;
 }
 </style>
     </ui:define>
@@ -32,7 +32,7 @@
             <h:messages />
             <h:form id="routeForm">
                 <div align="center"><h:panelGrid columns="1">
-                    <rich:panel id="mainInfoPanel">
+                    <rich:panel id="mainInfoPanel" style="text-align: left;">
                         <h:panelGrid columns="2" style="width: 100%;">
                             <h:panelGroup>
                                 <a4j:outputPanel>
@@ -69,7 +69,7 @@
                         </h:panelGrid>
                     </rich:panel>
 
-                    <rich:panel header="#{msg.routeDetailsHeader}" id="routeDetails">
+                    <rich:panel header="#{msg.routeDetailsHeader}" id="routeDetails" style="text-align: left;">
                         <h:panelGrid columns="3"
                             columnClasses="gridContent,gridContent,gridContent">
                             <rich:panel header="#{msg.daysOfWeek}" styleClass="internalPanel"
@@ -156,7 +156,7 @@
                                             oncomplete="#{rich:component('stopPanel')}.show()"
                                             title="#{msg.edit}">
                                             <h:graphicImage value="/images/edit.png"
-                                                style="width:16; height:16; border-style: none;"
+                                                style="width:16px; height:16px; border-style: none;"
                                                 alt="#{msg.edit}" title="#{msg.edit}" />
 
                                             <f:setPropertyActionListener value="#{stop}"
@@ -166,7 +166,7 @@
                                         <a4j:commandLink action="#{routeController.deleteStop}"
                                             title="#{msg.remove}" reRender="stopsPanel">
                                             <h:graphicImage value="/images/delete.png"
-                                                style="width:16; height:16; border-style: none;"
+                                                style="width:16px; height:16px; border-style: none;"
                                                 alt="#{msg.remove}" title="#{msg.remove}" />
                                         </a4j:commandLink>
                                     </rich:column>
@@ -291,7 +291,7 @@
                                             oncomplete="#{rich:component('discountPanel')}.show()"
                                             title="#{msg.edit}">
                                             <h:graphicImage value="/images/edit.png"
-                                                style="width:16; height:16; border-style: none;"
+                                                style="width:16px; height:16px; border-style: none;"
                                                 alt="#{msg.edit}" title="#{msg.edit}" />
 
                                             <f:setPropertyActionListener value="#{discount}"
@@ -301,7 +301,7 @@
                                         <a4j:commandLink action="#{routeController.deleteDiscount}"
                                             title="#{msg.remove}" reRender="discountsPanel">
                                             <h:graphicImage value="/images/delete.png"
-                                                style="width:16; height:16; border-style: none;"
+                                                style="width:16px; height:16px; border-style: none;"
                                                 alt="#{msg.remove}" title="#{msg.remove}" />
                                             <f:setPropertyActionListener value="#{discount}"
                                                 target="#{routeController.discount}" />

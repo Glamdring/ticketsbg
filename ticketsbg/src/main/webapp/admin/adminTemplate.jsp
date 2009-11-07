@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:h="http://java.sun.com/jsf/html"
@@ -23,7 +23,7 @@
 
 <ui:insert name="head" />
 </head>
-<body style="margin-left: 0px; margin-top: 0px; margin-right: 0px">
+<body style="margin-left: 0px; margin-top: 0px; margin-right: 0px; text-align: left;">
 <f:loadBundle var="msg" basename="com.tickets.constants.messages" />
 
 <a4j:form id="toolbarForm">
@@ -125,7 +125,7 @@
     </f:facet>
     <a4j:include viewId="firm.jsp" />
 </rich:modalPanel>
-<h:panelGroup style="text-align: left;">
+<h:panelGroup style="text-align: left;" layout="block">
 <ui:insert name="body" />
 </h:panelGroup>
 </body>

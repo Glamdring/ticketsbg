@@ -23,7 +23,7 @@
                             onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
                             onRowMouseOut="this.style.backgroundColor='white'"
                             cellpadding="0" cellspacing="0" width="700" border="0" var="user"
-                            value="#{userController.usersModel}" id="usersTable">
+                            value="#{userController.usersModel}" id="usersTable" columnClasses="tableColumn">
 
                             <rich:column sortBy="#{user.id}">
                                 <f:facet name="header">
@@ -68,7 +68,7 @@
                                     oncomplete="#{rich:component('entityPanel')}.show()"
                                     title="#{msg.edit}">
                                     <h:graphicImage value="/images/edit.png"
-                                        style="width:16; height:16; border-style: none;"
+                                        style="border-style: none;"
                                         alt="#{msg.edit}" title="#{msg.edit}" />
                                     <f:setPropertyActionListener value="#{user}"
                                         target="#{userController.user}" />
@@ -79,7 +79,7 @@
                                 <h:commandLink action="#{userController.delete}"
                                     title="#{msg.remove}">
                                     <h:graphicImage value="/images/delete.png"
-                                        style="width:16; height:16; border-style: none;"
+                                        style="border-style: none;"
                                         alt="#{msg.delete}" title="#{msg.delete}" />
                                 </h:commandLink>
                             </rich:column>
