@@ -47,7 +47,7 @@ public class PaymentServiceImpl extends BaseService implements PaymentService {
 
         for (Ticket ticket : tickets) {
             description += ticket.getStartStop() + " - " + ticket.getEndStop()
-                    + " : " + ticket.getTicketCode() + "\n";
+                    + " : " + ticket.getTicketCode() + "; ";
         }
 
         String orderId = "";
