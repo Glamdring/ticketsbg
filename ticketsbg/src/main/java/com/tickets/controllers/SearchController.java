@@ -141,6 +141,9 @@ public class SearchController extends BaseController {
 
     @Action
     public String search() {
+        // Clear the vacant seats cache so that it is recalculated
+        ServiceFunctions.clearCache();
+
         if (isAdmin()) {
             return adminSearch();
         }
@@ -250,6 +253,9 @@ public class SearchController extends BaseController {
 
     @Action
     public String proceed() {
+        // Clear the vacant seats cache so that it is recalculated
+        ServiceFunctions.clearCache();
+
         // Validation in the controller, because custom validators
         // for the complex UI would be an overhead
 
@@ -484,8 +490,6 @@ public class SearchController extends BaseController {
     /* -------------- ADMIN PANEL METHODS FOLLOW ------------------ */
 
     private String adminSearch() {
-        // Clear the vacant seats cache so that it is recalculated
-        ServiceFunctions.clearCache();
 
         resetSelections();
 

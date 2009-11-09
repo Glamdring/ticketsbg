@@ -82,7 +82,7 @@ public class PaymentServiceImpl extends BaseService implements PaymentService {
 
     private String stripDummyDigits(String orderId) {
         String withoutPrefix = orderId.substring(2);
-        String original = withoutPrefix.substring(withoutPrefix.length() - 2);
+        String original = withoutPrefix.substring(0, withoutPrefix.length() - 2);
 
         return original;
     }
@@ -112,6 +112,7 @@ public class PaymentServiceImpl extends BaseService implements PaymentService {
                 Ticket ticket = ticketService.get(Ticket.class, Integer.parseInt(ticketId));
                 // A ticket from the order is not found
                 if (ticket == null) {
+                    log.debug("No ticket found for ticketId=" + ticketId);
                     return false;
                 }
                 tickets.add(ticket);
@@ -121,6 +122,7 @@ public class PaymentServiceImpl extends BaseService implements PaymentService {
 
             return true;
         } catch (Exception ex) {
+            log.error("Error in committing payment", ex);
             throw new PaymentException(ex);
         }
     }
@@ -139,5 +141,4 @@ public class PaymentServiceImpl extends BaseService implements PaymentService {
 
         return fee;
     }
-
 }

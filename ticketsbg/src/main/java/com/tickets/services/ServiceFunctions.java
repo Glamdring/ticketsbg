@@ -34,8 +34,6 @@ public class ServiceFunctions {
 
         if (useCache && cache.get().containsKey(run)) {
             Integer result = cache.get().get(run);
-            // Remove the result after getting it TODO ??
-            cache.get().remove(run);
             return result;
         }
 
