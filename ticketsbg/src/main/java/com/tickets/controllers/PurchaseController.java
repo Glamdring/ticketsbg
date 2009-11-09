@@ -18,6 +18,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.tickets.controllers.valueobjects.Screen;
 import com.tickets.controllers.valueobjects.Step;
 import com.tickets.model.Customer;
+import com.tickets.model.Order;
 import com.tickets.model.PaymentMethod;
 import com.tickets.model.Ticket;
 import com.tickets.model.User;
@@ -29,6 +30,8 @@ import com.tickets.services.TicketService;
 public class PurchaseController extends BaseController {
 
     private List<Ticket> tickets = new ArrayList<Ticket>();
+    private Order order;
+
     private Step currentStep;
 
     /** Holding the current ticket when operation with the cart table */
@@ -143,4 +146,17 @@ public class PurchaseController extends BaseController {
     public void setCurrentTicket(Ticket currentTicket) {
         this.currentTicket = currentTicket;
     }
+
+    public Order getOrder() {
+        if (order == null) {
+            order = new Order();
+            order.setTickets(tickets);
+        }
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
 }

@@ -123,7 +123,7 @@ public class DaoEMImpl implements Dao {
         return query.list();
     }
 
-    public Object attach(Object entity) {
+    public <T> T attach(T entity) {
         return entityManager.merge(entity);
     }
 

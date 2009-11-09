@@ -15,6 +15,7 @@ import org.hibernate.SessionFactory;
  *
  */
 //@Repository("dao")
+@Deprecated
 public class DaoImpl implements Dao {
 
     @Resource(name="sessionFactory")
@@ -90,7 +91,6 @@ public class DaoImpl implements Dao {
         return q.executeUpdate();
     }
 
-    @SuppressWarnings("deprecation")
     public Connection getConnection() {
         return getSession().connection();
     }
@@ -108,7 +108,7 @@ public class DaoImpl implements Dao {
         return query.list();
     }
 
-    public Object attach(Object entity) {
+    public <T> T attach(T entity) {
         getSession().update(entity);
         return entity;
     }

@@ -84,9 +84,10 @@ public class PaymentController extends BaseController {
      */
     public void refreshPaymentData() {
         try {
-            PaymentData paymentData = paymentService.getPaymentData(purchaseController.getTickets());
+            PaymentData paymentData = paymentService.getPaymentData(purchaseController.getOrder());
             setEncoded(paymentData.getEncoded());
             setChecksum(paymentData.getChecksum());
+            purchaseController.setOrder(paymentData.getOrder());
         } catch (PaymentException ex) {
             String messageKey = ex.getMessage();
             if (messageKey == null) {

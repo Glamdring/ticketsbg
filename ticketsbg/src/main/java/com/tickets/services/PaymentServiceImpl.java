@@ -4,16 +4,16 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.tickets.constants.Settings;
 import com.tickets.constants.Messages;
+import com.tickets.constants.Settings;
 import com.tickets.exceptions.PaymentException;
+import com.tickets.model.Order;
 import com.tickets.model.Ticket;
 import com.tickets.services.valueobjects.PaymentData;
 import com.tickets.utils.GeneralUtils;
@@ -29,10 +29,11 @@ public class PaymentServiceImpl extends BaseService implements PaymentService {
     private TicketService ticketService;
 
     @Override
-    public PaymentData getPaymentData(List<Ticket> tickets)
-            throws PaymentException {
+    public PaymentData getPaymentData(Order order) throws PaymentException {
         String secret = Settings.getValue("epay.secret");
         String min = Settings.getValue("epay.min");
+
+        List<Ticket> tickets = order.getTickets();
 
         DecimalFormat df = new DecimalFormat();
         df.setMinimumFractionDigits(2);
@@ -50,11 +51,11 @@ public class PaymentServiceImpl extends BaseService implements PaymentService {
                     + " : " + ticket.getTicketCode() + "; ";
         }
 
-        String orderId = "";
-        //TODO delimit somehow!
-        for (Ticket ticket : tickets) {
-            orderId += ticket.getId();
+        if (order.getId() == 0) {
+            order = getDao().persist(order);
         }
+
+        String orderId = order.getId() + "";
         orderId = addDummyDigits(orderId);
 
         String data = MessageFormat.format(E_PAY_DATA_PATTERN, min, orderId,
@@ -62,6 +63,8 @@ public class PaymentServiceImpl extends BaseService implements PaymentService {
 
         try {
             PaymentData paymentData = new PaymentData();
+            paymentData.setOrder(order);
+
             paymentData.setEncoded(Base64Encoder
                     .toBase64String(data.getBytes("cp1251")));
             paymentData.setChecksum(SecurityUtils.hmac(
@@ -105,20 +108,10 @@ public class PaymentServiceImpl extends BaseService implements PaymentService {
     public boolean confirmPayment(String orderId, String paymentCode) throws PaymentException {
         try {
             orderId = stripDummyDigits(orderId);
-            String[] ticketIds = orderId.split("-");
 
-            List<Ticket> tickets = new ArrayList<Ticket>();
-            for (String ticketId : ticketIds) {
-                Ticket ticket = ticketService.get(Ticket.class, Integer.parseInt(ticketId));
-                // A ticket from the order is not found
-                if (ticket == null) {
-                    log.debug("No ticket found for ticketId=" + ticketId);
-                    return false;
-                }
-                tickets.add(ticket);
-            }
+            Order order = ticketService.get(Order.class, Integer.parseInt(orderId));
 
-            ticketService.finalizePurchase(tickets, paymentCode);
+            ticketService.finalizePurchase(order.getTickets(), paymentCode);
 
             return true;
         } catch (Exception ex) {

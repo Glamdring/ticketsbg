@@ -106,7 +106,7 @@ public interface Dao {
      * Re-attaches the entity to the session
      * @param entity
      */
-    Object attach(Object entity);
+    <T> T attach(T entity);
 
     /**
      * Flushes the underlying persistent context
