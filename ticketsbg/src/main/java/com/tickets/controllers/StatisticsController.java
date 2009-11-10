@@ -61,9 +61,9 @@ public class StatisticsController extends BaseController {
 
     @PostConstruct
     public void init() {
-        // Don't initialize in case a not in the admin panel
+        // Don't initialize in case not logged
         User user = LoggedUserHolder.getUser();
-        if (user != null && user.isStaff()) {
+        if (user != null && user.getAccessLevel().getPrivileges() > AccessLevel.FIRM_COORDINATOR.getPrivileges()) {
             periodItems = new ArrayList<SelectItem>();
             periodItems.add(new SelectItem(Calendar.DAY_OF_MONTH, Messages.getString("statsDayOfMonth")));
             periodItems.add(new SelectItem(Calendar.MONTH, Messages.getString("statsMonth")));

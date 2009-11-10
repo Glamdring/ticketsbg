@@ -92,7 +92,7 @@ function showOrHideReturn() {
                         <f:attribute name="label" value="#{msg.startStop}" />
 
                         <a4j:support event="onchange" reRender="toStop"
-                            eventsQueue="fromStopOnchange"
+                            limitToList="true" eventsQueue="fromStopOnchange"
                             action="#{searchController.filterToStops}" ajaxSingle="true"
                             requestDelay="500" />
                         <a4j:support event="onselect" reRender="toStop" limitToList="true"

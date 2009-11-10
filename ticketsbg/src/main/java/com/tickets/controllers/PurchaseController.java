@@ -1,5 +1,6 @@
 package com.tickets.controllers;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ import com.tickets.services.TicketService;
 
 @Controller("purchaseController")
 @Scope("session")
-public class PurchaseController extends BaseController {
+public class PurchaseController extends BaseController implements Serializable {
 
     private List<Ticket> tickets = new ArrayList<Ticket>();
     private Order order;

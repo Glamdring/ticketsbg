@@ -35,7 +35,7 @@
     href="#{facesContext.externalContext.context.contextPath}/"> <img
     src="images/logo.png" alt="avtogara.com" style="border-style: none;" />
 </a>
-<h:form style="float: left" id="menuForm">
+<h:form style="float: left; height: 34px; margin-bottom: 5px;" id="menuForm" ajaxSingle="true">
     <rich:toolBar itemSeparator="line" width="1000" height="34"
         style="float: left; padding: 0px; margin: 0px;" id="menuToolbar">
         <rich:menuItem action="#{searchController.navigateToSearch}"

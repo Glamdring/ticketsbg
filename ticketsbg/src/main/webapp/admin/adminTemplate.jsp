@@ -77,7 +77,7 @@
 
 
         <rich:dropDownMenu style="padding-right: 27px; padding-left: 27px;"
-            hideDelay="100">
+            hideDelay="100" rendered="#{loggedUserHolder.loggedUser.accessLevel.privileges >= 40}">
             <f:facet name="label">
                 <h:panelGroup>
                     <h:graphicImage value="/images/statistics.png"
