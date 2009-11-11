@@ -6,9 +6,13 @@ import javax.faces.application.FacesMessage;
 import javax.faces.application.ViewExpiredException;
 import javax.faces.context.FacesContext;
 
+import org.apache.log4j.Logger;
+
 import com.tickets.constants.Messages;
 
 public final class JSFErrorHandler {
+
+    private static final Logger logger = Logger.getLogger(JSFErrorHandler.class);
 
     public static void handleThrowable(FacesContext facesContext, Throwable t) {
         String msg = "";
@@ -22,6 +26,7 @@ public final class JSFErrorHandler {
         if (t instanceof ViewExpiredException) {
             msgKey = "viewExpired";
         } else {
+            logger.error("Exception caught", t);
             msgKey = "unexpectedError";
         }
 

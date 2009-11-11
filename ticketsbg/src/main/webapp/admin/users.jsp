@@ -31,7 +31,7 @@
                                 </f:facet>
                                 <h:outputText value="#{user.id}" />
                             </rich:column>
-                            <rich:column sortBy="#{usr.username}">
+                            <rich:column sortBy="#{user.username}">
                                 <f:facet name="header">
                                     <h:outputText value="#{msg.username}" />
                                 </f:facet>
@@ -55,6 +55,13 @@
                                 </f:facet>
                                 <h:outputText value="#{user.email}" />
                             </rich:column>
+                            <rich:column sortBy="#{user.office.name}">
+                                <f:facet name="header">
+                                    <h:outputText value="#{msg.office}" />
+                                </f:facet>
+                                <h:outputText value="#{user.office.name}" />
+                            </rich:column>
+
                             <rich:column sortBy="#{user.firm.name}"
                                 rendered="#{loggedUserHolder.loggedUser.administrator}">
                                 <f:facet name="header">
@@ -104,7 +111,7 @@
                                     </f:facet>
                                     <h:outputText value="#{agentUser.id}" />
                                 </rich:column>
-                                <rich:column sortBy="#{usr.username}">
+                                <rich:column sortBy="#{agentUser.username}">
                                     <f:facet name="header">
                                         <h:outputText value="#{msg.username}" />
                                     </f:facet>

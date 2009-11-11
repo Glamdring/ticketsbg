@@ -70,6 +70,12 @@
                             <f:selectItems value="#{userController.accessLevelSelectItems}" />
                         </h:selectOneMenu>
 
+                        <h:outputLabel for="office" value="#{msg.office}: " />
+                        <h:selectOneMenu id="office" converter="#{entityConverter}"
+                            value="#{userController.user.office}">
+                            <f:selectItems value="#{userController.offices}" />
+                        </h:selectOneMenu>
+
                         <h:outputLabel for="agent" value="#{msg.agent}: " />
                         <h:selectOneMenu id="agent" converter="#{entityConverter}"
                             value="#{userController.user.agent}">

@@ -330,8 +330,8 @@
 
     <navigation-rule>
         <navigation-case>
-            <from-outcome>promotionScreen</from-outcome>
-            <to-view-id>/admin/promotion.jsp</to-view-id>
+            <from-outcome>officesList</from-outcome>
+            <to-view-id>/admin/offices.jsp</to-view-id>
             <redirect />
         </navigation-case>
     </navigation-rule>

@@ -52,6 +52,9 @@ import com.tickets.utils.SelectItemUtils;
 @Action(accessLevel = AccessLevel.FIRM_COORDINATOR)
 public class RouteController extends BaseController implements Serializable {
 
+    private static final Integer[] DEFAULT_SECOND_DOOR_SEATS = new Integer[] {
+            27, 28 };
+
     private Route route;
     private ListDataModel routesModel;
     private List<Day> days;
@@ -129,6 +132,7 @@ public class RouteController extends BaseController implements Serializable {
         route.setFirm(loggedUserHolder.getLoggedUser().getFirm());
         route.setRequireReceiptAtCashDesk(route.getFirm().isRequireReceiptAtCashDesk());
         route.setAllowSeatChoice(!route.getFirm().isHasAnotherTicketSellingSystem());
+        route.getSeatSettings().getMissingSeats().addAll(Arrays.asList(DEFAULT_SECOND_DOOR_SEATS));
         return Screen.ROUTE_SCREEN.getOutcome();
     }
 

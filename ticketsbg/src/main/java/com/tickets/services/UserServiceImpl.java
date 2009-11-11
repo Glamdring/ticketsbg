@@ -18,7 +18,6 @@ import com.tickets.constants.Constants;
 import com.tickets.constants.Messages;
 import com.tickets.constants.Settings;
 import com.tickets.controllers.security.AccessLevel;
-import com.tickets.dao.ValidationBypassingEventListener;
 import com.tickets.exceptions.UserException;
 import com.tickets.model.Firm;
 import com.tickets.model.User;
@@ -314,16 +313,6 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
     @Override
     public boolean isHash(String password) {
         return password.length() == 37 && password.matches("[0-9abcdef]+");
-    }
-
-    @Override
-    public User save(User user) {
-        ValidationBypassingEventListener.turnValidationOff();
-        try {
-            return super.save(user);
-        } finally {
-            ValidationBypassingEventListener.turnValidationOn();
-        }
     }
 
     public boolean usernameExists(String username) {

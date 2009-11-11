@@ -106,6 +106,9 @@ public class User extends Customer implements Serializable {
     @ManyToOne
     private Agent agent;
 
+    @ManyToOne
+    private Office office;
+
     @Column
     private AccessLevel accessLevel = AccessLevel.PUBLIC;
 
@@ -250,6 +253,14 @@ public class User extends Customer implements Serializable {
 
     public void setAgent(Agent agent) {
         this.agent = agent;
+    }
+
+    public Office getOffice() {
+        return office;
+    }
+
+    public void setOffice(Office office) {
+        this.office = office;
     }
 
     public AccessLevel getAccessLevel() {

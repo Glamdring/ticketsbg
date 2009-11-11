@@ -1,5 +1,6 @@
 package com.tickets.controllers;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -11,13 +12,14 @@ import org.springframework.stereotype.Controller;
 import com.tickets.annotations.Action;
 import com.tickets.controllers.security.AccessLevel;
 import com.tickets.controllers.users.LoggedUserHolder;
+import com.tickets.model.Firm;
 import com.tickets.model.Promotion;
 import com.tickets.services.Service;
 
 
 @Controller("promotionController")
 @Scope("conversation.access")
-@Action(accessLevel=AccessLevel.ADMINISTRATOR)
+@Action(accessLevel=AccessLevel.FIRM_COORDINATOR)
 public class PromotionController extends BaseCRUDController<Promotion> {
 
     @Resource(name="baseService")
@@ -37,6 +39,14 @@ public class PromotionController extends BaseCRUDController<Promotion> {
     @Override
     protected void refreshList() {
         List<Promotion> promotions = service.list(Promotion.class);
+        //TODO move filtering to service layer
+        Firm currentFirm = LoggedUserHolder.getUser().getFirm();
+        for (Iterator<Promotion> it = promotions.iterator(); it.hasNext();) {
+            if (!it.next().getFirm().equals(currentFirm)) {
+                it.remove();
+            }
+        }
+
         promotionsModel = new ListDataModel(promotions);
 
         // End the current conversation in case the list of roles
@@ -45,7 +55,7 @@ public class PromotionController extends BaseCRUDController<Promotion> {
             endConversation();
     }
 
-    @Action(accessLevel=AccessLevel.FIRM_ADMINISTRATOR)
+    @Action(accessLevel=AccessLevel.FIRM_COORDINATOR)
     public Promotion getPromotion() {
         return promotion;
     }
@@ -55,7 +65,7 @@ public class PromotionController extends BaseCRUDController<Promotion> {
         this.promotion = promotion;
     }
 
-    @Action(accessLevel=AccessLevel.ADMINISTRATOR)
+    @Action(accessLevel=AccessLevel.FIRM_COORDINATOR)
     public ListDataModel getPromotionsModel() {
         return promotionsModel;
     }
@@ -86,7 +96,7 @@ public class PromotionController extends BaseCRUDController<Promotion> {
 
     @Override
     protected String getSingleScreenName() {
-        return "promotionScreen";
+        return null;
     }
 
     @Override

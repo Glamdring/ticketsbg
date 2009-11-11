@@ -14,10 +14,12 @@ import org.springframework.stereotype.Controller;
 import com.tickets.annotations.Action;
 import com.tickets.controllers.security.AccessLevel;
 import com.tickets.controllers.users.LoggedUserHolder;
+import com.tickets.dao.ValidationBypassingEventListener;
 import com.tickets.model.Agent;
 import com.tickets.model.Firm;
 import com.tickets.model.User;
 import com.tickets.services.AgentService;
+import com.tickets.services.OfficeService;
 import com.tickets.services.Service;
 import com.tickets.services.UserService;
 import com.tickets.utils.SelectItemUtils;
@@ -35,6 +37,9 @@ public class UserController extends BaseCRUDController<User> {
     private AgentService agentService;
 
     @Autowired
+    private OfficeService officeService;
+
+    @Autowired
     private LoggedUserHolder loggedUserHolder;
 
     private User user = new User();
@@ -49,6 +54,8 @@ public class UserController extends BaseCRUDController<User> {
 
     private List<SelectItem> agents = new ArrayList<SelectItem>();
 
+    private List<SelectItem> offices = new ArrayList<SelectItem>();
+
     @Override
     public void save() {
         //If the password has been manually changed - hash it and set it, otherwise don't modify it
@@ -60,7 +67,12 @@ public class UserController extends BaseCRUDController<User> {
         if (loggedUser.getFirm() != null) {
             user.setFirm(loggedUser.getFirm());
         }
-        super.save();
+        ValidationBypassingEventListener.turnValidationOff();
+        try {
+            super.save();
+        } finally {
+            ValidationBypassingEventListener.turnValidationOn();
+        }
     }
 
     @Override
@@ -86,6 +98,8 @@ public class UserController extends BaseCRUDController<User> {
                 AccessLevel.class, exclusions, AccessLevel.CASH_DESK);
 
         firmSelectItems = SelectItemUtils.formSelectItems(userService.list(Firm.class));
+
+        offices = SelectItemUtils.formSelectItems(officeService.getOffices(loggedUser.getFirm()));
 
         // End the current conversation in case the list of roles
         // is refreshed, but only if the bean has not just been constructed
@@ -189,5 +203,13 @@ public class UserController extends BaseCRUDController<User> {
 
     public void setAgentsUsersModel(ListDataModel agentsUsersModel) {
         this.agentsUsersModel = agentsUsersModel;
+    }
+
+    public List<SelectItem> getOffices() {
+        return offices;
+    }
+
+    public void setOffices(List<SelectItem> offices) {
+        this.offices = offices;
     }
 }

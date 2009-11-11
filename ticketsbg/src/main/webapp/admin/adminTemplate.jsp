@@ -64,8 +64,11 @@
             <rich:menuItem value="#{msg.discounts}" action="discountsList"
                 icon="/images/discounts.png" />
 
-            <rich:menuItem value="#{msg.promotions}" action="promotionsList"
-                icon="/images/promotions.png" />
+            <!-- rich:menuItem value="#{msg.promotions}" action="promotionsList"
+                icon="/images/promotions.png" /-->
+
+            <rich:menuItem value="#{msg.offices}" action="officesList"
+                icon="/images/offices.png" />
 
             <rich:menuItem value="#{msg.agents}" action="agentsList"
                 icon="/images/agents.png" />
