@@ -106,7 +106,7 @@ function showOrHideReturn() {
                     directInputSuggestions="false" required="${!isAdmin}"
                     value="#{searchController.toStop}" id="toStop"
                     disabled="#{searchController.ticketToAlter != null}" width="165"
-                    listStyle="text-align: left;">
+                    listStyle="text-align: left;" defaultLabel="#{isAdmin ? msg.allDestinations : null}">
                     <f:attribute name="label" value="#{msg.endStop}" />
                 </rich:comboBox>
 

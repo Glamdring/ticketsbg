@@ -228,7 +228,15 @@
                                     converterId="currencyConverter" />
                             </h:outputText>
                         </h:panelGroup>
-
+                        <h:panelGroup id="seatChoices" style="float: right;">
+                            <a4j:region rendered="#{seatController.seatHandler != null}">
+                                <a4j:include viewId="../seats.jsp">
+                                    <ui:param name="modifier" value="1" />
+                                    <ui:param name="return" value="false" />
+                                </a4j:include>
+                                <div style="clear: both;"/>
+                            </a4j:region>
+                        </h:panelGroup>
                         <br />
 
                         <rich:panel id="returnsPanel" header="#{msg.returnHeaderLabel}"
@@ -290,12 +298,20 @@
 
                                 <rich:column>
                                     <a4j:commandButton value="#{msg.select}"
-                                        reRender="selectedReturnChoice">
+                                        action="#{searchController.returnSelected}"
+                                        reRender="returnChoice,returnSeatChoices,totalPriceHolder">
                                         <f:setPropertyActionListener value="#{returnResult}"
                                             target="#{searchController.selectedReturnEntry}" />
                                     </a4j:commandButton>
                                 </rich:column>
                             </rich:dataTable>
+                            <a4j:status id="returnsFetchStatus">
+                                <f:facet name="start">
+                                    <h:graphicImage value="/images/ajaxloading.gif"
+                                        alt="loading..." />
+                                </f:facet>
+                            </a4j:status>
+
                             <h:panelGroup id="returnChoice" style="font-weight: bold;">
                                 <h:panelGroup
                                     rendered="#{searchController.selectedReturnEntry != null}">
@@ -303,7 +319,7 @@
                                         value="#{searchController.selectedReturnEntry.departureTime.time}">
                                         <f:convertDateTime pattern="HH:mm"
                                             timeZone="#{timeZoneController.timeZone}" />
-                                    </h:outputText> #{msg.hourAbbr} - <h:outputText
+                                    </h:outputText> #{msg.hourAbbr} , <h:outputText
                                         value="#{searchController.selectedReturnEntry.price.twoWayPrice}">
 
                                         <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
@@ -312,17 +328,19 @@
                                     </h:outputText>
                                 </h:panelGroup>
                             </h:panelGroup>
-                        </rich:panel>
 
-                        <h:panelGroup id="seatChoices">
-                            <a4j:region rendered="#{seatController.seatHandler != null}">
-                                <a4j:include viewId="../seats.jsp">
-                                    <ui:param name="modifier" value="1" />
-                                    <ui:param name="return" value="false" />
-                                </a4j:include>
-                                <div style="clear: both;"/>
-                            </a4j:region>
-                        </h:panelGroup>
+                            <h:panelGroup id="returnSeatChoices" style="float: right;" layout="block">
+                                <a4j:region rendered="#{searchController.selectedReturnEntry != null}">
+                                    <a4j:include viewId="../seats.jsp">
+                                        <ui:param name="modifier" value="2" />
+                                        <ui:param name="return" value="true" />
+                                    </a4j:include>
+                                    <div style="clear: both;" />
+                                </a4j:region>
+                            </h:panelGroup>
+
+
+                        </rich:panel>
 
                         <rich:panel header="#{msg.tickets}" id="ticketCounts"
                             style="width: 380px; margin-top: 15px;">

@@ -559,6 +559,10 @@ public class SearchController extends BaseController {
                 selectedEntry.getRun().getRoute()));
     }
 
+    @Action(accessLevel = AccessLevel.CASH_DESK)
+    public void returnSelected() {
+        seatController.setReturnSeatHandler(new SeatHandler(selectedReturnEntry, ticketCountsHolder));
+    }
     /* ------------------- GETTERS AND SETTERS FOLLOW ---------------- */
     public String getFromStop() {
         return fromStop;
