@@ -11,7 +11,7 @@
     <link href="../css/main.css" type="text/css" rel="stylesheet" />
     <ui:insert name="head" />
   </head>
-  <body style="margin-left: 0px; margin-top: 0px; margin-right: 0px">
+  <body style="margin-left: 0px; margin-top: 0px; margin-right: 0px; background-image: none;">
     <f:loadBundle var="msg" basename="com.tickets.constants.messages" />
     <ui:insert name="body" />
   </body>

@@ -139,14 +139,14 @@
 
                                     <h:outputText value="&#160;" />
 
-                                    <h:commandLink action="#{travelListController.openTravelList}"
-                                        title="#{msg.travelList}">
+                                    <a4j:commandLink oncomplete="#{rich:component('travelListOptionsPanel')}.show()"
+                                            title="#{msg.travelList}">
                                         <f:setPropertyActionListener value="#{result.run}"
                                             target="#{travelListController.run}" />
                                         <h:graphicImage value="/images/runs.png"
                                             style="width: 22px; height: 22px; border-style: none; vertical-align: middle;"
                                             alt="#{msg.travelList}" title="#{msg.travelList}" />
-                                    </h:commandLink>
+                                    </a4j:commandLink>
 
                                     <h:outputText value="&#160;" />
 
@@ -362,6 +362,10 @@
                             </a4j:repeat>
                         </rich:panel>
 
+                        <rich:panel header="#{msg.customerDetails}">
+                            <h:outputLabel value="#{msg.names}: " />
+                            <h:inputText value="#{searchController.customerName}"/>
+                        </rich:panel>
                         <rich:panel header="#{msg.totalPrice}"
                             style="width: 380px; margin-top: 10px;">
                             <a4j:outputPanel ajaxRendered="true" id="totalPriceHolder">
@@ -383,6 +387,9 @@
                 </a4j:form>
             </rich:modalPanel>
 
+            <ui:include src="travelListOptionsPanel.jsp">
+                <ui:param name="controller" value="#{travelListController}" />
+            </ui:include>
         </f:view>
     </ui:define>
 </ui:composition>

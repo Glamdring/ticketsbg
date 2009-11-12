@@ -61,14 +61,14 @@
                                 style="width:16; height:16; border-style: none;"
                                 alt="#{msg.remove}" title="#{msg.remove}" />
                         </h:commandLink>
-                        <h:commandLink action="#{travelListController.openTravelList}"
-                            title="#{msg.travelList}">
+                        <a4j:commandLink title="#{msg.travelList}"
+                            oncomplete="#{rich:component('travelListOptionsPanel')}.show()">
                             <f:setPropertyActionListener value="#{run}"
                                 target="#{travelListController.run}" />
                             <h:graphicImage value="/images/runs.png"
                                 style="width:16; height:16; border-style: none;"
                                 alt="#{msg.seatsTravelList}" title="#{msg.travelList}" />
-                        </h:commandLink>
+                        </a4j:commandLink>
                         <h:commandLink title="#{msg.setSeatsExceeded}"
                             action="#{runController.setSeatsExceeded}"
                             rendered="#{loggedUserHolder.loggedUser.firm.hasAnotherTicketSellingSystem and !run.seatsExceeded}">
@@ -122,6 +122,9 @@
                     </rich:modalPanel>
             </a4j:form>
 
+            <ui:include src="travelListOptionsPanel.jsp">
+                <ui:param name="controller" value="#{travelListController}" />
+            </ui:include>
         </f:view>
     </ui:define>
 </ui:composition>

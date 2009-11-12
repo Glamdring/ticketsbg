@@ -23,6 +23,7 @@ import com.tickets.controllers.users.LoggedUserHolder;
 import com.tickets.controllers.valueobjects.Screen;
 import com.tickets.controllers.valueobjects.Step;
 import com.tickets.exceptions.TicketCreationException;
+import com.tickets.model.Customer;
 import com.tickets.model.Discount;
 import com.tickets.model.Firm;
 import com.tickets.model.PassengerDetails;
@@ -126,6 +127,8 @@ public class SearchController extends BaseController {
 
     private boolean renderMaps = false;
 
+    // Used only in admin panel
+    private String customerName = "";
 
     @Action
     public String navigateToSearch() {
@@ -304,9 +307,13 @@ public class SearchController extends BaseController {
 
         purchaseController.getTickets().add(ticket);
 
-        // If the user is staff-member, just mark the tickets as sold
+        // If the user is staff-member, i.e. this is admin panel,
+        // set the customer name, and mark the tickets as sold
         User user = loggedUserHolder.getLoggedUser();
         if (user != null && user.isStaff()) {
+            ticket.setCustomerInformation(new Customer());
+            ticket.getCustomerInformation().setName(customerName);
+
             purchaseController.finalizePurchase(user);
             // redo the search
             adminSearch();
@@ -848,5 +855,13 @@ public class SearchController extends BaseController {
 
     public void setRenderMaps(boolean renderMaps) {
         this.renderMaps = renderMaps;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 }
