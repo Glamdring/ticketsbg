@@ -228,6 +228,7 @@
                                     converterId="currencyConverter" />
                             </h:outputText>
                         </h:panelGroup>
+
                         <h:panelGroup id="seatChoices" style="float: right;">
                             <a4j:region rendered="#{seatController.seatHandler != null}">
                                 <a4j:include viewId="../seats.jsp">
@@ -238,6 +239,18 @@
                             </a4j:region>
                         </h:panelGroup>
                         <br />
+                        <h:panelGroup id="twoWayPrice">
+                            <h:outputText value="#{msg.twoWayPrice}: " />
+
+                            <h:outputText
+                                value="#{searchController.selectedEntry.price.twoWayPrice}"
+                                styleClass="bold"
+                                rendered="#{searchController.toStopPerPurchase != null}">
+                                <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                                <f:converter binding="#{currencyConverter}"
+                                    converterId="currencyConverter" />
+                            </h:outputText>
+                        </h:panelGroup>
 
                         <rich:panel id="returnsPanel" header="#{msg.returnHeaderLabel}"
                             rendered="#{searchController.travelType == 'TWO_WAY'}">
@@ -286,17 +299,6 @@
                                 </rich:column>
 
                                 <rich:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="#{msg.twoWayPrice}" />
-                                    </f:facet>
-                                    <h:outputText value="#{returnResult.price.twoWayPrice}">
-                                        <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-                                        <f:converter binding="#{currencyConverter}"
-                                            converterId="currencyConverter" />
-                                    </h:outputText>
-                                </rich:column>
-
-                                <rich:column>
                                     <a4j:commandButton value="#{msg.select}"
                                         action="#{searchController.returnSelected}"
                                         reRender="returnChoice,returnSeatChoices,totalPriceHolder">
@@ -319,13 +321,7 @@
                                         value="#{searchController.selectedReturnEntry.departureTime.time}">
                                         <f:convertDateTime pattern="HH:mm"
                                             timeZone="#{timeZoneController.timeZone}" />
-                                    </h:outputText> #{msg.hourAbbr} , <h:outputText
-                                        value="#{searchController.selectedReturnEntry.price.twoWayPrice}">
-
-                                        <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-                                        <f:converter binding="#{currencyConverter}"
-                                            converterId="currencyConverter" />
-                                    </h:outputText>
+                                    </h:outputText> #{msg.hourAbbr}
                                 </h:panelGroup>
                             </h:panelGroup>
 

@@ -541,6 +541,7 @@ public class SearchController extends BaseController {
 
         selectedReturnEntry = null;
         returnResultsModel = null;
+        returnDate = null;
         travelType = "TWO_WAY";
     }
 
