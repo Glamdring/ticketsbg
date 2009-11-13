@@ -86,6 +86,15 @@ public class SearchServiceImpl extends BaseService implements SearchService {
             SearchResultEntry entry = it.next();
             Run run = entry.getRun();
 
+            // If the run is about to launch in less then the set hours,
+            // remove the current entry
+            Calendar salesLimit = run.getTime();
+            salesLimit.add(Calendar.HOUR, -1 * run.getRoute().getStopSalesBeforeRunInHours());
+            if (GeneralUtils.createCalendar().compareTo(salesLimit) > -1) {
+                it.remove();
+                continue;
+            }
+
             Stop fromStopObj = findStop(run.getRoute().getStops(), fromStop);
             Stop toStopObj = findStop(run.getRoute().getStops(), toStop);
 

@@ -46,6 +46,14 @@
                             <h:panelGroup style="float: right;">
 
                                 <h:panelGroup style="margin-right: 25px;">
+                                    <h:outputLabel value="#{msg.stopSalesBeforeRunInHours}: "
+                                        for="stopSalesBeforeRunInHours" />
+                                    <h:inputText
+                                        value="#{routeController.route.stopSalesBeforeRunInHours}"
+                                        id="stopSalesBeforeRunInHours" size="3" />
+                                </h:panelGroup>
+
+                                <h:panelGroup style="margin-right: 25px;">
                                     <h:outputLabel for="requireReceiptAtCashDesk"
                                         value="#{msg.requireReceiptAtCashDesk}: "
                                         id="requireReceiptAtCashDeskLabel" />
