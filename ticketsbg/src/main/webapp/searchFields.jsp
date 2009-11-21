@@ -70,10 +70,10 @@ function showOrHideReturn() {
                     onclick="showOrHideReturn();">
                     <a4j:support event="onchange" ajaxSingle="true" limitToList="true" />
 
-                    <f:selectItem itemLabel="#{msg.twoWayTravelType}"
-                        itemValue="twoWay" />
                     <f:selectItem itemLabel="#{msg.oneWayTravelType}"
                         itemValue="oneWay" />
+                    <f:selectItem itemLabel="#{msg.twoWayTravelType}"
+                        itemValue="twoWay" />
                 </h:selectOneRadio>
             </h:panelGrid>
 

@@ -71,6 +71,7 @@ public class SearchController extends BaseController {
     private SeatController seatController;
 
     private static final String TWO_WAY = "twoWay";
+    private static final String ONE_WAY = "oneWay";
 
     private String fromStop;
     private String toStop;
@@ -101,7 +102,7 @@ public class SearchController extends BaseController {
 
     private Integer[] hoursFrom;
     private Integer[] hoursTo;
-    private String travelType = TWO_WAY;
+    private String travelType = ONE_WAY;
 
     private SearchResultEntry selectedEntry;
 
@@ -394,7 +395,7 @@ public class SearchController extends BaseController {
         returnFromHour = 0;
         timeForDeparture = true;
         returnTimeForDeparture = true;
-        travelType = TWO_WAY;
+        travelType = ONE_WAY;
         ticketToAlter = null;
         renderMaps = false;
     }
