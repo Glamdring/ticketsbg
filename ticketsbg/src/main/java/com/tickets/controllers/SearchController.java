@@ -387,8 +387,8 @@ public class SearchController extends BaseController {
     private void resetSearchFields() {
         fromStop = null;
         toStop = null;
-        date = null; //GeneralUtils.createEmptyCalendar().getTime();
-        returnDate = null; //GeneralUtils.createEmptyCalendar().getTime();
+        date = GeneralUtils.createCalendar().getTime();
+        returnDate = null;
         toHour = 24;
         fromHour = 0;
         returnToHour = 24;
