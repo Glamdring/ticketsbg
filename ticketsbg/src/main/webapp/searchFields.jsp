@@ -40,7 +40,7 @@
 function showOrHideReturn() {
 
     if (#{!isAdmin}) {
-        var oneWayChecked = document.getElementById("searchForm:travelType:1").checked;
+        var oneWayChecked = document.getElementById("searchForm:travelType:0").checked;
         if (oneWayChecked || oneWayChecked == 'checked') {
             #{rich:element('returnPanel')}.style.display="none";
         } else {

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.tickets.exceptions.UserException;
 import com.tickets.mocks.EmailServiceMock;
+import com.tickets.model.Agent;
 import com.tickets.model.Firm;
 import com.tickets.model.User;
 import com.tickets.test.BaseTest;
@@ -129,6 +130,7 @@ public class UserSerivceTest extends BaseTest {
         Assert.assertTrue(getUserService().emailExists(user.getEmail()));
     }
 
+    @Test
     public void getUsersByFirmTest() {
         Firm firm = createFirm();
         User user = createAndRegisterUser();
@@ -137,11 +139,40 @@ public class UserSerivceTest extends BaseTest {
 
         List<User> users = getUserService().fetchUsers(firm);
         for (User cUser : users) {
-            if (cUser.equals(user)) {
+            if (cUser.getId() == user.getId()) {
+                // if found, return successfully
                 return;
             }
         }
+        // if not found, fail
         Assert.fail("Newly registered user not found in the firm's users list");
+    }
+
+    @Test
+    public void getUsersByAgentTest() {
+
+        Firm firm = createFirm();
+        Agent agent = new Agent();
+        agent.setActive(true);
+        agent.setName(getRandomString(5));
+        agent.setFirm(firm);
+        agent = (Agent) getUserService().saveObject(agent);
+
+        User user = createAndRegisterUser();
+        user.setAgent(agent);
+        user.setFirm(firm);
+        user = getUserService().save(user);
+
+        List<User> users = getUserService().fetchAgentsUsers(firm);
+
+         for (User cUser : users) {
+             if (cUser.getId() == user.getId()) {
+                 // if found, return successfully
+                 return;
+             }
+         }
+         // if not found, fail
+         Assert.fail("Newly registered user not found in the firm's agents' users list");
     }
 
     private void attemptLogin(String username, String password) throws UserException {
