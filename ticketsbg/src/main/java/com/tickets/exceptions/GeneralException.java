@@ -24,9 +24,15 @@ public class GeneralException extends Exception {
     }
 
     public String getMessageKey() {
-        if (messageKeys.size() > 0)
+        if (messageKeys.size() > 0) {
             return messageKeys.get(0);
+        }
 
-        return null;
+        String key = "";
+        for (String msgKey : messageKeys) {
+            key += msgKey + "; ";
+        }
+
+        return key;
     }
 }

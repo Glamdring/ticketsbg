@@ -53,8 +53,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
             result = getDao().findByNamedQuery(
                     "User.tempLogin",
                     new String[] { "username", "password" },
-                    new Object[] { username,
-                            saltAndHashPassword(new String(password)) });
+                    new Object[] { username, passParam });
 
             if (result == null || result.size() != 1) {
                 throw UserException.INCORRECT_LOGIN_DATA;
@@ -168,15 +167,6 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
             throw UserException.USER_ALREADY_ACTIVE;
         }
         throw UserException.INVALID_ACTIVATION_CODE;
-    }
-
-    public User getUserById(String id) {
-        try {
-            int intId = Integer.parseInt(id);
-            return getDao().getById(User.class, intId);
-        } catch (Exception e) {
-            return null;
-        }
     }
 
     public void clearNonActivatedUsers() {
