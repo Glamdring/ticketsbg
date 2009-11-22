@@ -11,72 +11,43 @@
     template="adminTemplate.jsp">
     <ui:define name="body">
         <f:view>
-            <rich:panel header="#{msg.promotions}">
-                <h:form id="promotionForm">
+            <rich:panel header="#{msg.newsList}">
+                <h:form id="newsForm">
                     <h:messages />
                     <a4j:commandButton value="#{msg.add}" ajaxSingle="true"
-                        action="#{promotionController.newRecord}"
+                        action="#{newsController.newRecord}"
                         oncomplete="#{rich:component('entityPanel')}.show()" />
                     <a4j:region>
                         <rich:dataTable
                             onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
                             onRowMouseOut="this.style.backgroundColor='white'"
                             cellpadding="0" cellspacing="0" width="700" border="0"
-                            var="promotion" value="#{promotionController.promotionsModel}"
-                            id="promotionsTable">
+                            var="news" value="#{newsController.newsListModel}"
+                            id="newsListTable">
 
                             <rich:column>
                                 <f:facet name="header">
                                     <h:outputText value="#{msg.id}" />
                                 </f:facet>
-                                <h:outputText value="#{promotion.promotionId}" />
+                                <h:outputText value="#{news.newsId}" />
                             </rich:column>
+
 
                             <rich:column>
                                 <f:facet name="header">
-                                    <h:outputText value="#{msg.promotionShortText}" />
+                                    <h:outputText value="#{msg.headline}" />
                                 </f:facet>
-                                <h:outputText value="#{promotion.shortText}" />
+                                <h:outputText value="#{news.headline}" />
                             </rich:column>
 
-                            <rich:column>
+                            <rich:column sortBy="#{news.date.time}">
                                 <f:facet name="header">
-                                    <h:outputText value="#{msg.startDate}" />
+                                    <h:outputText value="#{msg.date}" />
                                 </f:facet>
-                                <h:outputText value="#{promotion.start.time}">
+                                <h:outputText value="#{news.date.time}">
                                     <f:convertDateTime pattern="dd.MM.yyyy"
                                         timeZone="#{timeZoneController.timeZone}" />
                                 </h:outputText>
-                            </rich:column>
-
-                            <rich:column>
-                                <f:facet name="header">
-                                    <h:outputText value="#{msg.endDate}" />
-                                </f:facet>
-                                <h:outputText value="#{promotion.end.time}">
-                                    <f:convertDateTime pattern="dd.MM.yyyy"
-                                        timeZone="#{timeZoneController.timeZone}" />
-                                </h:outputText>
-                            </rich:column>
-
-                            <rich:column>
-                                <f:facet name="header">
-                                    <h:outputText value="#{msg.sendToEmail}" />
-                                </f:facet>
-                                <h:outputText value="#{msg.yes}"
-                                    rendered="#{promotion.sendToEmail}" />
-                                <h:outputText value="#{msg.no}"
-                                    rendered="#{!promotion.sendToEmail}" />
-                            </rich:column>
-
-                            <rich:column>
-                                <f:facet name="header">
-                                    <h:outputText value="#{msg.showInSite}" />
-                                </f:facet>
-                                <h:outputText value="#{msg.yes}"
-                                    rendered="#{promotion.showInSite}" />
-                                <h:outputText value="#{msg.no}"
-                                    rendered="#{!promotion.showInSite}" />
                             </rich:column>
 
                             <rich:column>
@@ -85,11 +56,11 @@
                                     <h:graphicImage value="/images/edit.png"
                                         style="border-style: none;" alt="#{msg.edit}"
                                         title="#{msg.edit}" />
-                                    <f:setPropertyActionListener value="${promotion}"
-                                        target="#{promotionController.promotion}" />
+                                    <f:setPropertyActionListener value="${news}"
+                                        target="#{newsController.news}" />
                                 </a4j:commandLink>
                                 <h:outputText value="&#160;" />
-                                <h:commandLink action="#{promotionController.delete}"
+                                <h:commandLink action="#{newsController.delete}"
                                     title="#{msg.remove}">
                                     <h:graphicImage value="/images/delete.png"
                                         style="border-style: none;" alt="#{msg.delete}"
@@ -109,9 +80,9 @@
                 <ui:param name="dialogId" value="entityPanel" />
             </ui:include>
             <f:facet name="header">
-                <h:outputText value="#{msg.promotion}" />
+                <h:outputText value="#{msg.news}" />
             </f:facet>
-            <a4j:include viewId="promotion.jsp" />
+            <a4j:include viewId="news.jsp" />
         </rich:modalPanel>
     </ui:define>
 </ui:composition>

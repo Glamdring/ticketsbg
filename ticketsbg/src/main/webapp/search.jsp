@@ -37,7 +37,7 @@
                     </a4j:outputPanel>
                     <rich:panel header=" " headerClass="rich-panel-header-main"
                         style="text-align: center; width: 485px; margin-left: 5px; height: 100%;">
-                        <h:graphicImage url="/images/banner.png" />
+                        <h:graphicImage url="/images/banner.png" alt="" />
                     </rich:panel>
                 </h:panelGrid>
             </a4j:form>

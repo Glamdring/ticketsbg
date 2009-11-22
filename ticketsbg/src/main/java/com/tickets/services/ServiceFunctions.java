@@ -162,4 +162,15 @@ public class ServiceFunctions {
     public static String concat(String string1, String string2) {
         return string1.concat(string2);
     }
+
+    public static String formatTextNewLines(String text) {
+        if (text == null) {
+            return "";
+        }
+
+        text = text.replace("\r\n", "<br />");
+        text = text.replace("\n", "<br />");
+
+        return text;
+    }
 }

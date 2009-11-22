@@ -76,6 +76,10 @@
             <rich:menuItem value="#{msg.firms}" action="firmsList"
                 icon="/images/agents.png"
                 rendered="#{loggedUserHolder.loggedUser.accessLevel == 'ADMINISTRATOR'}" />
+
+            <rich:menuItem value="#{msg.newsList}" action="newsList"
+                icon="/images/discounts.png"
+                rendered="#{loggedUserHolder.loggedUser.accessLevel == 'ADMINISTRATOR'}" />
         </rich:dropDownMenu>
 
 
@@ -129,6 +133,9 @@
     <a4j:include viewId="firm.jsp" />
 </rich:modalPanel>
 <h:panelGroup style="text-align: left;" layout="block">
+
+<h:outputText value="#{msg[param.errorKey]}"
+    rendered="#{param.errorKey != null}" styleClass="error" />
 <ui:insert name="body" />
 </h:panelGroup>
 </body>

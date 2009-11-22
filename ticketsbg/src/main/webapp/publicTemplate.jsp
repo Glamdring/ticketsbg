@@ -4,7 +4,8 @@
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:a4j="http://richfaces.org/a4j"
-    xmlns:rich="http://richfaces.org/rich">
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:tc="http://tickets.com/tc">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml; charset=UTF-8" />
 <title>Tickets</title>
@@ -118,6 +119,22 @@
         <ui:include src="paymentMethods.jsp" />
     </h:panelGroup>
 </h:panelGrid>
+
+<rich:panel header="#{msg.newsList}" styleClass="news" rendered="#{tc:getSize(newsController.freshNews) > 0}">
+    <a4j:repeat value="#{newsController.freshNews}" var="news">
+        <h:panelGroup layout="block" style="margin-bottom: 5px; clear: both;">
+            <h:outputText style="font-weight: bold; font-size: 14px;" value="#{news.headline}" />
+            &#160;&#160;
+            <h:outputText value="#{news.date.time}">
+                <f:convertDateTime type="date" pattern="dd.MM.yyyy"
+                    timeZone="#{timeZoneController.timeZone}" />
+            </h:outputText>
+        </h:panelGroup>
+
+        <h:outputText value="#{tc:formatTextNewLines(news.content)}" escape="false" />
+    </a4j:repeat>
+</rich:panel>
+
 <h:form>
     <h:panelGroup styleClass="footer" layout="block">
     <a4j:commandLink onclick="#{rich:component('termsPanel')}.show();"

@@ -162,7 +162,7 @@ function showOrHideReturn() {
                                 <f:attribute name="label" value="#{msg.departureDate}" />
                             </rich:calendar>
                             <h:outputText value="&#160;" />
-                            <h:graphicImage url="/images/small/timer.png"
+                            <h:graphicImage url="/images/small/timer.png" alt=""
                                 style="cursor: pointer; vertical-align: middle;"
                                 onclick="#{rich:component('outboundTimePanel')}.show()" />
                         </h:panelGroup>
@@ -229,7 +229,7 @@ function showOrHideReturn() {
                                 boundaryDatesMode="scroll" dayStyleClass="getDayClass" />
 
                             <h:outputText value="&#160;" />
-                            <h:graphicImage url="/images/small/timer.png"
+                            <h:graphicImage url="/images/small/timer.png" alt=""
                                 style="cursor: pointer; vertical-align: middle;"
                                 onclick="#{rich:component('returnTimePanel')}.show()" />
                         </h:panelGroup>

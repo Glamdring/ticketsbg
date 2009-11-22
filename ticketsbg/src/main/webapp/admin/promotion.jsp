@@ -50,7 +50,7 @@
                     <h:outputText value="" />
                     <a4j:commandButton value="${msg.save}"
                         action="#{promotionController.save}"
-                        oncomplete="if (#{rich:component('entityPanel')} != null) {#{rich:component('entityPanel')}.hide();} #{rich:component('promotionPanel')}.hide();"
+                        oncomplete="if (#{rich:component('entityPanel')} != null) {#{rich:component('entityPanel')}.hide();} #{rich:component('entityPanel')}.hide();"
                         reRender="promotionsTable" />
                 </h:panelGrid>
             </a4j:outputPanel>
