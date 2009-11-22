@@ -39,6 +39,9 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
     @Autowired
     private DiscountService discountService;
 
+    @Autowired
+    private EmailService emailService;
+
     public Ticket createTicket(SearchResultEntry selectedEntry,
             SearchResultEntry selectedReturnEntry,
             TicketCountsHolder ticketCountsHolder, List<Seat> selectedSeats,
@@ -425,7 +428,7 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
              String customerEmail = customerInfo.getEmail();
              String customerName = customerInfo.getName();
 
-             HtmlEmail email = GeneralUtils.getPreconfiguredMail();
+             HtmlEmail email = (HtmlEmail) emailService.createEmail(true);
              email.addTo(customerEmail);
 
              email.setFrom(Settings.getValue("purchase.email.sender"));
@@ -476,7 +479,7 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
 
              email.setHtmlMsg(Messages.getString("purchase.email.content", customerName, ticketsTable));
 
-             email.send();
+             emailService.send(email);
 
          } catch (EmailException eex) {
              log.error("Mail problem", eex);
@@ -602,6 +605,14 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
                 new Object[] { firmKey, fromStop, lastCheckCalendar.getTime()});
 
         return tickets.size();
+    }
+
+    public EmailService getEmailService() {
+        return emailService;
+    }
+
+    public void setEmailService(EmailService emailService) {
+        this.emailService = emailService;
     }
 }
 

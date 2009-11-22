@@ -46,13 +46,6 @@ public interface UserService extends Service<User> {
     String saltAndHashPassword(String password);
 
     /**
-     * Finds a user by a provided username
-     * @param userName
-     * @return user
-     */
-    User findUser(String userName);
-
-    /**
      * Checks whether the argument is a hash, or a normal password
      *
      * @param password

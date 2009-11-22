@@ -12,6 +12,7 @@ import javax.crypto.Cipher;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tickets.constants.Constants;
@@ -22,7 +23,7 @@ import com.tickets.exceptions.UserException;
 import com.tickets.model.Firm;
 import com.tickets.model.User;
 import com.tickets.utils.CertificateManager;
-import com.tickets.utils.GeneralUtils;
+import com.tickets.utils.ValidationBypassingEventListener;
 import com.tickets.utils.base64.Base64Decoder;
 import com.tickets.utils.base64.Base64Encoder;
 
@@ -31,6 +32,9 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
 
     private static Logger log = Logger.getLogger(UserServiceImpl.class);
     public static final String ENCODING = "ISO-8859-1";
+
+    @Autowired
+    private EmailService emailService;
 
     public User login(String username, char[] password,
             boolean passwordAlreadyHashed) throws UserException {
@@ -125,16 +129,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
         user.setRegisteredTimestamp(System.currentTimeMillis());
 
         try {
-            Email email = GeneralUtils.getPreconfiguredMail(false);
-            email.addTo(user.getEmail(), user.getName());
-            email.setFrom(Settings.getValue("confirmation.email.sender"));
-            email.setSubject(Messages.getString("confirmation.email.subject"));
-            email.setMsg(Messages.getString("confirmation.email.content", user
-                    .getName(), user.getUsername(), user.getRepeatPassword(),
-                    Settings.getValue("base.url") + "/activate.jsp?code="
-                            + user.getActivationCode()));
-
-            email.send();
+           sendRegistrationEmail(user);
         } catch (EmailException eex) {
             log.error("Mail problem", eex);
             throw UserException.EMAIL_PROBLEM;
@@ -143,6 +138,19 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
         user = getDao().persist(user);
 
         return user;
+    }
+
+    private void sendRegistrationEmail(User user) throws EmailException {
+         Email email = emailService.createEmail(false);
+         email.addTo(user.getEmail(), user.getName());
+         email.setFrom(Settings.getValue("confirmation.email.sender"));
+         email.setSubject(Messages.getString("confirmation.email.subject"));
+         email.setMsg(Messages.getString("confirmation.email.content", user
+                 .getName(), user.getUsername(), user.getRepeatPassword(),
+                 Settings.getValue("base.url") + "/activate.jsp?code="
+                         + user.getActivationCode()));
+
+         emailService.send(email);
     }
 
     public User activateUserWithCode(String code) throws UserException {
@@ -192,14 +200,14 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
             String tempPassword = generateTemporaryPassword();
 
             try {
-                Email mail = GeneralUtils.getPreconfiguredMail(false);
+                Email mail = emailService.createEmail(false);
                 mail.setFrom(Settings.getValue("temp.password.email.sender"));
                 mail.addTo(email, user.getName());
                 mail.setSubject(Messages
                         .getString("temp.password.email.subject"));
                 mail.setMsg(Messages.getString("temp.password.email.content",
                         user.getName(), tempPassword, user.getUsername()));
-                mail.send();
+                emailService.send(mail);
 
                 // Set after the mail, so that no update is triggered
                 user.setTemporaryPassword(saltAndHashPassword(tempPassword));
@@ -280,18 +288,6 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
         return listOrdered(User.class, orderColumn);
     }
 
-    @Override
-    public User findUser(String userName) {
-        List<User> result = getDao().findByNamedQuery("User.getByUsername",
-                new String[] { "username" }, new Object[] { userName });
-
-        if (result != null && result.size() > 0) {
-            return result.get(0);
-        }
-
-        return null;
-    }
-
     @SuppressWarnings("unchecked")
     @Override
     public List<User> fetchUsers(Firm firm) {
@@ -333,14 +329,30 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
     public void createInitialUser() {
         List<User> users = list(User.class);
         if (users.size() == 0) {
-            User user = new User();
-            user.setUsername("admin");
-            user.setActive(true);
-            user.setPassword(saltAndHashPassword("admin"));
-            user.setRegisteredTimestamp(Calendar.getInstance().getTimeInMillis());
-            user.setAccessLevel(AccessLevel.ADMINISTRATOR);
+            ValidationBypassingEventListener.turnValidationOff();
+            try {
+                User user = new User();
+                user.setUsername("admin");
+                user.setActive(true);
+                user.setPassword(saltAndHashPassword("admin"));
+                user.setRegisteredTimestamp(Calendar.getInstance().getTimeInMillis());
+                user.setAccessLevel(AccessLevel.ADMINISTRATOR);
+                user.setEmail("admin@avtogara.com");
+                user.setContactPhone("");
+                user.setName("");
 
-            getDao().persist(user);
+                getDao().persist(user);
+            } finally {
+                ValidationBypassingEventListener.turnValidationOn();
+            }
         }
+    }
+
+    public EmailService getEmailService() {
+        return emailService;
+    }
+
+    public void setEmailService(EmailService emailService) {
+        this.emailService = emailService;
     }
 }

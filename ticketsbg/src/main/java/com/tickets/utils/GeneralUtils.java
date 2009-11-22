@@ -54,10 +54,6 @@ public class GeneralUtils {
         return subdomain;
     }
 
-    public static HtmlEmail getPreconfiguredMail() {
-        return (HtmlEmail) getPreconfiguredMail(true);
-    }
-
     public static Email getPreconfiguredMail(boolean html) {
         Email e = null;
         if (html) {

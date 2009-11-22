@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import com.tickets.annotations.Action;
 import com.tickets.controllers.security.AccessLevel;
 import com.tickets.controllers.users.LoggedUserHolder;
-import com.tickets.dao.ValidationBypassingEventListener;
 import com.tickets.model.Agent;
 import com.tickets.model.Firm;
 import com.tickets.model.User;
@@ -23,6 +22,7 @@ import com.tickets.services.OfficeService;
 import com.tickets.services.Service;
 import com.tickets.services.UserService;
 import com.tickets.utils.SelectItemUtils;
+import com.tickets.utils.ValidationBypassingEventListener;
 
 
 @Controller("userController")

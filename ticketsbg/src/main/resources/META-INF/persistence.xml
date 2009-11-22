@@ -23,8 +23,8 @@
         <class>com.tickets.model.GenericDiscount</class>
 
         <properties>
-            <property name="hibernate.ejb.event.pre-insert" value="com.tickets.dao.ValidationBypassingEventListener" />
-            <property name="hibernate.ejb.event.pre-update" value="com.tickets.dao.ValidationBypassingEventListener" />
+            <property name="hibernate.ejb.event.pre-insert" value="com.tickets.utils.ValidationBypassingEventListener" />
+            <property name="hibernate.ejb.event.pre-update" value="com.tickets.utils.ValidationBypassingEventListener" />
 
             <property name="hibernate.cache.use_second_level_cache"
                 value="true" />

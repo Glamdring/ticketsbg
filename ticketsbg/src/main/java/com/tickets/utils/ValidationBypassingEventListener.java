@@ -1,4 +1,4 @@
-package com.tickets.dao;
+package com.tickets.utils;
 
 import org.hibernate.event.PreInsertEvent;
 import org.hibernate.event.PreUpdateEvent;
