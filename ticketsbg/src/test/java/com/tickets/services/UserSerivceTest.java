@@ -101,7 +101,6 @@ public class UserSerivceTest extends BaseTest {
         getUserService().changePassword(user, getRandomString(5));
     }
 
-
     @Test
     public void clearNonActivatedUsersTest() {
         List<User> users = getUserService().list(User.class);
@@ -165,17 +164,19 @@ public class UserSerivceTest extends BaseTest {
 
         List<User> users = getUserService().fetchAgentsUsers(firm);
 
-         for (User cUser : users) {
-             if (cUser.getId() == user.getId()) {
-                 // if found, return successfully
-                 return;
-             }
-         }
-         // if not found, fail
-         Assert.fail("Newly registered user not found in the firm's agents' users list");
+        for (User cUser : users) {
+            if (cUser.getId() == user.getId()) {
+                // if found, return successfully
+                return;
+            }
+        }
+        // if not found, fail
+        Assert
+                .fail("Newly registered user not found in the firm's agents' users list");
     }
 
-    private void attemptLogin(String username, String password) throws UserException {
+    private void attemptLogin(String username, String password)
+            throws UserException {
         getUserService().login(username, password.toCharArray(), true);
     }
 

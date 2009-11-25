@@ -67,6 +67,11 @@ public class GeneralUtils {
             e.setAuthentication(username, Settings.getValue("smtp.password"));
         }
 
+        String bounceEmail = Settings.getValue("smtp.bounce.email");
+        if (bounceEmail != null) {
+            e.setBounceAddress(bounceEmail);
+        }
+
         e.setTLS(true);
         e.setCharset("UTF8");
 

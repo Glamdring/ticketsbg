@@ -29,7 +29,7 @@ public class CurrencyConverter implements Converter {
 
     //TODO : handle currencies. Currently only lev supported, and hard-coded
 
-    private String addCurrencyInformation(BigDecimal value) {
+    public static String addCurrencyInformation(BigDecimal value) {
         if (value == null) {
             value = BigDecimal.ZERO;
         }

@@ -106,6 +106,14 @@ public class Ticket implements Serializable, Comparable<Ticket> {
     private Calendar creationTime;
 
     @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar departureTime;
+
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar returnDepartureTime;
+
+    @Column
     private boolean timeouted;
 
     @Column
@@ -298,5 +306,21 @@ public class Ticket implements Serializable, Comparable<Ticket> {
 
     public void addPassengerDetails(PassengerDetails passengerDetails) {
         getPassengerDetails().add(passengerDetails);
+    }
+
+    public Calendar getDepartureTime() {
+        return departureTime;
+    }
+
+    public void setDepartureTime(Calendar departureTime) {
+        this.departureTime = departureTime;
+    }
+
+    public Calendar getReturnDepartureTime() {
+        return returnDepartureTime;
+    }
+
+    public void setReturnDepartureTime(Calendar returnDepartureTime) {
+        this.returnDepartureTime = returnDepartureTime;
     }
 }

@@ -10,24 +10,26 @@
     xmlns:t="http://myfaces.apache.org/tomahawk"
     template="publicTemplate.jsp">
 
-<ui:define name="head">
-    <style type="text/css">
-        .heightClass {
-            height: 315px;
-        }
-        .innerColumn {
-            vertical-align: top;
-            height: 100%;
-            margin-bottom: 0px;
-            padding-bottom: 0px;
-        }
-    </style>
-</ui:define>
+    <ui:define name="head">
+        <style type="text/css">
+.heightClass {
+    height: 315px;
+}
+
+.innerColumn {
+    vertical-align: top;
+    height: 100%;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+}
+</style>
+    </ui:define>
     <ui:define name="body">
         <f:view>
             <a4j:form id="searchForm" ajaxSubmit="true">
                 <h:panelGrid columns="2" cellpadding="0" cellspacing="0"
-                    columnClasses="innerColumn, innerColumn" style="height: 320px; margin: 0px; padding: 0px;">
+                    columnClasses="innerColumn, innerColumn"
+                    style="height: 320px; margin: 0px; padding: 0px;">
                     <a4j:outputPanel>
                         <ui:include src="searchFields.jsp">
                             <ui:param name="isAdmin" value="false" />
@@ -42,5 +44,27 @@
                 </h:panelGrid>
             </a4j:form>
         </f:view>
+    </ui:define>
+
+    <ui:define name="bottomPanel">
+        <rich:panel header="#{msg.newsList}" styleClass="news"
+            rendered="#{tc:getSize(newsController.freshNews) > 0}">
+            <a4j:repeat value="#{newsController.freshNews}" var="news">
+                <h:panelGroup layout="block"
+                    style="margin-bottom: 5px; clear: both;">
+                    <h:outputText style="font-weight: bold; font-size: 14px;"
+                        value="#{news.headline}" />
+            &#160;&#160;
+            <h:outputText value="#{news.date.time}">
+                        <f:convertDateTime type="date" pattern="dd.MM.yyyy"
+                            timeZone="#{timeZoneController.timeZone}" />
+                    </h:outputText>
+                </h:panelGroup>
+
+                <h:outputText value="#{tc:formatTextNewLines(news.content)}"
+                    escape="false" />
+            </a4j:repeat>
+        </rich:panel>
+
     </ui:define>
 </ui:composition>

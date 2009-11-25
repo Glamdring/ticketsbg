@@ -4,8 +4,7 @@
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:a4j="http://richfaces.org/a4j"
-    xmlns:rich="http://richfaces.org/rich"
-    xmlns:tc="http://tickets.com/tc">
+    xmlns:rich="http://richfaces.org/rich" xmlns:tc="http://tickets.com/tc">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml; charset=UTF-8" />
 <title>Tickets</title>
@@ -35,8 +34,8 @@
 <div class="container"><a
     href="#{facesContext.externalContext.context.contextPath}/"> <img
     src="images/logo.png" alt="avtogara.com" style="border-style: none;" />
-</a>
-<h:form style="float: left; height: 34px; margin-bottom: 5px;" id="menuForm" ajaxSingle="true">
+</a> <h:form style="float: left; height: 34px; margin-bottom: 5px;"
+    id="menuForm" ajaxSingle="true">
     <rich:toolBar itemSeparator="line" width="1000" height="34"
         style="float: left; padding: 0px; margin: 0px;" id="menuToolbar">
         <rich:menuItem action="#{searchController.navigateToSearch}"
@@ -98,18 +97,13 @@
             <h:outputText value="#{msg.logout}" styleClass="menuContent" />
         </rich:menuItem>
     </rich:toolBar>
-</h:form>
-
-<a4j:status forceId="generalStatus">
+</h:form> <a4j:status forceId="generalStatus">
     <f:facet name="start">
         <h:graphicImage value="/images/ajaxloadingBig.gif" id="statusImage"
             style="float: right; margin-left: -40px; padding-right: 3px; padding-top: 3px;"
             alt="loading..." />
     </f:facet>
-</a4j:status>
-
-<ui:include src="loginPanel.jsp" />
-<h:panelGrid columns="2"
+</a4j:status> <ui:include src="loginPanel.jsp" /> <h:panelGrid columns="2"
     columnClasses="main,side" cellpadding="0" cellspacing="0"
     style="margin-top: 4px; margin-bottom: 0px; text-align: left; clear: both;">
     <ui:insert name="body" />
@@ -120,26 +114,14 @@
     </h:panelGroup>
 </h:panelGrid>
 
-<rich:panel header="#{msg.newsList}" styleClass="news" rendered="#{tc:getSize(newsController.freshNews) > 0}">
-    <a4j:repeat value="#{newsController.freshNews}" var="news">
-        <h:panelGroup layout="block" style="margin-bottom: 5px; clear: both;">
-            <h:outputText style="font-weight: bold; font-size: 14px;" value="#{news.headline}" />
-            &#160;&#160;
-            <h:outputText value="#{news.date.time}">
-                <f:convertDateTime type="date" pattern="dd.MM.yyyy"
-                    timeZone="#{timeZoneController.timeZone}" />
-            </h:outputText>
-        </h:panelGroup>
-
-        <h:outputText value="#{tc:formatTextNewLines(news.content)}" escape="false" />
-    </a4j:repeat>
-</rich:panel>
+<ui:insert name="bottomPanel" />
 
 <h:form>
     <h:panelGroup styleClass="footer" layout="block">
-    <a4j:commandLink onclick="#{rich:component('termsPanel')}.show();"
+        <a4j:commandLink onclick="#{rich:component('termsPanel')}.show();"
             value="#{msg.generalTerms}" /> |&#160;
-    <a4j:commandLink onclick="#{rich:component('contactsPanel')}.show();"
+    <a4j:commandLink
+            onclick="#{rich:component('contactsPanel')}.show();"
             value="#{msg.footerContacts}" /> |
     <a href="#">#{msg.footerFacebook}</a> |
     <a href="#">Twitter</a>
@@ -153,14 +135,13 @@
         <ui:param name="dialogId" value="termsPanel" />
     </ui:include>
     <f:facet name="header">
-        #{msg.generalTerms}
-    </f:facet>
+                #{msg.generalTerms}
+            </f:facet>
     <h:panelGroup style="overflow: auto;" layout="block">
-        <ui:include src="infopages/terms_#{facesContext.viewRoot.locale.language}.jsp" />
+        <ui:include
+            src="infopages/terms_#{facesContext.viewRoot.locale.language}.jsp" />
     </h:panelGroup>
-</rich:modalPanel>
-
-<rich:modalPanel id="contactsPanel" autosized="true"
+</rich:modalPanel> <rich:modalPanel id="contactsPanel" autosized="true"
     onmaskclick="#{rich:component('contactsPanel')}.hide();">
     <ui:include src="modalPanelCommons.jsp">
         <ui:param name="dialogId" value="contactsPanel" />
@@ -169,9 +150,9 @@
         #{msg.footerContacts}
     </f:facet>
     <h:panelGroup style="overflow: auto;" layout="block">
-        <ui:include src="infopages/contacts_#{facesContext.viewRoot.locale.language}.jsp" />
+        <ui:include
+            src="infopages/contacts_#{facesContext.viewRoot.locale.language}.jsp" />
     </h:panelGroup>
-</rich:modalPanel>
-</div>
+</rich:modalPanel></div>
 </body>
 </html>

@@ -52,11 +52,11 @@
                             </h:outputText>
                         </rich:column>
 
-                        <rich:column sortBy="#{ticket.run.time.time}">
+                        <rich:column sortBy="#{ticket.departureTime.time}">
                             <f:facet name="header">
                                 <h:outputText value="#{msg.travelTime}" />
                             </f:facet>
-                            <h:outputText value="#{ticket.run.time.time}">
+                            <h:outputText value="#{ticket.departureTime.time}">
                                 <f:convertDateTime type="time" pattern="dd.MM.yyyy HH:mm"
                                     timeZone="#{timeZoneController.timeZone}" />
                             </h:outputText>

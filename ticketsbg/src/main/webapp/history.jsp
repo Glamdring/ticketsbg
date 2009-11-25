@@ -42,11 +42,11 @@
                             #{ticket.endStop}
                         </rich:column>
 
-                        <rich:column sortBy="#{ticket.run.time.time}">
+                        <rich:column sortBy="#{ticket.departureTime.time}">
                             <f:facet name="header">
                                 #{msg.travelTime}
                             </f:facet>
-                            <h:outputText value="#{ticket.run.time.time}">
+                            <h:outputText value="#{ticket.departureTime.time}">
                                 <f:convertDateTime pattern="dd.MM.yyyy HH:mm"
                                     timeZone="#{timeZoneController.timeZone}" />
                             </h:outputText>

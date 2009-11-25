@@ -342,7 +342,8 @@
 
                     <!-- Ticket counts & discounts -->
                     <rich:panel header="#{msg.tickets}" id="ticketCounts"
-                        style="width: 380px; margin-top: 15px;">
+                        style="width: 380px; margin-top: 15px;"
+                        rendered="#{tc:getSize(searchController.resultsModel.wrappedData) > 0}">
                         <h:panelGrid columns="2"
                             columnClasses="firstTicketColumn,secondTicketColumn">
                             <h:panelGroup>
@@ -385,6 +386,7 @@
                     </rich:panel>
 
                     <rich:panel header="#{msg.totalPrice}"
+                        rendered="#{tc:getSize(searchController.resultsModel.wrappedData) > 0}"
                         style="width: 380px; margin-top: 10px;">
                         <a4j:outputPanel ajaxRendered="true" id="totalPriceHolder">
                             <h:outputText style="font-weight: bold"
@@ -396,7 +398,7 @@
                         </a4j:outputPanel>
                     </rich:panel>
 
-                    <h:panelGroup>
+                    <h:panelGroup rendered="#{tc:getSize(searchController.resultsModel.wrappedData) > 0}">
                         <h:commandButton value="#{msg.backToSearchScreen}"
                             action="#{searchController.toSearchScreen}" />
                         <h:outputText value=" " />

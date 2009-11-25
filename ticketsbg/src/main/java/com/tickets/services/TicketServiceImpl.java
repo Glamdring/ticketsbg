@@ -1,13 +1,27 @@
 package com.tickets.services;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JRStyle;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.engine.util.JRLoader;
+
+import org.apache.commons.mail.ByteArrayDataSource;
+import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +30,7 @@ import org.springframework.stereotype.Service;
 import com.tickets.constants.Constants;
 import com.tickets.constants.Messages;
 import com.tickets.constants.Settings;
+import com.tickets.controllers.converters.CurrencyConverter;
 import com.tickets.exceptions.TicketAlterationException;
 import com.tickets.exceptions.TicketCreationException;
 import com.tickets.model.Customer;
@@ -27,9 +42,11 @@ import com.tickets.model.Run;
 import com.tickets.model.SearchResultEntry;
 import com.tickets.model.Ticket;
 import com.tickets.model.User;
+import com.tickets.services.valueobjects.OrderReportData;
 import com.tickets.services.valueobjects.Seat;
 import com.tickets.services.valueobjects.TicketCount;
 import com.tickets.services.valueobjects.TicketCountsHolder;
+import com.tickets.services.valueobjects.TicketInfo;
 import com.tickets.utils.GeneralUtils;
 
 @Service("ticketService")
@@ -71,14 +88,15 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
         }
     }
 
-    public BigDecimal calculatePrice(SearchResultEntry selectedEntry, SearchResultEntry selectedReturnEntry,
+    public BigDecimal calculatePrice(SearchResultEntry selectedEntry,
+            SearchResultEntry selectedReturnEntry,
             TicketCountsHolder ticketCountsHolder) {
         BigDecimal price = BigDecimal.ZERO;
         if (ticketCountsHolder == null || selectedEntry == null) {
             return price;
         }
 
-        for (int i = 0; i < ticketCountsHolder.getRegularTicketsCount(); i ++) {
+        for (int i = 0; i < ticketCountsHolder.getRegularTicketsCount(); i++) {
             BigDecimal tmpPrice = BigDecimal.ZERO;
             if (selectedReturnEntry == null) {
                 tmpPrice = selectedEntry.getPrice().getPrice();
@@ -98,7 +116,8 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
                 }
 
                 if (tc.getDiscount() != null) {
-                    tmpPrice = discountService.calculatePrice(tmpPrice, tc.getDiscount());
+                    tmpPrice = discountService.calculatePrice(tmpPrice, tc
+                            .getDiscount());
                 }
                 price = price.add(tmpPrice);
             }
@@ -106,7 +125,6 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
 
         return price;
     }
-
 
     private Ticket doCreateTicket(SearchResultEntry selectedEntry,
             SearchResultEntry selectedReturnEntry,
@@ -137,7 +155,6 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
         // reload the run (JPA refresh throws exception, so attach instead)
         getDao().attach(run);
 
-
         boolean enoughSeats = ServiceFunctions.getVacantSeats(run,
                 selectedEntry.getPrice().getStartStop().getName(),
                 selectedEntry.getPrice().getEndStop().getName(), false) >= totalRequestedTickets;
@@ -165,6 +182,8 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
             } else {
                 ticket.setTwoWay(true);
                 ticket.setReturnRun(selectedReturnEntry.getRun());
+                ticket.setReturnDepartureTime(selectedReturnEntry
+                        .getDepartureTime());
             }
 
             ticket.setStartStop(selectedEntry.getPrice().getStartStop()
@@ -175,6 +194,7 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
             // idle time without payment
             ticket.setCreationTime(GeneralUtils.createCalendar());
             ticket.setTicketCode(generateTicketCode(selectedEntry.getRun()));
+            ticket.setDepartureTime(selectedEntry.getDepartureTime());
 
             int seatsCounter = 0;
 
@@ -387,7 +407,8 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
         doFinalizePurchase(tickets, null, paymentCode);
     }
 
-    private void doFinalizePurchase(List<Ticket> tickets, User user, String paymentCode) {
+    private void doFinalizePurchase(List<Ticket> tickets, User user,
+            String paymentCode) {
         for (Ticket ticket : tickets) {
             if (ticket.isCommitted()) {
                 // if there are committed tickets, return. Sometimes ePay may
@@ -415,76 +436,201 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
     }
 
     private void sendPurchaseEmail(List<Ticket> tickets) {
-         try {
-             Ticket firstTicket = tickets.get(0);
-             log.debug("Sending mail. First ticket is: " + firstTicket.getId());
+        try {
+            Ticket firstTicket = tickets.get(0);
+            log.debug("Sending mail. First ticket is: " + firstTicket.getId());
 
-             Customer customerInfo = firstTicket.getCustomerInformation();
-             if (customerInfo == null) {
-                 log.debug("Customer is null; returning");
-                 return;
-             }
+            Customer customerInfo = firstTicket.getCustomerInformation();
+            if (customerInfo == null) {
+                log.debug("Customer is null; returning");
+                return;
+            }
 
-             String customerEmail = customerInfo.getEmail();
-             String customerName = customerInfo.getName();
+            String customerEmail = customerInfo.getEmail();
+            String customerName = customerInfo.getName();
 
-             HtmlEmail email = (HtmlEmail) emailService.createEmail(true);
-             email.addTo(customerEmail);
+            HtmlEmail email = (HtmlEmail) emailService.createEmail(true);
+            email.addTo(customerEmail);
 
-             email.setFrom(Settings.getValue("purchase.email.sender"));
-             if (tickets.size() > 1 || tickets.get(0).getPassengerDetails().size() > 1) {
-                 email.setSubject(Messages.getString("purchase.email.subject.multiple"));
-             } else {
-                 email.setSubject(Messages.getString("purchase.email.subject.single"));
-             }
+            email.setFrom(Settings.getValue("purchase.email.sender"));
+            if (tickets.size() > 1
+                    || tickets.get(0).getPassengerDetails().size() > 1) {
+                email.setSubject(Messages
+                        .getString("purchase.email.subject.multiple"));
+            } else {
+                email.setSubject(Messages
+                        .getString("purchase.email.subject.single"));
+            }
 
+            List<TicketInfo> ticketInfos = getTicketInfo(tickets);
 
-             SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+            String html = getMailContent(ticketInfos, customerName);
 
-             String ticketsTable = "";
-             for (Ticket ticket : tickets) {
-                 String returnTime = "";
-                 if (ticket.isTwoWay()) {
-                     returnTime = sdf.format(ticket.getReturnRun().getTime().getTime());
-                 }
-                 String seats = "";
-                 String delim = "";
-                 for (PassengerDetails pd : ticket.getPassengerDetails()) {
-                     seats += delim + pd.getSeat();
-                     delim = ", ";
-                 }
-                 if (ticket.isTwoWay()) {
-                     seats += " / ";
-                     delim = "";
-                     for (PassengerDetails pd : ticket.getPassengerDetails()) {
-                         seats += delim + pd.getReturnSeat();
-                         delim = ", ";
-                     }
-                 }
+            email.setHtmlMsg(html);
 
-                 DecimalFormat df = new DecimalFormat();
-                 df.setMaximumFractionDigits(2);
-                 df.setMinimumFractionDigits(2);
+            try {
+                byte[] attachment = createPurchasePdf(ticketInfos);
 
-                 ticketsTable += "<tr>";
-                 ticketsTable += "<td>" + ticket.getTicketCode() + "</td>";
-                 ticketsTable += "<td>" + ticket.getStartStop() + " - " + ticket.getEndStop() + "</td>";
-                 ticketsTable += "<td>" + sdf.format(ticket.getRun().getTime().getTime()) + "</td>";
-                 ticketsTable += "<td>" + returnTime + "</td>";
-                 ticketsTable += "<td>" + seats + "</td>";
-                 ticketsTable += "<td>" + ticket.getRun().getRoute().getFirm().getName() + "</td>";
-                 ticketsTable += "<td>" + df.format(ticket.getTotalPrice()) + "</td>";
-                 ticketsTable += "</tr>";
-             }
+                email.attach(new ByteArrayDataSource(attachment,
+                        "applicant/pdf"), "order.pdf", "Order PDF",
+                        EmailAttachment.ATTACHMENT);
+            } catch (Exception ex) {
+                log.error("Problem adding attachment", ex);
+            }
 
-             email.setHtmlMsg(Messages.getString("purchase.email.content", customerName, ticketsTable));
+            emailService.send(email);
 
-             emailService.send(email);
+        } catch (EmailException eex) {
+            log.error("Mail problem", eex);
+        }
+    }
 
-         } catch (EmailException eex) {
-             log.error("Mail problem", eex);
-         }
+    public List<TicketInfo> getTicketInfo(List<Ticket> tickets) {
+        List<TicketInfo> ticketInfos = new ArrayList<TicketInfo>(tickets.size());
 
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+
+        for (Ticket ticket : tickets) {
+            TicketInfo ticketInfo = new TicketInfo();
+
+            ticketInfo.setTicketCode(ticket.getTicketCode());
+            ticketInfo.setRouteName(ticket.getStartStop() + " - " + ticket.getEndStop());
+            ticketInfo.setFirmName(ticket.getRun().getRoute().getFirm().getName());
+
+            ticketInfo.setDepartureTime(sdf.format(ticket.getDepartureTime()
+                    .getTime()));
+            if (ticket.isTwoWay()) {
+                ticketInfo.setReturnDepartureTime(sdf.format(ticket
+                        .getReturnDepartureTime().getTime()));
+            } else {
+                ticketInfo.setReturnDepartureTime("");
+            }
+
+            String seats = "";
+            String delim = "";
+            for (PassengerDetails pd : ticket.getPassengerDetails()) {
+                seats += delim + pd.getSeat();
+                delim = ", ";
+            }
+            ticketInfo.setSeats(seats);
+
+            String returnSeats = "";
+            if (ticket.isTwoWay()) {
+                delim = "";
+                for (PassengerDetails pd : ticket.getPassengerDetails()) {
+                    returnSeats += delim + pd.getReturnSeat();
+                    delim = ", ";
+                }
+            }
+
+            ticketInfo.setReturnSeats(returnSeats);
+
+            String msg = ticket.getRun().getRoute()
+                    .isRequireReceiptAtCashDesk() ? Messages
+                    .getString("requireReceiptAtCashDeskUserMessage")
+                    : Messages.getString("showTicketAtVehicle");
+            ticketInfo.setShowTicketAtMessage(msg);
+            ticketInfo.setPrice(CurrencyConverter.addCurrencyInformation(ticket.getTotalPrice()));
+
+            ticketInfos.add(ticketInfo);
+        }
+
+        return ticketInfos;
+    }
+
+    public String getMailContent(List<TicketInfo> tickets, String customerName) {
+
+        String ticketsTable = "";
+        for (TicketInfo ticket : tickets) {
+
+            ticketsTable += "<tr>";
+            ticketsTable += "<td>" + ticket.getTicketCode() + "</td>";
+            ticketsTable += "<td>" + ticket.getRouteName() + "</td>";
+            ticketsTable += "<td>" + ticket.getDepartureTime() + "</td>";
+            ticketsTable += "<td>" + ticket.getReturnDepartureTime() + "</td>";
+            ticketsTable += "<td>" + ticket.getSeats() + " / "
+                    + ticket.getReturnSeats() + "</td>";
+            ticketsTable += "<td>" + ticket.getFirmName() + "</td>";
+            ticketsTable += "<td>" + ticket.getPrice() + "</td>";
+            ticketsTable += "</tr>";
+        }
+
+        String html = Messages.getString("purchase.email.content",
+                customerName, ticketsTable);
+
+        return html;
+    }
+
+    public byte[] createPurchasePdf(List<TicketInfo> tickets) {
+        try {
+
+            String resourceName = "/com/tickets/jasper/tickets.jasper";
+
+            InputStream is = TicketServiceImpl.class
+                    .getResourceAsStream(resourceName);
+
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(is);
+
+            OrderReportData reportData = new OrderReportData();
+            reportData.setTickets(tickets);
+
+            reportData.setTitle(Messages.getString("pdfIntroText"));
+
+            List<OrderReportData> reportSource = new ArrayList<OrderReportData>(1);
+            reportSource.add(reportData);
+
+            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(reportSource);
+
+            Map<String, Object> params = new HashMap<String, Object>();
+
+            params.put("REPORTS_DIR", "com/tickets/jasper");
+
+            InputStream sis = TicketServiceImpl.class.getResourceAsStream("/com/tickets/jasper/tickets_subreport.jasper");
+            JasperReport subreport = (JasperReport) JRLoader.loadObject(sis);
+            addPdfFontsToStyles(subreport.getStyles());
+            params.put("SUBREPORT", subreport);
+
+            JRStyle[] styles = jasperReport.getStyles();
+            addPdfFontsToStyles(styles);
+
+            JasperPrint jasperPrint = JasperFillManager.fillReport(
+                    jasperReport, params, dataSource);
+
+            JRPdfExporter exporter = new JRPdfExporter();
+
+            Map fontMap = new HashMap();
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+            exporter.setParameter(JRExporterParameter.CHARACTER_ENCODING,"UTF-8");
+            exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+            exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, baos);
+            exporter.setParameter(JRExporterParameter.FONT_MAP, fontMap);
+            exporter.exportReport();
+
+            return baos.toByteArray();
+
+        } catch (Exception ex) {
+            log.error("Error creating PDF: ", ex);
+            return null;
+        }
+    }
+
+    public void addPdfFontsToStyles(JRStyle[] styles) {
+        if (styles != null) {
+            for (JRStyle style : styles) {
+                if (style.getName().equals("reportStyle")) {
+                    style.setPdfFontName("/com/tickets/fonts/times.ttf");
+                    style.setBlankWhenNull(true);
+                }
+
+                if (style.getName().equals("reportBoldStyle")) {
+                    style.setPdfFontName("/com/tickets/fonts/timesbd.ttf");
+                    style.setBlankWhenNull(true);
+                }
+
+            }
+        }
     }
 
     @Override
@@ -600,9 +746,12 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
         Calendar lastCheckCalendar = Calendar.getInstance();
         lastCheckCalendar.setTimeInMillis(lastCheck);
 
-        List tickets = getDao().findByNamedQuery("Ticket.findSince",
-                new String[] { "firmKey", "fromStop", "lastCheck" },
-                new Object[] { firmKey, fromStop, lastCheckCalendar.getTime()});
+        List tickets = getDao()
+                .findByNamedQuery(
+                        "Ticket.findSince",
+                        new String[] { "firmKey", "fromStop", "lastCheck" },
+                        new Object[] { firmKey, fromStop,
+                                lastCheckCalendar.getTime() });
 
         return tickets.size();
     }
@@ -636,3 +785,5 @@ class Seats {
         this.returnSeat = returnSeat;
     }
 }
+
+

@@ -35,7 +35,7 @@
                 <f:facet name="header">
                     <h:outputText value="#{msg.dateTime}" />
                 </f:facet>
-                <h:outputText value="#{ticket.run.time.time}">
+                <h:outputText value="#{ticket.departureTime.time}">
                     <f:convertDateTime pattern="dd.MM.yyyy HH:mm"
                         timeZone="#{timeZoneController.timeZone}" />
                 </h:outputText>
@@ -45,7 +45,7 @@
                 <f:facet name="header">
                     <h:outputText value="#{msg.returnDateTime}" />
                 </f:facet>
-                <h:outputText value="#{ticket.returnRun.time.time}">
+                <h:outputText value="#{ticket.returnDepartureTime.time}">
                     <f:convertDateTime pattern="dd.MM.yyyy HH:mm"
                         timeZone="#{timeZoneController.timeZone}" />
                 </h:outputText>
