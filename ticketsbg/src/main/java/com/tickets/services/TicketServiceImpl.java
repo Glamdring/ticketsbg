@@ -472,7 +472,7 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
                 byte[] attachment = createPurchasePdf(ticketInfos);
 
                 email.attach(new ByteArrayDataSource(attachment,
-                        "applicant/pdf"), "order.pdf", "Order PDF",
+                        "application/pdf"), "order.pdf", "Order PDF",
                         EmailAttachment.ATTACHMENT);
             } catch (Exception ex) {
                 log.error("Problem adding attachment", ex);
