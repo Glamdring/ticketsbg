@@ -3,6 +3,9 @@ package com.tickets.test;
 import java.security.SecureRandom;
 import java.util.Random;
 
+import org.junit.Ignore;
+
+@Ignore
 public final class TestUtils {
     private static Random r = new SecureRandom();
 
