@@ -3,19 +3,15 @@ package com.tickets.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.tickets.annotations.Action;
-import com.tickets.constants.Messages;
 import com.tickets.controllers.security.AccessLevel;
-import com.tickets.controllers.valueobjects.TicketDisplayInfo;
-import com.tickets.controllers.valueobjects.TravelListSubroute;
-import com.tickets.model.PassengerDetails;
-import com.tickets.model.PaymentMethod;
-import com.tickets.model.Price;
 import com.tickets.model.Run;
-import com.tickets.model.Ticket;
+import com.tickets.services.TravelListService;
+import com.tickets.services.valueobjects.TravelListSubroute;
 
 @Controller("travelListController")
 @Scope("conversation.access")
@@ -26,76 +22,19 @@ public class TravelListController extends BaseController {
     private boolean onlineOnly = true;
     private boolean showNames = true;
 
+    private String phoneNumber;
+
+    @Autowired
+    private TravelListService service;
+
     public String openTravelList() {
-        travelList = new ArrayList<TravelListSubroute>(run.getRoute()
-                .getPrices().size());
-        for (Ticket ticket : run.getTickets()) {
-            insertTicketDataIntoTravelList(ticket, false);
-        }
-
-        for (Ticket ticket : run.getReturnTickets()) {
-            insertTicketDataIntoTravelList(ticket, true);
-        }
-
-        for (TravelListSubroute tls : travelList) {
-            tls.order();
-        }
+        travelList = service.getTravelList(run, onlineOnly);
 
         return "travelList";
     }
 
-    private void insertTicketDataIntoTravelList(Ticket ticket, boolean isReturn) {
-        if (onlineOnly && ticket.getPaymentMethod() == PaymentMethod.CASH_DESK) {
-            return;
-        }
-
-        List<Price> prices = run.getRoute().getPrices();
-        for (Price price : prices) {
-            if (!(price.getStartStop().getName().equals(ticket.getStartStop())
-                    && price.getEndStop().getName().equals(ticket.getEndStop()))) {
-                continue;
-            }
-
-            String caption = price.getStartStop().getName() + " - "
-                    + price.getEndStop().getName();
-
-            TravelListSubroute tmpTLS = new TravelListSubroute();
-            tmpTLS.setCaption(caption);
-
-            int idx = travelList.indexOf(tmpTLS);
-            if (idx > -1) {
-                tmpTLS = travelList.get(idx);
-            }
-
-            TicketDisplayInfo tdi = new TicketDisplayInfo();
-            tdi.setTicketCode(ticket.getTicketCode());
-            String numbers = "";
-            String delimiter = "";
-
-            for (PassengerDetails pd : ticket.getPassengerDetails()) {
-                if (isReturn) {
-                    numbers += delimiter + pd.getReturnSeat();
-                } else {
-                    numbers += delimiter + pd.getSeat();
-                }
-                delimiter = ",";
-            }
-
-            tdi.setSeatNumbers(numbers);
-            if (ticket.getCustomerInformation() != null) {
-                tdi.setCustomerName(ticket.getCustomerInformation().getName());
-            } else {
-                tdi.setCustomerName(Messages.getString("noCustomerName"));
-            }
-
-            tmpTLS.getTickets().add(tdi);
-
-            if (idx > -1) {
-                travelList.set(idx, tmpTLS);
-            } else {
-                travelList.add(tmpTLS);
-            }
-        }
+    public void sendSMS() {
+        service.sendSMS(phoneNumber, run);
     }
 
     public Run getRun() {
@@ -128,5 +67,13 @@ public class TravelListController extends BaseController {
 
     public void setShowNames(boolean showNames) {
         this.showNames = showNames;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

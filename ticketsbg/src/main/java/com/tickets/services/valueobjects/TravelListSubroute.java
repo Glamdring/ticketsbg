@@ -1,8 +1,10 @@
-package com.tickets.controllers.valueobjects;
+package com.tickets.services.valueobjects;
 
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+
+import com.tickets.controllers.valueobjects.TicketDisplayInfo;
 
 
 public class TravelListSubroute {
