@@ -14,6 +14,8 @@ import com.tickets.model.Price;
 import com.tickets.model.Route;
 import com.tickets.model.Run;
 import com.tickets.model.SearchResultEntry;
+import com.tickets.model.SeatSettings;
+import com.tickets.model.Vehicle;
 import com.tickets.services.ServiceFunctions;
 import com.tickets.services.valueobjects.Seat;
 import com.tickets.services.valueobjects.TicketCount;
@@ -25,6 +27,8 @@ public class SeatHandler {
     private Route route;
     private Price price;
     private Integer[] used;
+
+    private Vehicle vehicle;
 
     private List<Row> rows;
     private List<SelectItem> seatSelectItems;
@@ -38,7 +42,12 @@ public class SeatHandler {
 
     public SeatHandler(Route route) {
         this.route = route;
-        refreshRows();
+        refreshRows(route.getSeatSettings(), route.getSeats());
+    }
+
+    public SeatHandler(Vehicle vehicle) {
+        this.vehicle = vehicle;
+        refreshRows(vehicle.getSeatSettings(), vehicle.getSeats());
     }
 
     public SeatHandler(SearchResultEntry entry, TicketCountsHolder ticketCountsHolder) {
@@ -51,18 +60,28 @@ public class SeatHandler {
         this.route = run.getRoute();
         this.price = entry.getPrice();
         initUsedSeats();
-        refreshRows();
+        refreshRows(route.getSeatSettings(), route.getSeats());
     }
 
 
     public void refreshRows() {
-        firstSeatUpstairs = route.getSeatSettings().getNumberOfSeatsDownstairs() + 1;
+        if (route != null) {
+            refreshRows(route.getSeatSettings(), route.getSeats());
+        }
+
+        if (vehicle != null) {
+            refreshRows(vehicle.getSeatSettings(), vehicle.getSeats());
+        }
+    }
+
+    public void refreshRows(SeatSettings seatSettings, int seats) {
+        firstSeatUpstairs = seatSettings.getNumberOfSeatsDownstairs() + 1;
         int skippedSeats = 0;
-        int rowCount = route.getSeats() / 4;
+        int rowCount = seats / 4;
 
         rows = new ArrayList<Row>(rowCount);
         List<Integer> missingSeats = new ArrayList<Integer>();
-        missingSeats.addAll(route.getSeatSettings().getMissingSeats());
+        missingSeats.addAll(seatSettings.getMissingSeats());
         //sorting so that binary search can be performed later
         Collections.sort(missingSeats);
 
@@ -70,8 +89,8 @@ public class SeatHandler {
             Row row = new Row();
             boolean lastRow = i == rowCount - 1;
             int rowId = i + 1;
-            if (!lastRow || route.getSeatSettings().isLastRowHasFourSeats()) {
-                if (route.getSeatSettings().isStartRight()) {
+            if (!lastRow || seatSettings.isLastRowHasFourSeats()) {
+                if (seatSettings.isStartRight()) {
 
                     skippedSeats += getSkippedSeat(rowId, 1, missingSeats);
                     row.setFourth(new Seat(i * 4 + 1 - skippedSeats, i * 4 + 1));
@@ -101,7 +120,7 @@ public class SeatHandler {
                     row.setId(rowId);
                 }
             } else {
-                 if (route.getSeatSettings().isStartRight()) {
+                 if (seatSettings.isStartRight()) {
 
                      skippedSeats += getSkippedSeat(rowId, 1, missingSeats);
                      row.setFourth(new Seat(i * 4 + 1 - skippedSeats, i * 4 + 1));
@@ -151,7 +170,7 @@ public class SeatHandler {
 
             // If the bus is a double-decker, and the
             // current row is the first upstairs add a separation row
-            if (route.getSeatSettings().isDoubleDecker() && (row.getFirst().getNumber() == firstSeatUpstairs ||
+            if (seatSettings.isDoubleDecker() && (row.getFirst().getNumber() == firstSeatUpstairs ||
                     row.getFourth().getNumber() == firstSeatUpstairs)) {
                 Row separatorRow = new Row();
                 separatorRow.setSeparator(true);
@@ -159,14 +178,14 @@ public class SeatHandler {
             }
 
             // If rows are needed that are not initially calculated
-            if (route.getSeats() - rowCount * 4 + skippedSeats >= 4) {
+            if (seats - rowCount * 4 + skippedSeats >= 4) {
                 rowCount ++;
             }
 
             rows.add(row);
         }
 
-        seatSelectItems = new ArrayList<SelectItem>(route.getSeats());
+        seatSelectItems = new ArrayList<SelectItem>(seats);
 
         for (Row row : rows) {
             // skip the iteration in case this is the separation 'row'
@@ -174,7 +193,7 @@ public class SeatHandler {
             if (row.isSeparator()) {
                 continue;
             }
-            if (route.getSeatSettings().isStartRight()) {
+            if (seatSettings.isStartRight()) {
                 SelectItem si = new SelectItem(row.getFourth(), "" + row.getFourth().getNumber());
                 si.setDisabled(!row.getFourth().isVacant() && run != null);
                 handleMissingSeat(row.getFourth().getNumber(), row.getId(), 1, missingSeats, run, si);
@@ -332,16 +351,16 @@ public class SeatHandler {
 
         this.selectedSeats = selectedSeats;
         if (run == null) {
-            updateMissingSeats();
+            updateMissingSeats(route != null ? route.getSeatSettings() : vehicle.getSeatSettings());
         }
     }
 
-    private void updateMissingSeats() {
+    private void updateMissingSeats(SeatSettings seatSettings) {
         List<Integer> missing = new ArrayList<Integer>();
         for (Seat seat : selectedSeats) {
             missing.add(seat.getId());
         }
-        route.getSeatSettings().setMissingSeats(missing);
+        seatSettings.setMissingSeats(missing);
     }
 
     public Price getPrice() {
@@ -374,6 +393,14 @@ public class SeatHandler {
 
     public void setUsed(Integer[] used) {
         this.used = used;
+    }
+
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
     }
 
     public int getTotalNumberOfTickets() {

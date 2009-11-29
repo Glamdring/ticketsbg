@@ -77,7 +77,8 @@
                         </h:panelGrid>
                     </rich:panel>
 
-                    <rich:panel header="#{msg.routeDetailsHeader}" id="routeDetails" style="text-align: left;">
+                    <rich:panel header="#{msg.routeDetailsHeader}" id="routeDetails"
+                        style="text-align: left;">
                         <h:panelGrid columns="3"
                             columnClasses="gridContent,gridContent,gridContent">
                             <rich:panel header="#{msg.daysOfWeek}" styleClass="internalPanel"
@@ -433,6 +434,18 @@
                     <!-- Seats positioning -->
                     <rich:panel id="seatsPanel" header="#{msg.seatsSettings}"
                         rendered="#{routeController.route.id > 0}">
+
+                        <h:outputLabel value="#{msg.vehicle}: " for="selectedVehicle" />
+                        <h:selectOneMenu value="#{routeController.selectedVehicle}"
+                            id="selectedVehicle" converter="#{entityConverter}">
+                            <f:selectItems value="#{vehicleController.vehicleSelectItems}" />
+                            <a4j:support event="onchange" limitToList="true"
+                                reRender="seats,seatsPanel"
+                                action="#{routeController.copyVehicleSettings}" />
+                        </h:selectOneMenu>
+
+                        <br />
+
                         <h:selectBooleanCheckbox
                             value="#{routeController.route.seatSettings.startRight}"
                             id="startRight">
@@ -486,7 +499,8 @@
                         <a4j:include viewId="../seats.jsp">
                             <ui:param name="return" value="false" />
                             <ui:param name="modifier" value="1" />
-                        </a4j:include><br />
+                        </a4j:include>
+                        <br />
                     </rich:panel>
                     <rich:panel id="buttonsPanel">
                         <h:commandButton action="#{routeController.save}"

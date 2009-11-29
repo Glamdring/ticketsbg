@@ -38,9 +38,11 @@ import com.tickets.model.DiscountType;
 import com.tickets.model.GenericDiscount;
 import com.tickets.model.Price;
 import com.tickets.model.Route;
+import com.tickets.model.SeatSettings;
 import com.tickets.model.Stop;
 import com.tickets.model.StopPriceHolder;
 import com.tickets.model.User;
+import com.tickets.model.Vehicle;
 import com.tickets.services.DiscountService;
 import com.tickets.services.RouteService;
 import com.tickets.services.StopService;
@@ -52,7 +54,7 @@ import com.tickets.utils.SelectItemUtils;
 @Action(accessLevel = AccessLevel.FIRM_COORDINATOR)
 public class RouteController extends BaseController implements Serializable {
 
-    private static final Integer[] DEFAULT_SECOND_DOOR_SEATS = new Integer[] {
+    static final Integer[] DEFAULT_SECOND_DOOR_SEATS = new Integer[] {
             27, 28 };
 
     private Route route;
@@ -76,6 +78,8 @@ public class RouteController extends BaseController implements Serializable {
     private List<String> genericDiscountNames = new ArrayList<String>();
 
     private String currentStopMapAddress = "";
+
+    private Vehicle selectedVehicle;
 
     @Autowired
     private SeatController seatController;
@@ -331,6 +335,17 @@ public class RouteController extends BaseController implements Serializable {
         }
     }
 
+    public void copyVehicleSettings() {
+        if (selectedVehicle != null) {
+            route.setSeats(selectedVehicle.getSeats());
+            route.setSeatSettings(selectedVehicle.getSeatSettings());
+            seatController.getSeatHandler().refreshRows();
+        } else {
+            route.setSeats(51);
+            route.setSeatSettings(new SeatSettings());
+        }
+    }
+
     public Route getRoute() {
         return route;
     }
@@ -476,5 +491,13 @@ public class RouteController extends BaseController implements Serializable {
 
     public void setGenericDiscountNames(List<String> genericDiscountNames) {
         this.genericDiscountNames = genericDiscountNames;
+    }
+
+    public Vehicle getSelectedVehicle() {
+        return selectedVehicle;
+    }
+
+    public void setSelectedVehicle(Vehicle selectedVehicle) {
+        this.selectedVehicle = selectedVehicle;
     }
 }

@@ -338,6 +338,14 @@
 
     <navigation-rule>
         <navigation-case>
+            <from-outcome>vehiclesList</from-outcome>
+            <to-view-id>/admin/vehicles.jsp</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <navigation-case>
             <from-outcome>newsList</from-outcome>
             <to-view-id>/admin/newsList.jsp</to-view-id>
             <redirect />

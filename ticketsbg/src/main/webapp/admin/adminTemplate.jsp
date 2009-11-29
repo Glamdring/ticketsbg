@@ -70,6 +70,9 @@
             <rich:menuItem value="#{msg.offices}" action="officesList"
                 icon="/images/offices.png" />
 
+            <rich:menuItem value="#{msg.vehicles}" action="vehiclesList"
+                icon="/images/vehicle.png" />
+
             <rich:menuItem value="#{msg.agents}" action="agentsList"
                 icon="/images/agents.png" />
 

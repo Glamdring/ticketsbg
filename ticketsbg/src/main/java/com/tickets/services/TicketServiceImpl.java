@@ -508,14 +508,16 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
 
             String seats = "";
             String delim = "";
-            for (PassengerDetails pd : ticket.getPassengerDetails()) {
-                seats += delim + pd.getSeat();
-                delim = ", ";
+            if (ticket.getRun().getRoute().isAllowSeatChoice()) {
+                for (PassengerDetails pd : ticket.getPassengerDetails()) {
+                    seats += delim + pd.getSeat();
+                    delim = ", ";
+                }
             }
             ticketInfo.setSeats(seats);
 
             String returnSeats = "";
-            if (ticket.isTwoWay()) {
+            if (ticket.isTwoWay() && ticket.getRun().getRoute().isAllowSeatChoice()) {
                 delim = "";
                 for (PassengerDetails pd : ticket.getPassengerDetails()) {
                     returnSeats += delim + pd.getReturnSeat();

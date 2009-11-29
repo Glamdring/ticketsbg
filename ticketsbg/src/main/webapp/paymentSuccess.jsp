@@ -34,7 +34,7 @@
                             <h:outputText value="#{ticket.ticketCode}"
                                 style="font-size: 18px; font-weight: bold;" />
 
-                            <h:panelGroup>
+                            <h:panelGroup rendered="#{ticket.run.route.allowSeatChoice}">
                                 <h:outputText value="#{tc:getSize(ticket.passengerDetails) > 1 ? msg.seats : msg.seat}: " />
                                 <a4j:repeat value="#{ticket.passengerDetails}" var="detail"
                                     rowKeyVar="rowKey">

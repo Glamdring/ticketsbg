@@ -3,6 +3,7 @@ package com.tickets.model;
 import java.io.Serializable;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,18 +14,18 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "offices")
+@Table(name = "vehicles")
 @NamedQueries({
     @NamedQuery(
-            name = "Office.findByFirm",
-            query = "SELECT o FROM Office o WHERE o.firm=:firm"
+            name = "Vehicle.findByFirm",
+            query = "SELECT v FROM Vehicle v WHERE v.firm=:firm"
         )
 })
-public class Office implements Serializable, Selectable {
+public class Vehicle implements Serializable, Selectable {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    private int officeId;
+    private int vehicleId;
 
     @Column
     private String name;
@@ -33,19 +34,30 @@ public class Office implements Serializable, Selectable {
     private String description;
 
     @Column
-    private String contactPhone;
-
-    @Column
     private String email;
 
     @ManyToOne
     private Firm firm;
 
-    public Office() {
+    @Column
+    private int seats = 51;
+
+    @Embedded
+    private SeatSettings seatSettings = new SeatSettings();
+
+    public Vehicle() {
+    }
+
+    public int getVehicleId() {
+        return vehicleId;
+    }
+
+    public void setVehicleId(int vehicleId) {
+        this.vehicleId = vehicleId;
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public void setName(String name) {
@@ -60,6 +72,13 @@ public class Office implements Serializable, Selectable {
         this.description = description;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public Firm getFirm() {
         return firm;
@@ -69,40 +88,27 @@ public class Office implements Serializable, Selectable {
         this.firm = firm;
     }
 
-    public int getOfficeId() {
-        return officeId;
+    public SeatSettings getSeatSettings() {
+        return seatSettings;
     }
 
-    public void setOfficeId(int officeId) {
-        this.officeId = officeId;
+    public void setSeatSettings(SeatSettings seatSettings) {
+        this.seatSettings = seatSettings;
     }
 
-    public String getContactPhone() {
-        return contactPhone;
+    public int getSeats() {
+        return seats;
     }
 
-    public void setContactPhone(String contactPhone) {
-        this.contactPhone = contactPhone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    @Override
-    public String getLabel() {
-        return getName();
+    public void setSeats(int seats) {
+        this.seats = seats;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + officeId;
+        result = prime * result + vehicleId;
         return result;
     }
 
@@ -114,9 +120,14 @@ public class Office implements Serializable, Selectable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Office other = (Office) obj;
-        if (officeId != other.officeId)
+        Vehicle other = (Vehicle) obj;
+        if (vehicleId != other.vehicleId)
             return false;
         return true;
+    }
+
+    @Override
+    public String getLabel() {
+        return getName();
     }
 }

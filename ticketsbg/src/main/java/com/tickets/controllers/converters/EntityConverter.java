@@ -21,13 +21,12 @@ public class EntityConverter implements Converter {
     @Autowired
     private Dao dao;
 
-    @SuppressWarnings("unchecked")
     @Override
     public Object getAsObject(FacesContext ctx, UIComponent component, String str) {
 
         try {
             String[] parts = str.split(":");
-            Class clazz = Class.forName(parts[0]);
+            Class<?> clazz = Class.forName(parts[0]);
             Field[] fields = clazz.getDeclaredFields();
             for (Field field : fields) {
                 if (field.isAnnotationPresent(Id.class)
