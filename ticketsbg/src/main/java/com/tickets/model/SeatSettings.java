@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 
 import org.hibernate.annotations.CollectionOfElements;
@@ -31,10 +30,7 @@ public class SeatSettings {
      * Ids, starting from left to right, 4 in a row
      */
     @CollectionOfElements(targetElement=Integer.class)
-    @JoinTable(
-            name = "missingSeats",
-            joinColumns = @JoinColumn(name="routeId")
-    )
+    @JoinTable
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Integer> missingSeats = new ArrayList<Integer>();
 

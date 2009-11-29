@@ -59,7 +59,11 @@ public class RouteHour implements Serializable {
     public String getDisplayLabel() {
         int hours = minutes / 60;
         int mins = minutes % 60;
-        return hours + ":" + mins;
+
+        String hoursStr = hours < 10 ? "0" + hours : hours+ "";
+        String minsStr = mins < 10 ? "0" + mins : mins + "";
+
+        return hoursStr + ":" + minsStr;
     }
 
 }

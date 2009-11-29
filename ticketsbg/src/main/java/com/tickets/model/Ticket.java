@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -130,6 +131,7 @@ public class Ticket implements Serializable, Comparable<Ticket> {
 
     @OneToMany(cascade=CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
+    @JoinTable(name="passengerDetails")
     private List<PassengerDetails> passengerDetails = new ArrayList<PassengerDetails>();
 
     public Run getRun() {

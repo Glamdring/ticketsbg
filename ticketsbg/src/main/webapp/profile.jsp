@@ -20,7 +20,7 @@
                                 <h:inputText value="#{loggedUserHolder.loggedUser.username}"
                                     id="username" size="35" disabled="true">
                                 </h:inputText>
-                                <a4j:commandButton value="#{msg.changePassword}"
+                                <a4j:commandButton value="#{msg.changePassword}" immediate="true"
                                     onclick="#{rich:component('changePasswordPanel')}.show()" />
 
                                 <h:outputLabel value="#{msg.email}" for="email" />
