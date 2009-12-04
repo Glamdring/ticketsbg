@@ -7,8 +7,13 @@
     xmlns:rich="http://richfaces.org/rich" xmlns:tc="http://tickets.com/tc">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml; charset=UTF-8" />
-<title>Tickets</title>
+<title>#{msg.title}</title>
+<meta name="description" content="#{msg.siteDescription}" />
+<meta name="keywords" content="#{msg.siteKeywords}" />
 <link href="css/main.css" type="text/css" rel="stylesheet" />
+<link rel="shortcut icon" href="favicon.png" />
+<link rel="icon" href="favicon.png" />
+
 <style type="text/css">
 .menuContent {
     vertical-align: middle;
