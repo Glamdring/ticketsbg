@@ -14,7 +14,7 @@
 .firstColumn {
     text-align: right;
     padding-right: 5px;
-    width: 50px;
+    width: 40px;
     font-weight: bold;
     vertical-align: middle;
 }
