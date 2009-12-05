@@ -53,6 +53,8 @@ import com.tickets.utils.GeneralUtils;
 public class TicketServiceImpl extends BaseService<Ticket> implements
         TicketService {
 
+    private static final String INTERN_PREFIX = "run";
+
     @Autowired
     private DiscountService discountService;
 
@@ -65,27 +67,47 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
             List<Seat> selectedReturnSeats) throws TicketCreationException {
 
         // Allow only one user per run at a time, to avoid collisions
-        String runIdIntern = ("run" + String.valueOf(selectedEntry.getRun()
+        String runIdIntern = (INTERN_PREFIX + String.valueOf(selectedEntry.getRun()
                 .getRunId())).intern();
         String returnRunIdIntern = null;
 
         if (selectedReturnEntry != null) {
-            returnRunIdIntern = ("run" + String.valueOf(selectedEntry.getRun()
+            returnRunIdIntern = (INTERN_PREFIX + String.valueOf(selectedEntry.getRun()
                     .getRunId())).intern();
         }
 
-        synchronized (runIdIntern) {
-            if (returnRunIdIntern != null) {
-                synchronized (returnRunIdIntern) {
-                    return doCreateTicket(selectedEntry, selectedReturnEntry,
-                            ticketCountsHolder, selectedSeats,
-                            selectedReturnSeats);
-                }
-            }
+        String bothRunsUniqueStringIntern = getBothRunsUniqueString(
+                runIdIntern, returnRunIdIntern).intern();
 
-            return doCreateTicket(selectedEntry, selectedReturnEntry,
-                    ticketCountsHolder, selectedSeats, selectedReturnSeats);
+        // Take a look at
+        // http://stackoverflow.com/questions/1852138/nested-synchronized-blocks-on-interned-strings
+        // for clarification
+        synchronized(bothRunsUniqueStringIntern) {
+            synchronized (runIdIntern) {
+                if (returnRunIdIntern != null) {
+                    synchronized (returnRunIdIntern) {
+                        return doCreateTicket(selectedEntry, selectedReturnEntry,
+                                ticketCountsHolder, selectedSeats,
+                                selectedReturnSeats);
+                    }
+                }
+
+                return doCreateTicket(selectedEntry, selectedReturnEntry,
+                        ticketCountsHolder, selectedSeats, selectedReturnSeats);
+            }
         }
+    }
+
+    private String getBothRunsUniqueString(String runIdIntern,
+            String returnRunIdIntern) {
+        int runId = Integer.parseInt(runIdIntern.replace(INTERN_PREFIX, ""));
+        int returnRunId = Integer.parseInt(returnRunIdIntern.replace(INTERN_PREFIX, ""));
+
+        if (runId > returnRunId) {
+            return runId + "-" + returnRunId;
+        }
+
+        return returnRunId + "-" + runId;
     }
 
     public BigDecimal calculatePrice(SearchResultEntry selectedEntry,
