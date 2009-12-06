@@ -101,7 +101,10 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
     private String getBothRunsUniqueString(String runIdIntern,
             String returnRunIdIntern) {
         int runId = Integer.parseInt(runIdIntern.replace(INTERN_PREFIX, ""));
-        int returnRunId = Integer.parseInt(returnRunIdIntern.replace(INTERN_PREFIX, ""));
+        int returnRunId = 0;
+        if (returnRunIdIntern != null) {
+            Integer.parseInt(returnRunIdIntern.replace(INTERN_PREFIX, ""));
+        }
 
         if (runId > returnRunId) {
             return runId + "-" + returnRunId;
@@ -572,7 +575,8 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
             ticketsTable += "<td>" + ticket.getRouteName() + "</td>";
             ticketsTable += "<td>" + ticket.getDepartureTime() + "</td>";
             ticketsTable += "<td>" + ticket.getReturnDepartureTime() + "</td>";
-            ticketsTable += "<td>" + ticket.getSeats() + " / "
+            ticketsTable += "<td>" + ticket.getSeats()
+                    + (ticket.getReturnSeats().length() > 0 ? " / " : "")
                     + ticket.getReturnSeats() + "</td>";
             ticketsTable += "<td>" + ticket.getFirmName() + "</td>";
             ticketsTable += "<td>" + ticket.getPrice() + "</td>";
