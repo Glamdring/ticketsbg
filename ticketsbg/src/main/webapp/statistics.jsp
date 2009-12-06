@@ -10,15 +10,30 @@
     xmlns:t="http://myfaces.apache.org/tomahawk">
     <f:view>
         <a4j:form>
-            <rich:panel header="#{msg.statistics}"
+            <rich:panel header=" "
                 headerClass="rich-panel-header-main" id="statistics">
                 <h:panelGrid columns="2">
-                    <h:outputText value="#{msg.busCompanies}:" />
-                    #{statisticsController.companiesCount}
+                    <h:outputText value="#{msg.busCompanies}:" style="font-size: 14px;" />
+                    <h:outputText value="#{statisticsController.companiesCount}"
+                        style="font-size: 14px;" />
 
-                    <h:outputText value="#{msg.destinations}:" />
-                    #{statisticsController.destinations}
+                    <h:outputText value="#{msg.destinations}:" style="font-size: 14px;" />
+                    <h:outputText value="#{statisticsController.destinations}"
+                        style="font-size: 14px;" />
+
                 </h:panelGrid>
+
+                <script type="text/javascript"
+                    src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php/bg_BG"></script>
+                <script type="text/javascript">
+                    FB.init("329367adf1678d9b262d077844549559");
+                    </script>
+
+                <iframe scrolling="no" frameborder="0"
+                    src="http://www.facebook.com/connect/connect.php?id=216346729251&amp;connections=0&amp;stream=0&amp;css=PATH_TO_STYLE_SHEET&amp;locale=bg_BG"
+                    allowtransparency="true"
+                    style="border: none; width: 185px; height: 80px; margin: 0px -10px 0px -10px; padding: 0px;"></iframe>
+
             </rich:panel>
         </a4j:form>
     </f:view>

@@ -7,7 +7,7 @@
     xmlns:rich="http://richfaces.org/rich" xmlns:tc="http://tickets.com/tc">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml; charset=UTF-8" />
-<title>#{msg.title}</title>
+<title>#{msg.siteTitle}</title>
 <meta name="description" content="#{msg.siteDescription}" />
 <meta name="keywords" content="#{msg.siteKeywords}" />
 <link href="css/main.css" type="text/css" rel="stylesheet" />
@@ -128,7 +128,7 @@
     <a4j:commandLink
             onclick="#{rich:component('contactsPanel')}.show();"
             value="#{msg.footerContacts}" /> |
-    <a href="#">#{msg.footerFacebook}</a> |
+    <a href="http://www.facebook.com/pages/avtogaracom/216346729251">#{msg.footerFacebook}</a> |
     <a href="#">Twitter</a>
         <ui:insert name="footer" />
     </h:panelGroup>
