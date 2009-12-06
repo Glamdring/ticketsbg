@@ -40,6 +40,7 @@ import com.tickets.model.PaymentMethod;
 import com.tickets.model.Route;
 import com.tickets.model.Run;
 import com.tickets.model.SearchResultEntry;
+import com.tickets.model.Stop;
 import com.tickets.model.Ticket;
 import com.tickets.model.User;
 import com.tickets.services.valueobjects.OrderReportData;
@@ -79,9 +80,8 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
         String bothRunsUniqueStringIntern = getBothRunsUniqueString(
                 runIdIntern, returnRunIdIntern).intern();
 
-        // Take a look at
+        // For clarification Take a look at
         // http://stackoverflow.com/questions/1852138/nested-synchronized-blocks-on-interned-strings
-        // for clarification
         synchronized(bothRunsUniqueStringIntern) {
             synchronized (runIdIntern) {
                 if (returnRunIdIntern != null) {
@@ -378,7 +378,7 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
         return seats;
     }
 
-    String generateTicketCode(Run run) {
+    public String generateTicketCode(Run run) {
         String code = "";
         code += run.getRoute().getFirm().getFirmId();
 
@@ -692,11 +692,14 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
 
     @Override
     public void clearTimeoutedTickets() {
-        getDao().executeNamedQuery("Ticket.deleteTimeouted");
+        List<Ticket> timeouted = getDao().findByNamedQuery("Ticket.getTimeouted");
+        for (Ticket ticket : timeouted) {
+            delete(ticket);
+        }
     }
 
     @Override
-    public Ticket findTicket(String ticketCode, String email) {
+    public Ticket findTicket(String ticketCode, String email) throws TicketAlterationException {
         List result = getDao().findByNamedQuery("Ticket.findByCodeAndEmail",
                 new String[] { "ticketCode", "email" },
                 new Object[] { ticketCode, email });
@@ -706,11 +709,25 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
             int hoursBeforeTravelAlterationAllowed = ticket.getRun().getRoute()
                     .getFirm().getHoursBeforeTravelAlterationAllowed();
 
-            // Check whether the ticket can be altered
-            if (ticket.getRun().getTime().getTimeInMillis()
-                    - GeneralUtils.createCalendar().getTimeInMillis() >= hoursBeforeTravelAlterationAllowed
-                    * Constants.ONE_HOUR) {
+            List<Stop> stops = ticket.getRun().getRoute().getStops();
+            Stop stop = null;
+            for (Stop cStop : stops) {
+                if (ticket.getStartStop().equals(cStop.getName())) {
+                    stop = cStop;
+                    break;
+                }
+            }
+            if (stop == null) {
+                throw new IllegalStateException("No stop found on the route with the specified name");
+            }
 
+            // Check whether the ticket can be altered
+            Calendar tresholdTime = (Calendar) ticket.getRun().getTime().clone();
+            tresholdTime.add(Calendar.MINUTE, stop.getTimeToDeparture());
+            tresholdTime.add(Calendar.HOUR, -hoursBeforeTravelAlterationAllowed);
+
+            Calendar now = GeneralUtils.createCalendar();
+            if (now.compareTo(tresholdTime) < 0) {
                 if (!ticket.isAltered()) {
                     return ticket;
                 }

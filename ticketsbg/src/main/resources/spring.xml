@@ -268,5 +268,5 @@
             <tx:method name="*" propagation="REQUIRED" />
         </tx:attributes>
     </tx:advice>
-    <!-- tx:annotation-driven transaction-manager="jpaTransactionManager" /-->
+    <tx:annotation-driven transaction-manager="jpaTransactionManager" />
 </beans>

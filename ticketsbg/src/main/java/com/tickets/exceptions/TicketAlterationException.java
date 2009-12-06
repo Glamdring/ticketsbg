@@ -1,6 +1,6 @@
 package com.tickets.exceptions;
 
-public class TicketAlterationException extends RuntimeException {
+public class TicketAlterationException extends Exception {
 
     private int hoursBeforeTravelAlterationAllowed;
     private boolean alreadyAltered = false;

@@ -194,6 +194,7 @@ public class Route extends DataObject implements Serializable {
         return prices;
     }
 
+    @Deprecated
     public void setPrices(List<Price> prices) {
         this.prices = prices;
     }

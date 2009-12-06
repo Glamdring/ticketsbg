@@ -33,8 +33,7 @@ public class RunServiceImpl extends BaseService<Run> implements RunService<Run> 
             if (run == null) {
                 time = GeneralUtils.getPreviousDay();
             } else {
-                time = Calendar.getInstance(GeneralUtils.getLocale());
-                time.setTimeInMillis(run.getTime().getTimeInMillis());
+                time = (Calendar) run.getTime().clone();
             }
             //If the single run is already created, skip
             if (run != null && route.isSingleRun()) {

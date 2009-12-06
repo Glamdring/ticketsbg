@@ -3,7 +3,9 @@ package com.tickets.services;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.tickets.exceptions.TicketAlterationException;
 import com.tickets.exceptions.TicketCreationException;
+import com.tickets.model.Run;
 import com.tickets.model.SearchResultEntry;
 import com.tickets.model.Ticket;
 import com.tickets.model.User;
@@ -36,7 +38,7 @@ public interface TicketService extends Service<Ticket> {
      * @param email
      * @return the found ticket
      */
-    Ticket findTicket(String ticketCode, String email);
+    Ticket findTicket(String ticketCode, String email) throws TicketAlterationException;
 
     /**
      * Alters the supplied ticket
@@ -51,7 +53,7 @@ public interface TicketService extends Service<Ticket> {
     void alterTicket(Ticket ticket, SearchResultEntry selectedEntry,
             SearchResultEntry selectedReturnEntry,
             TicketCountsHolder ticketCountsHolder, List<Seat> selectedSeats,
-            List<Seat> selectedReturnSeats) throws TicketCreationException ;
+            List<Seat> selectedReturnSeats) throws TicketCreationException;
 
     /**
      * Finalizes the purchase
@@ -123,4 +125,13 @@ public interface TicketService extends Service<Ticket> {
      */
     BigDecimal calculatePrice(SearchResultEntry selectedEntry, SearchResultEntry selectedReturnEntry,
             TicketCountsHolder ticketCountsHolder);
+
+
+    /**
+     * Generates a ticket code based on the run provided
+     *
+     * @param run
+     * @return code
+     */
+    String generateTicketCode(Run run);
 }

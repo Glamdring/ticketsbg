@@ -15,7 +15,7 @@ public class TimeoutedTicketsClearingTask extends TimerTask {
 
     @Override
     public void run() {
-        service.timeoutUnusedTickets();
+        service.clearTimeoutedTickets();
     }
 
 }

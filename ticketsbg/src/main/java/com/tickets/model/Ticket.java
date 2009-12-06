@@ -40,8 +40,8 @@ import org.hibernate.annotations.LazyCollectionOption;
         query = "SELECT t FROM Ticket t WHERE t.committed=false"
     ),
     @NamedQuery(
-        name = "Ticket.deleteTimeouted",
-        query = "DELETE FROM Ticket t WHERE t.timeouted=true"
+        name = "Ticket.getTimeouted",
+        query = "SELECT t FROM Ticket t WHERE t.timeouted=true"
     ),
     @NamedQuery(
         name = "Ticket.findByCodeAndEmail",
@@ -131,7 +131,7 @@ public class Ticket implements Serializable, Comparable<Ticket> {
 
     @OneToMany(cascade=CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
-    @JoinTable(name="passengerDetails")
+    @JoinTable(name="tickets_passengerDetails")
     private List<PassengerDetails> passengerDetails = new ArrayList<PassengerDetails>();
 
     public Run getRun() {
