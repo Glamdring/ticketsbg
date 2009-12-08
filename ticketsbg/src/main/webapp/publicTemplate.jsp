@@ -7,6 +7,7 @@
     xmlns:rich="http://richfaces.org/rich" xmlns:tc="http://tickets.com/tc">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml; charset=UTF-8" />
+<meta name="google-site-verification" content="FZQJxLcarL6XzIqdt3Fzg66zK2tLwOmlFJ33j9jqITw" />
 <title>#{msg.siteTitle}</title>
 <meta name="description" content="#{msg.siteDescription}" />
 <meta name="keywords" content="#{msg.siteKeywords}" />

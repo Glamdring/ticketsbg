@@ -37,9 +37,9 @@ import org.apache.commons.httpclient.protocol.Protocol;
 public class TicketsNotifier {
 
     private static final int HTTPS_PORT = 443;
-    private static final int HTTP_PORT = 8080;
-    private static final String HOST_NAME = "localhost";
-    protected static final String SERVLET_PATH = "/tickets/updates";
+    private static final int HTTP_PORT = 80;
+    private static final String HOST_NAME = "avtogara.com";
+    protected static final String SERVLET_PATH = "/updates";
     private static final boolean USE_SSL = false;
 
     protected static final String FIRM_KEY_SETTING = "firm.key";
