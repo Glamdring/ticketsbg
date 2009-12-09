@@ -163,7 +163,7 @@ function showOrHideReturn() {
                             </rich:calendar>
                             <h:outputText value="&#160;" />
                             <h:graphicImage url="/images/small/timer.png" alt=""
-                                style="cursor: pointer; vertical-align: middle;"
+                                style="cursor: pointer; vertical-align: middle; width: 16px; height: 16px;"
                                 onclick="#{rich:component('outboundTimePanel')}.show()" />
                         </h:panelGroup>
                     </h:panelGrid>
@@ -230,7 +230,7 @@ function showOrHideReturn() {
 
                             <h:outputText value="&#160;" />
                             <h:graphicImage url="/images/small/timer.png" alt=""
-                                style="cursor: pointer; vertical-align: middle;"
+                                style="cursor: pointer; vertical-align: middle; width: 16px; height: 16px;"
                                 onclick="#{rich:component('returnTimePanel')}.show()" />
                         </h:panelGroup>
                     </h:panelGrid>

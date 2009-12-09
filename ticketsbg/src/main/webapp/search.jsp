@@ -39,7 +39,7 @@
                     </a4j:outputPanel>
                     <rich:panel header="Очаквайте скоро!" headerClass="rich-panel-header-main"
                         style="text-align: center; width: 485px; margin-left: 5px; height: 100%;">
-                        <h:graphicImage url="/images/banner.png" alt="" />
+                        <h:graphicImage url="/images/banner.png" alt="" style="width: 445px; height: 235px;" />
                         Достъп до демо-акаунт за административния панел - адрес:<a href="http://avtogara.com/admin">http://avtogara.com/admin</a>, потребителско име: demo, парола: demo.
                     </rich:panel>
                 </h:panelGrid>

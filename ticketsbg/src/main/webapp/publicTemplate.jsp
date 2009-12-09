@@ -7,7 +7,6 @@
     xmlns:rich="http://richfaces.org/rich" xmlns:tc="http://tickets.com/tc">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml; charset=UTF-8" />
-<meta name="google-site-verification" content="FZQJxLcarL6XzIqdt3Fzg66zK2tLwOmlFJ33j9jqITw" />
 <title>#{msg.siteTitle}</title>
 <meta name="description" content="#{msg.siteDescription}" />
 <meta name="keywords" content="#{msg.siteKeywords}" />
@@ -23,6 +22,8 @@
 .menuIcon {
     margin-right: 5px;
     vertical-align: middle;
+    width: 22px;
+    height: 22px;
 }
 </style>
 <!-- script type="text/javascript">
@@ -39,7 +40,8 @@
 
 <div class="container"><a
     href="#{facesContext.externalContext.context.contextPath}/"> <img
-    src="images/logo.png" alt="avtogara.com" style="border-style: none;" />
+    src="images/logo.png" alt="avtogara.com"
+    style="border-style: none; width: 385px; height: 93px;" />
 </a> <h:form style="float: left; height: 34px; margin-bottom: 5px;"
     id="menuForm" ajaxSingle="true">
     <rich:toolBar itemSeparator="line" width="1000" height="34"
@@ -106,7 +108,7 @@
 </h:form> <a4j:status forceId="generalStatus">
     <f:facet name="start">
         <h:graphicImage value="/images/ajaxloadingBig.gif" id="statusImage"
-            style="float: right; margin-left: -40px; padding-right: 3px; padding-top: 3px;"
+            style="float: right; margin-left: -40px; padding-right: 3px; padding-top: 3px; width: 32px; height: 32px;"
             alt="loading..." />
     </f:facet>
 </a4j:status> <ui:include src="loginPanel.jsp" /> <h:panelGrid columns="2"
