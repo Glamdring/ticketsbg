@@ -80,16 +80,6 @@ public class StatisticsController extends BaseController {
         }
     }
 
-    @Action(accessLevel=AccessLevel.PUBLIC)
-    public int getCompaniesCount() {
-        return statsService.getCompaniesCount();
-    }
-
-    @Action(accessLevel=AccessLevel.PUBLIC)
-    public int getDestinations() {
-        return statsService.getDestinationsCount();
-    }
-
     public List<StatsHolder> getStatistics() {
         Firm firm = LoggedUserHolder.getUser().getFirm();
         Route route = routeService.findRoute(selectedRouteName, firm);

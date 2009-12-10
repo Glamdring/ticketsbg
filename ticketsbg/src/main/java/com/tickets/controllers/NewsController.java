@@ -1,7 +1,5 @@
 package com.tickets.controllers;
 
-import java.util.List;
-
 import javax.faces.model.ListDataModel;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,16 +21,6 @@ public class NewsController extends BaseCRUDController<News> {
     private NewsService newsService;
 
     private News news;
-
-    private List<News> freshNewsList;
-
-    @Action(accessLevel=AccessLevel.PUBLIC)
-    public List<News> getFreshNews() {
-        if (freshNewsList == null) {
-            freshNewsList = newsService.getFreshNews();
-        }
-        return freshNewsList;
-    }
 
     @Override
     protected News createEntity() {

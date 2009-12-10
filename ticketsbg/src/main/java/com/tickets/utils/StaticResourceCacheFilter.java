@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.httpclient.util.DateUtil;
+import org.apache.myfaces.orchestra.requestParameterProvider.RequestParameterServletFilter;
 
 public class StaticResourceCacheFilter implements Filter {
 
@@ -34,9 +35,21 @@ public class StaticResourceCacheFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain) throws IOException, ServletException {
 
-        chain.doFilter(request, response);
-
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
+
+        UrlMatcher matcher = new UrlMatcher();
+        matcher.setIncludeContaining("/admin");
+        if (!matcher.matches(httpRequest)) {
+            // Stop MyFaces Orchestra from wrapping the response
+            // in order to add the "?conversationContext" param
+            httpRequest.setAttribute(
+                    RequestParameterServletFilter.REQUEST_PARAM_FILTER_CALLED,
+                    Boolean.TRUE);
+        }
+
+        chain.doFilter(httpRequest, httpResponse);
+
 
         String contentType = httpResponse.getContentType();
         if (contentType == null
@@ -45,7 +58,6 @@ public class StaticResourceCacheFilter implements Filter {
             Calendar inTwoMonths = GeneralUtils.createCalendar();
             inTwoMonths.add(Calendar.MONTH, 2);
 
-            System.out.println(((HttpServletRequest) request).getRequestURI() + " : " + DateUtil.formatDate(inTwoMonths.getTime()));
             httpResponse.setHeader("Expires", DateUtil.formatDate(inTwoMonths.getTime()));
         }
     }
@@ -55,4 +67,25 @@ public class StaticResourceCacheFilter implements Filter {
 
     }
 
+}
+
+class UrlMatcher {
+    private String includeContaining;
+
+    public boolean matches(HttpServletRequest req) {
+
+        if (includeContaining != null) {
+            return (req.getRequestURI().indexOf(includeContaining) > -1);
+        }
+
+        return true;
+    }
+
+    public String getIncludeContaining() {
+        return includeContaining;
+    }
+
+    public void setIncludeContaining(String includeContaining) {
+        this.includeContaining = includeContaining;
+    }
 }

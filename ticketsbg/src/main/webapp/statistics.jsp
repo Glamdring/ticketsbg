@@ -14,11 +14,11 @@
                 headerClass="rich-panel-header-main" id="statistics">
                 <h:panelGrid columns="2">
                     <h:outputText value="#{msg.busCompanies}:" style="font-size: 14px;" />
-                    <h:outputText value="#{statisticsController.companiesCount}"
+                    <h:outputText value="#{publicStatsController.companiesCount}"
                         style="font-size: 14px;" />
 
                     <h:outputText value="#{msg.destinations}:" style="font-size: 14px;" />
-                    <h:outputText value="#{statisticsController.destinations}"
+                    <h:outputText value="#{publicStatsController.destinations}"
                         style="font-size: 14px;" />
 
                 </h:panelGrid>

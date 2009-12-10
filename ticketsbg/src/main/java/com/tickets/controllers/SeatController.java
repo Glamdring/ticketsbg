@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import com.tickets.controllers.handlers.SeatHandler;
 
 @Controller("seatController")
-@Scope("conversation.access")
+@Scope("session")
 public class SeatController extends BaseController implements Serializable {
 
     private SeatHandler seatHandler;

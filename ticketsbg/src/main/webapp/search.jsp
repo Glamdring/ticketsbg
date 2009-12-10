@@ -49,8 +49,8 @@
 
     <ui:define name="bottomPanel">
         <rich:panel header="#{msg.newsList}" styleClass="news"
-            rendered="#{tc:getSize(newsController.freshNews) > 0}">
-            <a4j:repeat value="#{newsController.freshNews}" var="news">
+            rendered="#{tc:getSize(publicNewsController.freshNews) > 0}">
+            <a4j:repeat value="#{publicNewsController.freshNews}" var="news">
                 <h:panelGroup layout="block"
                     style="margin-bottom: 5px; clear: both;">
                     <h:outputText style="font-weight: bold; font-size: 14px;"
