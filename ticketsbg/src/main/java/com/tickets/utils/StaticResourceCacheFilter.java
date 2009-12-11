@@ -26,6 +26,14 @@ public class StaticResourceCacheFilter implements Filter {
         Arrays.sort(CACHEABLE_CONTENT_TYPES);
     }
 
+    private String richfacesResourcePrefix;
+
+    @Override
+    public void init(FilterConfig cfg) throws ServletException {
+        richfacesResourcePrefix = cfg.getServletContext().getInitParameter(
+                "org.ajax4jsf.RESOURCE_URI_PREFIX");
+    }
+
     @Override
     public void destroy() {
 
@@ -38,6 +46,11 @@ public class StaticResourceCacheFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
+        if (httpRequest.getRequestURI().indexOf(richfacesResourcePrefix) > -1) {
+            chain.doFilter(httpRequest, httpResponse);
+            return;
+        }
+
         UrlMatcher matcher = new UrlMatcher();
         matcher.setIncludeContaining("/admin");
         if (!matcher.matches(httpRequest)) {
@@ -48,9 +61,6 @@ public class StaticResourceCacheFilter implements Filter {
                     Boolean.TRUE);
         }
 
-        chain.doFilter(httpRequest, httpResponse);
-
-
         String contentType = httpResponse.getContentType();
         if (contentType == null
                 || Arrays.binarySearch(CACHEABLE_CONTENT_TYPES, contentType) > -1) {
@@ -60,13 +70,9 @@ public class StaticResourceCacheFilter implements Filter {
 
             httpResponse.setHeader("Expires", DateUtil.formatDate(inTwoMonths.getTime()));
         }
+
+        chain.doFilter(httpRequest, httpResponse);
     }
-
-    @Override
-    public void init(FilterConfig arg0) throws ServletException {
-
-    }
-
 }
 
 class UrlMatcher {

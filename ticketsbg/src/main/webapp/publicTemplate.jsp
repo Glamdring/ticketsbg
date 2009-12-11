@@ -132,7 +132,7 @@
             onclick="#{rich:component('contactsPanel')}.show();"
             value="#{msg.footerContacts}" /> |
     <a href="http://www.facebook.com/pages/avtogaracom/216346729251">#{msg.footerFacebook}</a> |
-    <a href="#">Twitter</a>
+    <a href="http://twitter.com/avtogara_com">Twitter</a>
         <ui:insert name="footer" />
     </h:panelGroup>
 </h:form>

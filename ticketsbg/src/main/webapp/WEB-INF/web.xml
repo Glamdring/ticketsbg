@@ -46,6 +46,11 @@
         <param-value>extended</param-value>
     </context-param>
     <context-param>
+        <param-name>org.ajax4jsf.DEFAULT_EXPIRE</param-name>
+        <param-value>5356800</param-value>
+        <!-- 2 months -->
+    </context-param>
+    <context-param>
         <param-name>facelets.LIBRARIES</param-name>
         <param-value>/WEB-INF/facelets/tickets.taglib.xml
         </param-value>
