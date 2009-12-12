@@ -2,11 +2,17 @@ package com.tickets.services;
 
 import static com.tickets.test.TestUtils.getRandomString;
 
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import javax.mail.internet.InternetAddress;
+
+import org.apache.commons.mail.Email;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.tickets.dao.Dao;
 import com.tickets.exceptions.TicketAlterationException;
 import com.tickets.exceptions.TicketCreationException;
+import com.tickets.mocks.EmailListener;
+import com.tickets.mocks.EmailServiceMock;
 import com.tickets.model.Customer;
 import com.tickets.model.Day;
 import com.tickets.model.Discount;
@@ -66,7 +74,6 @@ public class TicketServiceTest extends BaseTest {
     private Route route;
 
     private Route returnRoute;
-
 
     @Before
     public void init() {
@@ -275,6 +282,13 @@ public class TicketServiceTest extends BaseTest {
     @Test(expected=TicketAlterationException.class)
     @Transactional
     public void attemptFindTicketToAlterRightBeforeTravelTest() throws TicketAlterationException {
+        route = routeService.get(Route.class, route.getId());
+        // won't work on new-year, but who would run unit tests on new year? :)
+        int currentDayOfYear = GeneralUtils.createCalendar().get(Calendar.DAY_OF_YEAR);
+        if (route.getRuns().get(0).getTime().get(Calendar.DAY_OF_YEAR) > currentDayOfYear) {
+            route.getRuns().get(0).getTime().set(Calendar.DAY_OF_YEAR, currentDayOfYear);
+        }
+
         Ticket ticket = createTicket(new TicketCountsHolder(), 0);
         Customer customer = new Customer();
         customer.setEmail(TICKET_EMAIL);
@@ -283,6 +297,77 @@ public class TicketServiceTest extends BaseTest {
         ticket.setCustomerInformation(customer);
 
         ticketService.findTicket(ticket.getTicketCode(), TICKET_EMAIL);
+    }
+
+    @Test
+    @Transactional
+    public void finalizePurchaseTest() {
+        // Not testing with User param instead of paymentCode,
+        // because the underlying code is the same, except that
+        // the paymentCode variant should send an Email
+
+        EmailServiceMock emailService = new EmailServiceMock();
+        emailService.addListener(new EmailListener() {
+            @SuppressWarnings("unchecked")
+            @Override
+            public void emailSent(Email email) {
+                try {
+                    Field f = Email.class.getDeclaredField("toList");
+                    f.setAccessible(true);
+                    List<InternetAddress> rcpt = (List<InternetAddress>) f.get(email);
+                    Assert.assertEquals(TICKET_EMAIL, rcpt.get(0).getAddress());
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    Assert.fail(ex.getMessage());
+                }
+            }
+        });
+
+        ((TicketServiceImpl) ticketService).setEmailService(emailService);
+
+        Ticket t = createTicket(new TicketCountsHolder());
+
+        Customer customer = new Customer();
+        customer.setEmail(TICKET_EMAIL);
+        customer.setName(getRandomString(5));
+        customer.setContactPhone(getRandomString(5));
+        t.setCustomerInformation(customer);
+
+        String paymentCode = getRandomString(10);
+        t.setPaymentCode(paymentCode);
+        List<Ticket> tickets = new ArrayList<Ticket>();
+        tickets.add(t);
+        ticketService.finalizePurchase(tickets, paymentCode);
+
+        Assert.assertTrue(t.isCommitted());
+    }
+
+    private static final Integer PURCHASE_ATTEMPTERS = 3;
+
+    @Test
+    @Transactional
+    public void concurrentPurchaseAttemptTest() {
+        route.setSeats(1);
+        SearchResultEntry entry = formEntry(route, 3);
+
+        Timer timer = new Timer();
+        Calendar schedulledTime = GeneralUtils.createCalendar();
+        schedulledTime.add(Calendar.SECOND, 5);
+        for (int i = 0; i < PURCHASE_ATTEMPTERS; i++) {
+            TicketPurchaseAttempter attempter = new TicketPurchaseAttempter(entry);
+            timer.schedule(attempter, schedulledTime.getTime());
+        }
+
+        try {
+            Thread.sleep(10000);
+            Assert.assertEquals(PURCHASE_ATTEMPTERS.intValue() - 1, purchaseFailures
+                    .intValue());
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+            Assert.fail();
+        } finally {
+            route.setSeats(51);
+        }
     }
 
     private TicketCountsHolder createDiscountedTicketCountsHolder() {
@@ -334,4 +419,25 @@ public class TicketServiceTest extends BaseTest {
         return entry;
     }
 
+    private static volatile Integer purchaseFailures = 0;
+
+    private class TicketPurchaseAttempter extends TimerTask {
+
+        private SearchResultEntry entry;
+        public TicketPurchaseAttempter(SearchResultEntry entry) {
+            this.entry = entry;
+        }
+
+        @Override
+        public void run() {
+            try {
+                ticketService.createTicket(entry, entry,
+                        new TicketCountsHolder(), new ArrayList<Seat>(), null);
+            } catch (TicketCreationException ex) {
+                synchronized(purchaseFailures) {
+                    purchaseFailures++;
+                }
+            }
+        }
+    }
 }
