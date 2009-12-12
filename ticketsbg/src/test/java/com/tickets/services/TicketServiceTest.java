@@ -7,8 +7,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.mail.internet.InternetAddress;
 
@@ -347,19 +345,29 @@ public class TicketServiceTest extends BaseTest {
     @Test
     @Transactional
     public void concurrentPurchaseAttemptTest() {
-        route.setSeats(1);
         SearchResultEntry entry = formEntry(route, 3);
 
-        Timer timer = new Timer();
+        route.setSeats(1);
+
         Calendar schedulledTime = GeneralUtils.createCalendar();
         schedulledTime.add(Calendar.SECOND, 5);
+
+        List<TicketPurchaseAttempter> attempters = new ArrayList<TicketPurchaseAttempter>(
+                PURCHASE_ATTEMPTERS);
+
         for (int i = 0; i < PURCHASE_ATTEMPTERS; i++) {
             TicketPurchaseAttempter attempter = new TicketPurchaseAttempter(entry);
-            timer.schedule(attempter, schedulledTime.getTime());
+            attempters.add(attempter);
+        }
+
+        for (TicketPurchaseAttempter attempter : attempters) {
+            attempter.run();
         }
 
         try {
-            Thread.sleep(10000);
+            for (TicketPurchaseAttempter attempter : attempters) {
+                attempter.join();
+            }
             Assert.assertEquals(PURCHASE_ATTEMPTERS.intValue() - 1, purchaseFailures
                     .intValue());
         } catch (InterruptedException ex) {
@@ -421,7 +429,7 @@ public class TicketServiceTest extends BaseTest {
 
     private static volatile Integer purchaseFailures = 0;
 
-    private class TicketPurchaseAttempter extends TimerTask {
+    private class TicketPurchaseAttempter extends Thread {
 
         private SearchResultEntry entry;
         public TicketPurchaseAttempter(SearchResultEntry entry) {
@@ -431,7 +439,7 @@ public class TicketServiceTest extends BaseTest {
         @Override
         public void run() {
             try {
-                ticketService.createTicket(entry, entry,
+                ticketService.createTicket(entry, null,
                         new TicketCountsHolder(), new ArrayList<Seat>(), null);
             } catch (TicketCreationException ex) {
                 synchronized(purchaseFailures) {
