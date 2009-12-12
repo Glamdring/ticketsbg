@@ -349,9 +349,6 @@ public class TicketServiceTest extends BaseTest {
 
         route.setSeats(1);
 
-        Calendar schedulledTime = GeneralUtils.createCalendar();
-        schedulledTime.add(Calendar.SECOND, 5);
-
         List<TicketPurchaseAttempter> attempters = new ArrayList<TicketPurchaseAttempter>(
                 PURCHASE_ATTEMPTERS);
 

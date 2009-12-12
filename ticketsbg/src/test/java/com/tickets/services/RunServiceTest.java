@@ -1,16 +1,10 @@
 package com.tickets.services;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class RunServiceTest extends BaseServiceTest {
+import com.tickets.test.BaseTest;
 
-    private static RunService service;
-
-    @BeforeClass
-    public static void initTest() {
-        service = (RunService) getBean("runService");
-    }
+public class RunServiceTest extends BaseTest {
 
     @Test
     public void testCreateRoutes() {
@@ -27,10 +21,5 @@ public class RunServiceTest extends BaseServiceTest {
 //            Run run = (Run) obj;
 //            System.out.println(run.getRoute());
 //        }
-    }
-
-    @Override
-    public BaseService getService() {
-        return (BaseService) service;
     }
 }

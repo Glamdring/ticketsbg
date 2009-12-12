@@ -242,6 +242,14 @@
         <property name="timerTask" ref="initTask" />
     </bean>
 
+    <bean id="scheduledBackupTask" class="org.springframework.scheduling.timer.ScheduledTimerTask"
+        lazy-init="false">
+        <!-- wait 10 seconds before starting repeated execution -->
+        <property name="delay" value="10000" />
+        <!-- run every day -->
+        <property name="period" value="86400000" />
+        <property name="timerTask" ref="backupTask" />
+    </bean>
 
     <bean id="timerFactory" class="org.springframework.scheduling.timer.TimerFactoryBean">
         <property name="scheduledTimerTasks">
@@ -250,7 +258,8 @@
                 <ref bean="scheduledStatsTask" />
                 <ref bean="scheduledTicketsTimeoutingTask" />
                 <ref bean="scheduledInitTask" />
-                <!--ref bean="scheduledTicketsClearingTask" /-->
+                <ref bean="scheduledTicketsClearingTask" />
+                <ref bean="scheduledBackupTask" />
             </list>
         </property>
     </bean>
