@@ -23,12 +23,6 @@
 
                 </h:panelGrid>
 
-                <script type="text/javascript"
-                    src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php/bg_BG"></script>
-                <script type="text/javascript">
-                    FB.init("329367adf1678d9b262d077844549559");
-                    </script>
-
                 <iframe scrolling="no" frameborder="0"
                     src="http://www.facebook.com/connect/connect.php?id=216346729251&amp;connections=0&amp;stream=0&amp;css=PATH_TO_STYLE_SHEET&amp;locale=bg_BG"
                     allowtransparency="true"
