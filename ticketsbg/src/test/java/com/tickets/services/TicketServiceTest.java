@@ -8,144 +8,50 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.mail.Email;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.tickets.dao.Dao;
 import com.tickets.exceptions.TicketAlterationException;
 import com.tickets.exceptions.TicketCreationException;
 import com.tickets.mocks.EmailListener;
 import com.tickets.mocks.EmailServiceMock;
 import com.tickets.model.Customer;
-import com.tickets.model.Day;
 import com.tickets.model.Discount;
 import com.tickets.model.DiscountType;
 import com.tickets.model.Firm;
-import com.tickets.model.Price;
 import com.tickets.model.Route;
-import com.tickets.model.RouteDay;
-import com.tickets.model.RouteHour;
 import com.tickets.model.Run;
 import com.tickets.model.SearchResultEntry;
-import com.tickets.model.Stop;
 import com.tickets.model.Ticket;
 import com.tickets.services.valueobjects.Seat;
 import com.tickets.services.valueobjects.TicketCount;
 import com.tickets.services.valueobjects.TicketCountsHolder;
 import com.tickets.test.BaseTest;
 import com.tickets.utils.GeneralUtils;
-import com.tickets.utils.InitTask;
 
 public class TicketServiceTest extends BaseTest {
 
-    private static final BigDecimal ONE_WAY_PRICE = BigDecimal.ONE;
-
-    private static final BigDecimal RETURN_PRICE = ONE_WAY_PRICE.add(ONE_WAY_PRICE);
-
-    private static final String END_STOP = "endStop";
-
-    private static final String START_STOP = "startStop";
-
     private static final String TICKET_EMAIL = "test@test.com";
 
-    @Autowired
-    private TicketService ticketService;
 
-    @Autowired
-    private RouteService routeService;
-
-    @Autowired
-    private RunService runService;
-
-    @Autowired
-    private InitTask initTask;
-
-    @Autowired
-    private Dao dao;
-
-    private Route route;
-
-    private Route returnRoute;
-
-    @Before
+    @PostConstruct
+    @Override
     public void init() {
-        initTask.run();
-
         List<Ticket> tickets = ticketService.list(Ticket.class);
         for (Ticket t : tickets) {
             ticketService.delete(t);
         }
-
-        List<Route> routes = routeService.list(Route.class);
-        for (Route r : routes) {
-            routeService.delete(r);
-        }
-
-        Route route = new Route();
-        Firm firm = new Firm();
-        firm.setName("Firm1");
-        firm.setFirmKey("firm1");
-
-        firm = (Firm) ticketService.saveObject(firm);
-        firm.setHoursBeforeTravelAlterationAllowed(2);
-        route.setFirm(firm);
-
-        Stop startStop = new Stop();
-        startStop.setName(START_STOP);
-        startStop.setIdx(1);
-        startStop.setTimeToArrival(0);
-        startStop.setTimeToDeparture(0);
-        route.addStop(startStop);
-
-        Stop endStop = new Stop();
-        endStop.setName(END_STOP);
-        endStop.setIdx(2);
-        endStop.setTimeToArrival(200);
-        endStop.setTimeToDeparture(0);
-        route.addStop(endStop);
-
-        Price price = new Price();
-        price.setStartStop(startStop);
-        price.setEndStop(endStop);
-        price.setPrice(ONE_WAY_PRICE);
-        price.setTwoWayPrice(RETURN_PRICE);
-
-        route.addPrice(price);
-
-        RouteHour hour = new RouteHour();
-        hour.setMinutes((GeneralUtils.createCalendar().get(
-            Calendar.HOUR_OF_DAY) - 3) * 60); // the current hour
-        // -3, in order to fix HSQDLDB TimeZone issue
-
-        route.addHour(hour);
-        for (int i = 1; i <= 7; i++ ) {
-            RouteDay rd = new RouteDay();
-            rd.setDay(ticketService.get(Day.class, i));
-            route.addRouteDay(rd);
-        }
-
-        route.setName(START_STOP + "-" + END_STOP);
-        route.setSellSeatsFrom(1);
-        route.setSellSeatsTo(51);
-
-        this.route = routeService.save(route);
-
-        route.getStops().get(0).setIdx(2);
-        route.getStops().get(1).setIdx(1);
-        route.getStops().get(1).setTimeToArrival(0);
-        route.getStops().get(0).setTimeToArrival(200);
-        route.setName(END_STOP + "-" + START_STOP);
-
-        this.returnRoute = routeService.save(route);
-
-        runService.createRuns(); //this is tested elsewhere
+        super.init();
     }
+
+    @Autowired
+    public TicketService ticketService;
 
     @Test
     public void generateTicketCodeTest() {

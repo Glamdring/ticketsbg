@@ -17,12 +17,12 @@ import com.tickets.model.RouteHour;
 @Service("routeService")
 public class RouteServiceImpl extends BaseService<Route> implements RouteService {
 
-    public List list(Firm firm) {
+    public List<Route> list(Firm firm) {
         return getDao().findByQuery("SELECT r FROM Route r WHERE r.firm=:firm",
                 new String[] { "firm" }, new Object[] { firm });
     }
 
-    public List listOrdered(Firm firm, String orderColumn) {
+    public List<Route> listOrdered(Firm firm, String orderColumn) {
         return getDao().findByQuery(
                 "SELECT r FROM Route r WHERE r.firm=:firm ORDER BY "
                         + orderColumn,

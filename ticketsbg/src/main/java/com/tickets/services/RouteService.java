@@ -16,9 +16,9 @@ public interface RouteService extends Service<Route> {
 
     Integer[] getDaysList(Route route);
 
-    List list(Firm firm);
+    List<Route> list(Firm firm);
 
-    List listOrdered(Firm firm, String orderColumn);
+    List<Route> listOrdered(Firm firm, String orderColumn);
 
     void addHourToRoute(Date hour, Route route);
 
