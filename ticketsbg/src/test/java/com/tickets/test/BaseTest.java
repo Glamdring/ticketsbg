@@ -35,20 +35,20 @@ public abstract class BaseTest {
     private static final String START_STOP = "startStop";
 
     @Autowired
-    protected RouteService routeService;
+    private RouteService routeService;
 
     @Autowired
-    protected RunService runService;
+    private RunService runService;
 
     @Autowired
     private InitTask initTask;
 
     @Autowired
-    protected Dao dao;
+    private Dao dao;
 
-    protected Route route;
+    private Route route;
 
-    protected Route returnRoute;
+    private Route returnRoute;
 
     @Before
     public void init() {
@@ -120,4 +120,51 @@ public abstract class BaseTest {
         runService.createRuns(); //this is tested elsewhere
     }
 
+    public RouteService getRouteService() {
+        return routeService;
+    }
+
+    public void setRouteService(RouteService routeService) {
+        this.routeService = routeService;
+    }
+
+    public RunService getRunService() {
+        return runService;
+    }
+
+    public void setRunService(RunService runService) {
+        this.runService = runService;
+    }
+
+    public InitTask getInitTask() {
+        return initTask;
+    }
+
+    public void setInitTask(InitTask initTask) {
+        this.initTask = initTask;
+    }
+
+    public Dao getDao() {
+        return dao;
+    }
+
+    public void setDao(Dao dao) {
+        this.dao = dao;
+    }
+
+    public Route getRoute() {
+        return route;
+    }
+
+    public void setRoute(Route route) {
+        this.route = route;
+    }
+
+    public Route getReturnRoute() {
+        return returnRoute;
+    }
+
+    public void setReturnRoute(Route returnRoute) {
+        this.returnRoute = returnRoute;
+    }
 }

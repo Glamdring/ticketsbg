@@ -21,7 +21,7 @@ public class RouteServiceTest extends BaseTest {
         Calendar cal = GeneralUtils.createCalendar();
         cal.set(Calendar.HOUR_OF_DAY, 14);
         cal.set(Calendar.MINUTE, 30);
-        routeService.addHourToRoute(cal.getTime(), route);
+        getRouteService().addHourToRoute(cal.getTime(), route);
 
         Assert.assertEquals(1, route.getRouteHours().size());
         Assert.assertEquals(14, route.getRouteHours().get(0).getMinutes() / 60);
@@ -31,22 +31,22 @@ public class RouteServiceTest extends BaseTest {
     @Test
     @Transactional
     public void findRouteTest() {
-        Route result = routeService.findRoute(route.getName(), route.getFirm());
-        Assert.assertEquals(route.getId(), result.getId());
+        Route result = getRouteService().findRoute(getRoute().getName(), getRoute().getFirm());
+        Assert.assertEquals(getRoute().getId(), result.getId());
     }
 
     @Test
     @Transactional
     public void listByFirmTest() {
-        List<Route> routes = routeService.list(route.getFirm());
+        List<Route> routes = getRouteService().list(getRoute().getFirm());
 
         // all routes count should be equal to routes for this firm
-        Assert.assertEquals(routeService.list(Route.class).size(), routes.size());
-        Assert.assertEquals(route.getId(), routes.get(0).getId());
+        Assert.assertEquals(getRouteService().list(Route.class).size(), routes.size());
+        Assert.assertEquals(getRoute().getId(), routes.get(0).getId());
 
-        routes = routeService.listOrdered(route.getFirm(), "id");
-        Assert.assertEquals(routeService.list(Route.class).size(), routes.size());
-        Assert.assertEquals(route.getId(), routes.get(0).getId());
+        routes = getRouteService().listOrdered(getRoute().getFirm(), "id");
+        Assert.assertEquals(getRouteService().list(Route.class).size(), routes.size());
+        Assert.assertEquals(getRoute().getId(), routes.get(0).getId());
     }
 
 }

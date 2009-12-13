@@ -20,14 +20,14 @@ public class RunServiceTest extends BaseTest {
         // The run should be one every day, hence should be almost equals to
         // 'publishedRunsPeriod' the difference might vary due to current day
         // generation
-        int runsDiff = route.getRuns().size() - route.getPublishedRunsPeriod();
+        int runsDiff = getRoute().getRuns().size() - getRoute().getPublishedRunsPeriod();
         Assert.assertTrue(runsDiff >= 0 && runsDiff <= 2);
 
-        Run run = route.getRuns().get(0);
+        Run run = getRoute().getRuns().get(0);
         int runHour = run.getTime().get(Calendar.HOUR_OF_DAY);
         int runMinutes = run.getTime().get(Calendar.MINUTE);
 
-        Assert.assertEquals(route.getRouteHours().get(0).getMinutes() / 60, runHour);
-        Assert.assertEquals(route.getRouteHours().get(0).getMinutes() % 60, runMinutes);
+        Assert.assertEquals(getRoute().getRouteHours().get(0).getMinutes() / 60, runHour);
+        Assert.assertEquals(getRoute().getRouteHours().get(0).getMinutes() % 60, runMinutes);
     }
 }

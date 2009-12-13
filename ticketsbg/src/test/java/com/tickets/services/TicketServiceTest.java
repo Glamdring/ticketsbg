@@ -61,7 +61,7 @@ public class TicketServiceTest extends BaseTest {
         cal.setTimeInMillis(System.currentTimeMillis());
         run.setTime(cal);
         Route route = new Route();
-        route.setId(402);
+        getRoute().setId(402);
         run.setRoute(route);
         Firm firm = new Firm();
         firm.setFirmId(17);
@@ -85,8 +85,8 @@ public class TicketServiceTest extends BaseTest {
     @Test
     @Transactional
     public void createReturnTicketTest() {
-        SearchResultEntry entry = formEntry(route);
-        SearchResultEntry returnEntry = formEntry(returnRoute);
+        SearchResultEntry entry = formEntry(getRoute());
+        SearchResultEntry returnEntry = formEntry(getReturnRoute());
         TicketCountsHolder tch = new TicketCountsHolder();
         tch.setRegularTicketsCount(2);
         try {
@@ -117,7 +117,7 @@ public class TicketServiceTest extends BaseTest {
     @Transactional
     public void alterTicketTest() {
         createTicketTest();
-        SearchResultEntry entry = formEntry(route, 1);
+        SearchResultEntry entry = formEntry(getRoute(), 1);
         TicketCountsHolder tch = new TicketCountsHolder();
         tch.setRegularTicketsCount(1);
 
@@ -135,7 +135,7 @@ public class TicketServiceTest extends BaseTest {
     @Test
     @Transactional
     public void calculatePriceTest() {
-        SearchResultEntry entry = formEntry(route);
+        SearchResultEntry entry = formEntry(getRoute());
         TicketCountsHolder tch = new TicketCountsHolder();
         tch.setRegularTicketsCount(5);
         BigDecimal price = ticketService.calculatePrice(entry, null, tch);
@@ -159,12 +159,12 @@ public class TicketServiceTest extends BaseTest {
 
         ticketService.timeoutUnusedTickets();
 
-        t = dao.getById(Ticket.class, t.getId());
+        t = getDao().getById(Ticket.class, t.getId());
         Assert.assertTrue(t.isTimeouted());
 
         ticketService.clearTimeoutedTickets();
 
-        t = dao.getById(Ticket.class, t.getId());
+        t = getDao().getById(Ticket.class, t.getId());
 
         Assert.assertNull("Ticket not deleted", t);
     }
@@ -186,11 +186,11 @@ public class TicketServiceTest extends BaseTest {
     @Test(expected=TicketAlterationException.class)
     @Transactional
     public void attemptFindTicketToAlterRightBeforeTravelTest() throws TicketAlterationException {
-        route = routeService.get(Route.class, route.getId());
+        setRoute(getRouteService().get(Route.class, getRoute().getId()));
         // won't work on new-year, but who would run unit tests on new year? :)
         int currentDayOfYear = GeneralUtils.createCalendar().get(Calendar.DAY_OF_YEAR);
-        if (route.getRuns().get(0).getTime().get(Calendar.DAY_OF_YEAR) > currentDayOfYear) {
-            route.getRuns().get(0).getTime().set(Calendar.DAY_OF_YEAR, currentDayOfYear);
+        if (getRoute().getRuns().get(0).getTime().get(Calendar.DAY_OF_YEAR) > currentDayOfYear) {
+            getRoute().getRuns().get(0).getTime().set(Calendar.DAY_OF_YEAR, currentDayOfYear);
         }
 
         Ticket ticket = createTicket(new TicketCountsHolder(), 0);
@@ -251,9 +251,9 @@ public class TicketServiceTest extends BaseTest {
     @Test
     @Transactional
     public void concurrentPurchaseAttemptTest() {
-        SearchResultEntry entry = formEntry(route, 3);
+        SearchResultEntry entry = formEntry(getRoute(), 3);
 
-        route.setSeats(1);
+        getRoute().setSeats(1);
 
         List<TicketPurchaseAttempter> attempters = new ArrayList<TicketPurchaseAttempter>(
                 PURCHASE_ATTEMPTERS);
@@ -277,7 +277,7 @@ public class TicketServiceTest extends BaseTest {
             ex.printStackTrace();
             Assert.fail();
         } finally {
-            route.setSeats(51);
+            getRoute().setSeats(51);
         }
     }
 
@@ -286,7 +286,7 @@ public class TicketServiceTest extends BaseTest {
         Discount discount = new Discount();
         discount.setValue(ONE_WAY_PRICE);
         discount.setDiscountType(DiscountType.FIXED);
-        discount = dao.persist(discount);
+        discount = getDao().persist(discount);
         List<TicketCount> tcList = new ArrayList<TicketCount>();
         TicketCount tc = new TicketCount();
         tc.setDiscount(discount);
@@ -302,7 +302,7 @@ public class TicketServiceTest extends BaseTest {
     }
 
     private Ticket createTicket(TicketCountsHolder tch, int runPosition) {
-        SearchResultEntry entry = formEntry(route, runPosition);
+        SearchResultEntry entry = formEntry(getRoute(), runPosition);
 
         try {
             return ticketService.createTicket(entry, null, tch, new ArrayList<Seat>(), null);
@@ -318,14 +318,14 @@ public class TicketServiceTest extends BaseTest {
 
     private SearchResultEntry formEntry(Route route, int runPosition) {
         SearchResultEntry entry = new SearchResultEntry();
-        route = routeService.get(Route.class, route.getId());
-        entry.setRun(route.getRuns().get(runPosition));
-        entry.setPrice(route.getPrices().get(0));
+        route = getRouteService().get(Route.class, route.getId());
+        entry.setRun(getRoute().getRuns().get(runPosition));
+        entry.setPrice(getRoute().getPrices().get(0));
         entry.setDepartureTime(entry.getRun().getTime());
         Calendar arrival = entry.getRun().getTime();
         arrival.add(Calendar.MINUTE, entry.getPrice().getEndStop().getTimeToArrival());
         entry.setArrivalTime(arrival);
-        entry.setRun(dao.attach(entry.getRun()));
+        entry.setRun(getDao().attach(entry.getRun()));
 
         return entry;
     }
