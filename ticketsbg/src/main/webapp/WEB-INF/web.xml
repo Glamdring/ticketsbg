@@ -98,7 +98,7 @@
     </context-param>
     <context-param>
         <param-name>org.richfaces.LoadScriptStrategy</param-name>
-        <param-value>NONE</param-value>
+        <param-value>ALL</param-value>
     </context-param>
     <!-- context-param>
         <param-name>org.apache.myfaces.redirectTracker.POLICY</param-name>

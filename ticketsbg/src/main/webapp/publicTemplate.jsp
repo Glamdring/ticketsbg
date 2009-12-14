@@ -176,8 +176,6 @@
 </rich:modalPanel></div>
 
 
-<script src="rfRes/org/ajax4jsf/framework.pack.js.jsp" type="text/javascript"></script>
-<script src="rfRes/org/richfaces/ui.pack.js.jsp" type="text/javascript" />
 <script type="text/javascript">
 window.RICH_FACES_EXTENDED_SKINNING_ON=true;
 </script>
