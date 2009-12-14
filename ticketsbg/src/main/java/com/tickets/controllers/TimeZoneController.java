@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 @Controller("timeZoneController")
-@Scope("session")
+@Scope("singleton")
 public class TimeZoneController implements Serializable {
 
     private TimeZone timeZone;

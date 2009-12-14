@@ -66,7 +66,7 @@ public class Ticket implements Serializable, Comparable<Ticket> {
     @JoinColumn(name="userId", referencedColumnName="id")
     private User user;
 
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne(cascade={CascadeType.PERSIST, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name="customerId", referencedColumnName="id")
     private Customer customerInformation;
 
@@ -133,6 +133,9 @@ public class Ticket implements Serializable, Comparable<Ticket> {
     @LazyCollection(LazyCollectionOption.FALSE)
     @JoinTable(name="tickets_passengerDetails")
     private List<PassengerDetails> passengerDetails = new ArrayList<PassengerDetails>();
+
+    @ManyToOne(cascade=CascadeType.ALL)
+    private Order order;
 
     public Run getRun() {
         return run;
@@ -324,5 +327,13 @@ public class Ticket implements Serializable, Comparable<Ticket> {
 
     public void setReturnDepartureTime(Calendar returnDepartureTime) {
         this.returnDepartureTime = returnDepartureTime;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
     }
 }

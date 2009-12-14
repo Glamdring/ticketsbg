@@ -17,7 +17,7 @@ public final class JSFErrorHandler {
     public static void handleThrowable(FacesContext facesContext, Throwable t) {
         String msg = "";
         String msgKey = "";
-        Locale locale = Messages.DEFAULT_LOCALE;
+        Locale locale = GeneralUtils.getDefaultLocale();
         try {
             locale = facesContext.getViewRoot().getLocale();
         } catch (Exception e) {

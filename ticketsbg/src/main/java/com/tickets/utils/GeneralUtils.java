@@ -26,11 +26,16 @@ public class GeneralUtils {
      * @return calendar
      */
     public static Calendar createCalendar() {
-        return Calendar.getInstance(getLocale());
+        return Calendar.getInstance(getDefaultLocale());
     }
 
-    public static Locale getLocale() {
-        return new Locale("bg");
+    private static Locale defaultLocale;
+
+    public static Locale getDefaultLocale() {
+        if (defaultLocale == null) {
+            defaultLocale = new Locale(Settings.getValue("default.locale"));
+        }
+        return defaultLocale;
     }
 
     public static String getSubdomain() {
@@ -78,5 +83,29 @@ public class GeneralUtils {
         // e.setDebug(true);
 
         return e;
+    }
+
+    private static ThreadLocal<Locale> currentLocale = new ThreadLocal<Locale>();
+
+    /**
+     * This convenient method makes the application dependent on the JSF
+     * front-end, but in case needed a setter could easily be introduced, which
+     * sets the current locale in the thread-local so that this method remains
+     * framework-agnostic
+     *
+     * @return the current locale
+     */
+    public static Locale getCurrentLocale() {
+        Locale locale = currentLocale.get();
+        if (locale == null) {
+            locale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
+
+            if (locale == null) {
+                locale = GeneralUtils.getDefaultLocale();
+            }
+            currentLocale.set(locale);
+        }
+
+        return locale;
     }
 }

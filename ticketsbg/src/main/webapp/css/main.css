@@ -139,3 +139,21 @@ form {
 .tableColumn {
     font-size: 14px;
 }
+
+.menuContent {
+    vertical-align: middle;
+}
+
+.menuIcon {
+    margin-right: 5px;
+    vertical-align: middle;
+    width: 22px;
+    height: 22px;
+}
+
+.languageIcon {
+    margin-top: 7px;
+    width: 30px;
+    height: 20px;
+    border-style: none;
+}

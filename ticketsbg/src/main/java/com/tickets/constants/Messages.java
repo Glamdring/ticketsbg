@@ -8,9 +8,10 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import com.tickets.utils.GeneralUtils;
+
 public class Messages implements Serializable {
     private static Map<Locale, ResourceBundle> bundles = new HashMap<Locale, ResourceBundle>();
-    public static final Locale DEFAULT_LOCALE = new Locale("bg");
 
     private static ClassLoader getCurrentClassLoader(Object defaultObject) {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
@@ -21,7 +22,7 @@ public class Messages implements Serializable {
     }
 
     public static String getString(String key, Object...params) {
-        return getString(key, DEFAULT_LOCALE, params);
+        return getString(key, GeneralUtils.getCurrentLocale(), params);
     }
 
     public static String getString(String key, Locale locale, Object...params) {

@@ -14,24 +14,6 @@
 <link rel="shortcut icon" href="favicon.png" />
 <link rel="icon" href="favicon.png" />
 
-<style type="text/css">
-.menuContent {
-    vertical-align: middle;
-}
-
-.menuIcon {
-    margin-right: 5px;
-    vertical-align: middle;
-    width: 22px;
-    height: 22px;
-}
-</style>
-<!-- script type="text/javascript">
-    $(document).ready(function(){
-        $(document).pngFix();
-    });
-</script-->
-
 <ui:insert name="head" />
 
 <script type="text/javascript">
@@ -49,14 +31,30 @@
 </script>
 </head>
 <body>
-
+<f:view locale="#{localeController.locale}">
 <f:loadBundle var="msg" basename="com.tickets.constants.messages" />
-
 <div class="container"><a
     href="#{facesContext.externalContext.context.contextPath}/"> <img
     src="images/logo.png" alt="avtogara.com"
     style="border-style: none; width: 385px; height: 93px;" />
-</a> <h:form style="float: left; height: 34px; margin-bottom: 5px;"
+</a>
+    <div style="float: right;"><h:form>
+        <h:commandLink action="#{localeController.changeLocale}">
+            <h:graphicImage url="images/flags/bg.jpg"
+                style=" margin-right: 10px;" styleClass="languageIcon" alt="BG"
+                title="BG" />
+            <f:setPropertyActionListener value="bg"
+                target="#{localeController.selectedLanguage}" />
+        </h:commandLink>
+
+        <h:commandLink action="#{localeController.changeLocale}">
+            <h:graphicImage url="images/flags/en.jpg" styleClass="languageIcon"
+                alt="EN" title="EN" />
+            <f:setPropertyActionListener value="en"
+                target="#{localeController.selectedLanguage}" />
+        </h:commandLink>
+    </h:form></div>
+    <h:form style="float: left; height: 34px; margin-bottom: 5px;"
     id="menuForm" ajaxSingle="true">
     <rich:toolBar itemSeparator="line" width="1000" height="34"
         style="float: left; padding: 0px; margin: 0px;" id="menuToolbar">
@@ -177,13 +175,21 @@
     </h:panelGroup>
 </rich:modalPanel></div>
 
+
+<script src="rfRes/org/ajax4jsf/framework.pack.js.jsp" type="text/javascript"></script>
+<script src="rfRes/org/richfaces/ui.pack.js.jsp" type="text/javascript" />
+<script type="text/javascript">
+window.RICH_FACES_EXTENDED_SKINNING_ON=true;
+</script>
+
 <script src="http://static.getclicky.com/js" type="text/javascript"></script>
 <script type="text/javascript">clicky.init(163258);</script>
 
 <script type="text/javascript"
-    src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php/bg_BG"></script>
+    src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php/#{localeController.locale}"></script>
 <script type="text/javascript">
 FB.init("329367adf1678d9b262d077844549559");
 </script>
+</f:view>
 </body>
 </html>

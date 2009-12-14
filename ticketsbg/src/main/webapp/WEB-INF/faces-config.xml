@@ -18,7 +18,7 @@
         <locale-config>
             <default-locale>bg</default-locale>
             <supported-locale>bg</supported-locale>
-            <!-- supported-locale>en</supported-locale-->
+            <supported-locale>en</supported-locale>
         </locale-config>
         <message-bundle>com.tickets.constants.messages</message-bundle>
     </application>

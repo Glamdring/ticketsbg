@@ -184,16 +184,16 @@ public class StatisticsServiceImpl extends BaseService
         String result = "";
         DateFormat df;
         if (period == Calendar.DAY_OF_MONTH) {
-            df = new SimpleDateFormat("dd.MM", GeneralUtils.getLocale());
+            df = new SimpleDateFormat("dd.MM", GeneralUtils.getDefaultLocale());
             result = df.format(time.getTime());
         }
         if (period == Calendar.MONTH) {
-            df = new SimpleDateFormat("MM.yyyy", GeneralUtils.getLocale());
+            df = new SimpleDateFormat("MM.yyyy", GeneralUtils.getDefaultLocale());
             result = df.format(time.getTime());
         }
 
         if (period == Calendar.DAY_OF_WEEK) {
-            df = new SimpleDateFormat("EEEE", GeneralUtils.getLocale());
+            df = new SimpleDateFormat("EEEE", GeneralUtils.getDefaultLocale());
             result = df.format(time.getTime());
         }
 
