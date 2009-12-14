@@ -179,7 +179,7 @@
 <script type="text/javascript">clicky.init(163258);</script>
 
 <script type="text/javascript"
-    src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php/#{localeController.locale}"></script>
+    src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php/#{localeController.localeWithCountry}"></script>
 <script type="text/javascript">
 FB.init("329367adf1678d9b262d077844549559");
 </script>

@@ -134,9 +134,6 @@ public class Ticket implements Serializable, Comparable<Ticket> {
     @JoinTable(name="tickets_passengerDetails")
     private List<PassengerDetails> passengerDetails = new ArrayList<PassengerDetails>();
 
-    @ManyToOne(cascade=CascadeType.ALL)
-    private Order order;
-
     public Run getRun() {
         return run;
     }
@@ -327,13 +324,5 @@ public class Ticket implements Serializable, Comparable<Ticket> {
 
     public void setReturnDepartureTime(Calendar returnDepartureTime) {
         this.returnDepartureTime = returnDepartureTime;
-    }
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
     }
 }

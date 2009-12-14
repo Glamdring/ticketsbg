@@ -23,10 +23,11 @@
 
                 </h:panelGrid>
 
-                <iframe scrolling="no" frameborder="0"
-                    src="http://www.facebook.com/connect/connect.php?id=216346729251&amp;connections=0&amp;stream=0&amp;css=PATH_TO_STYLE_SHEET&amp;locale=bg_BG"
-                    allowtransparency="true"
-                    style="border: none; width: 185px; height: 80px; margin: 0px -10px 0px -10px; padding: 0px;"></iframe>
+                <div style='margin: 0px -10px 0px -10px; padding: 0px;'>
+                    <h:outputText
+                        value="#{msg['lt']}fb:fan profile_id='216346729251' stream='0' connections='0' width='185' height='80'#{msg['gt']}#{msg['lt']}/fb:fan#{msg['gt']}"
+                        escape="false" />
+                 </div>
 
             </rich:panel>
         </a4j:form>

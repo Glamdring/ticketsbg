@@ -98,7 +98,11 @@ public class GeneralUtils {
     public static Locale getCurrentLocale() {
         Locale locale = currentLocale.get();
         if (locale == null) {
-            locale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
+            try {
+                locale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
+            } catch (Exception ex) {
+                // ignore
+            }
 
             if (locale == null) {
                 locale = GeneralUtils.getDefaultLocale();

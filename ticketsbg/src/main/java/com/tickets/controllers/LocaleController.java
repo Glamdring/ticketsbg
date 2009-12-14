@@ -34,4 +34,16 @@ public class LocaleController extends BaseController {
     public void setSelectedLanguage(String selectedLanguage) {
         this.selectedLanguage = selectedLanguage;
     }
+
+    public String getLocaleWithCountry() {
+        if (locale.getLanguage().equals("bg")) {
+            return "bg_BG";
+        }
+
+        if (locale.getLanguage().equals("en")) {
+            return "en_GB";
+        }
+
+        return null;
+    }
 }
