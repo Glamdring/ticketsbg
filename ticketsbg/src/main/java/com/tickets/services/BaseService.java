@@ -48,7 +48,7 @@ public class BaseService<E> implements Service<E> {
         return result;
     }
 
-    public void delete(E e) {
+    public <T> void delete(T e) {
         getDao().delete(e);
     }
 

@@ -54,4 +54,14 @@
         <function-class>com.tickets.services.ServiceFunctions</function-class>
         <function-signature>java.lang.String formatTextNewLines(java.lang.String)</function-signature>
     </function>
+    <function>
+        <function-name>getExternalResource</function-name>
+        <function-class>com.tickets.services.ServiceFunctions</function-class>
+        <function-signature>java.lang.String getExternalResource(java.lang.String)</function-signature>
+    </function>
+    <function>
+        <function-name>resetExternalResourceCache</function-name>
+        <function-class>com.tickets.services.ServiceFunctions</function-class>
+        <function-signature>void resetExternalResourceCache()</function-signature>
+    </function>
 </facelet-taglib>

@@ -7,7 +7,7 @@ public interface Service<E> {
 
      E save(E entity);
 
-     void delete(E e);
+     <T> void delete(T e);
 
      <T> List<T> list(Class<T> clazz);
 

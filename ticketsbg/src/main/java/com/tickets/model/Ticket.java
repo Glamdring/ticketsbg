@@ -40,10 +40,6 @@ import org.hibernate.annotations.LazyCollectionOption;
         query = "SELECT t FROM Ticket t WHERE t.committed=false"
     ),
     @NamedQuery(
-        name = "Ticket.getTimeouted",
-        query = "SELECT t FROM Ticket t WHERE t.timeouted=true"
-    ),
-    @NamedQuery(
         name = "Ticket.findByCodeAndEmail",
         query = "SELECT t FROM Ticket t WHERE t.ticketCode=:ticketCode AND " +
                 "t.customerInformation.email=:email"),

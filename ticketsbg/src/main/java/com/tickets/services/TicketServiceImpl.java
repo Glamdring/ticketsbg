@@ -35,6 +35,7 @@ import com.tickets.exceptions.TicketAlterationException;
 import com.tickets.exceptions.TicketCreationException;
 import com.tickets.model.Customer;
 import com.tickets.model.Discount;
+import com.tickets.model.Order;
 import com.tickets.model.PassengerDetails;
 import com.tickets.model.PaymentMethod;
 import com.tickets.model.Route;
@@ -692,9 +693,9 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
 
     @Override
     public void clearTimeoutedTickets() {
-        List<Ticket> timeouted = getDao().findByNamedQuery("Ticket.getTimeouted");
-        for (Ticket ticket : timeouted) {
-            delete(ticket);
+        List<Order> timeouted = getDao().findByNamedQuery("Order.getTimeouted");
+        for (Order order : timeouted) {
+            delete(order);
         }
     }
 

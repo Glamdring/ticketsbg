@@ -1,11 +1,16 @@
 package com.tickets.services;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.log4j.Logger;
 
 import com.tickets.controllers.security.AccessLevel;
 import com.tickets.controllers.users.LoggedUserHolder;
@@ -17,6 +22,8 @@ import com.tickets.model.Ticket;
 import com.tickets.model.User;
 
 public class ServiceFunctions {
+
+    private static final Logger log = Logger.getLogger(ServiceFunctions.class);
 
     // Cache used in cases when the same value is to be calculated
     // during the same request (and therefore - thread)
@@ -172,5 +179,35 @@ public class ServiceFunctions {
         text = text.replace("\n", "<br />");
 
         return text;
+    }
+
+    private static final Map<String, String> externalResourceCache = new HashMap<String, String>();
+
+    public static String getExternalResource(String urlString) {
+        try {
+            if (externalResourceCache.containsKey(urlString)) {
+                return externalResourceCache.get(urlString);
+            }
+
+            URL url = new URL(urlString);
+            InputStream is = url.openConnection().getInputStream();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            int b;
+            while ((b = is.read()) != -1) {
+                baos.write(b);
+            }
+            String content = baos.toString();
+
+            externalResourceCache.put(urlString, content);
+
+            return content;
+        } catch (Exception ex) {
+            log.error("Error getting external resoruce", ex);
+            return "";
+        }
+    }
+
+    public static void resetExternalResourceCache() {
+        externalResourceCache.clear();
     }
 }

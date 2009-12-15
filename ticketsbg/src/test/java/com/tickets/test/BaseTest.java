@@ -91,8 +91,9 @@ public abstract class BaseTest {
         route.addPrice(price);
 
         RouteHour hour = new RouteHour();
-        hour.setMinutes((GeneralUtils.createCalendar().get(
-            Calendar.HOUR_OF_DAY) - 3) * 60); // the current hour
+        Calendar cal = GeneralUtils.createCalendar();
+        cal.add(Calendar.HOUR_OF_DAY, -3);
+        hour.setMinutes(cal.get(Calendar.HOUR_OF_DAY) * 60); // the current hour
         // -3, in order to fix HSQDLDB TimeZone issue
 
         route.addHour(hour);

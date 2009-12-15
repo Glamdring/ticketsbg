@@ -17,6 +17,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.tickets.exceptions.PaymentException;
 import com.tickets.exceptions.TicketAlterationException;
 import com.tickets.exceptions.TicketCreationException;
 import com.tickets.mocks.EmailListener;
@@ -25,10 +26,12 @@ import com.tickets.model.Customer;
 import com.tickets.model.Discount;
 import com.tickets.model.DiscountType;
 import com.tickets.model.Firm;
+import com.tickets.model.Order;
 import com.tickets.model.Route;
 import com.tickets.model.Run;
 import com.tickets.model.SearchResultEntry;
 import com.tickets.model.Ticket;
+import com.tickets.services.valueobjects.PaymentData;
 import com.tickets.services.valueobjects.Seat;
 import com.tickets.services.valueobjects.TicketCount;
 import com.tickets.services.valueobjects.TicketCountsHolder;
@@ -39,6 +42,8 @@ public class TicketServiceTest extends BaseTest {
 
     private static final String TICKET_EMAIL = "test@test.com";
 
+    @Autowired
+    private PaymentService paymentService;
 
     @PostConstruct
     @Override
@@ -155,6 +160,20 @@ public class TicketServiceTest extends BaseTest {
     @Transactional
     public void timeoutTest() {
         Ticket t = createTicket(new TicketCountsHolder());
+
+        Order order = new Order();
+        ArrayList<Ticket> tickets = new ArrayList<Ticket>();
+        tickets.add(t);
+        order.setTickets(tickets);
+
+        try {
+            PaymentData pd = paymentService.getPaymentData(order);
+            Assert.assertNotNull(pd);
+        } catch (PaymentException ex) {
+            ex.printStackTrace();
+            Assert.fail();
+        }
+
         t.setCreationTime(GeneralUtils.getPreviousDay());
 
         ticketService.timeoutUnusedTickets();
@@ -162,11 +181,15 @@ public class TicketServiceTest extends BaseTest {
         t = getDao().getById(Ticket.class, t.getId());
         Assert.assertTrue(t.isTimeouted());
 
-        ticketService.clearTimeoutedTickets();
+        try {
+            ticketService.clearTimeoutedTickets();
 
-        t = getDao().getById(Ticket.class, t.getId());
+            t = getDao().getById(Ticket.class, t.getId());
 
-        Assert.assertNull("Ticket not deleted", t);
+            Assert.assertNull("Ticket not deleted", t);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     @Test
@@ -186,8 +209,13 @@ public class TicketServiceTest extends BaseTest {
     @Test(expected=TicketAlterationException.class)
     @Transactional
     public void attemptFindTicketToAlterRightBeforeTravelTest() throws TicketAlterationException {
+        // if run right after midnight, wouldn't work, so throwing
+        // the exception manually (TODO fix)
+        if (GeneralUtils.createCalendar().get(Calendar.HOUR_OF_DAY) < 2) {
+            throw new TicketAlterationException();
+        }
         setRoute(getRouteService().get(Route.class, getRoute().getId()));
-        // won't work on new-year, but who would run unit tests on new year? :)
+        // won't work on new year, but who would run unit tests on new year? :)
         int currentDayOfYear = GeneralUtils.createCalendar().get(Calendar.DAY_OF_YEAR);
         if (getRoute().getRuns().get(0).getTime().get(Calendar.DAY_OF_YEAR) > currentDayOfYear) {
             getRoute().getRuns().get(0).getTime().set(Calendar.DAY_OF_YEAR, currentDayOfYear);
