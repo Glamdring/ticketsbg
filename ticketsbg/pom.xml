@@ -326,9 +326,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-        	<groupId>jasperreports</groupId>
-        	<artifactId>jasperreports</artifactId>
-        	<version>3.5.3</version>
+            <groupId>jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>3.5.3</version>
         </dependency>
     </dependencies>
 

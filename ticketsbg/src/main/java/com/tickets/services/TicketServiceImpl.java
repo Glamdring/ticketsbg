@@ -673,8 +673,7 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
         List<Ticket> unconfirmed = getDao().findByNamedQuery(
                 "Ticket.findUnconfirmed");
 
-        long timeoutPeriod = Integer.parseInt(Settings
-                .getValue("ticket.timeout"))
+        long timeoutPeriod = Integer.parseInt(Settings.getValue("ticket.timeout"))
                 * Constants.ONE_MINUTE;
 
         long inProcessTimeoutPeriod = timeoutPeriod * 3 / 2;
@@ -772,8 +771,7 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
             return 0;
         }
 
-        long timeoutPeriod = Integer.parseInt(Settings
-                .getValue("ticket.timeout"))
+        long timeoutPeriod = Integer.parseInt(Settings.getValue("ticket.timeout"))
                 * Constants.ONE_MINUTE;
 
         long result = timeoutPeriod

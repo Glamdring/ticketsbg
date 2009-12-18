@@ -26,7 +26,7 @@ public class Settings {
     private static void load() {
         try {
             InputStream is = Settings.class
-                    .getResourceAsStream("settings.properties");
+                    .getResourceAsStream("/application.properties");
             settings = new Properties();
             settings.load(is);
         } catch (Exception ex) {

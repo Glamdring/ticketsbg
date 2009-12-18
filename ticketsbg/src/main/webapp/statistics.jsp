@@ -23,7 +23,7 @@
 
                 </h:panelGrid>
 
-                <div style='margin: 0px -10px 0px -10px; padding: 0px;'>
+                <div style="margin: 0px -10px 0px -10px; padding: 0px;">
                     <h:outputText
                         value="#{msg['lt']}fb:fan profile_id='216346729251' stream='0' connections='0' width='185' height='80'#{msg['gt']}#{msg['lt']}/fb:fan#{msg['gt']}"
                         escape="false" />
