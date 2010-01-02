@@ -400,10 +400,10 @@
 
                     <h:panelGroup rendered="#{tc:getSize(searchController.resultsModel.wrappedData) > 0}">
                         <h:commandButton value="#{msg.backToSearchScreen}"
-                            action="#{searchController.toSearchScreen}" />
+                            action="#{searchController.toSearchScreen}" style="font-size: 14px;" />
                         <h:outputText value=" " />
                         <h:commandButton action="#{searchController.proceed}"
-                            value="#{msg.toPayment} *" />
+                            value="#{msg.toPayment} *" style="font-size: 14px;" />
                         <br />* #{msg.agreeingToBothTerms}
                     </h:panelGroup>
                 </rich:panel>
