@@ -8,8 +8,7 @@
     xmlns:c="http://java.sun.com/jstl/core"
     xmlns:tc="http://tickets.bg/tickets">
 
-    <rich:modalPanel id="changePasswordPanel" autosized="true" width="500"
-        style="overflow: hidden;">
+    <rich:modalPanel id="changePasswordPanel" autosized="true" width="500">
         <f:facet name="header">
             <h:outputText value="#{msg.changePassword}" />
         </f:facet>

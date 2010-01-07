@@ -263,7 +263,7 @@
         </property>
     </bean>
 
-    <aop:aspectj-autoproxy proxy-target-class="true"/>
+    <aop:aspectj-autoproxy proxy-target-class="true" />
 
     <aop:config proxy-target-class="false">
         <aop:pointcut id="serviceMethods"
@@ -271,10 +271,12 @@
 
         <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethods" />
     </aop:config>
+
     <tx:advice id="txAdvice" transaction-manager="jpaTransactionManager">
         <tx:attributes>
             <tx:method name="*" propagation="REQUIRED" />
         </tx:attributes>
     </tx:advice>
-    <tx:annotation-driven transaction-manager="jpaTransactionManager" />
+
+    <tx:annotation-driven transaction-manager="jpaTransactionManager" order="1" />
 </beans>

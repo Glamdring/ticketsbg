@@ -55,8 +55,8 @@ public class BackupTask extends TimerTask {
             db = m.group(1);
         }
 
-        System.out.println(host + ":" + port + ":" + user + ":" + password
-                + ":" + db);
+        log.debug(host + ":" + port + ":" + user + ":" + password + ":" + db);
+
         try {
             storeBackup(getData(host, port, user, password, db));
         } catch (Exception ex) {

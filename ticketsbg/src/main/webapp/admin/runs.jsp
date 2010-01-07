@@ -99,7 +99,7 @@
 
             <a4j:form id="newRunHolder" ajaxSubmit="true">
                     <rich:modalPanel id="newRunPanel" autosized="true" moveable="true"
-                        resizeable="false" style="overflow: hidden;" width="220"
+                        resizeable="false" width="220"
                         rendered="#{runController.run != null}" domElementAttachment="form">
                         <ui:include src="/modalPanelCommons.jsp">
                             <ui:param name="dialogId" value="newRunPanel" />

@@ -204,8 +204,10 @@ public class RouteController extends BaseController implements Serializable {
 
     @Action
     public void savePrice() {
-        price.setPrice(priceValue);
-        price.setTwoWayPrice(twoWayPriceValue);
+        if (price != null) {
+            price.setPrice(priceValue);
+            price.setTwoWayPrice(twoWayPriceValue);
+        }
     }
 
     @Action

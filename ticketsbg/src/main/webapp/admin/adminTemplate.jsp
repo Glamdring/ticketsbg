@@ -127,7 +127,7 @@
 
 <rich:modalPanel id="firmPanel" autosized="true" width="350"
     height="120" moveable="true" resizeable="false"
-    domElementAttachment="parent" style="overflow: hidden;">
+    domElementAttachment="parent">
     <ui:include src="/modalPanelCommons.jsp">
         <ui:param name="dialogId" value="firmPanel" />
     </ui:include>

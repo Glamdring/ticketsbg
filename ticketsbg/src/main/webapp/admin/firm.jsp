@@ -111,7 +111,7 @@
             <rich:modalPanel id="richDescriptionPanel" autosized="true"
                 width="200" height="320" moveable="true" resizeable="false"
                 onmaskclick="#{rich:component('richDescriptionPanel')}.hide()"
-                domElementAttachment="parent" style="overflow: hidden;">
+                domElementAttachment="parent">
                 <ui:include src="/modalPanelCommons.jsp">
                     <ui:param name="dialogId" value="richDescriptionPanel" />
                 </ui:include>

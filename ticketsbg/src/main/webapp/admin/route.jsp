@@ -200,13 +200,13 @@
                                             adviseNodeOpened="#{routeController.getExpandedNodes}">
 
                                             <rich:treeNode type="start"
-                                                reRender="priceField,twoWayPriceField">
+                                                reRender="priceField,twoWayPriceField,savePriceButton">
                                                 <div style="font-size: 11px;"><h:outputText
                                                     value="#{msg.fromStop} " /> <h:outputText
                                                     value="#{data.stop.name}" /></div>
                                             </rich:treeNode>
                                             <rich:treeNode type="end"
-                                                reRender="priceField,twoWayPriceField">
+                                                reRender="priceField,twoWayPriceField,savePriceButton">
                                                 <div style="font-size: 11px;"><h:outputText
                                                     value="#{msg.toStop} " /> <h:outputText
                                                     value="#{data.stop.name}" /> <h:outputText value=" (" />
@@ -240,8 +240,9 @@
                                             </h:inputText>
 
                                             <h:outputText />
-                                            <a4j:commandButton value="#{msg.save}"
-                                                action="#{routeController.savePrice}" reRender="pricesTree" />
+                                            <a4j:commandButton value="#{msg.save}" id="savePriceButton"
+                                                action="#{routeController.savePrice}" reRender="pricesTree"
+                                                onclick="if (#{routeController.price == null}) {alert('#{msg.subrouteMustBeSelected}');}" />
                                         </h:panelGrid>
                                     </rich:panel>
                                 </h:panelGrid>
@@ -513,8 +514,7 @@
             </h:form>
         </f:view>
 
-        <rich:modalPanel id="stopPanel" autosized="true" width="400"
-            style="overflow: hidden;">
+        <rich:modalPanel id="stopPanel" autosized="true" width="400">
             <f:facet name="header">
                 <h:outputText value="#{msg.addOrModifyStop}" />
             </f:facet>
@@ -524,8 +524,7 @@
             <a4j:include viewId="stop.jsp" />
         </rich:modalPanel>
 
-        <rich:modalPanel id="discountPanel" autosized="true" width="300"
-            style="overflow: hidden;">
+        <rich:modalPanel id="discountPanel" autosized="true" width="300">
             <f:facet name="header">
                 <h:outputText value="#{msg.addOrModifyDiscount}" />
             </f:facet>

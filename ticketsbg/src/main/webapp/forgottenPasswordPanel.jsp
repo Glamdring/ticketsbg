@@ -11,7 +11,7 @@
 
     <a4j:region>
         <rich:modalPanel id="forgottenPasswordPanel" autosized="true"
-            width="250" style="overflow: hidden;" domElementAttachment="form">
+            width="250" domElementAttachment="form">
             <f:facet name="header">
                 <h:outputText value="#{msg.forgottenPassword}" />
             </f:facet>

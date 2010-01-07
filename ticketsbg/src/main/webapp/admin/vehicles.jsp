@@ -79,7 +79,7 @@
         </f:view>
 
         <rich:modalPanel id="entityPanel" autosized="true" width="300"
-            height="120" moveable="true" resizeable="false" style="overflow: hidden;">
+            height="120" moveable="true" resizeable="false">
             <ui:include src="/modalPanelCommons.jsp">
                 <ui:param name="dialogId" value="entityPanel" />
             </ui:include>
