@@ -12,6 +12,7 @@
 <ui:insert name="head" />
 </head>
 <body style="margin-left: 0px; margin-top: 0px; margin-right: 0px">
+<f:view locale="#{localeController.locale}">
 <a4j:keepAlive beanName="keepAliveController" />
 
 <f:loadBundle var="msg" basename="com.tickets.constants.messages" />
@@ -19,5 +20,6 @@
 <div style="width: 100%; margin-top: 20px;" align="center">
 <ui:insert name="body" />
 </div>
+</f:view>
 </body>
 </html>

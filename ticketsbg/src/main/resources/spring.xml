@@ -278,5 +278,5 @@
         </tx:attributes>
     </tx:advice>
 
-    <tx:annotation-driven transaction-manager="jpaTransactionManager" order="1" />
+    <tx:annotation-driven transaction-manager="jpaTransactionManager" />
 </beans>
