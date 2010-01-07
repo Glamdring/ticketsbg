@@ -84,6 +84,10 @@ public class RouteServiceImpl extends BaseService<Route> implements RouteService
 
     @Override
     public void addHourToRoute(Date hour, Route route) {
+        if (hour == null) {
+            return;
+        }
+
         RouteHour rh = new RouteHour();
         Calendar c = Calendar.getInstance();
         c.setTime(hour);
