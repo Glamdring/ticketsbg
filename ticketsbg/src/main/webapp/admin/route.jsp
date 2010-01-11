@@ -133,11 +133,17 @@
                                     action="#{routeController.addStop}"
                                     oncomplete="#{rich:component('stopPanel')}.show()" />
 
+                                <a4j:jsFunction name="stopOrderChanged"
+                                    action="#{routeController.listReordered}" immediate="true" />
+
                                 <rich:orderingList binding="#{routeController.stopsTable}"
                                     var="stop" value="#{routeController.route.stops}"
                                     converter="#{stopListConverter}" showButtonLabels="false"
-                                    valueChangeListener="#{routeController.listReordered}"
-                                    listWidth="500" listHeight="150" id="stopsTable">
+                                    listWidth="500" listHeight="150" id="stopsTable"
+                                    onorderchanged="stopOrderChanged();">
+
+                                    <a4j:support event="onorderchanged" ajaxSingle="true"
+                                        immediate="true" />
 
                                     <rich:column>
                                         <f:facet name="header">
@@ -149,13 +155,15 @@
                                         <f:facet name="header">
                                             <h:outputText value="#{msg.timeToArrival}" id="col2" />
                                         </f:facet>
-                                        <h:outputText value="#{stop.timeToArrival}" />
+                                        <h:outputText value="#{stop.timeToArrival}"
+                                            converter="#{timeToMinutesConverter}" />
                                     </rich:column>
                                     <rich:column width="120">
                                         <f:facet name="header">
                                             <h:outputText value="#{msg.timeToDeparture}" id="col3" />
                                         </f:facet>
-                                        <h:outputText value="#{stop.timeToDeparture}" />
+                                        <h:outputText value="#{stop.timeToDeparture}"
+                                            converter="#{timeToMinutesConverter}" />
                                     </rich:column>
                                     <rich:column width="35">
                                         <f:facet name="header">
@@ -191,13 +199,12 @@
                                 rendered="#{routeController.route.id > 0}"
                                 styleClass="downInternalPanel">
                                 <h:panelGrid columns="2" columnClasses="gridContent">
-                                    <rich:panel styleClass="subInternalPanel">
+                                    <rich:panel styleClass="subInternalPanel" style="overflow: auto; width: 250px;">
                                         <rich:tree switchType="client" ajaxSubmitSelection="true"
-                                            style="width:230px;"
+                                            style="width:210px;"
                                             value="#{routeController.pricesTreeData}" var="data"
                                             nodeFace="#{data.leaf ? 'end' : 'start'}" id="pricesTree"
-                                            nodeSelectListener="#{routeController.nodeSelected}"
-                                            adviseNodeOpened="#{routeController.getExpandedNodes}">
+                                            nodeSelectListener="#{routeController.nodeSelected}">
 
                                             <rich:treeNode type="start"
                                                 reRender="priceField,twoWayPriceField,savePriceButton">

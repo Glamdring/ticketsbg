@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
-import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
@@ -170,7 +169,7 @@ public class RouteController extends BaseController implements Serializable {
         stopService.saveMapAddress(stop.getName(),
                 currentStopMapAddress,
                 loggedUserHolder.getLoggedUser().getFirm());
-        listReordered(null);
+        listReordered();
     }
 
     @Action
@@ -210,10 +209,13 @@ public class RouteController extends BaseController implements Serializable {
         }
     }
 
+    //no longer in use
+    @Deprecated
     @Action
     public Boolean getExpandedNodes(UITree tree) {
-        if (tree.getChildCount() <= 4)
+        if (tree.getChildCount() <= 4) {
             return Boolean.TRUE;
+        }
 
         return Boolean.FALSE;
     }
@@ -232,8 +234,7 @@ public class RouteController extends BaseController implements Serializable {
         discount.setDescription(gd.getDescription());
     }
 
-    @SuppressWarnings( { "unused" })
-    public void listReordered(ValueChangeEvent evt) {
+    public void listReordered() {
         // TODO : skip the multiple events!
         // TODO: listener-method is executed before the actual value is set!
         // fix!

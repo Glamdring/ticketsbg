@@ -25,14 +25,22 @@
                     </h:panelGroup>
 
 
-                    <h:outputLabel value="#{msg.timeToArrival}" for="timeToArrival" />
-                    <rich:inputNumberSpinner maxValue="1000"
-                        value="${routeController.stop.timeToArrival}" id="timeToArrival" />
+                    <h:panelGroup>
+                        <h:outputLabel value="#{msg.timeToArrival}" for="timeToArrival" />
+                        <h:outputText value=" #{msg.timeForStopFormatSpecification}"/>
+                    </h:panelGroup>
+                    <h:inputText value="#{routeController.stop.timeToArrival}" id="timeToArrival"
+                            size="5" converter="#{timeToMinutesConverter}" />
 
-                    <h:outputLabel value="#{msg.timeToDeparture}" for="timeToDeparture" />
-                    <rich:inputNumberSpinner maxValue="1000"
+                    <h:panelGroup>
+                        <h:outputLabel value="#{msg.timeToDeparture}" for="timeToDeparture" />
+                        <h:outputText value=" #{msg.timeForStopFormatSpecification}"/>
+                    </h:panelGroup>
+                    <h:inputText value="#{routeController.stop.timeToDeparture}"
+                          size="5" converter="#{timeToMinutesConverter}" id="timeToDeparture" />
+                    <!-- rich:inputNumberSpinner maxValue="1000"
                         value="${routeController.stop.timeToDeparture}"
-                        id="timeToDeparture" />
+                        id="timeToDeparture" /-->
 
                     <h:outputLabel value="#{msg.mapUrl}" for="mapUrl" id="mapLabel" />
                     <h:inputText id="mapUrl" size="30"
