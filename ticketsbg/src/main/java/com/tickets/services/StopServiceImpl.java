@@ -1,5 +1,7 @@
 package com.tickets.services;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -109,14 +111,27 @@ public class StopServiceImpl extends BaseService<Stop> implements StopService {
     }
 
     @Override
-    public void listReoredered(Route route) {
-        if (route.getStops() != null) {
-            for (int i = 0, max = route.getStops().size(); i < max; i++) {
-                route.getStops().get(i).setIdx(i + 1);
-            }
+    public void listReoredered(Route route, Collection<Stop> stops) {
+
+        if (stops == null) {
+            return;
         }
+
+        List<Stop> stopsResult = new ArrayList<Stop>(stops.size());
+
+        int i = 1;
+        for (Stop stop : stops) {
+            stop.setIdx(i);
+            i++;
+            stopsResult.add(stop);
+        }
+
+//        for (int i = 0, max = stops.size(); i < max; i++) {
+//            stops.get(i).setIdx(i + 1);
+//        }
         // Reordering the list itself, not only changing the idx's
-        Collections.sort(route.getStops());
+        Collections.sort(stopsResult);
+        route.setStops(stopsResult);
 
         cascadePrices(route);
     }

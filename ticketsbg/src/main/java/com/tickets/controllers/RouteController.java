@@ -1,9 +1,11 @@
 package com.tickets.controllers;
 
 import java.io.Serializable;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -13,12 +15,15 @@ import javax.annotation.PostConstruct;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
+import org.ajax4jsf.component.UIDataAdaptor;
 import org.apache.myfaces.orchestra.conversation.annotations.ConversationName;
+import org.richfaces.component.UIOrderingList;
 import org.richfaces.component.UITree;
 import org.richfaces.component.html.HtmlOrderingList;
 import org.richfaces.component.html.HtmlTree;
 import org.richfaces.event.NodeSelectedEvent;
 import org.richfaces.model.ListRowKey;
+import org.richfaces.model.OrderingListDataModel;
 import org.richfaces.model.TreeNode;
 import org.richfaces.model.TreeNodeImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,6 +85,10 @@ public class RouteController extends BaseController implements Serializable {
 
     private Vehicle selectedVehicle;
 
+    private UIOrderingList stopsOrderingList;
+
+    private List<Stop> stopsInitialList;
+
     @Autowired
     private SeatController seatController;
 
@@ -115,6 +124,7 @@ public class RouteController extends BaseController implements Serializable {
     @Action
     public String edit() {
         route = (Route) routesModel.getRowData();
+        stopsInitialList = new ArrayList<Stop>(route.getStops());
         daysPickList = routeService.getDaysList(route);
         seatController.setSeatHandler(new SeatHandler(route));
         refreshTreeModel();
@@ -234,11 +244,24 @@ public class RouteController extends BaseController implements Serializable {
         discount.setDescription(gd.getDescription());
     }
 
+    @SuppressWarnings({ "unchecked", "cast" })
     public void listReordered() {
-        // TODO : skip the multiple events!
-        // TODO: listener-method is executed before the actual value is set!
-        // fix!
-        stopService.listReoredered(route);
+
+        // This is a hack. But a working one. Should be cleared
+        // whenever there is time to understand the functioning
+        // of rich:orderingList better
+
+        Map model = null;
+        try {
+            Method m = UIDataAdaptor.class.getDeclaredMethod("getExtendedDataModel");
+            m.setAccessible(true);
+            OrderingListDataModel dataModel = (OrderingListDataModel) m.invoke(stopsTable);
+            model = (Map) dataModel.getWrappedData();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return;
+        }
+        stopService.listReoredered(route, (Collection<Stop>) model.values());
         refreshTreeModel();
     }
 
@@ -323,6 +346,7 @@ public class RouteController extends BaseController implements Serializable {
 
         discountTypeSelectItems = SelectItemUtils
                 .formSelectItems(DiscountType.class);
+
     }
 
     private void refreshList() {
@@ -502,5 +526,21 @@ public class RouteController extends BaseController implements Serializable {
 
     public void setSelectedVehicle(Vehicle selectedVehicle) {
         this.selectedVehicle = selectedVehicle;
+    }
+
+    public UIOrderingList getStopsOrderingList() {
+        return stopsOrderingList;
+    }
+
+    public void setStopsOrderingList(UIOrderingList stopsOrderingList) {
+        this.stopsOrderingList = stopsOrderingList;
+    }
+
+    public List<Stop> getStopsInitialList() {
+        return stopsInitialList;
+    }
+
+    public void setStopsInitialList(List<Stop> stopsInitialList) {
+        this.stopsInitialList = stopsInitialList;
     }
 }

@@ -203,7 +203,6 @@ public class Route extends DataObject implements Serializable {
         return stops;
     }
 
-    @Deprecated
     public void setStops(List<Stop> stops) {
         //Not acting in case MyFaces calls it
         //if (stops instanceof PersistentBag)

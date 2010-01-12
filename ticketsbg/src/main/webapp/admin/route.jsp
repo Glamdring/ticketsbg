@@ -133,12 +133,12 @@
                                     action="#{routeController.addStop}"
                                     oncomplete="#{rich:component('stopPanel')}.show()" />
 
-                                <a4j:jsFunction name="stopOrderChanged"
+                                <a4j:jsFunction name="stopOrderChanged" reRender="pricesPanel"
                                     action="#{routeController.listReordered}" immediate="true" />
 
                                 <rich:orderingList binding="#{routeController.stopsTable}"
-                                    var="stop" value="#{routeController.route.stops}"
-                                    converter="#{stopListConverter}" showButtonLabels="false"
+                                    var="stop" value="#{routeController.stopsInitialList}"
+                                    converter="#{entityConverter}" showButtonLabels="false"
                                     listWidth="500" listHeight="150" id="stopsTable"
                                     onorderchanged="stopOrderChanged();">
 
