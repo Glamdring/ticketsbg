@@ -37,6 +37,15 @@ public class Discount extends DataObject implements Serializable, Selectable {
     @Column
     private String description;
 
+    @ManyToOne
+    private Stop startStop;
+
+    @ManyToOne
+    private Stop endStop;
+
+    @Column
+    private boolean currentDayOnly;
+
     public int getDiscountId() {
         return discountId;
     }
@@ -98,11 +107,17 @@ public class Discount extends DataObject implements Serializable, Selectable {
         return getName();
     }
 
+
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + discountId;
+        result = prime * result + (currentDayOnly ? 1231 : 1237);
+        result = prime * result + ((endStop == null) ? 0 : endStop.hashCode());
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result
+                + ((startStop == null) ? 0 : startStop.hashCode());
         return result;
     }
 
@@ -115,8 +130,47 @@ public class Discount extends DataObject implements Serializable, Selectable {
         if (getClass() != obj.getClass())
             return false;
         Discount other = (Discount) obj;
-        if (discountId != other.discountId)
+        if (currentDayOnly != other.currentDayOnly)
+            return false;
+        if (endStop == null) {
+            if (other.endStop != null)
+                return false;
+        } else if (!endStop.equals(other.endStop))
+            return false;
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!name.equals(other.name))
+            return false;
+        if (startStop == null) {
+            if (other.startStop != null)
+                return false;
+        } else if (!startStop.equals(other.startStop))
             return false;
         return true;
+    }
+
+    public Stop getStartStop() {
+        return startStop;
+    }
+
+    public void setStartStop(Stop startStop) {
+        this.startStop = startStop;
+    }
+
+    public Stop getEndStop() {
+        return endStop;
+    }
+
+    public void setEndStop(Stop endStop) {
+        this.endStop = endStop;
+    }
+
+    public boolean isCurrentDayOnly() {
+        return currentDayOnly;
+    }
+
+    public void setCurrentDayOnly(boolean currentDayOnly) {
+        this.currentDayOnly = currentDayOnly;
     }
 }

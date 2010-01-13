@@ -58,7 +58,6 @@ public class RouteServiceImpl extends BaseService<Route> implements RouteService
             }
         }
 
-        //route.setRouteDays(routeDays)
         save(route);
     }
 

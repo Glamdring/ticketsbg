@@ -83,6 +83,10 @@ public class StopServiceImpl extends BaseService<Stop> implements StopService {
             }
 
             if (shouldRemove) {
+                // setting to null so that hibernate can safely cascade delete
+                // orphan without tying to persist anything
+                price.setStartStop(null);
+                price.setEndStop(null);
                 prices.remove(i);
                 i--;
             }

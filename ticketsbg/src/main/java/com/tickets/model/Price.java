@@ -3,7 +3,6 @@ package com.tickets.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,6 +13,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 /**
  * The Price object is used to indicate a price between two stops
@@ -41,16 +43,18 @@ public class Price implements Serializable {
      * Starting stop. Annotated with cascade-all because stops should be
      * persisted before the price itself.
      */
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "startStopId", nullable = false)
+    //@Cascade({CascadeType.ALL, CascadeType.DELETE_ORPHAN})
     private Stop startStop;
 
     /**
      * End stop. Annotated with cascade-all because stops should be persisted
      * before the price itself.
      */
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "endStopId", nullable = false)
+    //@Cascade({CascadeType.ALL, CascadeType.DELETE_ORPHAN})
     private Stop endStop;
 
     @Column

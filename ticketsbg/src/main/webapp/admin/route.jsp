@@ -138,7 +138,7 @@
 
                                 <rich:orderingList binding="#{routeController.stopsTable}"
                                     var="stop" value="#{routeController.stopsInitialList}"
-                                    converter="#{entityConverter}" showButtonLabels="false"
+                                    converter="#{stopListConverter}" showButtonLabels="false"
                                     listWidth="500" listHeight="150" id="stopsTable"
                                     onorderchanged="stopOrderChanged();">
 
@@ -181,7 +181,8 @@
                                         </a4j:commandLink>
                                         <h:outputText value="&#160;" />
                                         <a4j:commandLink action="#{routeController.deleteStop}"
-                                            title="#{msg.remove}" reRender="stopsPanel">
+                                            title="#{msg.remove}" reRender="stopsTable"
+                                            oncomplete="stopOrderChanged();">
                                             <h:graphicImage value="/images/delete.png"
                                                 style="width:16px; height:16px; border-style: none;"
                                                 alt="#{msg.remove}" title="#{msg.remove}" />

@@ -3,6 +3,7 @@ package com.tickets.services;
 import java.util.Date;
 import java.util.List;
 
+import com.tickets.model.Discount;
 import com.tickets.model.Firm;
 import com.tickets.model.Route;
 import com.tickets.model.SearchResultEntry;
@@ -83,4 +84,13 @@ public interface SearchService extends Service {
      * @return the list of names
      */
     List<String> listAllEndStopsForRoute(String fromStop, Route route);
+
+    /**
+     * Lists all discounts available for this subroute
+     * @param selectedEntry
+     * @param startStop
+     * @param endStop
+     * @return list of applicable discounts
+     */
+    List<Discount> getApplicableDiscounts(SearchResultEntry selectedEntry, String startStop, String endStop);
 }

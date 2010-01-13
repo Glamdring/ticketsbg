@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.tickets.model.Discount;
 import com.tickets.model.Firm;
 import com.tickets.model.Route;
 import com.tickets.model.Run;
@@ -203,5 +204,15 @@ public class SearchServiceImpl extends BaseService implements SearchService {
             }
         }
         return names;
+    }
+
+    @Override
+    public List<Discount> getApplicableDiscounts(
+            SearchResultEntry selectedEntry, String startStop, String endStop) {
+
+        List<Discount> discounts = selectedEntry.getRun().getRoute().getDiscounts();
+
+        //TODO filter
+        return discounts;
     }
 }

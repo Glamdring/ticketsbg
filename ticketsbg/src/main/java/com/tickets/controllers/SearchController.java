@@ -444,8 +444,7 @@ public class SearchController extends BaseController {
         selectedEntry = ((List<SearchResultEntry>) resultsModel
                 .getWrappedData()).get(selectedId);
 
-        ticketCountsHolder.setTicketCounts(new ArrayList<TicketCount>(
-                selectedEntry.getRun().getRoute().getDiscounts().size()));
+        ticketCountsHolder.setTicketCounts(new ArrayList<TicketCount>(searchService.getApplicableDiscounts(selectedEntry, fromStop, toStop).size()));
 
         for (Discount discount : selectedEntry.getRun().getRoute()
                 .getDiscounts()) {

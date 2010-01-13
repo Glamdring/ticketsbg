@@ -141,6 +141,7 @@ public class RouteController extends BaseController implements Serializable {
     @Action
     public String newRoute() {
         daysPickList = new Integer[0];
+        stopsInitialList = new ArrayList<Stop>();
         route = new Route();
         route.setFirm(loggedUserHolder.getLoggedUser().getFirm());
         route.setRequireReceiptAtCashDesk(route.getFirm().isRequireReceiptAtCashDesk());
@@ -180,17 +181,28 @@ public class RouteController extends BaseController implements Serializable {
                 currentStopMapAddress,
                 loggedUserHolder.getLoggedUser().getFirm());
         listReordered();
+
+        // re-setting, because then, after submission of the form,
+        // the Stop objects are checked against the "value" attribute
+        // (which evaluates to stopsInitialList), and as the hashCode()
+        // and equals() methods are using a business key, the check would
+        // fail if a stop was edited
+        stopsInitialList = route.getStops();
     }
 
     @Action
     public void deleteStop() {
         Stop stop = (Stop) stopsTable.getRowData();
         stopService.delete(stop, route);
+        //see saveStop comment for more details on this
+        stopsInitialList = route.getStops();
     }
 
     @Action
     public void addDiscount() {
         discount = new Discount();
+        discount.setStartStop(route.getStops().get(0));
+        discount.setEndStop(route.getStops().get(route.getStops().size() - 1));
     }
 
     @Action
@@ -208,6 +220,7 @@ public class RouteController extends BaseController implements Serializable {
     @Action
     public String cancel() {
         endConversation();
+        refreshList();
         return Screen.ROUTES_LIST.getOutcome();
     }
 
@@ -542,5 +555,9 @@ public class RouteController extends BaseController implements Serializable {
 
     public void setStopsInitialList(List<Stop> stopsInitialList) {
         this.stopsInitialList = stopsInitialList;
+    }
+
+    public List<SelectItem> getStopSelectItems() {
+        return SelectItemUtils.formSelectItems(route.getStops(), false);
     }
 }

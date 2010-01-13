@@ -50,7 +50,8 @@ public class TimeToMinutesConverter implements Converter {
         if (hours == 0) {
             return totalMinutes + "";
         }
+        int minutes = totalMinutes % 60;
 
-        return  hours + ":" + totalMinutes % 60;
+        return  hours + ":" + (minutes < 10 ? "0" + minutes : minutes);
     }
 }

@@ -46,6 +46,23 @@
                         <f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
                     </h:inputText>
 
+                    <h:outputLabel value="#{msg.startStop}" for="discountStartStop" />
+                    <h:selectOneMenu value="#{routeController.discount.startStop}"
+                        converter="#{entityConverter}" id="discountStartStop">
+                        <f:selectItems value="#{routeController.stopSelectItems}" />
+                    </h:selectOneMenu>
+
+                    <h:outputLabel value="#{msg.endStop}" for="discountEndStop" />
+                    <h:selectOneMenu value="#{routeController.discount.endStop}"
+                        converter="#{entityConverter}" id="discountEndStop">
+                        <f:selectItems value="#{routeController.stopSelectItems}" />
+                    </h:selectOneMenu>
+
+                    <h:outputLabel value="#{msg.currentDayOnly}" for="currentDayOnly" />
+                    <h:selectBooleanCheckbox
+                        value="#{routeController.discount.currentDayOnly}"
+                        id="currentDayOnly" />
+
                     <h:outputLabel value="#{msg.description}: " for="description" />
                     <h:inputTextarea value="#{routeController.discount.description}"
                         id="description" rows="5" cols="25" />

@@ -48,7 +48,7 @@
 
                     <a4j:commandButton action="#{routeController.saveStop}"
                         value="#{msg.save}" reRender="stopsTable,pricesTree"
-                        oncomplete="#{rich:component('stopPanel')}.hide();" type="submit">
+                        oncomplete="#{rich:component('stopPanel')}.hide();stopOrderChanged();" type="submit">
                     </a4j:commandButton>
                     <h:outputText></h:outputText>
                 </h:panelGrid>

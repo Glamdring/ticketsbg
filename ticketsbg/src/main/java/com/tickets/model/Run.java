@@ -42,6 +42,7 @@ import org.hibernate.annotations.LazyCollectionOption;
                         "WHERE price.startStop.name=:fromStop AND price.endStop.name=:toStop " +
                         "AND price.price > 0 " +
                         "AND run.seatsExceeded = false " +
+                        "AND run.route.firm.isActive = true " +
                         "ORDER BY run.time, price.price"
         ),
         @NamedQuery(
