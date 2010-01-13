@@ -444,10 +444,10 @@ public class SearchController extends BaseController {
         selectedEntry = ((List<SearchResultEntry>) resultsModel
                 .getWrappedData()).get(selectedId);
 
-        ticketCountsHolder.setTicketCounts(new ArrayList<TicketCount>(searchService.getApplicableDiscounts(selectedEntry, fromStop, toStop).size()));
+        List<Discount> discounts = searchService.getApplicableDiscounts(selectedEntry, fromStop, toStop);
+        ticketCountsHolder.setTicketCounts(new ArrayList<TicketCount>(discounts.size()));
 
-        for (Discount discount : selectedEntry.getRun().getRoute()
-                .getDiscounts()) {
+        for (Discount discount : discounts) {
             TicketCount tc = new TicketCount();
             tc.setDiscount(discount);
             tc.setNumberOfTickets(0);

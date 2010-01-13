@@ -48,13 +48,13 @@
 
                     <h:outputLabel value="#{msg.startStop}" for="discountStartStop" />
                     <h:selectOneMenu value="#{routeController.discount.startStop}"
-                        converter="#{entityConverter}" id="discountStartStop">
+                        id="discountStartStop">
                         <f:selectItems value="#{routeController.stopSelectItems}" />
                     </h:selectOneMenu>
 
                     <h:outputLabel value="#{msg.endStop}" for="discountEndStop" />
                     <h:selectOneMenu value="#{routeController.discount.endStop}"
-                        converter="#{entityConverter}" id="discountEndStop">
+                        id="discountEndStop">
                         <f:selectItems value="#{routeController.stopSelectItems}" />
                     </h:selectOneMenu>
 

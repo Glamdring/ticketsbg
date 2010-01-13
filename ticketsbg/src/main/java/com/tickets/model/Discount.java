@@ -37,11 +37,11 @@ public class Discount extends DataObject implements Serializable, Selectable {
     @Column
     private String description;
 
-    @ManyToOne
-    private Stop startStop;
+    @Column
+    private String startStop;
 
-    @ManyToOne
-    private Stop endStop;
+    @Column
+    private String endStop;
 
     @Column
     private boolean currentDayOnly;
@@ -149,20 +149,19 @@ public class Discount extends DataObject implements Serializable, Selectable {
             return false;
         return true;
     }
-
-    public Stop getStartStop() {
+    public String getStartStop() {
         return startStop;
     }
 
-    public void setStartStop(Stop startStop) {
+    public void setStartStop(String startStop) {
         this.startStop = startStop;
     }
 
-    public Stop getEndStop() {
+    public String getEndStop() {
         return endStop;
     }
 
-    public void setEndStop(Stop endStop) {
+    public void setEndStop(String endStop) {
         this.endStop = endStop;
     }
 

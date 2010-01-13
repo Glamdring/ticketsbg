@@ -212,7 +212,47 @@ public class SearchServiceImpl extends BaseService implements SearchService {
 
         List<Discount> discounts = selectedEntry.getRun().getRoute().getDiscounts();
 
-        //TODO filter
+        Calendar departureTime = selectedEntry.getDepartureTime();
+        int today = GeneralUtils.createCalendar().get(Calendar.DAY_OF_YEAR);
+
+        for (Iterator<Discount> it = discounts.iterator(); it.hasNext();) {
+            Discount discount = it.next();
+            if (!(discount.getStartStop().equals(startStop)
+                    && discount.getEndStop().equals(endStop))) {
+                it.remove();
+            }
+
+            // remove if :
+            // 1.
+            // 1.1. the day of departure is today
+            // 1.2. the discount is not marked as "currentDayOnly"
+            // 1.3. there is a discount with the same start and end stop marked
+            //      as "currentDayOnly"
+            //
+            // 2. if the discount is for the current day and the departure time
+            //    is not today
+            if (!discount.isCurrentDayOnly()
+                    && departureTime.get(Calendar.DAY_OF_YEAR) == today) {
+                if (currentDayDiscountExists(discounts, startStop, endStop)) {
+                    it.remove();
+                }
+            } else  if (discount.isCurrentDayOnly()) {
+                it.remove();
+            }
+        }
+
         return discounts;
+    }
+
+    private boolean currentDayDiscountExists(List<Discount> discounts, String startStop, String endStop) {
+        for (Discount discount : discounts) {
+            if (discount.isCurrentDayOnly()
+                    && discount.getStartStop().equals(startStop)
+                    && discount.getEndStop().equals(endStop)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -201,8 +201,8 @@ public class RouteController extends BaseController implements Serializable {
     @Action
     public void addDiscount() {
         discount = new Discount();
-        discount.setStartStop(route.getStops().get(0));
-        discount.setEndStop(route.getStops().get(route.getStops().size() - 1));
+        discount.setStartStop(route.getStops().get(0).getName());
+        discount.setEndStop(route.getStops().get(route.getStops().size() - 1).getName());
     }
 
     @Action
@@ -558,6 +558,6 @@ public class RouteController extends BaseController implements Serializable {
     }
 
     public List<SelectItem> getStopSelectItems() {
-        return SelectItemUtils.formSelectItems(route.getStops(), false);
+        return SelectItemUtils.formStringSelectItems(route.getStops(), true);
     }
 }

@@ -78,4 +78,24 @@ public class SelectItemUtils {
             return new ArrayList<SelectItem>();
         }
     }
+
+    public static List<SelectItem> formStringSelectItems(
+            List<? extends Selectable> original, boolean addEmptyElement) {
+
+        int size = addEmptyElement ? original.size() + 1 : original.size();
+
+        List<SelectItem> list = new ArrayList<SelectItem>(size);
+
+        if (addEmptyElement) {
+            list.add(new SelectItem(null, ""));
+        }
+
+        for (Selectable sl : original) {
+            list.add(new SelectItem(sl.getLabel(), sl.getLabel()));
+        }
+
+        return list;
+
+    }
+
 }
