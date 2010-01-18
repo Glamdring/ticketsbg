@@ -33,21 +33,24 @@
 
     <rich:toolBar itemSeparator="line" height="34">
         <rich:menuItem action="adminSearchScreen" id="searchMenuItem">
-            <h:graphicImage value="/images/search.png" styleClass="menuIcon" />
-            <h:outputText value="#{msg.searchMenuItem}" styleClass="menuContent" />
+                <h:graphicImage value="/images/search.png" styleClass="menuIcon"
+                    alt="#{msg.searchMenuItem}" />
+                <h:outputText value="#{msg.runsMenuItem}" styleClass="menuContent" />
         </rich:menuItem>
 
         <rich:menuItem action="routesList">
-            <h:graphicImage value="/images/routes.png" styleClass="menuIcon" />
-            <h:outputText value="#{msg.routes}" styleClass="menuContent" />
+                <h:graphicImage value="/images/routes.png" styleClass="menuIcon"
+                    alt="#{msg.routes}" />
+                <h:outputText value="#{msg.routes}" styleClass="menuContent" />
         </rich:menuItem>
 
         <rich:dropDownMenu style="padding-right: 27px; padding-left: 27px;"
             hideDelay="100">
             <f:facet name="label">
                 <h:panelGroup>
-                    <h:graphicImage value="/images/settings.png" styleClass="menuIcon" />
-                    <h:outputText value="#{msg.settings}" styleClass="menuContent" />
+                        <h:graphicImage value="/images/settings.png" styleClass="menuIcon"
+                            alt="#{msg.settings}" />
+                        <h:outputText value="#{msg.settings}" styleClass="menuContent" />
                 </h:panelGroup>
             </f:facet>
 
@@ -92,7 +95,7 @@
             <f:facet name="label">
                 <h:panelGroup>
                     <h:graphicImage value="/images/statistics.png"
-                        styleClass="menuIcon" />
+                        styleClass="menuIcon" alt="#{msg.reports}" />
                     <h:outputText value="#{msg.reports}" styleClass="menuContent" />
                 </h:panelGroup>
             </f:facet>
@@ -105,8 +108,9 @@
 
         <rich:menuItem action="#{loggedUserHolder.logout}"
             rendered="#{loggedUserHolder.loggedUser != null}">
-            <h:graphicImage value="/images/logout.png" styleClass="menuIcon" />
-            <h:outputText value="#{msg.logout}" styleClass="menuContent" />
+                <h:graphicImage value="/images/logout.png" styleClass="menuIcon"
+                    alt="#{msg.logout}" />
+                <h:outputText value="#{msg.logout}" styleClass="menuContent" />
         </rich:menuItem>
 
         <rich:dropDownMenu

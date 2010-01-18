@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -599,7 +600,6 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
                     .getResourceAsStream(resourceName);
 
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(is);
-
             OrderReportData reportData = new OrderReportData();
             reportData.setTickets(tickets);
 
@@ -618,6 +618,7 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
             JasperReport subreport = (JasperReport) JRLoader.loadObject(sis);
             addPdfFontsToStyles(subreport.getStyles());
             params.put("SUBREPORT", subreport);
+            params.put(JRParameter.REPORT_LOCALE, GeneralUtils.getCurrentLocale());
 
             JRStyle[] styles = jasperReport.getStyles();
             addPdfFontsToStyles(styles);

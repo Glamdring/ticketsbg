@@ -13,16 +13,19 @@
         <style type="text/css">
 .internalPanel {
     height: 230px;
+    overflow: auto;
     text-align: left;
 }
 
 .downInternalPanel {
     height: 270px;
+    overflow: auto;
     text-align: left;
 }
 
 .subInternalPanel {
     height: 230px;
+    overflow: auto;
     text-align: left;
 }
 </style>
@@ -200,7 +203,7 @@
                                 rendered="#{routeController.route.id > 0}"
                                 styleClass="downInternalPanel">
                                 <h:panelGrid columns="2" columnClasses="gridContent">
-                                    <rich:panel styleClass="subInternalPanel" style="overflow: auto; width: 250px;">
+                                    <rich:panel styleClass="subInternalPanel" style="width: 250px;">
                                         <rich:tree switchType="client" ajaxSubmitSelection="true"
                                             style="width:210px;"
                                             value="#{routeController.pricesTreeData}" var="data"

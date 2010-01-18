@@ -62,7 +62,7 @@ public class Ticket implements Serializable, Comparable<Ticket> {
     @JoinColumn(name="userId", referencedColumnName="id")
     private User user;
 
-    @ManyToOne(cascade={CascadeType.PERSIST, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name="customerId", referencedColumnName="id")
     private Customer customerInformation;
 

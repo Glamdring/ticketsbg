@@ -65,4 +65,10 @@ public interface StopService extends Service<Stop> {
     void saveMapAddress(String stopName, String mapAddress, Firm firm);
 
     String getMapUrl(String stopName, Firm firm);
+
+    /**
+     * creates or removes prices according to stop updates
+     * @param route
+     */
+    void cascadePrices(Route route);
 }

@@ -40,7 +40,7 @@
         style="border-style: none; width: 385px; height: 93px;" />
     </a></div>
     <div style="float: right; text-align: right;"><h:form>
-        <h:commandLink action="#{localew.ler.changeLocale}">
+        <h:commandLink action="#{localeController.changeLocale}">
             <h:graphicImage url="images/flags/bg.jpg"
                 style=" margin-right: 10px;" styleClass="languageIcon" alt="BG"
                 title="BG" />

@@ -64,7 +64,7 @@
 
                     <h:panelGroup id="resultsPanel"
                         style="border-style: none; width: 100%;">
-                        <rich:panel style="width: 100%">
+                        <rich:panel style="width: 100%" header="#{msg.salesAndTravelLists}">
                             <rich:dataTable value="#{searchController.resultsModel}"
                                 var="result" id="resultsTable" headerClass="tableHeader"
                                 width="100%" columnClasses="columnClass" border="0"

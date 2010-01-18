@@ -128,7 +128,6 @@ public class StatisticsController extends BaseController {
         this.periodItems = periodItems;
     }
 
-    @SuppressWarnings("unchecked")
     public List<String> getRouteNames() {
         if (routeNames == null) {
             List<Route> routes = routeService.list(LoggedUserHolder.getUser().getFirm());

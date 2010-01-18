@@ -85,7 +85,7 @@ public class Route extends DataObject implements Serializable {
 
     @OneToMany(mappedBy="route")
     @LazyCollection(LazyCollectionOption.FALSE)
-    @Cascade({CascadeType.ALL})
+    @Cascade({CascadeType.ALL, CascadeType.DELETE_ORPHAN})
     private List<Discount> discounts;
 
     @Column

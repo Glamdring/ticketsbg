@@ -99,6 +99,8 @@ public class GeneralUtils {
         Locale locale = currentLocale.get();
         if (locale == null) {
             try {
+                // TODO move this to inner-class factory to avoid implicit
+                // dependecy on the jsf
                 locale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
             } catch (Exception ex) {
                 // ignore

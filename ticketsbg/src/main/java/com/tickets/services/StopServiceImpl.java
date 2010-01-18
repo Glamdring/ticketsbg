@@ -45,7 +45,7 @@ public class StopServiceImpl extends BaseService<Stop> implements StopService {
         cascadePrices(route);
     }
 
-    private void cascadePrices(Route route) {
+    public void cascadePrices(Route route) {
         List<Price> prices = route.getPrices();
         List<Stop> stops = route.getStops();
         // to size - 1, because no sub-route can start from the last stop
@@ -122,6 +122,9 @@ public class StopServiceImpl extends BaseService<Stop> implements StopService {
         }
 
         List<Stop> stopsResult = new ArrayList<Stop>(stops.size());
+        if (stops.size() == 0) {
+            return;
+        }
 
         int i = 1;
         for (Stop stop : stops) {
