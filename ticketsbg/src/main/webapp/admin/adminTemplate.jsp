@@ -5,7 +5,8 @@
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:a4j="http://richfaces.org/a4j"
     xmlns:rich="http://richfaces.org/rich"
-    xmlns:p="http://primefaces.prime.com.tr/ui">
+    xmlns:p="http://primefaces.prime.com.tr/ui"
+    xmlns:tc="http://tickets.com/tc">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Tickets</title>
@@ -19,6 +20,10 @@
     margin-right: 5px;
     vertical-align: middle;
 }
+.helpPanel {
+    margin-left: 5px;
+}
+
 </style>
 
 <ui:insert name="head" />
@@ -126,6 +131,13 @@
                 </a4j:region>
             </f:facet>
         </rich:dropDownMenu>
+
+        <rich:toolBarGroup location="right">
+            <h:outputLink value="#{tc:getCurrentHelpPage(facesContext)}">
+                    <h:graphicImage url="/images/small/help.png" alt="#{msg.help}"
+                        title="#{msg.help}" style="border-style: none;" />
+                </h:outputLink>
+        </rich:toolBarGroup>
     </rich:toolBar>
 </a4j:form>
 

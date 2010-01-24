@@ -64,4 +64,9 @@
         <function-class>com.tickets.services.ServiceFunctions</function-class>
         <function-signature>void resetExternalResourceCache()</function-signature>
     </function>
+    <function>
+        <function-name>getCurrentHelpPage</function-name>
+        <function-class>com.tickets.services.ServiceFunctions</function-class>
+        <function-signature>String getCurrentHelpPage(javax.faces.context.FacesContext)</function-signature>
+    </function>
 </facelet-taglib>

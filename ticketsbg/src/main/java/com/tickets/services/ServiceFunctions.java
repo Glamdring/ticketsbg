@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.context.FacesContext;
+
 import org.apache.log4j.Logger;
 
 import com.tickets.controllers.security.AccessLevel;
@@ -33,9 +35,10 @@ public class ServiceFunctions {
         return getVacantSeats(run, fromStop, toStop, true);
     }
 
-    public static int getVacantSeats(Run run, String fromStop, String toStop, boolean useCache) {
+    public static int getVacantSeats(Run run, String fromStop, String toStop,
+            boolean useCache) {
 
-        //lazily initialize the cache
+        // lazily initialize the cache
         if (cache.get() == null)
             cache.set(new HashMap<Run, Integer>());
 
@@ -44,7 +47,8 @@ public class ServiceFunctions {
             return result;
         }
 
-        int seats = run.getRoute().getSeats() - getUsedSeats(run, fromStop, toStop).size();
+        int seats = run.getRoute().getSeats()
+                - getUsedSeats(run, fromStop, toStop).size();
 
         cache.get().put(run, seats);
 
@@ -54,18 +58,18 @@ public class ServiceFunctions {
     /**
      * Method for listing all used seats on a run
      *
-     * The ones that are configured not to be sold online
-     * are also marked as used, but only for the public
-     * part of the site.
+     * The ones that are configured not to be sold online are also marked as
+     * used, but only for the public part of the site.
      *
      * @param price
      * @param run
      * @return a sorted list
      */
 
-    public static List<Integer> getUsedSeats(Run run, String fromStop, String toStop) {
+    public static List<Integer> getUsedSeats(Run run, String fromStop,
+            String toStop) {
         if (run == null || fromStop == null) {
-            return Collections.<Integer>emptyList();
+            return Collections.<Integer> emptyList();
         }
 
         Route route = run.getRoute();
@@ -75,12 +79,12 @@ public class ServiceFunctions {
         // If this is not the admin part, mark all seats beyond the
         // configured 'sell online' seats as used
         User user = LoggedUserHolder.getUser();
-        if (user == null || user.getAccessLevel() == null ||
-                user.getAccessLevel() == AccessLevel.PUBLIC) {
-            for (int i = 1; i < run.getRoute().getSellSeatsFrom(); i ++) {
+        if (user == null || user.getAccessLevel() == null
+                || user.getAccessLevel() == AccessLevel.PUBLIC) {
+            for (int i = 1; i < run.getRoute().getSellSeatsFrom(); i++) {
                 u.add(i);
             }
-            for (int i = route.getSellSeatsTo() + 1; i < route.getSeats(); i ++) {
+            for (int i = route.getSellSeatsTo() + 1; i < route.getSeats(); i++) {
                 u.add(i);
             }
         }
@@ -89,7 +93,7 @@ public class ServiceFunctions {
         Stop startStop = getStopByName(fromStop, stops);
         Stop endStop = getStopByName(toStop, stops);
 
-        //if no end stop selected, assume final stop (TODO: sum all??)
+        // if no end stop selected, assume final stop (TODO: sum all??)
         if (endStop == null) {
             endStop = stops.get(stops.size() - 1);
         }
@@ -102,13 +106,12 @@ public class ServiceFunctions {
         tickets.addAll(run.getTickets());
         tickets.addAll(run.getReturnTickets());
 
-        ticketCycle:
-        for (Ticket ticket : run.getTickets()) {
+        ticketCycle: for (Ticket ticket : run.getTickets()) {
             if (ticket.isTimeouted()) {
                 continue;
             }
-            //from (relative) first to penultimate stop
-            for (int i = startStop.getIdx() - 1; i < endStop.getIdx() - 1; i ++) {
+            // from (relative) first to penultimate stop
+            for (int i = startStop.getIdx() - 1; i < endStop.getIdx() - 1; i++) {
                 Stop tmpStop = stops.get(i);
                 // If the start stop of the existing ticket is anywhere
                 // in the active stops for the requested criteria
@@ -123,7 +126,8 @@ public class ServiceFunctions {
                 // in the active stops for the requested criteria
                 // (excluding the first one, because thus there is no
                 // intersection between them)
-                if (ticket.getEndStop().equals(tmpStop.getName()) && i != startStop.getIdx() - 1) {
+                if (ticket.getEndStop().equals(tmpStop.getName())
+                        && i != startStop.getIdx() - 1) {
                     for (PassengerDetails pd : ticket.getPassengerDetails()) {
                         u.add(pd.getSeat());
                     }
@@ -151,7 +155,6 @@ public class ServiceFunctions {
         }
         return collection.size();
     }
-
 
     public static int getSeatsCount(Collection<Ticket> tickets) {
         int sum = 0;
@@ -209,5 +212,21 @@ public class ServiceFunctions {
 
     public static void resetExternalResourceCache() {
         externalResourceCache.clear();
+    }
+
+    private static final String ADMIN_ROOT = "/admin/";
+    private static final String HELP_ROOT = "help";
+
+    public static String getCurrentHelpPage(FacesContext ctx) {
+        String viewId = ctx.getViewRoot().getViewId();
+
+        if (viewId.contains(HELP_ROOT)) {
+            return "#";
+        }
+
+        String localizedHelpRoot = HELP_ROOT + "_"
+                + ctx.getViewRoot().getLocale().getLanguage() + "/";
+        String currentPageName = viewId.replace(ADMIN_ROOT, "");
+        return localizedHelpRoot + currentPageName;
     }
 }

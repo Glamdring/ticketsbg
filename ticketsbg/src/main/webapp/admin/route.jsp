@@ -13,19 +13,16 @@
         <style type="text/css">
 .internalPanel {
     height: 230px;
-    overflow: auto;
     text-align: left;
 }
 
 .downInternalPanel {
     height: 270px;
-    overflow: auto;
     text-align: left;
 }
 
 .subInternalPanel {
     height: 230px;
-    overflow: auto;
     text-align: left;
 }
 </style>
@@ -203,7 +200,7 @@
                                 rendered="#{routeController.route.id > 0}"
                                 styleClass="downInternalPanel">
                                 <h:panelGrid columns="2" columnClasses="gridContent">
-                                    <rich:panel styleClass="subInternalPanel" style="width: 250px;">
+                                    <rich:panel styleClass="subInternalPanel" style="width: 250px; overflow: auto;">
                                         <rich:tree switchType="client" ajaxSubmitSelection="true"
                                             style="width:210px;"
                                             value="#{routeController.pricesTreeData}" var="data"
@@ -259,7 +256,7 @@
                                 </h:panelGrid>
                             </rich:panel>
 
-                            <rich:panel styleClass="downInternalPanel"
+                            <rich:panel styleClass="downInternalPanel" style="overflow: auto;"
                                 header="#{msg.discounts}" id="discountsPanel">
                                 <a4j:commandButton value="#{msg.addDiscount}"
                                     action="#{routeController.addDiscount}"
@@ -333,7 +330,7 @@
                             </rich:panel>
 
 
-                            <rich:panel styleClass="downInternalPanel"
+                            <rich:panel styleClass="downInternalPanel" style="overflow: auto;"
                                 header="#{msg.routeSettings}" id="routeSettingsPanel">
                                 <h:panelGrid columns="2" styleClass="dr-pnl-b"
                                     style="padding:0px; margin:0px;">
