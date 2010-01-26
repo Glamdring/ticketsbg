@@ -116,7 +116,9 @@ public class UserController extends BaseCRUDController<User> {
 
     @Override
     protected User createEntity() {
-        return new User();
+        User user = new User();
+        user.setStaff(true);
+        return user;
     }
 
     @Override

@@ -61,17 +61,20 @@ public class StaticResourceCacheFilter implements Filter {
                     Boolean.TRUE);
         }
 
+        chain.doFilter(httpRequest, httpResponse);
+
         String contentType = httpResponse.getContentType();
-        if (contentType == null
-                || Arrays.binarySearch(CACHEABLE_CONTENT_TYPES, contentType) > -1) {
+
+        if (contentType != null && Arrays.binarySearch(CACHEABLE_CONTENT_TYPES, contentType) > -1) {
 
             Calendar inTwoMonths = GeneralUtils.createCalendar();
             inTwoMonths.add(Calendar.MONTH, 2);
 
             httpResponse.setHeader("Expires", DateUtil.formatDate(inTwoMonths.getTime()));
+        } else {
+            httpResponse.setHeader("Expires", "-1");
         }
 
-        chain.doFilter(httpRequest, httpResponse);
     }
 }
 

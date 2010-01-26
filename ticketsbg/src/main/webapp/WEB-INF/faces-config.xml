@@ -249,6 +249,14 @@
 
     <navigation-rule>
         <navigation-case>
+            <from-outcome>adminUnauthorized</from-outcome>
+            <to-view-id>/admin/unauthorized.jsp</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <navigation-case>
             <from-outcome>agentsList</from-outcome>
             <to-view-id>/admin/agents.jsp</to-view-id>
             <redirect />

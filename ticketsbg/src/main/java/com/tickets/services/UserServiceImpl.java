@@ -298,7 +298,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
 
     @Override
     public boolean isHash(String password) {
-        return password.length() == 37 && password.matches("[0-9abcdef]+");
+        return password.length() >= 37 && password.matches("[0-9abcdef]+");
     }
 
     public boolean usernameExists(String username) {

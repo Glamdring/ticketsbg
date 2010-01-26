@@ -18,6 +18,7 @@ public enum Screen {
     ADMIN_SEARCH_RESULTS("adminSearchResults"),
 
     UNAUTHORIZED("unauthorized"),
+    ADMIN_UNAUTHORIZED("adminUnauthorized"),
     ADMIN_SEARCH_SCREEN("adminSearchScreen")
     ;
 

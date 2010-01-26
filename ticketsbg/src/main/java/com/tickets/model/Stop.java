@@ -46,7 +46,7 @@ import javax.persistence.Table;
                     "WHERE u=:user " +
                     "AND s.route.firm=firm " +
                     "AND p.price > 0 " +
-                    "AND (u.firm = firm OR u.agent=agent)" +
+                    "AND (u.firm = firm OR u.agent=agent) " +
                     "AND p.startStop = s " +
                     "GROUP BY s.name ORDER BY s.name"
     ),
@@ -56,7 +56,7 @@ import javax.persistence.Table;
                     "WHERE u=:user " +
                     "AND s.route.firm=firm " +
                     "AND p.price > 0 " +
-                    "AND (u.firm=firm OR u.agent=agent)" +
+                    "AND (u.firm=firm OR u.agent=agent) " +
                     "AND p.endStop = s " +
                     "AND p.startStop.name=:startStopName " +
                     "GROUP BY s.name ORDER BY s.name"

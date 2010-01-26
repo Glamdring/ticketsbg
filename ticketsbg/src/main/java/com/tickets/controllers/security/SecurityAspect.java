@@ -66,7 +66,12 @@ public class SecurityAspect implements Serializable {
 
         if (user.getAccessLevel().getPrivileges() < requiredLevel
                 .getPrivileges()) {
-            redirectTo(Screen.UNAUTHORIZED, facesContext);
+
+            if (isAdminPage) {
+                redirectTo(Screen.ADMIN_UNAUTHORIZED, facesContext);
+            } else {
+                redirectTo(Screen.UNAUTHORIZED, facesContext);
+            }
             return getObjectToReturn(jp);
         }
 

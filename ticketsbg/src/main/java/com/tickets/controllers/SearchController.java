@@ -59,7 +59,7 @@ public class SearchController extends BaseController {
     private transient TicketService ticketService;
 
     @Autowired
-    private StopService stopService;
+    private transient StopService stopService;
 
     @Autowired
     private LoggedUserHolder loggedUserHolder;
@@ -156,8 +156,8 @@ public class SearchController extends BaseController {
     }
 
     private boolean isAdmin() {
-        return admin.getValue() != null
-                && admin.getValue().equals(Boolean.TRUE);
+        return admin != null && admin.getValue() != null
+                && (admin.getValue().equals(Boolean.TRUE) || admin.getValue().equals("true"));
     }
 
     private String publicSearch() {
@@ -413,7 +413,6 @@ public class SearchController extends BaseController {
         User user = loggedUserHolder.getLoggedUser();
 
         stopNames = searchService.listAllStops(user, getCurrentFirm());
-        // toStopNames = searchService.listAllStops(user);
 
         // Setting a default origin
         if (user != null) {
@@ -614,6 +613,11 @@ public class SearchController extends BaseController {
     }
 
     public List<String> getStopNames() {
+        if (isAdmin()) {
+            // in admin panel, refresh
+            stopNames = searchService.listAllStops(loggedUserHolder
+                    .getLoggedUser(), getCurrentFirm());
+        }
         return stopNames;
     }
 
