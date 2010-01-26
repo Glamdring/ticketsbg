@@ -43,14 +43,14 @@
                 <h:outputText value="#{msg.runsMenuItem}" styleClass="menuContent" />
         </rich:menuItem>
 
-        <rich:menuItem action="routesList">
+        <rich:menuItem action="routesList" rendered="#{loggedUserHolder.loggedUser.accessLevel.privileges >= 40}">
                 <h:graphicImage value="/images/routes.png" styleClass="menuIcon"
                     alt="#{msg.routes}" />
                 <h:outputText value="#{msg.routes}" styleClass="menuContent" />
         </rich:menuItem>
 
         <rich:dropDownMenu style="padding-right: 27px; padding-left: 27px;"
-            hideDelay="100">
+            hideDelay="100" rendered="#{loggedUserHolder.loggedUser.accessLevel.privileges >= 40}">
             <f:facet name="label">
                 <h:panelGroup>
                         <h:graphicImage value="/images/settings.png" styleClass="menuIcon"
