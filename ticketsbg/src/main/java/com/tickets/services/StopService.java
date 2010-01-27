@@ -31,7 +31,7 @@ public interface StopService extends Service<Stop> {
     void delete(Stop stop, Route route);
 
     /**
-     * Manages reordering of the stops list
+     * Manages reordering of the stops list.
      * @param route
      * @param stops
      */

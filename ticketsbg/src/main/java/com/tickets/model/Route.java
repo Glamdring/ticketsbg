@@ -131,7 +131,7 @@ public class Route extends DataObject implements Serializable {
      * when sales stop
      */
     @Column
-    private int stopSalesBeforeRunInHours = 2;
+    private int stopSalesBeforeRunTime = 2 * 60;
 
     public Route() {
     }
@@ -340,11 +340,11 @@ public class Route extends DataObject implements Serializable {
         this.requireReceiptAtCashDesk = requireReceiptAtCashDesk;
     }
 
-    public int getStopSalesBeforeRunInHours() {
-        return stopSalesBeforeRunInHours;
+    public int getStopSalesBeforeRunTime() {
+        return stopSalesBeforeRunTime;
     }
 
-    public void setStopSalesBeforeRunInHours(int stopSalesBeforeRunInHours) {
-        this.stopSalesBeforeRunInHours = stopSalesBeforeRunInHours;
+    public void setStopSalesBeforeRunTime(int stopSalesBeforeRunTime) {
+        this.stopSalesBeforeRunTime = stopSalesBeforeRunTime;
     }
 }

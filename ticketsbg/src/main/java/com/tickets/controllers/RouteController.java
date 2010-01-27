@@ -16,7 +16,6 @@ import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
 import org.ajax4jsf.component.UIDataAdaptor;
-import org.ajax4jsf.model.SequenceDataModel;
 import org.apache.myfaces.orchestra.conversation.annotations.ConversationName;
 import org.richfaces.component.UIOrderingList;
 import org.richfaces.component.UITree;
@@ -269,6 +268,7 @@ public class RouteController extends BaseController implements Serializable {
         // whenever there is time to understand the functioning
         // of rich:orderingList better
 
+        System.out.println(stopsTable.getValue());
         Collection<Stop> collectionOfStops = null;
         try {
             Method m = UIDataAdaptor.class.getDeclaredMethod("getExtendedDataModel");
@@ -287,6 +287,7 @@ public class RouteController extends BaseController implements Serializable {
             return;
         }
         stopService.listReoredered(route, collectionOfStops);
+
         refreshTreeModel();
     }
 

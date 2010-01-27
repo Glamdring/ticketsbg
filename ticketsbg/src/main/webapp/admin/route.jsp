@@ -25,6 +25,10 @@
     height: 230px;
     text-align: left;
 }
+.rich-ordering-list-output {
+    margin-left: 0px;
+    padding-left: 0px;
+}
 </style>
     </ui:define>
     <ui:define name="body">
@@ -46,11 +50,12 @@
                             <h:panelGroup style="float: right;">
 
                                 <h:panelGroup style="margin-right: 25px;">
-                                    <h:outputLabel value="#{msg.stopSalesBeforeRunInHours}: "
-                                        for="stopSalesBeforeRunInHours" />
+                                    <h:outputLabel value="#{msg.stopSalesBeforeRunTime}: "
+                                        for="stopSalesBeforeRunTime" />
                                     <h:inputText
-                                        value="#{routeController.route.stopSalesBeforeRunInHours}"
-                                        id="stopSalesBeforeRunInHours" size="3" />
+                                        value="#{routeController.route.stopSalesBeforeRunTime}"
+                                        id="stopSalesBeforeRunTime" size="4"
+                                        converter="#{timeToMinutesConverter}"/>
                                 </h:panelGroup>
 
                                 <h:panelGroup style="margin-right: 25px;">
@@ -141,9 +146,6 @@
                                     converter="#{stopListConverter}" showButtonLabels="false"
                                     listWidth="500" listHeight="150" id="stopsTable"
                                     onorderchanged="stopOrderChanged();">
-
-                                    <a4j:support event="onorderchanged" ajaxSingle="true"
-                                        immediate="true" />
 
                                     <rich:column>
                                         <f:facet name="header">
