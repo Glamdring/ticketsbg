@@ -1,6 +1,5 @@
 package com.tickets.services;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.richfaces.model.ListRowKey;
@@ -35,7 +34,7 @@ public interface StopService extends Service<Stop> {
      * @param route
      * @param stops
      */
-    void listReoredered(Route route, Collection<Stop> stops);
+    void listReoredered(Route route);
 
     /**
      * Gets the Price for the following path in the tree

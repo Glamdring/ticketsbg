@@ -1,11 +1,9 @@
 package com.tickets.controllers;
 
 import java.io.Serializable;
-import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +13,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
-import org.ajax4jsf.component.UIDataAdaptor;
 import org.apache.myfaces.orchestra.conversation.annotations.ConversationName;
 import org.richfaces.component.UIOrderingList;
 import org.richfaces.component.UITree;
@@ -23,7 +20,6 @@ import org.richfaces.component.html.HtmlOrderingList;
 import org.richfaces.component.html.HtmlTree;
 import org.richfaces.event.NodeSelectedEvent;
 import org.richfaces.model.ListRowKey;
-import org.richfaces.model.OrderingListDataModel;
 import org.richfaces.model.TreeNode;
 import org.richfaces.model.TreeNodeImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,8 +83,6 @@ public class RouteController extends BaseController implements Serializable {
 
     private UIOrderingList stopsOrderingList;
 
-    private List<Stop> stopsInitialList;
-
     @Autowired
     private SeatController seatController;
 
@@ -124,7 +118,6 @@ public class RouteController extends BaseController implements Serializable {
     @Action
     public String edit() {
         route = (Route) routesModel.getRowData();
-        stopsInitialList = new ArrayList<Stop>(route.getStops());
         daysPickList = routeService.getDaysList(route);
         seatController.setSeatHandler(new SeatHandler(route));
         if (route.getPrices().size() == 0) {
@@ -145,7 +138,6 @@ public class RouteController extends BaseController implements Serializable {
     @Action
     public String newRoute() {
         daysPickList = new Integer[0];
-        stopsInitialList = new ArrayList<Stop>();
         route = new Route();
         route.setFirm(loggedUserHolder.getLoggedUser().getFirm());
         route.setRequireReceiptAtCashDesk(route.getFirm().isRequireReceiptAtCashDesk());
@@ -185,13 +177,6 @@ public class RouteController extends BaseController implements Serializable {
                 currentStopMapAddress,
                 loggedUserHolder.getLoggedUser().getFirm());
         listReordered();
-
-        // re-setting, because then, after submission of the form,
-        // the Stop objects are checked against the "value" attribute
-        // (which evaluates to stopsInitialList), and as the hashCode()
-        // and equals() methods are using a business key, the check would
-        // fail if a stop was edited
-        stopsInitialList = route.getStops();
     }
 
     @Action
@@ -199,7 +184,6 @@ public class RouteController extends BaseController implements Serializable {
         Stop stop = (Stop) stopsTable.getRowData();
         stopService.delete(stop, route);
         //see saveStop comment for more details on this
-        stopsInitialList = route.getStops();
     }
 
     @Action
@@ -261,33 +245,9 @@ public class RouteController extends BaseController implements Serializable {
         discount.setDescription(gd.getDescription());
     }
 
-    @SuppressWarnings({ "unchecked", "cast" })
     public void listReordered() {
 
-        // This is a hack. But a working one. Should be cleared
-        // whenever there is time to understand the functioning
-        // of rich:orderingList better
-
-        System.out.println(stopsTable.getValue());
-        Collection<Stop> collectionOfStops = null;
-        try {
-            Method m = UIDataAdaptor.class.getDeclaredMethod("getExtendedDataModel");
-            m.setAccessible(true);
-            Object dataModel = m.invoke(stopsTable);
-            if (dataModel instanceof OrderingListDataModel) {
-                Map model = (Map) ((OrderingListDataModel) dataModel).getWrappedData();
-                collectionOfStops = (Collection<Stop>) model.values();
-            }
-
-            if (collectionOfStops == null) {
-                return;
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return;
-        }
-        stopService.listReoredered(route, collectionOfStops);
-
+        stopService.listReoredered(route);
         refreshTreeModel();
     }
 
@@ -560,14 +520,6 @@ public class RouteController extends BaseController implements Serializable {
 
     public void setStopsOrderingList(UIOrderingList stopsOrderingList) {
         this.stopsOrderingList = stopsOrderingList;
-    }
-
-    public List<Stop> getStopsInitialList() {
-        return stopsInitialList;
-    }
-
-    public void setStopsInitialList(List<Stop> stopsInitialList) {
-        this.stopsInitialList = stopsInitialList;
     }
 
     public List<SelectItem> getStopSelectItems() {

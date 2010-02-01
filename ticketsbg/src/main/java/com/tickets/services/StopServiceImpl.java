@@ -1,8 +1,5 @@
 package com.tickets.services;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import org.richfaces.model.ListRowKey;
@@ -115,30 +112,17 @@ public class StopServiceImpl extends BaseService<Stop> implements StopService {
     }
 
     @Override
-    public void listReoredered(Route route, Collection<Stop> stops) {
+    public void listReoredered(Route route) {
 
-        if (stops == null) {
+        List<Stop> stops = route.getStops();
+
+        if (stops == null || stops.size() == 0) {
             return;
         }
 
-        List<Stop> stopsResult = new ArrayList<Stop>(stops.size());
-        if (stops.size() == 0) {
-            return;
+        for (int i = 0, max = stops.size(); i < max; i++) {
+            stops.get(i).setIdx(i + 1);
         }
-
-        int i = 1;
-        for (Stop stop : stops) {
-            stop.setIdx(i);
-            i++;
-            stopsResult.add(stop);
-        }
-
-//        for (int i = 0, max = stops.size(); i < max; i++) {
-//            stops.get(i).setIdx(i + 1);
-//        }
-        // Reordering the list itself, not only changing the idx's
-        Collections.sort(stopsResult);
-        route.setStops(stopsResult);
 
         cascadePrices(route);
     }

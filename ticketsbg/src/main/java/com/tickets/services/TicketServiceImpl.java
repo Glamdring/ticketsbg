@@ -51,6 +51,7 @@ import com.tickets.services.valueobjects.TicketCount;
 import com.tickets.services.valueobjects.TicketCountsHolder;
 import com.tickets.services.valueobjects.TicketInfo;
 import com.tickets.utils.GeneralUtils;
+import com.tickets.utils.ValidationBypassingEventListener;
 
 @Service("ticketService")
 public class TicketServiceImpl extends BaseService<Ticket> implements
@@ -452,7 +453,15 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
             if (ticket.getUser() == null) {
                 ticket.setUser(user);
             }
-            ticket = save(ticket);
+
+            ValidationBypassingEventListener.turnValidationOff();
+            try {
+                ticket = save(ticket);
+            } finally {
+                ValidationBypassingEventListener.turnValidationOn();
+            }
+
+
         }
 
         log.debug("Committing purchase. Number of tickets: " + tickets.size());

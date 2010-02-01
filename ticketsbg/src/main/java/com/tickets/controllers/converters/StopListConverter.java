@@ -1,5 +1,7 @@
 package com.tickets.controllers.converters;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -20,7 +22,13 @@ public class StopListConverter implements Converter {
 
     public Object getAsObject(FacesContext ctx, UIComponent c, String str) {
         try {
-            return routeController.getRoute().getStops().get(Integer.parseInt(str) - 1);
+            List<Stop> stops = routeController.getRoute().getStops();
+            for (Stop stop : stops) {
+                if (stop.getName().equals(str)) {
+                    return stop;
+                }
+            }
+            return null;
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
@@ -28,6 +36,6 @@ public class StopListConverter implements Converter {
     }
     public String getAsString(FacesContext ctx, UIComponent c, Object obj) {
         if (obj == null) return null;
-        return ((Stop) obj).getIdx() + "";
+        return ((Stop) obj).getName();
     }
 }

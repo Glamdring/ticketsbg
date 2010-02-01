@@ -311,9 +311,12 @@ public class SearchController extends BaseController {
         // If the user is staff-member, i.e. this is admin panel,
         // set the customer name, and mark the tickets as sold
         User user = loggedUserHolder.getLoggedUser();
-        if (user != null && user.isStaff()) {
+        if (user != null && user.isStaff() && isAdmin()) {
             ticket.setCustomerInformation(new Customer());
             ticket.getCustomerInformation().setName(customerName);
+            // setting to empty values in order to bypass validation on cascade
+            ticket.getCustomerInformation().setEmail("");
+            ticket.getCustomerInformation().setContactPhone("");
 
             purchaseController.finalizePurchase(user);
             // redo the search

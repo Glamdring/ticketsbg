@@ -70,8 +70,11 @@ public class PurchaseController extends BaseController implements Serializable {
     }
 
     public void finalizePurchase(User user) {
-        ticketService.finalizePurchase(tickets, user);
-        clearPurchase();
+        try {
+            ticketService.finalizePurchase(tickets, user);
+        } finally {
+            clearPurchase();
+        }
     }
 
     public void clearPurchase() {

@@ -53,7 +53,7 @@ public class StatisticsServiceImpl extends BaseService
     @PostConstruct
     public void refreshStatistics() {
         List destResult = getDao().findByQuery(
-            "SELECT DISTINCT stop.name FROM Stop stop WHERE stop.route.firm.active=true");
+            "SELECT DISTINCT stop.name FROM Stop stop WHERE stop.route.firm.isActive=true");
         destinationsCount = destResult.size();
 
         List<Firm> firms = list(Firm.class);
