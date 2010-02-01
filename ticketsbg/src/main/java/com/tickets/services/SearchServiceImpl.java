@@ -30,13 +30,17 @@ public class SearchServiceImpl extends BaseService implements SearchService {
         if (currentFirm == null) {
             result = getDao().findByNamedQuery("Run.search",
                     new String[] { "fromStop", "toStop" },
-                    new Object[] { fromStop, toStop });
+                    new Object[] { fromStop + "%", toStop + "%"});
         } else {
             result = getDao().findByNamedQuery("Run.searchByFirm",
                     new String[] { "fromStop", "toStop", "firm" },
-                    new Object[] { fromStop, toStop, currentFirm });
+                    new Object[] { fromStop + "%", toStop + "%", currentFirm });
         }
 
+
+        for (SearchResultEntry sre : result) {
+            System.out.println(sre.getRun().getRoute().getName());
+        }
         filterSearchResults(fromStop, toStop, date, fromHour, toHour,
                 isTimeForDeparture, result);
 
@@ -53,11 +57,11 @@ public class SearchServiceImpl extends BaseService implements SearchService {
         if (endStop == null || endStop.length() == 0) {
             result = getDao().findByNamedQuery("Run.adminSearchNoEndStop",
                     new String[] { "fromStop", "user" },
-                    new Object[] { startStop, user });
+                    new Object[] { startStop + "%", user });
         } else {
             result = getDao().findByNamedQuery("Run.adminSearch",
                     new String[] { "fromStop", "toStop", "user" },
-                    new Object[] { startStop, endStop, user });
+                    new Object[] { startStop + "%", endStop + "%", user });
         }
 
         filterSearchResults(startStop, endStop, date, fromHour, toHour,
@@ -102,8 +106,8 @@ public class SearchServiceImpl extends BaseService implements SearchService {
                 continue;
             }
 
-            Stop fromStopObj = findStop(run.getRoute().getStops(), fromStop);
-            Stop toStopObj = findStop(run.getRoute().getStops(), toStop);
+            Stop fromStopObj = ServiceFunctions.getStopByName(fromStop, run.getRoute().getStops());
+            Stop toStopObj = ServiceFunctions.getStopByName(toStop, run.getRoute().getStops());
 
             // if no target stop chosen, assume the final stop of the route;
             if (toStopObj == null) {
@@ -145,18 +149,6 @@ public class SearchServiceImpl extends BaseService implements SearchService {
             entry.setArrivalTime(arrivalTime);
             entry.setDepartureTime(departureTime);
         }
-    }
-
-    private Stop findStop(List<Stop> stops, String stopName) {
-        if (stopName == null)
-            return null;
-
-        for (Stop stop : stops) {
-            if (stopName.equals(stop.getName())) {
-                return stop;
-            }
-        }
-        return null;
     }
 
     @Override
@@ -223,8 +215,8 @@ public class SearchServiceImpl extends BaseService implements SearchService {
 
         for (Iterator<Discount> it = discounts.iterator(); it.hasNext();) {
             Discount discount = it.next();
-            if (!(discount.getStartStop().equals(startStop)
-                    && discount.getEndStop().equals(endStop))) {
+            if (!(discount.getStartStop().startsWith(startStop)
+                    && discount.getEndStop().startsWith(endStop))) {
                 it.remove();
             }
 

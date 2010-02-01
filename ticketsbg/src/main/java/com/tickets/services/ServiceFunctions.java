@@ -140,9 +140,13 @@ public class ServiceFunctions {
         return u;
     }
 
-    private static Stop getStopByName(String name, List<Stop> stops) {
+    public static Stop getStopByName(String name, List<Stop> stops) {
+        if (name == null) {
+            return null;
+        }
+
         for (Stop stop : stops) {
-            if (stop.getName().equals(name)) {
+            if (stop.getName().startsWith(name)) {
                 return stop;
             }
         }

@@ -39,7 +39,7 @@ import org.hibernate.annotations.LazyCollectionOption;
         @NamedQuery(
                 name = "Run.search",
                 query = "SELECT DISTINCT new com.tickets.model.SearchResultEntry(run, price) FROM Run run, IN(run.route.prices) price " +
-                        "WHERE price.startStop.name=:fromStop AND price.endStop.name=:toStop " +
+                        "WHERE price.startStop.name LIKE :fromStop AND price.endStop.name LIKE :toStop " +
                         "AND price.price > 0 " +
                         "AND run.seatsExceeded = false " +
                         "AND run.route.firm.isActive = true " +
@@ -48,7 +48,7 @@ import org.hibernate.annotations.LazyCollectionOption;
         @NamedQuery(
                 name = "Run.searchByFirm",
                 query = "SELECT DISTINCT new com.tickets.model.SearchResultEntry(run, price) FROM Run run, IN(run.route.prices) price " +
-                        "WHERE price.startStop.name=:fromStop AND price.endStop.name=:toStop " +
+                        "WHERE price.startStop.name LIKE :fromStop AND price.endStop.name LIKE :toStop " +
                         "AND price.price > 0 " +
                         "AND run.seatsExceeded = false " +
                         "AND run.route.firm=:firm " +
@@ -57,7 +57,7 @@ import org.hibernate.annotations.LazyCollectionOption;
         @NamedQuery(
                 name = "Run.adminSearch",
                 query = "SELECT DISTINCT new com.tickets.model.SearchResultEntry(run, price) FROM Run run, User user, IN(run.route.prices) price, Firm firm LEFT OUTER JOIN firm.agents agent " +
-                        "WHERE price.startStop.name=:fromStop AND price.endStop.name=:toStop " +
+                        "WHERE price.startStop.name LIKE :fromStop AND price.endStop.name LIKE :toStop " +
                         "AND price.price > 0 " +
                         "AND run.route.firm = firm " +
                         "AND user=:user " +
@@ -68,7 +68,7 @@ import org.hibernate.annotations.LazyCollectionOption;
         @NamedQuery(
                 name = "Run.adminSearchNoEndStop",
                 query = "SELECT DISTINCT new com.tickets.model.SearchResultEntry(run, price) FROM Run run, User user, IN(run.route.prices) price, Firm firm LEFT OUTER JOIN firm.agents agent " +
-                        "WHERE price.startStop.name=:fromStop " +
+                        "WHERE price.startStop.name LIKE :fromStop " +
                         "AND price.price > 0 " +
                         "AND run.route.firm = firm " +
                         "AND user=:user " +

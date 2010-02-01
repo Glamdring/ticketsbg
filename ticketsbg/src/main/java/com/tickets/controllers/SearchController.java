@@ -341,8 +341,8 @@ public class SearchController extends BaseController {
     private Price findPrice(String fromStop, String toStopPerPurchase,
             Route route) {
         for (Price price : route.getPrices()) {
-            if (price.getStartStop().getName().equals(fromStop)
-                    && price.getEndStop().getName().equals(toStopPerPurchase)) {
+            if (price.getStartStop().getName().startsWith(fromStop)
+                    && price.getEndStop().getName().startsWith(toStopPerPurchase)) {
 
                 return price;
             }
