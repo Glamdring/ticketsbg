@@ -83,11 +83,11 @@ public class Run implements Serializable, Comparable<Run> {
     private int runId;
 
     @OneToMany(mappedBy = "run")
-    @LazyCollection(LazyCollectionOption.FALSE)
+    @LazyCollection(LazyCollectionOption.TRUE)
     private Set<Ticket> tickets = new HashSet<Ticket>();
 
     @OneToMany(mappedBy = "returnRun")
-    @LazyCollection(LazyCollectionOption.FALSE)
+    @LazyCollection(LazyCollectionOption.TRUE)
     private Set<Ticket> returnTickets = new HashSet<Ticket>();
 
     @ManyToOne

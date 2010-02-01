@@ -3,8 +3,10 @@ package com.tickets.services;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
@@ -74,6 +76,9 @@ public class SearchServiceImpl extends BaseService implements SearchService {
     private void filterSearchResults(String fromStop, String toStop, Date date,
             int fromHour, int toHour, boolean isTimeForDeparture,
             List<SearchResultEntry> result) {
+
+        Set<Integer> usedRuns = new HashSet<Integer>();
+
         Calendar fromTime = GeneralUtils.createCalendar();
         fromTime.setTime(date);
         fromTime.add(Calendar.HOUR_OF_DAY, fromHour);
@@ -142,6 +147,12 @@ public class SearchServiceImpl extends BaseService implements SearchService {
 
             // Filtering the ones with no seats remaining
             if (ServiceFunctions.getVacantSeats(run, fromStop, toStop, false) <= 0) {
+                it.remove();
+                continue;
+            }
+
+            // disallow a run to be included twice
+            if (!usedRuns.add(run.getRunId())) {
                 it.remove();
                 continue;
             }
