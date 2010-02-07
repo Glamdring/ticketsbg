@@ -38,7 +38,7 @@ import org.hibernate.annotations.LazyCollectionOption;
         //TODO optimize. Now does a query for each run (to match a price)
         @NamedQuery(
                 name = "Run.search",
-                query = "SELECT DISTINCT new com.tickets.model.SearchResultEntry(run, price) FROM Run run, IN(run.route.prices) price " +
+                query = "SELECT DISTINCT new com.tickets.model.SearchResultEntry(run, price, run.time, price.price) FROM Run run, IN(run.route.prices) price " +
                         "WHERE price.startStop.name LIKE :fromStop AND price.endStop.name LIKE :toStop " +
                         "AND price.price > 0 " +
                         "AND run.seatsExceeded = false " +

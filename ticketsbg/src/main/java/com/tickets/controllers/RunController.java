@@ -53,7 +53,6 @@ public class RunController extends BaseController {
     @Action
     public void addRun() {
         // saving the route, which will cascade the newly added runs
-        System.out.println(run.getTime());
         if (run.getTime() != null) {
             run.setManuallyAdded(true);
             route.addRun(run);

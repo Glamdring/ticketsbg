@@ -17,13 +17,11 @@ import java.util.zip.ZipOutputStream;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.tickets.constants.Settings;
 import com.tickets.utils.GeneralUtils;
 
-@Component("backupTask")
 public class BackupTask extends TimerTask {
 
     private static final Logger log = Logger.getLogger(BackupTask.class);
@@ -31,10 +29,14 @@ public class BackupTask extends TimerTask {
     @Autowired
     private ComboPooledDataSource dataSource;
 
+    private boolean performBackup;
+
     @Override
     public void run() {
-        parseAndPerformBackup(dataSource.getUser(), dataSource.getPassword(),
+        if (performBackup) {
+            parseAndPerformBackup(dataSource.getUser(), dataSource.getPassword(),
                 dataSource.getJdbcUrl());
+        }
     }
 
     private void parseAndPerformBackup(String user, String password,
@@ -118,4 +120,11 @@ public class BackupTask extends TimerTask {
         dest.close();
     }
 
+    public boolean isPerformBackup() {
+        return performBackup;
+    }
+
+    public void setPerformBackup(boolean performBackup) {
+        this.performBackup = performBackup;
+    }
 }

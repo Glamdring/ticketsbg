@@ -41,9 +41,9 @@ public class ProfileController extends BaseController {
 
     @PostConstruct
     public void init() {
-        for (Iterator<FacesMessage> it = FacesContext.getCurrentInstance().getMessages(); it.hasNext();) {
-            System.out.println(it.next().getSummary());
-        }
+//        for (Iterator<FacesMessage> it = FacesContext.getCurrentInstance().getMessages(); it.hasNext();) {
+//            System.out.println(it.next().getSummary());
+//        }
         customerTypeItems = SelectItemUtils.formSelectItems(CustomerType.class);
     }
 

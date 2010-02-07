@@ -1,5 +1,6 @@
 package com.tickets.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 @Embeddable
-public class SeatSettings {
+public class SeatSettings implements Serializable {
 
     @Column
     private boolean startRight;

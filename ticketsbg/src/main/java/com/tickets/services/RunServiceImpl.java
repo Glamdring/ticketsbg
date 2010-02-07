@@ -147,7 +147,7 @@ public class RunServiceImpl extends BaseService<Run> implements RunService<Run> 
         int day = time.get(Calendar.DAY_OF_YEAR);
         int diff = day - now.get(Calendar.DAY_OF_YEAR);
 
-        System.out.println(diff);
+        logger.debug("Difference is: " + diff);
         // check whether the 'now' or 'day' (whichever is greater) isn't in the
         // next year recalculate the difference in days
         if (diff > 300) {

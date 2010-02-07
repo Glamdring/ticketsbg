@@ -250,6 +250,10 @@
         <property name="timerTask" ref="backupTask" />
     </bean>
 
+    <bean id="backupTask" class="com.tickets.utils.timers.BackupTask">
+        <property name="performBackup" value="${perform.backup}" />
+    </bean>
+
     <bean id="timerFactory" class="org.springframework.scheduling.timer.TimerFactoryBean">
         <property name="scheduledTimerTasks">
             <list>

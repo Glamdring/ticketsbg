@@ -1,6 +1,7 @@
 package com.tickets.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Calendar;
 
 import com.tickets.constants.Constants;
@@ -13,6 +14,12 @@ public class SearchResultEntry implements Serializable {
     private Calendar arrivalTime;
 
     public SearchResultEntry() {
+    }
+
+    // constructor for accommodating two more arguments. required by HSQLDB
+    @SuppressWarnings("unused")
+    public SearchResultEntry(Run run, Price price, Calendar time, BigDecimal priceValue) {
+        this(run, price);
     }
 
     public SearchResultEntry(Run run, Price price) {

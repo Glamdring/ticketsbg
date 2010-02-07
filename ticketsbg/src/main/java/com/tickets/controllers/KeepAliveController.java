@@ -2,6 +2,7 @@ package com.tickets.controllers;
 
 import java.io.Serializable;
 
+import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
@@ -9,8 +10,11 @@ import org.springframework.stereotype.Controller;
 @Scope("session")
 public class KeepAliveController implements Serializable {
 
+    private static final Logger logger = Logger
+            .getLogger(KeepAliveController.class);
+
     public void poll() {
-        System.out.println("polled");
+        logger.info("polled");
         // polling in order to keep the session alive
     }
 }

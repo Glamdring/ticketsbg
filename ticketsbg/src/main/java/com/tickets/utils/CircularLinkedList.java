@@ -1,5 +1,6 @@
 package com.tickets.utils;
 
+import java.io.PrintStream;
 import java.util.List;
 
 public class CircularLinkedList<E> {
@@ -80,10 +81,10 @@ public class CircularLinkedList<E> {
         return node.getNext();
     }
 
-    public void display() {
+    public void display(PrintStream ps) {
         ListNode<E> node = head;
         do {
-            System.out.println(node.getValue() + ", ");
+            ps.println(node.getValue() + ", ");
             node = node.getNext();
         } while (node != head);
     }

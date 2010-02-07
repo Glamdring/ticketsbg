@@ -39,10 +39,6 @@ public class SearchServiceImpl extends BaseService implements SearchService {
                     new Object[] { fromStop + "%", toStop + "%", currentFirm });
         }
 
-
-        for (SearchResultEntry sre : result) {
-            System.out.println(sre.getRun().getRoute().getName());
-        }
         filterSearchResults(fromStop, toStop, date, fromHour, toHour,
                 isTimeForDeparture, result);
 
@@ -81,11 +77,11 @@ public class SearchServiceImpl extends BaseService implements SearchService {
 
         Calendar fromTime = GeneralUtils.createCalendar();
         fromTime.setTime(date);
-        fromTime.add(Calendar.HOUR_OF_DAY, fromHour);
+        fromTime.set(Calendar.HOUR_OF_DAY, fromHour);
 
         Calendar toTime = GeneralUtils.createCalendar();
         toTime.setTime(date);
-        toTime.add(Calendar.HOUR_OF_DAY, toHour);
+        toTime.set(Calendar.HOUR_OF_DAY, toHour);
         // toTime.roll(Calendar.MINUTE, 1);
 
         // Complexity n^2 in the worst case, but generally n (because of the

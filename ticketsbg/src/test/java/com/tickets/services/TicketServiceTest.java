@@ -299,12 +299,16 @@ public class TicketServiceTest extends BaseTest {
             for (TicketPurchaseAttempter attempter : attempters) {
                 attempter.join();
             }
-            Assert.assertEquals(PURCHASE_ATTEMPTERS.intValue() - 1, purchaseFailures
-                    .intValue());
+            System.out.println("VACANT: " + ServiceFunctions.getVacantSeats(entry.getRun(), START_STOP, END_STOP));
+
+            Assert.assertEquals(PURCHASE_ATTEMPTERS.intValue() - 1,
+                    purchaseFailures.intValue());
+
         } catch (InterruptedException ex) {
             ex.printStackTrace();
             Assert.fail();
         } finally {
+            // restore the original value
             getRoute().setSeats(51);
         }
     }
@@ -372,6 +376,7 @@ public class TicketServiceTest extends BaseTest {
             try {
                 ticketService.createTicket(entry, null,
                         new TicketCountsHolder(), new ArrayList<Seat>(), null);
+
             } catch (TicketCreationException ex) {
                 synchronized(purchaseFailures) {
                     purchaseFailures++;

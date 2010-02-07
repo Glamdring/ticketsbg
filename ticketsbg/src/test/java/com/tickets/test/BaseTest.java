@@ -1,9 +1,11 @@
 package com.tickets.test;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import org.apache.commons.lang.SerializationUtils;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 
 import com.tickets.dao.Dao;
 import com.tickets.model.Day;
+import com.tickets.model.Discount;
 import com.tickets.model.Firm;
 import com.tickets.model.Price;
 import com.tickets.model.Route;
@@ -31,8 +34,8 @@ public abstract class BaseTest {
 
     protected static final BigDecimal ONE_WAY_PRICE = BigDecimal.ONE;
     protected static final BigDecimal RETURN_PRICE = ONE_WAY_PRICE.add(ONE_WAY_PRICE);
-    private static final String END_STOP = "endStop";
-    private static final String START_STOP = "startStop";
+    protected static final String END_STOP = "endStop";
+    protected static final String START_STOP = "startStop";
 
     @Autowired
     private RouteService routeService;
@@ -50,6 +53,14 @@ public abstract class BaseTest {
 
     private Route returnRoute;
 
+    /**
+     * The init method initializes the preconditions for tests to be run.
+     * It creates:
+     * - a firm
+     * - a number of routes (defaults to 1, changeable by overriding getRequiredRoutesCount()
+     * - runs for the created routes
+     */
+    @SuppressWarnings("deprecation")
     @Before
     public void init() {
         initTask.run();
@@ -59,10 +70,35 @@ public abstract class BaseTest {
             routeService.delete(r);
         }
 
+        for (int i = 0; i < getRequiredRoutesCount(); i ++) {
+            this.route = createRoute(); //only the last one is assigned
+        }
+
+        route.setDiscounts(new ArrayList<Discount>());
+        Route returnRoute = (Route) SerializationUtils.clone(route);
+        returnRoute.setId(0);
+        this.returnRoute = routeService.save(returnRoute);
+
+        returnRoute.getStops().get(0).setIdx(2);
+        returnRoute.getStops().get(1).setIdx(1);
+        returnRoute.getStops().get(1).setTimeToArrival(0);
+        returnRoute.getStops().get(0).setTimeToArrival(200);
+        returnRoute.setName(END_STOP + "-" + START_STOP);
+
+
+        runService.createRuns(); //this is tested elsewhere
+    }
+
+    protected int getRequiredRoutesCount() {
+        return 1;
+    }
+
+    protected Route createRoute() {
         Route route = new Route();
         Firm firm = new Firm();
-        firm.setName("Firm1");
-        firm.setFirmKey("firm1");
+        firm.setName(TestUtils.getRandomString(10));
+        firm.setFirmKey(TestUtils.getRandomString(5));
+        firm.setActive(true);
 
         firm = (Firm) routeService.saveObject(firm);
         firm.setHoursBeforeTravelAlterationAllowed(2);
@@ -108,17 +144,8 @@ public abstract class BaseTest {
         route.setSellSeatsFrom(1);
         route.setSellSeatsTo(51);
 
-        this.route = routeService.save(route);
-
-        route.getStops().get(0).setIdx(2);
-        route.getStops().get(1).setIdx(1);
-        route.getStops().get(1).setTimeToArrival(0);
-        route.getStops().get(0).setTimeToArrival(200);
-        route.setName(END_STOP + "-" + START_STOP);
-
-        this.returnRoute = routeService.save(route);
-
-        runService.createRuns(); //this is tested elsewhere
+        route = routeService.save(route);
+        return route;
     }
 
     public RouteService getRouteService() {
