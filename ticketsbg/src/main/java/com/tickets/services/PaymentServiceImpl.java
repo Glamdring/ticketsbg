@@ -44,7 +44,7 @@ public class PaymentServiceImpl extends BaseService implements PaymentService {
         String expiryDate = new SimpleDateFormat("dd.MM.yyyy HH:mm")
                 .format(inTenMinutes.getTime());
 
-        String description = Messages.getString("paymentDescriptionPrefix") + ":\\n";
+        String description = Messages.getString("paymentDescriptionPrefix") + ": "; // TODO somehow put new line
 
         for (Ticket ticket : tickets) {
             description += ticket.getStartStop() + " - " + ticket.getEndStop()
@@ -108,12 +108,13 @@ public class PaymentServiceImpl extends BaseService implements PaymentService {
     public boolean confirmPayment(String orderId, String paymentCode) throws PaymentException {
         try {
             orderId = stripDummyDigits(orderId);
+            log.debug("Confirming payment with stripped orderId=" + orderId);
 
             Order order = ticketService.get(Order.class, Integer.parseInt(orderId));
 
             ticketService.finalizePurchase(order.getTickets(), paymentCode);
 
-            return true;
+            return true; //TODO sometimes return "false". check with ePay protocol
         } catch (Exception ex) {
             log.error("Error in committing payment", ex);
             throw new PaymentException(ex);

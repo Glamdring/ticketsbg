@@ -437,10 +437,16 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
 
     private void doFinalizePurchase(List<Ticket> tickets, User user,
             String paymentCode) {
+
+        log.debug("Finalizing purchase. Number of tickets: " + tickets.size());
+
         for (Ticket ticket : tickets) {
             if (ticket.isCommitted()) {
                 // if there are committed tickets, return. Sometimes ePay may
                 // send multiple confirmations for the same order
+                log.debug("Returning, because the ticket (code="
+                        + ticket.getTicketCode() + "; id=" + ticket.getId()
+                        + ") is already committed");
                 return;
             }
             ticket.setCommitted(true);
@@ -457,14 +463,12 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
             ValidationBypassingEventListener.turnValidationOff();
             try {
                 ticket = save(ticket);
+            } catch (Exception ex) {
+                log.error("Error while saving committed ticket", ex);
             } finally {
                 ValidationBypassingEventListener.turnValidationOn();
             }
-
-
         }
-
-        log.debug("Committing purchase. Number of tickets: " + tickets.size());
 
         if (user == null || !user.isStaff()) {
             sendPurchaseEmail(tickets);
@@ -544,6 +548,8 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
 
             String seats = "";
             String delim = "";
+
+            // if seat choice is not allowed, no seat should be shown
             if (ticket.getRun().getRoute().isAllowSeatChoice()) {
                 for (PassengerDetails pd : ticket.getPassengerDetails()) {
                     seats += delim + pd.getSeat();

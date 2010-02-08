@@ -87,6 +87,7 @@ public class PaymentController extends BaseController {
             PaymentData paymentData = paymentService.getPaymentData(purchaseController.getOrder());
             setEncoded(paymentData.getEncoded());
             setChecksum(paymentData.getChecksum());
+            // the next line is not redundant! The order in the payment data is changed (acquired an id)
             purchaseController.setOrder(paymentData.getOrder());
         } catch (PaymentException ex) {
             String messageKey = ex.getMessage();

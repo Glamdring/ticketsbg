@@ -182,15 +182,15 @@ public class SearchServiceImpl extends BaseService implements SearchService {
             stops = getDao().findByNamedQuery(
                     "Stop.listAllEndStopNamesForUser",
                     new String[] { "startStopName", "user" },
-                    new Object[] { startStopName, user });
+                    new Object[] { startStopName + "%", user });
         } else if (firm != null) {
             stops = getDao().findByNamedQuery("Stop.listAllEndStopNamesForFirm",
                     new String[] { "startStopName", "firm"},
-                    new Object[] { startStopName, firm });
+                    new Object[] { startStopName + "%", firm });
         } else {
             stops = getDao().findByNamedQuery("Stop.listAllEndStopNames",
                     new String[] { "startStopName" },
-                    new Object[] { startStopName });
+                    new Object[] { startStopName + "%"});
         }
 
         return stops;
@@ -225,6 +225,7 @@ public class SearchServiceImpl extends BaseService implements SearchService {
             if (!(discount.getStartStop().startsWith(startStop)
                     && discount.getEndStop().startsWith(endStop))) {
                 it.remove();
+                continue;
             }
 
             // remove if :

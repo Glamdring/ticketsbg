@@ -80,6 +80,7 @@ public class PurchaseController extends BaseController implements Serializable {
     public void clearPurchase() {
         setCurrentStep(null);
         setTickets(new ArrayList<Ticket>());
+        setOrder(null);
         HttpSession session = ((HttpServletRequest) FacesContext
                 .getCurrentInstance().getExternalContext().getRequest())
                 .getSession();

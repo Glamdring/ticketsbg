@@ -7,6 +7,7 @@
     xmlns:rich="http://richfaces.org/rich"
     xmlns:c="http://java.sun.com/jstl/core"
     xmlns:fmt="http://java.sun.com/jstl/fmt"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
     xmlns:t="http://myfaces.apache.org/tomahawk"
     xmlns:tc="http://tickets.com/tc" template="publicTemplate.jsp">
 
@@ -111,6 +112,10 @@
                                     toMapVar.panTo(response);
                                 }
 
+
+                                function scrollDown() {
+                                    document.location.href="#seatsChoice";
+                                }
                                 //]]>
                             </script>
                         </h:panelGroup>
@@ -122,7 +127,7 @@
                         cellpadding="0" cellspacing="0">
                         <h:panelGroup id="oneWay" style="border-style: none;">
                             <rich:extendedDataTable value="#{searchController.resultsModel}"
-                                height="#{searchController.resultsModel.rowCount == 0 ? 50 : searchController.resultsModel.rowCount * (searchController.returnResultsModel == null ? 182 : 202) + 31}px"
+                                height="#{searchController.resultsModel.rowCount == 0 ? 50 : searchController.resultsModel.rowCount * (searchController.returnResultsModel == null ? 212 : 232) + 31}px"
                                 var="result" rowKeyVar="rowId" selectionMode="single"
                                 enableContextMenu="false" id="resultsTable"
                                 selection="#{searchController.selection}"
@@ -133,7 +138,7 @@
                                 <a4j:support event="onselectionchange"
                                     reRender="selectedEntry,returnResultsTable,ticketCounts,seatChoices,returnSeatChoices"
                                     eventsQueue="selectionSubmit"
-                                    action="#{searchController.rowSelectionChanged}" />
+                                    action="#{searchController.rowSelectionChanged}" oncomplete="if (#{searchController.returnResultsModel == null}) {scrollDown();}"/>
 
                                 <rich:column width="35px" sortable="false" style="width: 35px;">
                                     <f:facet name="header">
@@ -153,14 +158,16 @@
                                             rendered="#{searchController.returnResultsModel != null}" />
                                     </f:facet>
                                     <rich:panel id="resultEntry" header="#{result.run.route.name}">
-                                        <a4j:repeat value="#{result.run.route.stops}" var="stop"
-                                            rowKeyVar="stopId">
-                                            <h:outputText value=" → " rendered="#{stopId > 0}" />
-                                            <h:outputText value="#{stop.name}" styleClass="bold"
-                                                rendered="#{searchController.fromStop == stop.name || searchController.toStop == stop.name}" />
-                                            <h:outputText value="#{stop.name}"
-                                                rendered="#{searchController.fromStop != stop.name &amp;&amp; searchController.toStop != stop.name}" />
-                                        </a4j:repeat>
+                                        <h:panelGroup style="white-space: normal; min-height: 45px;" layout="block">
+                                            <a4j:repeat value="#{result.run.route.stops}" var="stop"
+                                                rowKeyVar="stopId">
+                                                <h:outputText value=" → " rendered="#{stopId > 0}" />
+                                                <h:outputText value="#{stop.name}" styleClass="bold"
+                                                    rendered="#{fn:startsWith(stop.name, searchController.fromStop) || fn:startsWith(stop.name, searchController.toStop)}" />
+                                                <h:outputText value="#{stop.name}"
+                                                    rendered="#{!fn:startsWith(stop.name, searchController.fromStop) and !fn:startsWith(stop.name, searchController.toStop)}" />
+                                            </a4j:repeat>
+                                        </h:panelGroup>
 
                                         <h:panelGrid columns="2">
                                             <!-- Always render the oneWay price - in case no return options are available, or the user choses not to select one -->
@@ -222,7 +229,7 @@
                         <h:panelGroup id="return" style="border-style: none;">
                             <a4j:region>
                                 <rich:extendedDataTable
-                                    height="#{searchController.returnResultsModel.rowCount == 0 ? 50 : searchController.returnResultsModel.rowCount * 123 + 30}px"
+                                    height="#{searchController.returnResultsModel.rowCount == 0 ? 50 : searchController.returnResultsModel.rowCount * 155 + 30}px"
                                     value="#{searchController.returnResultsModel}" var="result"
                                     rowKeyVar="rowId" selectionMode="single"
                                     enableContextMenu="false" id="returnResultsTable"
@@ -236,7 +243,7 @@
                                     <a4j:support event="onselectionchange"
                                         reRender="selectedReturnEntry,ticketCounts,returnSeatChoices"
                                         eventsQueue="returnSelectionSubmit"
-                                        action="#{searchController.returnRowSelectionChanged}" />
+                                        action="#{searchController.returnRowSelectionChanged}" oncomplete="scrollDown();"/>
 
                                     <rich:column width="35px" sortable="false" style="width: 35px;">
                                         <!-- For presentational purposes only -->
@@ -256,14 +263,16 @@
                                         </f:facet>
 
                                         <rich:panel id="resultEntry" header="#{result.run.route.name}">
-                                            <a4j:repeat value="#{result.run.route.stops}" var="stop"
-                                                rowKeyVar="stopId">
-                                                <h:outputText value=" → " rendered="#{stopId > 0}" />
-                                                <h:outputText value="#{stop.name}" styleClass="bold"
-                                                    rendered="#{searchController.fromStop == stop.name || searchController.toStop == stop.name}" />
-                                                <h:outputText value="#{stop.name}"
-                                                    rendered="#{searchController.fromStop != stop.name &amp;&amp; searchController.toStop != stop.name}" />
-                                            </a4j:repeat>
+                                            <h:panelGroup style="white-space: normal; min-height: 45px;" layout="block">
+                                                <a4j:repeat value="#{result.run.route.stops}" var="stop"
+                                                    rowKeyVar="stopId">
+                                                    <h:outputText value=" → " rendered="#{stopId > 0}" />
+                                                    <h:outputText value="#{stop.name}" styleClass="bold"
+                                                        rendered="#{fn:startsWith(stop.name, searchController.fromStop) || fn:startsWith(stop.name, searchController.toStop)}" />
+                                                    <h:outputText value="#{stop.name}"
+                                                        rendered="#{!fn:startsWith(stop.name, searchController.fromStop) and !fn:startsWith(stop.name, searchController.toStop)}" />
+                                                </a4j:repeat>
+                                            </h:panelGroup>
 
                                             <h:panelGrid columns="2">
 
@@ -297,13 +306,14 @@
                         </h:panelGroup>
 
                         <h:panelGroup id="seatChoices">
+                            <a name="seatsChoice" />
                             <!-- Not rendering if there is no run chosen, or in case the page is just loaded with
                             the only possible run selected. See the end of document for how
                             the panel is rendered afterwards -->
                             <a4j:region
                                 rendered="#{seatController.seatHandler != null and
                                 (tc:getSize(searchController.resultsModel.wrappedData) != 1 || searchController.reRenderSeatChoices)}">
-                                <a4j:include viewId="seats.jsp">
+                                <a4j:include viewId="seats.jsp" rendered="#{searchController.selectedEntry.run.route.allowSeatChoice}">
                                     <ui:param name="modifier" value="1" />
                                     <ui:param name="return" value="falase" />
                                 </a4j:include>
@@ -332,7 +342,7 @@
                         <h:panelGroup id="returnSeatChoices">
                             <a4j:region
                                 rendered="#{seatController.returnSeatHandler != null}">
-                                <a4j:include viewId="seats.jsp">
+                                <a4j:include viewId="seats.jsp" rendered="#{searchController.selectedReturnEntry.run.route.allowSeatChoice}">
                                     <ui:param name="modifier" value="2" />
                                     <ui:param name="return" value="true" />
                                 </a4j:include>

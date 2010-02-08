@@ -29,7 +29,7 @@ import javax.persistence.Table;
     ),
     @NamedQuery(
             name = "Stop.listAllEndStopNames",
-            query = "SELECT s.name FROM Stop s, Price p WHERE p.endStop = s AND p.startStop.name=:startStopName AND p.price > 0 GROUP BY s.name ORDER BY s.name"
+            query = "SELECT s.name FROM Stop s, Price p WHERE p.endStop = s AND p.startStop.name LIKE :startStopName AND p.price > 0 GROUP BY s.name ORDER BY s.name"
     ),
     @NamedQuery(
             name = "Stop.listAllStopNamesForFirm",
@@ -37,7 +37,7 @@ import javax.persistence.Table;
     ),
     @NamedQuery(
             name = "Stop.listAllEndStopNamesForFirm",
-            query = "SELECT s.name FROM Stop s, Price p WHERE p.endStop = s AND p.startStop.name=:startStopName AND p.route.firm=:firm AND p.price > 0 GROUP BY s.name ORDER BY s.name"
+            query = "SELECT s.name FROM Stop s, Price p WHERE p.endStop = s AND p.startStop.name LIKE :startStopName AND p.route.firm=:firm AND p.price > 0 GROUP BY s.name ORDER BY s.name"
     ),
 
     @NamedQuery(
@@ -58,7 +58,7 @@ import javax.persistence.Table;
                     "AND p.price > 0 " +
                     "AND (u.firm=firm OR u.agent=agent) " +
                     "AND p.endStop = s " +
-                    "AND p.startStop.name=:startStopName " +
+                    "AND p.startStop.name LIKE :startStopName " +
                     "GROUP BY s.name ORDER BY s.name"
     )
 })
