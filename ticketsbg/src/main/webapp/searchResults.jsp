@@ -207,9 +207,9 @@
 
                                             <h:outputText value="#{msg.duration}: " />
                                             <h:panelGroup>
-                                                <h:outputText value="#{result.duration / 60}">
+                                                <h:outputText value="#{result.duration / 60}" styleClass="bold">
                                                     <f:convertNumber maxFractionDigits="0" />
-                                                </h:outputText>:#{result.duration % 60}
+                                                </h:outputText>:<h:outputText value="#{result.duration % 60}" styleClass="bold" />
                                             </h:panelGroup>
 
                                             <h:outputText value="#{msg.vacantSeats}: " />
@@ -218,7 +218,7 @@
                                                 style="#{tc:getVacantSeats(result.run, searchController.fromStop, searchController.toStop) &lt; 5 ? 'color: red;' : 'color: black;'};font-weight: bold;" />
 
                                             <h:outputText value="#{msg.transportCompany}: " />
-                                            <h:outputText value="#{result.run.route.firm.name}" />
+                                            <h:outputText value="#{result.run.route.firm.name}" styleClass="bold" />
                                         </h:panelGrid>
                                     </rich:panel>
                                 </rich:column>
@@ -297,7 +297,7 @@
                                                 <h:outputText value="#{msg.vacantSeats}: " />
                                                 <h:outputText
                                                     value="#{tc:getVacantSeats(result.run, searchController.fromStop, searchController.toStop)}"
-                                                    style="#{tc:getVacantSeats(result.run, searchController.fromStop, searchController.toStop)} &lt; 5 ? 'color: red;' : 'color: black;'};font-weight: bold;" />
+                                                    style="#{tc:getVacantSeats(result.run, searchController.fromStop, searchController.toStop) &lt; 5 ? 'color: red;' : 'color: black;'};font-weight: bold;" />
                                             </h:panelGrid>
                                         </rich:panel>
                                     </rich:column>
