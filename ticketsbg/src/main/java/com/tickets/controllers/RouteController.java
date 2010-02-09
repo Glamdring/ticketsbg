@@ -523,6 +523,13 @@ public class RouteController extends BaseController implements Serializable {
     }
 
     public List<SelectItem> getStopSelectItems() {
-        return SelectItemUtils.formStringSelectItems(route.getStops(), true);
+        List<SelectItem> items = SelectItemUtils.formStringSelectItems(route.getStops(), true);
+
+        // can it really be null?
+        if (items == null) {
+            return new ArrayList<SelectItem>();
+        }
+
+        return items;
     }
 }

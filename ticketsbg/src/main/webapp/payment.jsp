@@ -80,6 +80,12 @@
                                 value="#{msg.pay}" style="font-size: 16px;"
                                 oncomplete="if(#{facesContext.maximumSeverity==null}) {document.getElementById('paymentGatewayForm').submit();}" />
 
+                             <br />
+                             <a4j:outputPanel ajaxRendered="true">
+                                <h:outputText value="#{msg.validationErrorsAbove}"
+                                    rendered="#{facesContext.maximumSeverity!=null}"
+                                    styleClass="error" />
+                            </a4j:outputPanel>
                             </div>
                         </rich:panel>
                     </rich:panel>
