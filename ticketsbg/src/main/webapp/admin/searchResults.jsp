@@ -89,7 +89,8 @@
                                         <h:outputText value="#{msg.date}" />
                                     </f:facet>
                                     <h:outputText value="#{result.run.time.time}">
-                                        <f:convertDateTime pattern="dd.MM.yyyy" />
+                                        <f:convertDateTime pattern="dd.MM.yyyy"
+                                            timeZone="#{timeZoneController.timeZone}" />
                                     </h:outputText>
                                 </rich:column>
 
@@ -105,7 +106,8 @@
                                         <h:outputText value="#{msg.departureTime}" />
                                     </f:facet>
                                     <h:outputText value="#{result.run.time.time}">
-                                        <f:convertDateTime pattern="HH:mm" />
+                                        <f:convertDateTime pattern="HH:mm"
+                                            timeZone="#{timeZoneController.timeZone}" />
                                     </h:outputText> #{msg.hourAbbr}
                                 </rich:column>
 
@@ -202,7 +204,7 @@
                     <a4j:outputPanel ajaxRendered="true">
                         <h:panelGrid columns="2">
                             <h:outputLabel for="purchaseStartStop" value="#{msg.fromStop}" />
-                            <h:inputText value="#{searchController.fromStop}"
+                            <h:inputText value="#{searchController.actualFromStop}"
                                 id="purchaseStartStop" readonly="true" />
 
                             <h:outputLabel for="purchaseStartStop" value="#{msg.toStop}" />

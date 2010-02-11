@@ -36,7 +36,7 @@ public class SearchServiceImpl extends BaseService implements SearchService {
         } else {
             result = getDao().findByNamedQuery("Run.searchByFirm",
                     new String[] { "fromStop", "toStop", "firm" },
-                    new Object[] { fromStop + "%", toStop + "%", currentFirm });
+                    new Object[] { fromStop + "%", toStop + "%", currentFirm});
         }
 
         filterSearchResults(fromStop, toStop, date, fromHour, toHour,

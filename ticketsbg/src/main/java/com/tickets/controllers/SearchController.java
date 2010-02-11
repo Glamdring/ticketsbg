@@ -31,6 +31,7 @@ import com.tickets.model.Price;
 import com.tickets.model.Route;
 import com.tickets.model.Run;
 import com.tickets.model.SearchResultEntry;
+import com.tickets.model.Stop;
 import com.tickets.model.Ticket;
 import com.tickets.model.User;
 import com.tickets.services.SearchService;
@@ -875,5 +876,19 @@ public class SearchController extends BaseController {
 
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
+    }
+
+    /**
+     * Get the actual stop name for the given start stop. They can differ in
+     * cases like "Sofia - central" (actual) and "Sofia" (searched)
+     *
+     * @return the actual stop name
+     */
+    public String getActualFromStop() {
+        if (selectedEntry != null) {
+            Stop stop = ServiceFunctions.getStopByName(fromStop, selectedEntry.getRun().getRoute().getStops());
+            return stop.getName();
+        }
+        return "";
     }
 }

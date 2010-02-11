@@ -61,7 +61,7 @@ import org.hibernate.annotations.LazyCollectionOption;
                         "AND price.price > 0 " +
                         "AND run.route.firm = firm " +
                         "AND user=:user " +
-                        "AND (user.firm=firm OR user.agent=agent OR agent IS NULL)" +
+                        "AND (user.firm=firm OR user.agent=agent) " +
                         "ORDER BY run.time, price.price"
         ),
 
@@ -72,7 +72,7 @@ import org.hibernate.annotations.LazyCollectionOption;
                         "AND price.price > 0 " +
                         "AND run.route.firm = firm " +
                         "AND user=:user " +
-                        "AND (user.firm=firm OR user.agent=agent OR agent IS NULL)" +
+                        "AND (user.firm=firm OR user.agent=agent) " +
                         "ORDER BY run.time, price.price"
         )
 })

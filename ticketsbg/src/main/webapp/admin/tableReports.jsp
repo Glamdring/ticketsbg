@@ -35,6 +35,14 @@
 
                     <rich:dataTable value="#{tickets}" var="ticket" rows="50">
 
+
+                        <rich:column sortBy="#{ticket.run.route.name}">
+                            <f:facet name="header">
+                                <h:outputText value="#{msg.fromStop} - #{msg.toStop}" />
+                            </f:facet>
+                            <h:outputText value="#{ticket.startStop} - #{ticket.endStop}" />
+                        </rich:column>
+
                         <rich:column sortBy="#{ticket.run.route.name}">
                             <f:facet name="header">
                                 <h:outputText value="#{msg.routeName}" />
