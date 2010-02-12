@@ -33,9 +33,10 @@
     </ui:define>
     <ui:define name="body">
         <f:view>
-            <h:messages />
             <h:form id="routeForm">
-                <div align="center"><h:panelGrid columns="1">
+                <div align="center">
+                <rich:messages errorClass="error" />
+                <h:panelGrid columns="1">
                     <rich:panel id="mainInfoPanel" style="text-align: left;">
                         <h:panelGrid columns="2" style="width: 100%;">
                             <h:panelGroup>
