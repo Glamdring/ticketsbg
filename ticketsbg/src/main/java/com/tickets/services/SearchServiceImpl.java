@@ -204,7 +204,7 @@ public class SearchServiceImpl extends BaseService implements SearchService {
             if (insertionStarted) {
                 names.add(stop.getName());
             }
-            if (stop.getName().equals(fromStop)) {
+            if (stop.getName().startsWith(fromStop)) {
                 insertionStarted = true;
             }
         }
