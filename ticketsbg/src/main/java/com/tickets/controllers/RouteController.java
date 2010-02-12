@@ -270,10 +270,18 @@ public class RouteController extends BaseController implements Serializable {
                 }
             } else {
                 price = stopService.getPrice(rowKey, route);
-                //cloning
-                priceValue = new BigDecimal(price.getPrice().toString());
-                twoWayPriceValue = new BigDecimal(price.getTwoWayPrice()
-                        .toString());
+                if (price == null || price.getPrice() == null) {
+                    // in case for some reason the price hasn't been generated,
+                    // set it to 0;
+                    priceValue = BigDecimal.ZERO;
+                    twoWayPriceValue = BigDecimal.ZERO;
+                } else {
+                    // cloning
+                    priceValue = new BigDecimal(price.getPrice().toString());
+                    twoWayPriceValue = new BigDecimal(price.getTwoWayPrice()
+                            .toString());
+                }
+
             }
         }
     }
