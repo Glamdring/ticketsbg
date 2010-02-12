@@ -182,8 +182,7 @@
                                         </a4j:commandLink>
                                         <h:outputText value="&#160;" />
                                         <a4j:commandLink action="#{routeController.deleteStop}"
-                                            title="#{msg.remove}" reRender="stopsTable"
-                                            oncomplete="stopOrderChanged();">
+                                            title="#{msg.remove}" reRender="stopsTable,pricesPanel">
                                             <h:graphicImage value="/images/delete.png"
                                                 style="width:16px; height:16px; border-style: none;"
                                                 alt="#{msg.remove}" title="#{msg.remove}" />

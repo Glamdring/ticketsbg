@@ -172,7 +172,11 @@ public class RouteController extends BaseController implements Serializable {
 
     @Action
     public void saveStop() {
-        stopService.addStopToRoute(stop, route);
+        try {
+            stopService.addStopToRoute(stop, route);
+        } catch (IllegalArgumentException ex) {
+            addError("duplicateStopName");
+        }
         stopService.saveMapAddress(stop.getName(),
                 currentStopMapAddress,
                 loggedUserHolder.getLoggedUser().getFirm());
@@ -183,6 +187,8 @@ public class RouteController extends BaseController implements Serializable {
     public void deleteStop() {
         Stop stop = (Stop) stopsTable.getRowData();
         stopService.delete(stop, route);
+
+        listReordered();
         //see saveStop comment for more details on this
     }
 
@@ -263,7 +269,7 @@ public class RouteController extends BaseController implements Serializable {
                     tree.queueNodeExpand(rowKey);
                 } catch (Exception ex) {
                     // Ignore
-                    // No excepetion is expected to be thrown,
+                    // No exception is expected to be thrown,
                     // but in previous versions of RichFaces,
                     // an IOException was thrown, so retaining
                     // the clause just in case
@@ -294,19 +300,19 @@ public class RouteController extends BaseController implements Serializable {
             // the root node is the parent
             node.setParent(pricesTreeData);
             pricesTreeData.addChild("start"
-                    + node.getData().getStop().getStopId(), node);
+                    + node.getData().getStop().getName(), node);
 
             for (int j = i + 1; j < route.getStops().size(); j++) {
                 TreeNode<StopPriceHolder> subNode = new TreeNodeImpl<StopPriceHolder>();
                 StopPriceHolder holder = new StopPriceHolder();
                 holder.setStop(route.getStops().get(j));
                 holder.setPrice(stopService.getPrice(node.getData().getStop()
-                        .getStopId(), holder.getStop().getStopId(), route));
+                        .getName(), holder.getStop().getName(), route));
 
                 holder.setLeaf(true);
                 subNode.setData(holder);
                 subNode.setParent(node);
-                node.addChild("end" + subNode.getData().getStop().getStopId(),
+                node.addChild("end" + subNode.getData().getStop().getName(),
                         subNode);
             }
         }

@@ -17,14 +17,13 @@ public class StopServiceImpl extends BaseService<Stop> implements StopService {
     public Stop addStopToRoute(Stop stop, Route route) {
 
         if (stop.getIdx() == 0) {
-            if (route.getStops() != null) {
-                stop.setIdx(route.getStops().size() + 1);
-            } else {
-                stop.setIdx(1);
+            if (containsStop(route.getStops(), stop)) {
+                throw new IllegalArgumentException();
             }
+            stop.setIdx(route.getStops().size() + 1);
             route.addStop(stop);
         } else {
-            route.getStops().set(stop.getIdx() - 1, stop);
+            route.getStops().set(route.getStops().indexOf(stop), stop);
         }
 
         cascadePrices(route);
@@ -59,19 +58,19 @@ public class StopServiceImpl extends BaseService<Stop> implements StopService {
         }
 
         /*
-         * Remove unneeded prices (~= DELETE_ORPHAN) Remove if: - the last stop
-         * is starting stop - if the first stop is an end stop - if either start
-         * or end stop is not found in the stops list (deleted)
+         * Remove unneeded prices (~= DELETE_ORPHAN) Remove if:
+         * - the last stop is starting stop
+         * - the first stop is an end stop
+         * - if either start or end stop is not found in the stops list (deleted)
          */
 
         for (int i = 0; i < prices.size(); i++) {
             Price price = prices.get(i);
             boolean shouldRemove = false;
-            if (price.getStartStop().getStopId() == stops.get(stops.size() - 1)
-                    .getStopId()) {
+            if (price.getStartStop().equals(stops.get(stops.size() - 1))) {
                 shouldRemove = true;
             }
-            if (price.getEndStop().getStopId() == stops.get(0).getStopId()) {
+            if (price.getEndStop().equals(stops.get(0))) {
                 shouldRemove = true;
             }
             if (!containsStop(stops, price.getStartStop())
@@ -92,7 +91,7 @@ public class StopServiceImpl extends BaseService<Stop> implements StopService {
 
     private boolean containsStop(List<Stop> stops, Stop stop) {
         for (Stop s : stops) {
-            if (s.getStopId() == stop.getStopId()) {
+            if (s.equals(stop)) {
                 return true;
             }
         }
@@ -101,10 +100,8 @@ public class StopServiceImpl extends BaseService<Stop> implements StopService {
 
     private boolean containsPrice(List<Price> prices, Price price) {
         for (Price p : prices) {
-            if (p.getStartStop().getStopId() == price.getStartStop()
-                    .getStopId()
-                    && p.getEndStop().getStopId() == price.getEndStop()
-                            .getStopId()) {
+            if (p.getStartStop().equals(price.getStartStop())
+                    && p.getEndStop().equals(price.getEndStop())) {
                 return true;
             }
         }
@@ -129,25 +126,25 @@ public class StopServiceImpl extends BaseService<Stop> implements StopService {
 
     @Override
     public Price getPrice(ListRowKey keys, Route route) {
-        int startStopId = Integer.parseInt(((String) keys.get(0)).replace(
-                "start", ""));
-        int endStopId = Integer.parseInt(((String) keys.get(1)).replace("end",
-                ""));
+        String startStopName = ((String) keys.get(0)).replace("start", "");
+        String endStopName = ((String) keys.get(1)).replace("end", "");
 
-        return getPrice(startStopId, endStopId, route);
+        return getPrice(startStopName, endStopName, route);
     }
 
     @Override
-    public Price getPrice(int startStopId, int endStopId, Route route) {
-        Stop startStop = getStop(startStopId, route.getStops());
-        Stop endStop = getStop(endStopId, route.getStops());
+    public Price getPrice(String startStopName, String endStopName, Route route) {
+        Stop startStop = getStop(startStopName, route.getStops());
+        Stop endStop = getStop(endStopName, route.getStops());
 
+        if (startStop == null || endStop == null) {
+            return null;
+        }
         Price searchedPrice = null;
 
         for (Price price : route.getPrices()) {
-            if (endStop.getStopId() == price.getEndStop().getStopId()
-                    && startStop.getStopId() == price.getStartStop()
-                            .getStopId()) {
+            if (endStop.equals(price.getEndStop())
+                    && startStop.equals(price.getStartStop())) {
                 searchedPrice = price;
                 break;
             }
@@ -157,9 +154,9 @@ public class StopServiceImpl extends BaseService<Stop> implements StopService {
         return searchedPrice;
     }
 
-    private Stop getStop(int stopId, List<Stop> stops) {
+    private Stop getStop(String stopName, List<Stop> stops) {
         for (Stop stop : stops) {
-            if (stop.getStopId() == stopId) {
+            if (stop.getName().equals(stopName)) {
                 return stop;
             }
         }

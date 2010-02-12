@@ -46,12 +46,12 @@ public interface StopService extends Service<Stop> {
 
     /**
      * Gets the price for the following stops
-     * @param startStopId
-     * @param endStopId
+     * @param startStopName
+     * @param endStopName
      * @param route
      * @return price
      */
-    Price getPrice(int startStopId, int endStopId, Route route);
+    Price getPrice(String startStopName, String endStopName, Route route);
 
     /**
      * Lists names of stops already entered in the system,
