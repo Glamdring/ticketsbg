@@ -14,7 +14,6 @@ import com.tickets.utils.GeneralUtils;
 
 public class RouteServiceTest extends BaseTest {
 
-
     @Test
     public void addHourToRouteTest() {
         Route route = new Route();
