@@ -472,6 +472,10 @@ public class SearchController extends BaseController {
 
     @SuppressWarnings("unchecked")
     public void returnRowSelectionChanged() {
+        if (returnResultsModel == null) {
+            return;
+        }
+
         Integer selectedId = (Integer) returnSelection.getKeys().next();
         selectedReturnRowId = new Long(selectedId);
         selectedReturnEntry = ((List<SearchResultEntry>) returnResultsModel
