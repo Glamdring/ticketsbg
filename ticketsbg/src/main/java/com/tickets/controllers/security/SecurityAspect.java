@@ -9,6 +9,7 @@ import javax.faces.context.FacesContext;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
 import com.tickets.annotations.Action;
@@ -57,6 +58,7 @@ public class SecurityAspect implements Serializable {
         User user = LoggedUserHolder.getUser();
 
         boolean isAdminPage = facesContext.getViewRoot().getViewId().indexOf("/admin/") > -1;
+        boolean isUnauthorizedPage = facesContext.getViewRoot().getViewId().indexOf("unauthorized") > -1;
 
         if (user == null) {
             redirectTo(isAdminPage ? Screen.ADMIN_LOGIN_SCREEN
@@ -67,8 +69,16 @@ public class SecurityAspect implements Serializable {
         if (user.getAccessLevel().getPrivileges() < requiredLevel
                 .getPrivileges()) {
 
+            // if admin page, and the user is public, send to public unathorized
+            // if admin page, and the user is not public, but the page is already unathorized, do nothing
             if (isAdminPage) {
-                redirectTo(Screen.ADMIN_UNAUTHORIZED, facesContext);
+                if (user.getAccessLevel().getPrivileges() < AccessLevel.CASH_DESK.getPrivileges()) {
+                    redirectTo(Screen.UNAUTHORIZED, facesContext);
+                } else  if (isUnauthorizedPage) {
+                    return getObjectToReturn(jp);
+                } else {
+                    redirectTo(Screen.ADMIN_UNAUTHORIZED, facesContext);
+                }
             } else {
                 redirectTo(Screen.UNAUTHORIZED, facesContext);
             }
@@ -90,8 +100,8 @@ public class SecurityAspect implements Serializable {
     private Object getObjectToReturn(ProceedingJoinPoint jp) {
         if (jp.getSignature().getName().startsWith("get")) {
             try {
-                Object result = jp.proceed();
-                Constructor c = result.getClass().getDeclaredConstructor();
+                Class<?> returnType = ((MethodSignature) jp.getSignature()).getMethod().getReturnType();
+                Constructor c = returnType.getDeclaredConstructor();
                 c.setAccessible(true);
                 return c.newInstance();
             } catch (Throwable ex) {

@@ -110,7 +110,7 @@ public class User extends Customer implements Serializable {
     private Office office;
 
     @Column
-    private AccessLevel accessLevel = AccessLevel.PUBLIC;
+    private AccessLevel accessLevel = AccessLevel.PUBLIC_LOGGED;
 
     @Column
     private boolean isStaff;

@@ -462,7 +462,7 @@
                 </rich:modalPanel>
 
                 <a4j:jsFunction name="refreshSeatChoices" reRender="seatChoices"
-                    id="refreshSeatChoices" ajaxSingle="true" immediate="true">
+                    id="refreshSeatChoices" ajaxSingle="true" immediate="true" limitToList="true">
                     <a4j:actionparam assignTo="#{searchController.reRenderSeatChoices}"
                         value="true" id="reRenderParam" name="reRenderParam" />
                 </a4j:jsFunction>

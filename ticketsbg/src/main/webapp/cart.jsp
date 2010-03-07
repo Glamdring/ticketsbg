@@ -115,11 +115,10 @@
                     <f:setPropertyActionListener value="#{ticket}"
                         target="#{purchaseController.currentTicket}" />
                     <h:graphicImage value="/images/delete.png"
-                        style="width:16; height:16; border-style: none;"
+                        style="width:16px; height:16px; border-style: none;"
                         alt="#{msg.remove}" title="#{msg.remove}" />
                 </a4j:commandLink>
             </rich:column>
-
         </rich:dataTable>
     </rich:panel>
 </ui:composition>

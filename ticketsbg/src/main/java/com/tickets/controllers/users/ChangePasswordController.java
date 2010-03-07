@@ -13,7 +13,7 @@ import com.tickets.services.UserService;
 
 @Controller("changePasswordController")
 @Scope("request")
-@Action(accessLevel = AccessLevel.PUBLIC)
+@Action(accessLevel = AccessLevel.PUBLIC_LOGGED)
 public class ChangePasswordController extends BaseController {
 
     private String oldPassword = "";

@@ -57,7 +57,7 @@
     </h:form>
     </div>
     <h:form style="float: left; height: 34px; margin-bottom: 5px;"
-        id="menuForm" ajaxSingle="true">
+        id="menuForm">
         <rich:toolBar itemSeparator="line" width="1000" height="34"
             style="float: left; padding: 0px; margin: 0px;" id="menuToolbar">
             <rich:menuItem action="#{searchController.navigateToSearch}"
@@ -141,8 +141,8 @@
     <a4j:commandLink
                 onclick="#{rich:component('contactsPanel')}.show();"
                 value="#{msg.footerContacts}" /> |
-    <a href="http://www.facebook.com/pages/avtogaracom/216346729251">#{msg.footerFacebook}</a> |
-    <a href="http://twitter.com/avtogara_com">Twitter</a>
+    <a href="http://www.facebook.com/pages/avtogaracom/216346729251" target="_blank">#{msg.footerFacebook}</a> |
+    <a href="http://twitter.com/avtogara_com" target="_blank">Twitter</a>
             <ui:insert name="footer" />
         </h:panelGroup>
     </h:form> <rich:modalPanel id="termsPanel" width="400" height="300"

@@ -1,12 +1,9 @@
 package com.tickets.controllers.users;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +17,9 @@ import com.tickets.model.CustomerType;
 import com.tickets.services.UserService;
 import com.tickets.utils.SelectItemUtils;
 
-
 @Controller("profileController")
 @Scope("conversation.access")
-@Action(accessLevel=AccessLevel.FIRM_ADMINISTRATOR)
+@Action(accessLevel=AccessLevel.PUBLIC_LOGGED)
 public class ProfileController extends BaseController {
 
     @Autowired

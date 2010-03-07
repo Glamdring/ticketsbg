@@ -73,6 +73,7 @@ public class StaticResourceCacheFilter implements Filter {
             httpResponse.setHeader("Expires", DateUtil.formatDate(inTwoMonths.getTime()));
         } else {
             httpResponse.setHeader("Expires", "-1");
+            httpResponse.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
         }
 
     }

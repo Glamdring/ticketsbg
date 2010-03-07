@@ -199,11 +199,7 @@ public class SearchController extends BaseController {
             addError("choseReturnDate");
         }
 
-        if (result.size() == 1) {
-            selection = new SimpleSelection();
-            selection.addKey(0);
-            rowSelectionChanged();
-        }
+        initilizeSingleSearchResultValues();
 
         if (result.size() > 0) {
             Run firstResult = result.get(0).getRun();
@@ -386,6 +382,15 @@ public class SearchController extends BaseController {
         ticketCountsHolder = new TicketCountsHolder();
         reRenderSeatChoices = false;
         renderMaps = false;
+        initilizeSingleSearchResultValues();
+    }
+
+    private void initilizeSingleSearchResultValues() {
+        if (resultsModel != null && resultsModel.getRowCount() == 1) {
+            selection = new SimpleSelection();
+            selection.addKey(0);
+            rowSelectionChanged();
+        }
     }
 
     private void resetSearchFields() {
