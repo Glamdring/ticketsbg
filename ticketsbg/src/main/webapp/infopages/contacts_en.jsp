@@ -1,4 +1,7 @@
-<table>
+<table cellspacing="5" align="center">
+<tr>
+    <td colspan="2">"OMNIVERSE" Ltd.</td>
+</tr>
 <tr>
     <td style="text-align: right; ">email:</td>
     <td><strong>contact@avtogara.com</strong></td>

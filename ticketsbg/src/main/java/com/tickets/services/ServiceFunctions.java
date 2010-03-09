@@ -209,7 +209,7 @@ public class ServiceFunctions {
 
             return content;
         } catch (Exception ex) {
-            log.error("Error getting external resoruce", ex);
+            log.error("Error getting external resoruce " + urlString, ex);
             return "";
         }
     }

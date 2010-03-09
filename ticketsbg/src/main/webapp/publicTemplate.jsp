@@ -134,18 +134,25 @@
             <ui:include src="statistics.jsp" />
             <ui:include src="paymentMethods.jsp" />
         </h:panelGroup>
-    </h:panelGrid> <ui:insert name="bottomPanel" /> <h:form>
+    </h:panelGrid>
+
+
+     <ui:insert name="bottomPanel" /> <h:form>
         <h:panelGroup styleClass="footer" layout="block">
             <a4j:commandLink onclick="#{rich:component('termsPanel')}.show();"
                 value="#{msg.generalTerms}" /> |&#160;
-    <a4j:commandLink
+            <a4j:commandLink onclick="#{rich:component('privacyPolicyPanel')}.show();"
+                value="#{msg.privacyPolicy}" /> |&#160;
+            <a4j:commandLink
                 onclick="#{rich:component('contactsPanel')}.show();"
                 value="#{msg.footerContacts}" /> |
     <a href="http://www.facebook.com/pages/avtogaracom/216346729251" target="_blank">#{msg.footerFacebook}</a> |
     <a href="http://twitter.com/avtogara_com" target="_blank">Twitter</a>
             <ui:insert name="footer" />
         </h:panelGroup>
-    </h:form> <rich:modalPanel id="termsPanel" width="400" height="300"
+    </h:form>
+
+    <rich:modalPanel id="termsPanel" width="600" height="400"
         onmaskclick="#{rich:component('termsPanel')}.hide();">
         <ui:include src="modalPanelCommons.jsp">
             <ui:param name="dialogId" value="termsPanel" />
@@ -153,11 +160,27 @@
         <f:facet name="header">
                 #{msg.generalTerms}
             </f:facet>
-        <h:panelGroup style="overflow: auto;" layout="block">
+        <h:panelGroup style="overflow: auto; height: 356px;" layout="block">
             <ui:include
                 src="infopages/terms_#{facesContext.viewRoot.locale.language}.jsp" />
         </h:panelGroup>
-    </rich:modalPanel> <rich:modalPanel id="contactsPanel" autosized="true"
+    </rich:modalPanel>
+
+    <rich:modalPanel id="privacyPolicyPanel" width="600" height="400"
+        onmaskclick="#{rich:component('privacyPolicyPanel')}.hide();">
+        <ui:include src="modalPanelCommons.jsp">
+            <ui:param name="dialogId" value="privacyPolicyPanel" />
+        </ui:include>
+        <f:facet name="header">
+                #{msg.privacyPolicy}
+            </f:facet>
+        <h:panelGroup style="overflow: auto; height: 356px;" layout="block">
+            <ui:include
+                src="infopages/privacyPolicy_#{facesContext.viewRoot.locale.language}.jsp" />
+        </h:panelGroup>
+    </rich:modalPanel>
+
+    <rich:modalPanel id="contactsPanel" autosized="true" width="250" height="120"
         onmaskclick="#{rich:component('contactsPanel')}.hide();">
         <ui:include src="modalPanelCommons.jsp">
             <ui:param name="dialogId" value="contactsPanel" />
