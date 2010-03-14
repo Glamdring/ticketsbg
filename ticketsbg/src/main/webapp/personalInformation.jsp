@@ -25,7 +25,10 @@
 
             <h:panelGrid columns="3" id="directInputFields" columnClasses="label">
 
-                <h:outputLabel value="#{msg.customerType}" for="customerType" />
+                <h:panelGroup>
+                    <h:outputLabel value="#{msg.customerType}" for="customerType" />
+                    <h:outputText value=" *" styleClass="asterisk" />
+                </h:panelGroup>
                 <h:selectOneMenu
                     value="#{personalInformationController.customer.customerType}"
                     id="customerType" style="width: 205px;">
@@ -51,7 +54,10 @@
                         rendered="#{personalInformationController.customer.customerType == 'BUSINESS'} " />
                 </a4j:outputPanel>
 
-                <h:outputLabel for="name" value="#{msg.names}" />
+                <h:panelGroup>
+                    <h:outputLabel for="name" value="#{msg.names}" />
+                    <h:outputText value=" *" styleClass="asterisk" />
+                </h:panelGroup>
                 <h:inputText value="#{personalInformationController.customer.name}"
                     id="name" size="35">
                     <rich:beanValidator />
@@ -59,7 +65,10 @@
                 </h:inputText>
                 <rich:message for="name" errorClass="error" />
 
-                <h:outputLabel for="contactPhone" value="#{msg.contactPhone}" />
+                <h:panelGroup>
+                    <h:outputLabel for="contactPhone" value="#{msg.contactPhone}" />
+                    <h:outputText value=" *" styleClass="asterisk" />
+                </h:panelGroup>
                 <h:inputText
                     value="#{personalInformationController.customer.contactPhone}"
                     id="contactPhone" size="35">
@@ -68,7 +77,10 @@
                 </h:inputText>
                 <rich:message for="contactPhone" errorClass="error" />
 
-                <h:outputLabel for="email" value="#{msg.email}" />
+                <h:panelGroup>
+                    <h:outputLabel for="email" value="#{msg.email}" />
+                    <h:outputText value=" *" styleClass="asterisk" />
+                </h:panelGroup>
                 <h:inputText value="#{personalInformationController.customer.email}"
                     id="email" size="35">
                     <rich:beanValidator />

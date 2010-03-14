@@ -133,6 +133,9 @@ public class Route extends DataObject implements Serializable {
     @Column
     private int stopSalesBeforeRunTime = 2 * 60;
 
+    @ManyToOne
+    private Vehicle vehicle;
+
     public Route() {
     }
 
@@ -346,5 +349,13 @@ public class Route extends DataObject implements Serializable {
 
     public void setStopSalesBeforeRunTime(int stopSalesBeforeRunTime) {
         this.stopSalesBeforeRunTime = stopSalesBeforeRunTime;
+    }
+
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
     }
 }

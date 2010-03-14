@@ -338,6 +338,9 @@
                                     <h:outputLabel for="seats" value="#{msg.seats}: " />
                                     <h:inputText value="#{routeController.route.seats}" id="seats"
                                         size="18">
+                                        <a4j:support event="onblur" reRender="seatsViewInner1" ajaxSingle="true"
+                                            limitToList="true"
+                                            action="#{seatController.seatHandler.refreshRows}" />
                                         <f:convertNumber maxFractionDigits="0" />
                                     </h:inputText>
 
@@ -446,7 +449,7 @@
                         rendered="#{routeController.route.id > 0}">
 
                         <h:outputLabel value="#{msg.vehicle}: " for="selectedVehicle" />
-                        <h:selectOneMenu value="#{routeController.selectedVehicle}"
+                        <h:selectOneMenu value="#{routeController.route.vehicle}"
                             id="selectedVehicle" converter="#{entityConverter}">
                             <f:selectItems value="#{vehicleController.vehicleSelectItems}" />
                             <a4j:support event="onchange" limitToList="true"

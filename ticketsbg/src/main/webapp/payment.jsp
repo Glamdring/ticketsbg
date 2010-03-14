@@ -59,6 +59,7 @@
                                     <h:outputLabel id="ccLabel" for="selectedPaymentMethod">
                                         <h:graphicImage url="/images/creditCards.gif"
                                             style="border: 0px; margin-top: -2px" height="45" />
+                                        <!-- Service fee removed due to VISA / MasterCard policy
                                         <br />
                                         <h:outputText value="#{msg.serviceFee}: "
                                             style="font-size: 10px;" />
@@ -68,6 +69,7 @@
                                             <f:converter binding="#{currencyConverter}"
                                                 converterId="currencyConverter" />
                                         </h:outputText>
+                                        -->
                                     </h:outputLabel>
                                 </h:panelGroup>
 

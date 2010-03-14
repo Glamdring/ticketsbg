@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 
 import com.tickets.model.Day;
@@ -119,6 +120,13 @@ public class RouteServiceImpl extends BaseService<Route> implements RouteService
         }
 
         return null;
+    }
+
+    @Override
+    public Route getNonLazy(int routeId) {
+        Route route = get(Route.class, routeId);
+        Hibernate.initialize(route.getRuns());
+        return route;
     }
 
 }

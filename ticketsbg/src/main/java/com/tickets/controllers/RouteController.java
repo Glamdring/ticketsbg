@@ -42,7 +42,6 @@ import com.tickets.model.SeatSettings;
 import com.tickets.model.Stop;
 import com.tickets.model.StopPriceHolder;
 import com.tickets.model.User;
-import com.tickets.model.Vehicle;
 import com.tickets.services.DiscountService;
 import com.tickets.services.RouteService;
 import com.tickets.services.StopService;
@@ -78,8 +77,6 @@ public class RouteController extends BaseController implements Serializable {
     private List<String> genericDiscountNames = new ArrayList<String>();
 
     private String currentStopMapAddress = "";
-
-    private Vehicle selectedVehicle;
 
     private UIOrderingList stopsOrderingList;
 
@@ -363,9 +360,9 @@ public class RouteController extends BaseController implements Serializable {
     }
 
     public void copyVehicleSettings() {
-        if (selectedVehicle != null) {
-            route.setSeats(selectedVehicle.getSeats());
-            route.setSeatSettings(selectedVehicle.getSeatSettings());
+        if (route.getVehicle() != null) {
+            route.setSeats(route.getVehicle().getSeats());
+            route.setSeatSettings(route.getVehicle().getSeatSettings());
             seatController.getSeatHandler().refreshRows();
         } else {
             route.setSeats(51);
@@ -518,14 +515,6 @@ public class RouteController extends BaseController implements Serializable {
 
     public void setGenericDiscountNames(List<String> genericDiscountNames) {
         this.genericDiscountNames = genericDiscountNames;
-    }
-
-    public Vehicle getSelectedVehicle() {
-        return selectedVehicle;
-    }
-
-    public void setSelectedVehicle(Vehicle selectedVehicle) {
-        this.selectedVehicle = selectedVehicle;
     }
 
     public UIOrderingList getStopsOrderingList() {

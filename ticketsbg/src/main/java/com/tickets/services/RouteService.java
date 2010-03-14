@@ -33,4 +33,12 @@ public interface RouteService extends Service<Route> {
      * @return the route, if found; null otherwise.
      */
     Route findRoute(String selectedRouteName, Firm firm);
+
+    /**
+     * Fetches the route and initializes the runs collection
+     *
+     * @param routeId
+     * @return the initiliazed route
+     */
+    Route getNonLazy(int routeId);
 }

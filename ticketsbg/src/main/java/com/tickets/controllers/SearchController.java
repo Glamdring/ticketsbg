@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.component.UIInput;
+import javax.faces.context.FacesContext;
 import javax.faces.model.ListDataModel;
 
 import org.richfaces.model.selection.SimpleSelection;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import com.tickets.annotations.Action;
 import com.tickets.controllers.handlers.GMapHandler;
 import com.tickets.controllers.handlers.SeatHandler;
+import com.tickets.controllers.handlers.TransliterationHandler;
 import com.tickets.controllers.security.AccessLevel;
 import com.tickets.controllers.users.LoggedUserHolder;
 import com.tickets.controllers.valueobjects.Screen;
@@ -70,6 +72,8 @@ public class SearchController extends BaseController {
 
     @Autowired
     private SeatController seatController;
+
+    private TransliterationHandler transliterationHandler = new TransliterationHandler();
 
     private static final String TWO_WAY = "twoWay";
     private static final String ONE_WAY = "oneWay";
@@ -582,6 +586,9 @@ public class SearchController extends BaseController {
     }
 
     public void setFromStop(String fromStop) {
+        if (needsTransliteration()) {
+            fromStop = transliterationHandler.getCyrillicOriginal(fromStop);
+        }
         this.fromStop = fromStop;
     }
 
@@ -590,6 +597,9 @@ public class SearchController extends BaseController {
     }
 
     public void setToStop(String toStop) {
+        if (needsTransliteration()) {
+            toStop = transliterationHandler.getCyrillicOriginal(toStop);
+        }
         this.toStop = toStop;
     }
 
@@ -631,7 +641,22 @@ public class SearchController extends BaseController {
             stopNames = searchService.listAllStops(loggedUserHolder
                     .getLoggedUser(), getCurrentFirm());
         }
+
+        // TODO cache?
+        if (needsTransliteration()) {
+            stopNames = transliterateStopNames(stopNames);
+        }
+
         return stopNames;
+    }
+
+    private List<String> transliterateStopNames(List<String> stopNames) {
+        List<String> transliterated = new ArrayList<String>(stopNames.size());
+        for (String stopName : stopNames) {
+            transliterated.add(transliterationHandler.toLatin(stopName));
+        }
+
+        return transliterated;
     }
 
     public void setStopNames(List<String> stopNames) {
@@ -899,5 +924,10 @@ public class SearchController extends BaseController {
             return stop.getName();
         }
         return "";
+    }
+
+    private boolean needsTransliteration() {
+        //todo variable
+        return !FacesContext.getCurrentInstance().getViewRoot().getLocale().equals(GeneralUtils.getDefaultLocale());
     }
 }

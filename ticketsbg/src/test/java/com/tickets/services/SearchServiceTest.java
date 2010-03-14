@@ -60,7 +60,7 @@ public class SearchServiceTest extends BaseTest {
 
     @Override
     protected int getRequiredRoutesCount() {
-        return 10;
+        return 9;
     }
 
     private List<SearchResultEntry> performSearch(int fromHour, int toHour) {

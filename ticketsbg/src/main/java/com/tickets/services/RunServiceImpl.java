@@ -21,7 +21,16 @@ public class RunServiceImpl extends BaseService<Run> implements RunService<Run> 
 
     @Override
     public void createRuns() {
+        createRuns(GeneralUtils.createCalendar());
+    }
 
+    /**
+     * This method is used in cases someone (a unit test) wants to specify a
+     * value of "now" different from the real current time
+     *
+     * @param now
+     */
+    public void createRuns(Calendar now) {
         List<List> runsAndRoutes = getDao().findByNamedQuery("Run.getLastRuns");
 
         logger.debug("Found for run creation: " + runsAndRoutes.size());
@@ -44,7 +53,7 @@ public class RunServiceImpl extends BaseService<Run> implements RunService<Run> 
                 createSingleRunForRoute(route);
             } else {
                 //TODO optimize skipping seasonal
-                createRunsForRoute(route, time);
+                createRunsForRoute(route, time, (Calendar) now.clone());
             }
         }
     }
@@ -60,14 +69,13 @@ public class RunServiceImpl extends BaseService<Run> implements RunService<Run> 
     }
 
 
-    public void createRunsForRoute(Route route, Calendar time) {
+    public void createRunsForRoute(Route route, Calendar time, Calendar now) {
         int day = time.get(Calendar.DAY_OF_YEAR);
         int dayOfWeek = time.get(Calendar.DAY_OF_WEEK);
         // the current day, starting from Monday
         int currentDay = dayOfWeek; // > 1 ? dayOfWeek - 1 : 7; if locale is EN
         CircularLinkedList<RouteDay> routeDays =
             new CircularLinkedList<RouteDay>(route.getRouteDays());
-
 
         // Identifying the day from which to start generating
         ListNode<RouteDay> dayNode = null;
@@ -80,10 +88,9 @@ public class RunServiceImpl extends BaseService<Run> implements RunService<Run> 
                 break;
             }
         }
-        if (dayNode == null)
+        if (dayNode == null) {
             return; // no day found
-
-        Calendar now = GeneralUtils.createCalendar();
+        }
 
         int diff = day - now.get(Calendar.DAY_OF_YEAR);
         // check whether the 'now' or 'day' (whichever is greater) isn't in the
@@ -94,12 +101,13 @@ public class RunServiceImpl extends BaseService<Run> implements RunService<Run> 
             diff = day + (getDaysInYear(time) - now.get(Calendar.DAY_OF_YEAR));
         }
 
-        int daysToGenerate = route.getPublishedRunsPeriod() - diff;
+        int daysToGenerate = route.getPublishedRunsPeriod() - diff + 1; // +1 to guarantee that each day a new day is generated
 
         logger.debug("Generating runs for " + daysToGenerate + " days, for route " + route.getId());
 
-        //Starting either from the last already generated day + 1, or from today (=yesterday + 1)
-        now.add(Calendar.DAY_OF_YEAR, diff + 1);
+        // Starting either from the last already generated day , or from yesterday,
+        // so that after the first "scrolling" the correct day is retrieved
+        now.add(Calendar.DAY_OF_YEAR, diff);
         while (daysToGenerate > 0) {
             int tmpDay = dayNode.getValue().getDay().getId();
             // 'scrolling' to the next date where a run is needed
