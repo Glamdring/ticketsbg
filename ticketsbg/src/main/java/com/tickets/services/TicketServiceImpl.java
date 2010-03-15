@@ -810,7 +810,7 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
                 .findByNamedQuery(
                         "Ticket.findSince",
                         new String[] { "firmKey", "fromStop", "lastCheck" },
-                        new Object[] { firmKey, fromStop,
+                        new Object[] { firmKey, fromStop + "%",
                                 lastCheckCalendar.getTime() });
 
         return tickets.size();

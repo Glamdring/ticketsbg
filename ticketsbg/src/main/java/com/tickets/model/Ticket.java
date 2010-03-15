@@ -47,7 +47,7 @@ import org.hibernate.annotations.LazyCollectionOption;
         name = "Ticket.findSince",
         query = "SELECT t FROM Ticket t " +
                 "WHERE t.run.route.firm.firmKey=:firmKey " +
-                "AND t.startStop=:fromStop " +
+                "AND t.startStop LIKE :fromStop " +
                 "AND timestamp(t.creationTime) > :lastCheck " +
                 "AND t.committed=true"
             )
