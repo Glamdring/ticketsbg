@@ -2,6 +2,7 @@ package com.tickets.services;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -38,6 +39,10 @@ public class PaymentServiceImpl extends BaseService implements PaymentService {
         DecimalFormat df = new DecimalFormat();
         df.setMinimumFractionDigits(2);
         df.setMaximumFractionDigits(2);
+        DecimalFormatSymbols dfs = new DecimalFormatSymbols();
+        dfs.setDecimalSeparator('.');
+
+        df.setDecimalFormatSymbols(dfs);
         String sum = df.format(getTotalPrice(tickets));
         Calendar inTenMinutes = GeneralUtils.createCalendar();
         inTenMinutes.add(Calendar.MINUTE, 10);
