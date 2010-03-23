@@ -185,6 +185,13 @@
     </servlet>
 
     <servlet>
+        <servlet-name>BoricaPaymentServlet</servlet-name>
+        <servlet-class>com.tickets.controllers.payment.BoricaPaymentServlet
+        </servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet>
         <servlet-name>UpdatesServlet</servlet-name>
         <servlet-class>com.tickets.controllers.notifier.UpdatesServlet
         </servlet-class>
@@ -211,6 +218,11 @@
     <servlet-mapping>
         <servlet-name>PaymentServlet</servlet-name>
         <url-pattern>/payment</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>BoricaPaymentServlet</servlet-name>
+        <url-pattern>/boricaPayment</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

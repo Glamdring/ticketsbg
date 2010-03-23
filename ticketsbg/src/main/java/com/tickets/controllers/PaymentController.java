@@ -6,13 +6,16 @@ import java.util.EnumSet;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.tickets.constants.Settings;
 import com.tickets.exceptions.PaymentException;
 import com.tickets.model.PaymentMethod;
 import com.tickets.services.PaymentService;
@@ -22,6 +25,8 @@ import com.tickets.utils.SelectItemUtils;
 @Component("paymentController")
 @Scope("request")
 public class PaymentController extends BaseController {
+
+    private static final Logger logger = Logger.getLogger(PaymentController.class);
 
     private List<SelectItem> paymentMethods = new ArrayList<SelectItem>();
     private String selectedPaymentMethod;
@@ -65,12 +70,21 @@ public class PaymentController extends BaseController {
             // Update the customer information for the purchase
             personalInformationController.updateCustomerInPurchase();
 
+            if (paymentMethod == PaymentMethod.CREDIT_CARD) {
+                PaymentData pd = paymentService.getPaymentData(purchaseController.getOrder(), paymentMethod, getCurrentLocale());
+                String url = Settings.getValue("borica.url") + "?"
+                        + Settings.getValue("borica.param") + "="
+                        + pd.getEncoded();
+
+                System.out.println(url);
+                FacesContext.getCurrentInstance().getExternalContext().redirect(url);
+            }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error("Problem with getting BORICA payment data", ex);
         }
 
-        // After this method completes, if no errors exist, the
-        // payment form is submitted to the payment provider
+        // If the method is ePay, after this method completes, if no errors
+        // occur, the payment form is submitted to the ePay
     }
 
     public BigDecimal getServiceFee() {
@@ -84,7 +98,9 @@ public class PaymentController extends BaseController {
      */
     public void refreshPaymentData() {
         try {
-            PaymentData paymentData = paymentService.getPaymentData(purchaseController.getOrder());
+            PaymentData paymentData = paymentService
+                    .getPaymentData(purchaseController.getOrder(),
+                            PaymentMethod.E_PAY, getCurrentLocale());
             setEncoded(paymentData.getEncoded());
             setChecksum(paymentData.getChecksum());
             // the next line is not redundant! The order in the payment data is changed (acquired an id)

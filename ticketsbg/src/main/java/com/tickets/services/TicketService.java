@@ -67,6 +67,7 @@ public interface TicketService extends Service<Ticket> {
     /**
      * Finalizes the purchase
      * @param tickets
+     * @param the transaction identification code
      *
      */
     void finalizePurchase(List<Ticket> tickets, String paymentCode);

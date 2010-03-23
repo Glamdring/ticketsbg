@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.PostConstruct;
 import javax.mail.internet.InternetAddress;
@@ -27,6 +28,7 @@ import com.tickets.model.Discount;
 import com.tickets.model.DiscountType;
 import com.tickets.model.Firm;
 import com.tickets.model.Order;
+import com.tickets.model.PaymentMethod;
 import com.tickets.model.Route;
 import com.tickets.model.Run;
 import com.tickets.model.SearchResultEntry;
@@ -167,7 +169,7 @@ public class TicketServiceTest extends BaseTest {
         order.setTickets(tickets);
 
         try {
-            PaymentData pd = paymentService.getPaymentData(order);
+            PaymentData pd = paymentService.getPaymentData(order, PaymentMethod.E_PAY, new Locale("bg"));
             Assert.assertNotNull(pd);
         } catch (PaymentException ex) {
             ex.printStackTrace();

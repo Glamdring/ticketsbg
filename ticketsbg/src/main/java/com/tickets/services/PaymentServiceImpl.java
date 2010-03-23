@@ -1,13 +1,20 @@
 package com.tickets.services;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +22,7 @@ import com.tickets.constants.Messages;
 import com.tickets.constants.Settings;
 import com.tickets.exceptions.PaymentException;
 import com.tickets.model.Order;
+import com.tickets.model.PaymentMethod;
 import com.tickets.model.Ticket;
 import com.tickets.services.valueobjects.PaymentData;
 import com.tickets.utils.GeneralUtils;
@@ -24,37 +32,99 @@ import com.tickets.utils.base64.Base64Encoder;
 @Service("paymentService")
 public class PaymentServiceImpl extends BaseService implements PaymentService {
 
+    private static final Logger logger = Logger.getLogger(PaymentServiceImpl.class);
+
     private static final String E_PAY_DATA_PATTERN = "MIN={0}\nINVOICE={1}\nAMOUNT={2}\nEXP_TIME={3}\nDESCR={4}";
+
+    private static final String BORICA_PROTOCOL_VERSION = "1.1";
 
     @Autowired
     private TicketService ticketService;
 
     @Override
-    public PaymentData getPaymentData(Order order) throws PaymentException {
+    public PaymentData getPaymentData(Order order, PaymentMethod paymentMethod, Locale locale) throws PaymentException {
+       if (paymentMethod == PaymentMethod.E_PAY) {
+           return getEpayPaymentData(order);
+       }
+       if (paymentMethod == PaymentMethod.CREDIT_CARD) {
+           return getBoricaPaymentData(order, locale);
+       }
+
+       return new PaymentData(); // empty object
+    }
+
+    private PaymentData getBoricaPaymentData(Order order, Locale locale) {
+
+        // Do not touch the code below. It is dark magic in order to conform
+        // to Borica odd choice of encodings and byte array representations
+
+        List<Ticket> tickets = order.getTickets();
+
+        String transactionType = "10"; // purchase
+
+        DateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+        String dateTime = df.format(GeneralUtils.createCalendar().getTime());
+
+        String formattedSum = createDecimalFormat().format(getTotalPrice(tickets));
+        String[] decimalParts = formattedSum.split("\\.");
+        int sumInt = Integer.parseInt(decimalParts[0]) * 100 + Integer.parseInt(decimalParts[1]);
+        String sum = String.format("%012d", sumInt);
+
+        String orderId = order.getId() + "";
+        orderId = StringUtils.rightPad(addDummyDigits(orderId), 15);
+
+        String description = StringUtils.rightPad(getDescription(tickets), 125);
+
+        String tid = Settings.getValue("borica.tid");
+
+        String language = locale.getLanguage().toLowerCase().indexOf("bg") != -1 ? "BG" : "EN";
+        String protocolVersion = BORICA_PROTOCOL_VERSION;
+
+        String currency = "BGN"; // TODO currencies
+
+        String textToSign = StringUtils.join(new String[] { transactionType,
+                dateTime, sum, tid, orderId, description, language,
+                protocolVersion, currency});
+
+        String signatureString = "";
+        try {
+            byte[] signature = SecurityUtils.sign(textToSign.getBytes("cp1251"), SecurityUtils.getBoricaClientPrivateKey());
+
+            signatureString = new String(signature, "cp1251"); // blah, that stupid Borica protocol
+        } catch (UnsupportedEncodingException ex) {
+            // it is supported
+        }
+
+        String encoded = null;
+        try {
+            String finalMessage = textToSign + signatureString;
+            logger.info("Sending to BORICA: " + finalMessage);
+
+            encoded = URLEncoder.encode(new String(Base64.encodeBase64(finalMessage.getBytes("cp1251"))), "cp1251");
+        } catch (UnsupportedEncodingException ex) {
+            // it IS supported
+        }
+
+        PaymentData pd = new PaymentData();
+        pd.setEncoded(encoded);
+
+        return pd;
+    }
+
+    private PaymentData getEpayPaymentData(Order order) throws PaymentException {
         String secret = Settings.getValue("epay.secret");
         String min = Settings.getValue("epay.min");
 
         List<Ticket> tickets = order.getTickets();
 
-        DecimalFormat df = new DecimalFormat();
-        df.setMinimumFractionDigits(2);
-        df.setMaximumFractionDigits(2);
-        DecimalFormatSymbols dfs = new DecimalFormatSymbols();
-        dfs.setDecimalSeparator('.');
-
-        df.setDecimalFormatSymbols(dfs);
+        DecimalFormat df = createDecimalFormat();
         String sum = df.format(getTotalPrice(tickets));
         Calendar inTenMinutes = GeneralUtils.createCalendar();
         inTenMinutes.add(Calendar.MINUTE, 10);
         String expiryDate = new SimpleDateFormat("dd.MM.yyyy HH:mm")
                 .format(inTenMinutes.getTime());
 
-        String description = Messages.getString("paymentDescriptionPrefix") + ": "; // TODO somehow put new line
-
-        for (Ticket ticket : tickets) {
-            description += ticket.getStartStop() + " - " + ticket.getEndStop()
-                    + " : " + ticket.getTicketCode() + "; ";
-        }
+        String description = getDescription(tickets);
 
         if (order.getId() == 0) {
             order = getDao().persist(order);
@@ -79,6 +149,27 @@ public class PaymentServiceImpl extends BaseService implements PaymentService {
         } catch (Exception ex) {
             throw new PaymentException(ex);
         }
+    }
+
+    private String getDescription(List<Ticket> tickets) {
+        String description = Messages.getString("paymentDescriptionPrefix") + ": "; // TODO somehow put new line
+
+        for (Ticket ticket : tickets) {
+            description += ticket.getStartStop() + " - " + ticket.getEndStop()
+                    + " : " + ticket.getTicketCode() + "; ";
+        }
+        return description;
+    }
+
+    private DecimalFormat createDecimalFormat() {
+        DecimalFormat df = new DecimalFormat();
+        df.setMinimumFractionDigits(2);
+        df.setMaximumFractionDigits(2);
+        DecimalFormatSymbols dfs = new DecimalFormatSymbols();
+        dfs.setDecimalSeparator('.');
+
+        df.setDecimalFormatSymbols(dfs);
+        return df;
     }
 
     private String addDummyDigits(String orderId) {

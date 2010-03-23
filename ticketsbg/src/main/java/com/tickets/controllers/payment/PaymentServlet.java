@@ -20,8 +20,6 @@ import com.tickets.services.PaymentService;
 import com.tickets.utils.SecurityUtils;
 import com.tickets.utils.base64.Base64Decoder;
 
-@Controller("paymentStatusControlller")
-@Scope("request")
 public class PaymentServlet extends HttpServlet {
 
     private static final Pattern RESPONSE_PATTERN

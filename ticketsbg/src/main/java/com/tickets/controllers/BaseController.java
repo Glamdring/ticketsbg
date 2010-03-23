@@ -1,6 +1,7 @@
 package com.tickets.controllers;
 
 import java.io.Serializable;
+import java.util.Locale;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -66,5 +67,9 @@ public class BaseController implements Serializable {
 
     public boolean isHasMessages() {
         return FacesContext.getCurrentInstance().getMessages().hasNext();
+    }
+
+    protected Locale getCurrentLocale() {
+        return FacesContext.getCurrentInstance().getViewRoot().getLocale();
     }
 }

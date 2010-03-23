@@ -41,12 +41,6 @@
                         <rich:panel header="#{msg.payment}" style="vertical-align: top;">
                             <div align="center">
 
-                                <t:selectOneRadio layout="spread" onchange="updatePaymentGatewayPage(this.value);"
-                                    id="selectedPaymentMethod" required="true"
-                                    value="#{paymentController.selectedPaymentMethod}">
-                                    <f:selectItem itemValue="E_PAY" itemLabel="" />
-                                    <f:selectItem itemValue="CREDIT_CARD" itemLabel="" />
-                                </t:selectOneRadio>
                              <h:panelGrid columns="2" rowClasses="imageRow,optionRow"
                                 style="text-align: center;" width="500px">
 
@@ -59,28 +53,23 @@
                                     <h:outputLabel id="ccLabel" for="selectedPaymentMethod">
                                         <h:graphicImage url="/images/creditCards.gif"
                                             style="border: 0px; margin-top: -2px" height="45" />
-                                        <!-- Service fee removed due to VISA / MasterCard policy
-                                        <br />
-                                        <h:outputText value="#{msg.serviceFee}: "
-                                            style="font-size: 10px;" />
-                                        <h:outputText value="#{paymentController.serviceFee}"
-                                            style="color: red; font-size: 10px;">
-                                            <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-                                            <f:converter binding="#{currencyConverter}"
-                                                converterId="currencyConverter" />
-                                        </h:outputText>
-                                        -->
                                     </h:outputLabel>
                                 </h:panelGroup>
 
-                                <t:radio for="selectedPaymentMethod" index="0" />
-                                <t:radio for="selectedPaymentMethod" index="1" />
+                                <a4j:commandButton action="#{paymentController.pay}"
+                                    value="#{msg.pay}" style="font-size: 16px;"
+                                    oncomplete="if(#{facesContext.maximumSeverity==null}) {document.getElementById('paymentGatewayForm').submit();}">
+                                    <f:setPropertyActionListener value="E_PAY"
+                                        target="#{paymentController.selectedPaymentMethod}" />
+                                </a4j:commandButton>
 
+
+                                <a4j:commandButton action="#{paymentController.pay}"
+                                    value="#{msg.pay}" style="font-size: 16px;">
+                                    <f:setPropertyActionListener value="CREDIT_CARD"
+                                        target="#{paymentController.selectedPaymentMethod}" />
+                                </a4j:commandButton>
                             </h:panelGrid>
-
-                            <a4j:commandButton action="#{paymentController.pay}"
-                                value="#{msg.pay}" style="font-size: 16px;"
-                                oncomplete="if(#{facesContext.maximumSeverity==null}) {document.getElementById('paymentGatewayForm').submit();}" />
 
                              <br />
                              <a4j:outputPanel ajaxRendered="true">
