@@ -8,9 +8,9 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
@@ -42,18 +42,18 @@ public class PaymentServiceImpl extends BaseService implements PaymentService {
     private TicketService ticketService;
 
     @Override
-    public PaymentData getPaymentData(Order order, PaymentMethod paymentMethod, Locale locale) throws PaymentException {
+    public PaymentData getPaymentData(Order order, PaymentMethod paymentMethod) throws PaymentException {
        if (paymentMethod == PaymentMethod.E_PAY) {
            return getEpayPaymentData(order);
        }
        if (paymentMethod == PaymentMethod.CREDIT_CARD) {
-           return getBoricaPaymentData(order, locale);
+           return getBoricaPaymentData(order);
        }
 
        return new PaymentData(); // empty object
     }
 
-    private PaymentData getBoricaPaymentData(Order order, Locale locale) {
+    private PaymentData getBoricaPaymentData(Order order) {
 
         // Do not touch the code below. It is dark magic in order to conform
         // to Borica odd choice of encodings and byte array representations
@@ -77,7 +77,7 @@ public class PaymentServiceImpl extends BaseService implements PaymentService {
 
         String tid = Settings.getValue("borica.tid");
 
-        String language = locale.getLanguage().toLowerCase().indexOf("bg") != -1 ? "BG" : "EN";
+        String language = order.getLanguageCode().toLowerCase().indexOf("bg") != -1 ? "BG" : "EN";
         String protocolVersion = BORICA_PROTOCOL_VERSION;
 
         String currency = "BGN"; // TODO currencies
@@ -230,5 +230,48 @@ public class PaymentServiceImpl extends BaseService implements PaymentService {
         }
 
         return fee;
+    }
+
+    @Override
+    public String formBoricaURL(PaymentData pd) {
+        return Settings.getValue("borica.url") + "?"
+                + Settings.getValue("borica.param") + "=" + pd.getEncoded();
+    }
+
+    public String formBoricaStatusURL(PaymentData pd) {
+        return Settings.getValue("borica.status.url") + "?"
+                + Settings.getValue("borica.param") + "=" + pd.getEncoded();
+    }
+
+    @Override
+    public boolean handleBoricaConfirmation(String message) throws PaymentException {
+        byte[] bytes = Base64.decodeBase64(message.getBytes());
+        String decoded = new String(bytes);
+
+        int orderIdStart = 2 + 14 + 12 + 8;
+        String orderId = decoded.substring(orderIdStart, orderIdStart + 15)
+                .trim();
+        // using the date for payment code
+        String paymentCode = decoded.substring(2, 14);
+        String resultCode = decoded.substring(orderIdStart + 15,
+                orderIdStart + 17);
+
+        if (resultCode.equals("00")) {
+
+            byte[] sigBytes = Arrays.copyOfRange(bytes, bytes.length - 128,
+                    bytes.length);
+            byte[] textBytes = Arrays.copyOfRange(bytes, 0, bytes.length - 128);
+
+            boolean verified = SecurityUtils.verify(sigBytes, textBytes,
+                    SecurityUtils.getBoricaCertificate());
+            if (verified) {
+                return confirmPayment(orderId, paymentCode);
+            } else {
+                throw new PaymentException("Failed verifying Borica signature");
+            }
+        } else {
+            throw new PaymentException("BORICA payment failed with code: "
+                    + resultCode);
+        }
     }
 }

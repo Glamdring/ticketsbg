@@ -1,8 +1,11 @@
 package com.tickets.utils;
 
+import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.Signature;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateFactory;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -52,6 +55,17 @@ public final class SecurityUtils {
         }
     }
 
+    public static boolean verify(byte[] signature, byte[] content, Certificate certificate) {
+        try {
+            Signature sig = Signature.getInstance(SIGNATURE_ALGORITHM);
+            sig.initVerify(certificate);
+            sig.update(content);
+            return sig.verify(signature);
+        } catch (Exception ex) {
+            throw new RuntimeException("Problem with signature verification", ex);
+        }
+    }
+
     private static KeyStore boricaClientKeystore;
 
     public static KeyStore getBoricaClientKeyStore() {
@@ -84,7 +98,23 @@ public final class SecurityUtils {
 
             return boricaClientPrivateKey;
         } catch (Exception ex) {
-            throw new RuntimeException("Error loading AIS private key", ex);
+            throw new RuntimeException("Error loading private key", ex);
+        }
+    }
+
+    private static Certificate boricaCertificate;
+
+    public static Certificate getBoricaCertificate() {
+        try {
+            if (boricaCertificate == null) {
+                InputStream is = SecurityUtils.class.getResourceAsStream(Settings.getValue("borica.certificate"));
+                boricaCertificate = CertificateFactory.getInstance("X.509")
+                        .generateCertificate(is);
+            }
+
+            return boricaCertificate;
+        } catch (Exception ex) {
+            throw new RuntimeException("Error loading Certificate key", ex);
         }
     }
 }

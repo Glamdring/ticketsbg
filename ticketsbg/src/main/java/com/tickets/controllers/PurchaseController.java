@@ -155,6 +155,7 @@ public class PurchaseController extends BaseController implements Serializable {
     public Order getOrder() {
         if (order == null) {
             order = new Order();
+            order.setLanguageCode(getCurrentLocale().getLanguage());
             order.setTickets(tickets);
         }
         return order;

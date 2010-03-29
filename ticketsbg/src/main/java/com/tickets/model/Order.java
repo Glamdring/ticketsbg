@@ -1,9 +1,11 @@
 package com.tickets.model;
 
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -34,6 +36,9 @@ public class Order implements Serializable {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Ticket> tickets;
 
+    @Column
+    private String languageCode;
+
     public int getId() {
         return id;
     }
@@ -48,5 +53,34 @@ public class Order implements Serializable {
 
     public void setTickets(List<Ticket> tickets) {
         this.tickets = tickets;
+    }
+
+    public String getLanguageCode() {
+        return languageCode;
+    }
+
+    public void setLanguageCode(String languageCode) {
+        this.languageCode = languageCode;
+    }
+
+    // the two methods below actually use the fact that all tickets within the
+    // order have the same properties. This is so because the order is an
+    // artificial holder of the purchased tickets
+
+    public boolean paymentInitiated() {
+        for (Ticket ticket : tickets) {
+            if (ticket.isPaymentInProcess()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public PaymentMethod getPaymentMethod() {
+        Iterator<Ticket> it = tickets.iterator();
+        if (it.hasNext()) {
+            return it.next().getPaymentMethod();
+        }
+        return null;
     }
 }

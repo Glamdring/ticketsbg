@@ -106,7 +106,7 @@
                     value="http://#{facesContext.externalContext.request.serverName}:#{facesContext.externalContext.request.serverPort}#{facesContext.externalContext.request.contextPath}" />
 
                 <h:panelGroup id="paymentGatewayFormWrapper">
-                    <form action="https://devep2.datamax.bg/ep2/epay2_demo/"
+                    <form action="#{paymentController.epayUrl}"
                         id="paymentGatewayForm"><input type="hidden" id="PAGE" name="PAGE"
                         value="paylogin" /> <input type="hidden" name="LANG" value="bg" />
                     <input type="hidden" name="ENCODED"

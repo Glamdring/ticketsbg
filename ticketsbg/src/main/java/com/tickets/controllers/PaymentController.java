@@ -71,10 +71,9 @@ public class PaymentController extends BaseController {
             personalInformationController.updateCustomerInPurchase();
 
             if (paymentMethod == PaymentMethod.CREDIT_CARD) {
-                PaymentData pd = paymentService.getPaymentData(purchaseController.getOrder(), paymentMethod, getCurrentLocale());
-                String url = Settings.getValue("borica.url") + "?"
-                        + Settings.getValue("borica.param") + "="
-                        + pd.getEncoded();
+
+                PaymentData pd = paymentService.getPaymentData(purchaseController.getOrder(), paymentMethod);
+                String url = paymentService.formBoricaURL(pd);
 
                 System.out.println(url);
                 FacesContext.getCurrentInstance().getExternalContext().redirect(url);
@@ -100,7 +99,7 @@ public class PaymentController extends BaseController {
         try {
             PaymentData paymentData = paymentService
                     .getPaymentData(purchaseController.getOrder(),
-                            PaymentMethod.E_PAY, getCurrentLocale());
+                            PaymentMethod.E_PAY);
             setEncoded(paymentData.getEncoded());
             setChecksum(paymentData.getChecksum());
             // the next line is not redundant! The order in the payment data is changed (acquired an id)
@@ -118,6 +117,9 @@ public class PaymentController extends BaseController {
         refreshPaymentData();
     }
 
+    public String getEpayUrl() {
+        return Settings.getValue("epay.url");
+    }
     public List<SelectItem> getPaymentMethods() {
         return paymentMethods;
     }

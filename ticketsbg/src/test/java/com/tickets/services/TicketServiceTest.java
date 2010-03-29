@@ -164,12 +164,14 @@ public class TicketServiceTest extends BaseTest {
         Ticket t = createTicket(new TicketCountsHolder());
 
         Order order = new Order();
+        order.setLanguageCode(new Locale("bg").getLanguage());
+
         ArrayList<Ticket> tickets = new ArrayList<Ticket>();
         tickets.add(t);
         order.setTickets(tickets);
 
         try {
-            PaymentData pd = paymentService.getPaymentData(order, PaymentMethod.E_PAY, new Locale("bg"));
+            PaymentData pd = paymentService.getPaymentData(order, PaymentMethod.E_PAY);
             Assert.assertNotNull(pd);
         } catch (PaymentException ex) {
             ex.printStackTrace();

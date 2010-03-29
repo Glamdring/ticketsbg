@@ -1,8 +1,13 @@
 package com.tickets.services;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -32,6 +37,7 @@ import com.tickets.constants.Constants;
 import com.tickets.constants.Messages;
 import com.tickets.constants.Settings;
 import com.tickets.controllers.converters.CurrencyConverter;
+import com.tickets.exceptions.PaymentException;
 import com.tickets.exceptions.TicketAlterationException;
 import com.tickets.exceptions.TicketCreationException;
 import com.tickets.model.Customer;
@@ -46,6 +52,7 @@ import com.tickets.model.Stop;
 import com.tickets.model.Ticket;
 import com.tickets.model.User;
 import com.tickets.services.valueobjects.OrderReportData;
+import com.tickets.services.valueobjects.PaymentData;
 import com.tickets.services.valueobjects.Seat;
 import com.tickets.services.valueobjects.TicketCount;
 import com.tickets.services.valueobjects.TicketCountsHolder;
@@ -65,19 +72,22 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private PaymentService paymentService;
+
     public Ticket createTicket(SearchResultEntry selectedEntry,
             SearchResultEntry selectedReturnEntry,
             TicketCountsHolder ticketCountsHolder, List<Seat> selectedSeats,
             List<Seat> selectedReturnSeats) throws TicketCreationException {
 
         // Allow only one user per run at a time, to avoid collisions
-        String runIdIntern = (INTERN_PREFIX + String.valueOf(selectedEntry.getRun()
-                .getRunId())).intern();
+        String runIdIntern = (INTERN_PREFIX + String.valueOf(selectedEntry
+                .getRun().getRunId())).intern();
         String returnRunIdIntern = null;
 
         if (selectedReturnEntry != null) {
-            returnRunIdIntern = (INTERN_PREFIX + String.valueOf(selectedEntry.getRun()
-                    .getRunId())).intern();
+            returnRunIdIntern = (INTERN_PREFIX + String.valueOf(selectedEntry
+                    .getRun().getRunId())).intern();
         }
 
         String bothRunsUniqueStringIntern = getBothRunsUniqueString(
@@ -85,13 +95,13 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
 
         // For clarification Take a look at
         // http://stackoverflow.com/questions/1852138/nested-synchronized-blocks-on-interned-strings
-        synchronized(bothRunsUniqueStringIntern) {
+        synchronized (bothRunsUniqueStringIntern) {
             synchronized (runIdIntern) {
                 if (returnRunIdIntern != null) {
                     synchronized (returnRunIdIntern) {
-                        return doCreateTicket(selectedEntry, selectedReturnEntry,
-                                ticketCountsHolder, selectedSeats,
-                                selectedReturnSeats);
+                        return doCreateTicket(selectedEntry,
+                                selectedReturnEntry, ticketCountsHolder,
+                                selectedSeats, selectedReturnSeats);
                     }
                 }
 
@@ -534,8 +544,10 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
             TicketInfo ticketInfo = new TicketInfo();
 
             ticketInfo.setTicketCode(ticket.getTicketCode());
-            ticketInfo.setRouteName(ticket.getStartStop() + " - " + ticket.getEndStop());
-            ticketInfo.setFirmName(ticket.getRun().getRoute().getFirm().getName());
+            ticketInfo.setRouteName(ticket.getStartStop() + " - "
+                    + ticket.getEndStop());
+            ticketInfo.setFirmName(ticket.getRun().getRoute().getFirm()
+                    .getName());
 
             ticketInfo.setDepartureTime(sdf.format(ticket.getDepartureTime()
                     .getTime()));
@@ -559,7 +571,8 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
             ticketInfo.setSeats(seats);
 
             String returnSeats = "";
-            if (ticket.isTwoWay() && ticket.getRun().getRoute().isAllowSeatChoice()) {
+            if (ticket.isTwoWay()
+                    && ticket.getRun().getRoute().isAllowSeatChoice()) {
                 delim = "";
                 for (PassengerDetails pd : ticket.getPassengerDetails()) {
                     returnSeats += delim + pd.getReturnSeat();
@@ -574,7 +587,8 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
                     .getString("requireReceiptAtCashDeskUserMessage")
                     : Messages.getString("showTicketAtVehicle");
             ticketInfo.setShowTicketAtMessage(msg);
-            ticketInfo.setPrice(CurrencyConverter.addCurrencyInformation(ticket.getTotalPrice()));
+            ticketInfo.setPrice(CurrencyConverter.addCurrencyInformation(ticket
+                    .getTotalPrice()));
 
             ticketInfos.add(ticketInfo);
         }
@@ -620,20 +634,24 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
 
             reportData.setTitle(Messages.getString("pdfIntroText"));
 
-            List<OrderReportData> reportSource = new ArrayList<OrderReportData>(1);
+            List<OrderReportData> reportSource = new ArrayList<OrderReportData>(
+                    1);
             reportSource.add(reportData);
 
-            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(reportSource);
+            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(
+                    reportSource);
 
             Map<String, Object> params = new HashMap<String, Object>();
 
             params.put("REPORTS_DIR", "com/tickets/jasper");
 
-            InputStream sis = TicketServiceImpl.class.getResourceAsStream("/com/tickets/jasper/tickets_subreport.jasper");
+            InputStream sis = TicketServiceImpl.class
+                    .getResourceAsStream("/com/tickets/jasper/tickets_subreport.jasper");
             JasperReport subreport = (JasperReport) JRLoader.loadObject(sis);
             addPdfFontsToStyles(subreport.getStyles());
             params.put("SUBREPORT", subreport);
-            params.put(JRParameter.REPORT_LOCALE, GeneralUtils.getCurrentLocale());
+            params.put(JRParameter.REPORT_LOCALE, GeneralUtils
+                    .getCurrentLocale());
 
             JRStyle[] styles = jasperReport.getStyles();
             addPdfFontsToStyles(styles);
@@ -647,8 +665,10 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-            exporter.setParameter(JRExporterParameter.CHARACTER_ENCODING,"UTF-8");
-            exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+            exporter.setParameter(JRExporterParameter.CHARACTER_ENCODING,
+                    "UTF-8");
+            exporter
+                    .setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
             exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, baos);
             exporter.setParameter(JRExporterParameter.FONT_MAP, fontMap);
             exporter.exportReport();
@@ -689,7 +709,8 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
         List<Ticket> unconfirmed = getDao().findByNamedQuery(
                 "Ticket.findUnconfirmed");
 
-        long timeoutPeriod = Integer.parseInt(Settings.getValue("ticket.timeout"))
+        long timeoutPeriod = Integer.parseInt(Settings
+                .getValue("ticket.timeout"))
                 * Constants.ONE_MINUTE;
 
         long inProcessTimeoutPeriod = timeoutPeriod * 3 / 2;
@@ -710,12 +731,89 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
     public void clearTimeoutedTickets() {
         List<Order> timeouted = getDao().findByNamedQuery("Order.getTimeouted");
         for (Order order : timeouted) {
+            if (order.paymentInitiated()
+                    && order.getPaymentMethod() == PaymentMethod.CREDIT_CARD) {
+                if (order.getLanguageCode() == null) {
+                    order.setLanguageCode(GeneralUtils.getDefaultLocale().getLanguage());
+                }
+                String orderResponse = getOrderResponse(order);
+                if (orderResponse != null) {
+                    try {
+                        // in case the payment is confirmed, skip the deletion
+                        // of this order
+                        if (paymentService
+                                .handleBoricaConfirmation(orderResponse)) {
+                            continue;
+                        }
+                    } catch (PaymentException ex) {
+                        // do nothing - this payment is not confirmed
+                    }
+
+                }
+            }
+
             delete(order);
         }
     }
 
+    /**
+     * This method sends a request to Borica for the specified order to verify
+     * whether it is really timeouted and unconfirmed, or the user has closed
+     * his browser before it was redirected to the confirmation address
+     *
+     * @param order
+     * @return the whole response
+     */
+    private String getOrderResponse(Order order) {
+        try {
+            PaymentData pd = paymentService.getPaymentData(order, order
+                    .getPaymentMethod());
+            String urlString = paymentService.formBoricaStatusURL(pd);
+            URL url = new URL(urlString);
+
+            String response = getBoricaResponse(url);
+            return response;
+        } catch (PaymentException ex) {
+            // log & return null is a bad practice, but here it conforms to the
+            // contract of the method
+            log.error(ex.getMessage());
+            return null;
+        } catch (MalformedURLException ex) {
+            log.error("Problem with the URL", ex);
+            return null;
+        } catch (Exception e) {
+            log.error("", e);
+            return null;
+        }
+    }
+
+    static {
+        try {
+            URL fileURL = TicketServiceImpl.class.getResource(
+                    "/com/tickets/utils/" + Settings.getValue("borica.keystore"));
+            File keyStoreFile = new File(fileURL.toURI());
+            String absolutePath = keyStoreFile.getAbsolutePath();
+            log.debug("Absolute path to keystore is: " + absolutePath);
+            System.setProperty("javax.net.ssl.keyStore", absolutePath);
+            System.setProperty("javax.net.ssl.keyStorePassword", Settings
+                    .getValue("borica.keystore.password"));
+            log.info("SSL initialized successfully");
+        } catch (Exception ex) {
+            log.error("Error initializing ssl properties", ex);
+        }
+    }
+    private String getBoricaResponse(URL url) throws IOException {
+
+        URLConnection con = url.openConnection();
+        byte[] data = new byte[con.getContentLength()];
+        con.getInputStream().read(data);
+
+        return new String(data);
+    }
+
     @Override
-    public Ticket findTicket(String ticketCode, String email) throws TicketAlterationException {
+    public Ticket findTicket(String ticketCode, String email)
+            throws TicketAlterationException {
         List result = getDao().findByNamedQuery("Ticket.findByCodeAndEmail",
                 new String[] { "ticketCode", "email" },
                 new Object[] { ticketCode, email });
@@ -734,13 +832,16 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
                 }
             }
             if (stop == null) {
-                throw new IllegalStateException("No stop found on the route with the specified name");
+                throw new IllegalStateException(
+                        "No stop found on the route with the specified name");
             }
 
             // Check whether the ticket can be altered
-            Calendar tresholdTime = (Calendar) ticket.getRun().getTime().clone();
+            Calendar tresholdTime = (Calendar) ticket.getRun().getTime()
+                    .clone();
             tresholdTime.add(Calendar.MINUTE, stop.getTimeToDeparture());
-            tresholdTime.add(Calendar.HOUR, -hoursBeforeTravelAlterationAllowed);
+            tresholdTime
+                    .add(Calendar.HOUR, -hoursBeforeTravelAlterationAllowed);
 
             Calendar now = GeneralUtils.createCalendar();
             if (now.compareTo(tresholdTime) < 0) {
@@ -787,7 +888,8 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
             return 0;
         }
 
-        long timeoutPeriod = Integer.parseInt(Settings.getValue("ticket.timeout"))
+        long timeoutPeriod = Integer.parseInt(Settings
+                .getValue("ticket.timeout"))
                 * Constants.ONE_MINUTE;
 
         long result = timeoutPeriod
@@ -806,12 +908,11 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
         Calendar lastCheckCalendar = Calendar.getInstance();
         lastCheckCalendar.setTimeInMillis(lastCheck);
 
-        List tickets = getDao()
-                .findByNamedQuery(
-                        "Ticket.findSince",
-                        new String[] { "firmKey", "fromStop", "lastCheck" },
-                        new Object[] { firmKey, fromStop + "%",
-                                lastCheckCalendar.getTime() });
+        List tickets = getDao().findByNamedQuery(
+                "Ticket.findSince",
+                new String[] { "firmKey", "fromStop", "lastCheck" },
+                new Object[] { firmKey, fromStop + "%",
+                        lastCheckCalendar.getTime() });
 
         return tickets.size();
     }
@@ -845,5 +946,3 @@ class Seats {
         this.returnSeat = returnSeat;
     }
 }
-
-
