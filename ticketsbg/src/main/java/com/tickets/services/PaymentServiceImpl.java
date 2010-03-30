@@ -2,7 +2,9 @@ package com.tickets.services;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.security.KeyStoreException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -13,8 +15,10 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.bouncycastle.util.encoders.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -86,23 +90,21 @@ public class PaymentServiceImpl extends BaseService implements PaymentService {
                 dateTime, sum, tid, orderId, description, language,
                 protocolVersion, currency});
 
-        String signatureString = "";
-        try {
-            byte[] signature = SecurityUtils.sign(textToSign.getBytes("cp1251"), SecurityUtils.getBoricaClientPrivateKey());
-
-            signatureString = new String(signature, "cp1251"); // blah, that stupid Borica protocol
-        } catch (UnsupportedEncodingException ex) {
-            // it is supported
-        }
-
         String encoded = null;
         try {
-            String finalMessage = textToSign + signatureString;
-            logger.info("Sending to BORICA: " + finalMessage);
 
-            encoded = URLEncoder.encode(new String(Base64.encodeBase64(finalMessage.getBytes("cp1251"))), "cp1251");
+            byte[] tBytes = textToSign.getBytes("cp1251");
+            byte[] signature = SecurityUtils.sign(tBytes, SecurityUtils.getBoricaClientPrivateKey());
+
+            byte[] allBytes = ArrayUtils.addAll(tBytes, signature);
+            encoded = new String(Base64.encodeBase64(allBytes));
+
+            logger.info("Sending to BORICA: " + textToSign);
+
+            encoded = URLEncoder.encode(encoded, "ISO-8859-1");
+
         } catch (UnsupportedEncodingException ex) {
-            // it IS supported
+            // it is supported
         }
 
         PaymentData pd = new PaymentData();

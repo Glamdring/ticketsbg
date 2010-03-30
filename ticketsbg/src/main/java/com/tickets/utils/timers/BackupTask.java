@@ -71,7 +71,7 @@ public class BackupTask extends TimerTask {
         BackupTask bt = new BackupTask();
 
         bt.parseAndPerformBackup("root", "",
-                "jdbc:mysql://localhost/tickets?characterEncoding=utf8");
+                "jdbc:mysql://localhost/avtogara?characterEncoding=utf8");
 
     }
 
@@ -79,10 +79,13 @@ public class BackupTask extends TimerTask {
 
     private String getData(String host, String port, String user,
             String password, String db) throws Exception {
-        Process run = Runtime.getRuntime().exec("mysqldump --host=" + host + " --port=" + port + " --user="
-                        + user + " --password=" + password
-                        + " --compact --complete-insert --extended-insert "
-                        + "--skip-comments --skip-triggers " + db);
+
+        String execString = "mysqldump --host=" + host + " --port=" + port + " --user="
+            + user + " --password=" + password
+            + " --compact --complete-insert --extended-insert "
+            + "--skip-comments --skip-triggers --default-character-set=utf8 " + db;
+
+        Process run = Runtime.getRuntime().exec(execString);
         InputStream in = run.getInputStream();
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
