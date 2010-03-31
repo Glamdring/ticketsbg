@@ -37,8 +37,9 @@
                         <h:inputHidden id="admin" binding="#{searchController.admin}"
                             value="false" converter="#{booleanConverter}" />
                     </a4j:outputPanel>
-                    <rich:panel header=" " headerClass="rich-panel-header-main"
+                    <rich:panel headerClass="rich-panel-header-main"
                         style="text-align: center; width: 485px; margin-left: 5px; height: 100%;">
+                        <f:facet name="header"><h4 style="margin-top: 2px;">#{msg.seoTitle}</h4></f:facet>
                         <h:graphicImage url="/images/banner.png" alt="" style="width: 445px; height: 235px;" />
                     </rich:panel>
                 </h:panelGrid>

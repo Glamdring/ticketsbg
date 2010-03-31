@@ -30,6 +30,7 @@ import org.apache.commons.mail.ByteArrayDataSource;
 import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
+import org.apache.commons.validator.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -498,9 +499,14 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
 
             String customerEmail = customerInfo.getEmail();
             String customerName = customerInfo.getName();
+            String firmNotificationEmail = firstTicket.getRun().getRoute().getFirm().getNotificationEmail();
 
             HtmlEmail email = (HtmlEmail) emailService.createEmail(true);
             email.addTo(customerEmail);
+
+            if (EmailValidator.getInstance().isValid(firmNotificationEmail)) {
+                email.addBcc(firmNotificationEmail);
+            }
 
             email.setFrom(Settings.getValue("purchase.email.sender"));
             if (tickets.size() > 1

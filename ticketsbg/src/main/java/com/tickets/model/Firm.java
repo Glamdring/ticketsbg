@@ -55,6 +55,12 @@ public class Firm implements Serializable, Selectable {
     private String other;
 
     @Column
+    private String publicEmail;
+
+    @Column
+    private String notificationEmail;
+
+    @Column
     private boolean isActive;
 
     @ManyToMany
@@ -264,6 +270,22 @@ public class Firm implements Serializable, Selectable {
 
     public void setRequireReceiptAtCashDesk(boolean requireReceiptAtCashDesk) {
         this.requireReceiptAtCashDesk = requireReceiptAtCashDesk;
+    }
+
+    public String getPublicEmail() {
+        return publicEmail;
+    }
+
+    public void setPublicEmail(String publicEmail) {
+        this.publicEmail = publicEmail;
+    }
+
+    public String getNotificationEmail() {
+        return notificationEmail;
+    }
+
+    public void setNotificationEmail(String notificationEmail) {
+        this.notificationEmail = notificationEmail;
     }
 
     @Override

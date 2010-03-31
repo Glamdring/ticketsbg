@@ -37,9 +37,11 @@
     <div style="float: left;"><a
         href="#{facesContext.externalContext.context.contextPath}/"> <img
         src="images/logo.png" alt="avtogara.com"
+        alt="#{msg.seoTitle}"
+        title="#{msg.seoTitle}"
         style="border-style: none; width: 385px; height: 93px;" />
     </a></div>
-    <div style="float: right; text-align: right;"><h:form>
+    <!-- div style="float: right; text-align: right;"><h:form>
         <h:commandLink action="#{localeController.changeLocale}">
             <h:graphicImage url="images/flags/bg.jpg"
                 style=" margin-right: 10px;" styleClass="languageIcon" alt="BG"
@@ -55,7 +57,7 @@
                 target="#{localeController.selectedLanguage}" />
         </h:commandLink>
     </h:form>
-    </div>
+    </div-->
     <h:form style="float: left; height: 34px; margin-bottom: 5px;"
         id="menuForm">
         <rich:toolBar itemSeparator="line" width="1000" height="34"
@@ -195,17 +197,13 @@
     </rich:modalPanel></div>
 
     <script src="scripts/externalScripts.jsp" type="text/javascript"></script>
-<!--
-<script src="http://static.getclicky.com/js" type="text/javascript"></script>
-<script type="text/javascript"
-    src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php/#{localeController.localeWithCountry}"></script>
-     -->
-<script type="text/javascript">clicky.init(163258);</script>
+
+    <script type="text/javascript">clicky.init(163258);</script>
 
 
-<script type="text/javascript">
+<!-- script type="text/javascript">
 FB.init("329367adf1678d9b262d077844549559");
-</script>
+</script-->
 </f:view>
 </body>
 </html>

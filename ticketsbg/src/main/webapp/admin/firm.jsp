@@ -50,6 +50,12 @@
                     <h:outputLabel for="bic" value="#{msg.bic}: " />
                     <h:inputText value="#{firmController.firm.bic}" id="bic" size="30" />
 
+                    <h:outputLabel for="publicEmail" value="#{msg.publicEmail}: " />
+                    <h:inputText value="#{firmController.firm.publicEmail}" id="publicEmail" size="30" />
+
+                    <h:outputLabel for="notificationEmail" value="#{msg.notificationEmail}: " />
+                    <h:inputText value="#{firmController.firm.notificationEmail}" id="notificationEmail" size="30" />
+
                     <h:outputLabel for="other" value="#{msg.other}: " />
                     <h:inputText value="#{firmController.firm.other}" id="other"
                         size="30" />
