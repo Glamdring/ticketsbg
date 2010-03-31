@@ -36,7 +36,7 @@
     <div class="container">
     <div style="float: left;"><a
         href="#{facesContext.externalContext.context.contextPath}/"> <img
-        src="images/logo.png" alt="avtogara.com"
+        src="images/logo.png"
         alt="#{msg.seoTitle}"
         title="#{msg.seoTitle}"
         style="border-style: none; width: 385px; height: 93px;" />
