@@ -78,7 +78,7 @@
                 rendered="#{baseController.currentFirm != null}">
                 <h:graphicImage value="/images/small/firm.png" styleClass="menuIcon"
                     alt="#{msg.firm}" />
-                <h:outputText value="#{msg.firm}" styleClass="menuContent" />
+                <h:outputText value="#{msg.aboutFirm} #{baseController.currentFirm.name}" styleClass="menuContent" />
             </rich:menuItem>
 
             <rich:menuItem action="registrationScreen"

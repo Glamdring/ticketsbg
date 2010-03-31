@@ -39,10 +39,6 @@
                     <h:inputText value="#{firmController.firm.eik}" id="eik"
                         size="30" />
 
-                    <h:outputLabel for="epayKin" value="#{msg.epayKin}: " />
-                    <h:inputText value="#{firmController.firm.epayKin}" id="epayKin"
-                        size="30" />
-
                     <h:outputLabel for="iban" value="#{msg.iban}: " />
                     <h:inputText value="#{firmController.firm.iban}" id="iban"
                         size="30" />
@@ -57,6 +53,10 @@
                     <h:outputLabel for="other" value="#{msg.other}: " />
                     <h:inputText value="#{firmController.firm.other}" id="other"
                         size="30" />
+
+                    <h:outputLabel for="firmKey" value="Key: " rendered="#{loggedUserHolder.loggedUser.administrator}" />
+                    <h:inputText value="#{firmController.firm.firmKey}" id="firmKey"
+                        size="30" rendered="#{loggedUserHolder.loggedUser.administrator}" />
 
                     <h:outputLabel for="active" value="#{msg.active}: "
                         rendered="#{loggedUserHolder.loggedUser.administrator}" />
