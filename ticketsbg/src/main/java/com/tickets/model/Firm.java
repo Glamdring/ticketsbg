@@ -21,6 +21,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.validator.Email;
 
 @Entity
 @Table(name = "firms")
@@ -55,9 +56,11 @@ public class Firm implements Serializable, Selectable {
     private String other;
 
     @Column
+    @Email
     private String publicEmail;
 
     @Column
+    @Email
     private String notificationEmail;
 
     @Column

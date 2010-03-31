@@ -18,6 +18,8 @@
         <h:messages />
         <h:form id="firmForm">
             <a4j:outputPanel ajaxRendered="true">
+                <rich:messages/>
+
                 <h:panelGrid columns="2" styleClass="gridContent">
                     <h:outputLabel for="name" value="#{msg.firmName}: " />
                     <h:inputText value="#{firmController.firm.name}" id="name"
@@ -51,10 +53,16 @@
                     <h:inputText value="#{firmController.firm.bic}" id="bic" size="30" />
 
                     <h:outputLabel for="publicEmail" value="#{msg.publicEmail}: " />
-                    <h:inputText value="#{firmController.firm.publicEmail}" id="publicEmail" size="30" />
+                    <h:inputText value="#{firmController.firm.publicEmail}" id="publicEmail" size="30">
+                        <rich:beanValidator />
+                        <rich:ajaxValidator event="onblur"/>
+                    </h:inputText>
 
                     <h:outputLabel for="notificationEmail" value="#{msg.notificationEmail}: " />
-                    <h:inputText value="#{firmController.firm.notificationEmail}" id="notificationEmail" size="30" />
+                    <h:inputText value="#{firmController.firm.notificationEmail}" id="notificationEmail" size="30">
+                        <rich:beanValidator />
+                        <rich:ajaxValidator event="onblur"/>
+                    </h:inputText>
 
                     <h:outputLabel for="other" value="#{msg.other}: " />
                     <h:inputText value="#{firmController.firm.other}" id="other"

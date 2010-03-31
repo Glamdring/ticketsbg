@@ -504,7 +504,7 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
             HtmlEmail email = (HtmlEmail) emailService.createEmail(true);
             email.addTo(customerEmail);
 
-            if (EmailValidator.getInstance().isValid(firmNotificationEmail)) {
+            if (EmailValidator.getInstance().isValid(firmNotificationEmail) && firmNotificationEmail.length() > 0) {
                 email.addBcc(firmNotificationEmail);
             }
 
