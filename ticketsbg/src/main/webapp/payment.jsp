@@ -46,12 +46,13 @@
 
                                 <h:outputLabel id="ePayLabel" for="selectedPaymentMethod">
                                     <h:graphicImage url="/images/epay.jpg" style="border: 0px;"
-                                        height="43" />
+                                        height="43" alt="#{msg.E_PAY}" title="#{msg.E_PAY}" />
                                 </h:outputLabel>
 
                                 <h:panelGroup>
                                     <h:outputLabel id="ccLabel" for="selectedPaymentMethod">
                                         <h:graphicImage url="/images/creditCards.gif"
+                                            alt="#{msg.CREDIT_CARD}" title="#{msg.CREDIT_CARD}"
                                             style="border: 0px; margin-top: -2px" height="45" />
                                     </h:outputLabel>
                                 </h:panelGroup>

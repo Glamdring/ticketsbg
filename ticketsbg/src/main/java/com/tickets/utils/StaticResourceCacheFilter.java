@@ -12,19 +12,11 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
 
-import org.apache.commons.httpclient.util.DateUtil;
 import org.apache.myfaces.orchestra.requestParameterProvider.RequestParameterServletFilter;
 
 public class StaticResourceCacheFilter implements Filter {
-
-    public static final String[] CACHEABLE_CONTENT_TYPES = new String[] {
-            "text/css", "text/javascript", "image/png", "image/jpeg",
-            "image/gif", "image/jpg" };
-
-    static {
-        Arrays.sort(CACHEABLE_CONTENT_TYPES);
-    }
 
     private String richfacesResourcePrefix;
 
@@ -61,21 +53,7 @@ public class StaticResourceCacheFilter implements Filter {
                     Boolean.TRUE);
         }
 
-        chain.doFilter(httpRequest, httpResponse);
-
-        String contentType = httpResponse.getContentType();
-
-        if (contentType != null && Arrays.binarySearch(CACHEABLE_CONTENT_TYPES, contentType) > -1) {
-
-            Calendar inTwoMonths = GeneralUtils.createCalendar();
-            inTwoMonths.add(Calendar.MONTH, 2);
-
-            httpResponse.setHeader("Expires", DateUtil.formatDate(inTwoMonths.getTime()));
-        } else {
-            httpResponse.setHeader("Expires", "-1");
-            httpResponse.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
-        }
-
+        chain.doFilter(httpRequest, new AddExpiresHeader(httpResponse));
     }
 }
 
@@ -97,5 +75,34 @@ class UrlMatcher {
 
     public void setIncludeContaining(String includeContaining) {
         this.includeContaining = includeContaining;
+    }
+}
+
+class AddExpiresHeader extends HttpServletResponseWrapper {
+
+    public static final String[] CACHEABLE_CONTENT_TYPES = new String[] {
+        "text/css", "text/javascript", "image/png", "image/jpeg",
+        "image/gif", "image/jpg" };
+
+    static {
+        Arrays.sort(CACHEABLE_CONTENT_TYPES);
+    }
+
+    public AddExpiresHeader(HttpServletResponse response) {
+        super(response);
+    }
+
+    @Override
+    public void setContentType(String contentType) {
+        if (contentType != null && Arrays.binarySearch(CACHEABLE_CONTENT_TYPES, contentType) > -1) {
+            Calendar inTwoMonths = GeneralUtils.createCalendar();
+            inTwoMonths.add(Calendar.MONTH, 2);
+
+            super.setDateHeader("Expires", inTwoMonths.getTimeInMillis());
+        } else {
+            super.setHeader("Expires", "-1");
+            super.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
+        }
+        super.setContentType(contentType);
     }
 }

@@ -50,7 +50,7 @@
                                 <f:convertDateTime pattern="dd.MM.yyyy HH:mm"
                                     timeZone="#{timeZoneController.timeZone}" />
                             </h:outputText>
-                            </rich:column>
+                        </rich:column>
 
                         <rich:column sortBy="#{ticket.creationTime.time}">
                             <f:facet name="header">
@@ -60,10 +60,11 @@
                                 <f:convertDateTime pattern="dd.MM.yyyy HH:mm"
                                     timeZone="#{timeZoneController.timeZone}" />
                             </h:outputText>
-                            </rich:column>
-                            <f:facet name="footer">
-                                <rich:datascroller />
-                            </f:facet>
+                        </rich:column>
+
+                        <f:facet name="footer">
+                            <rich:datascroller />
+                        </f:facet>
                     </rich:dataTable>
                 </rich:panel>
             </a4j:form>

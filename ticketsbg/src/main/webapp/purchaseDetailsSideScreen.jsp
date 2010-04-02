@@ -30,7 +30,7 @@
                 <h:panelGrid columns="2" id="timeHolder"
                     rendered="#{purchaseController.tickets != null and tc:getSize(purchaseController.tickets) > 0}">
                     <h:panelGroup>
-                        <h:graphicImage url="/images/small/timer.png" />
+                        <h:graphicImage url="/images/small/timer.png" alt="" />
 
                         <a4j:jsFunction name="timeoutPurchase"
                             oncomplete="document.location='search.jsp';"

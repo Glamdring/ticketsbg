@@ -44,6 +44,22 @@ public class FirmController extends BaseCRUDController<Firm> {
             endConversation();
     }
 
+    /**
+     * Generating the unique firm key used for the notification client Not
+     * putting it in a service, because this would mean creating a new service
+     * just for one method
+     *
+     */
+    @Override
+    public void save() {
+        if (firm.getFirmKey() == null || firm.getFirmKey().length() == 0) {
+            int n = 100000 + (int) (Math.random() * 1000000);
+            firm.setFirmKey(Integer.toString(n, 16));
+        }
+
+        super.save();
+    }
+
     @Action(accessLevel=AccessLevel.CASH_DESK)
     public Firm getFirm() {
         return firm;

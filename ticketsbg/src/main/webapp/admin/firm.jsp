@@ -25,6 +25,10 @@
                     <h:inputText value="#{firmController.firm.name}" id="name"
                         size="30" />
 
+                    <h:outputLabel for="nameLatin" value="#{msg.firmNameLatin}: " />
+                    <h:inputText value="#{firmController.firm.nameLatin}" id="nameLatin"
+                        size="30" />
+
                     <h:outputLabel for="description" value="#{msg.shortDescription}: " />
                     <h:inputTextarea value="#{firmController.firm.description}"
                         id="description" rows="2" cols="27" />
@@ -37,20 +41,16 @@
                     <h:inputText value="#{firmController.firm.subdomain}"
                         id="subdomain" size="30" />
 
-                    <h:outputLabel for="eik" value="#{msg.eik}: " />
-                    <h:inputText value="#{firmController.firm.eik}" id="eik"
-                        size="30" />
-
                     <h:outputLabel for="iban" value="#{msg.iban}: " />
                     <h:inputText value="#{firmController.firm.iban}" id="iban"
                         size="30" />
 
+                    <h:outputLabel for="bic" value="#{msg.bic}: " />
+                    <h:inputText value="#{firmController.firm.bic}" id="bic" size="30" />
+
                     <h:outputLabel for="bank" value="#{msg.bank}: " />
                     <h:inputText value="#{firmController.firm.bank}" id="bank"
                         size="30" />
-
-                    <h:outputLabel for="bic" value="#{msg.bic}: " />
-                    <h:inputText value="#{firmController.firm.bic}" id="bic" size="30" />
 
                     <h:outputLabel for="publicEmail" value="#{msg.publicEmail}: " />
                     <h:inputText value="#{firmController.firm.publicEmail}" id="publicEmail" size="30">
@@ -71,6 +71,10 @@
                     <h:outputLabel for="firmKey" value="Key: " rendered="#{loggedUserHolder.loggedUser.administrator}" />
                     <h:inputText value="#{firmController.firm.firmKey}" id="firmKey"
                         size="30" rendered="#{loggedUserHolder.loggedUser.administrator}" />
+
+                    <h:outputLabel for="firmKeyDisplay" value="#{msg.firmKey}: " rendered="#{!loggedUserHolder.loggedUser.administrator}" />
+                    <h:outputText value="#{firmController.firm.firmKey}" id="firmKeyDisplay"
+                        style="font-weight: bold;" rendered="#{!loggedUserHolder.loggedUser.administrator}" />
 
                     <h:outputLabel for="active" value="#{msg.active}: "
                         rendered="#{loggedUserHolder.loggedUser.administrator}" />

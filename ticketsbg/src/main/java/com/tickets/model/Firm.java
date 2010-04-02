@@ -35,6 +35,9 @@ public class Firm implements Serializable, Selectable {
     private String name;
 
     @Column
+    private String nameLatin;
+
+    @Column
     private String description;
 
     @Column
@@ -289,6 +292,14 @@ public class Firm implements Serializable, Selectable {
 
     public void setNotificationEmail(String notificationEmail) {
         this.notificationEmail = notificationEmail;
+    }
+
+    public String getNameLatin() {
+        return nameLatin;
+    }
+
+    public void setNameLatin(String nameLatin) {
+        this.nameLatin = nameLatin;
     }
 
     @Override

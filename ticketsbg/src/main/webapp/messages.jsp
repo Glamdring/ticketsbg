@@ -10,7 +10,7 @@
         globalOnly="#{globalOnly != null and globalOnly == true}" ajaxRendered="#{ajaxRendered != false}">
         <f:facet name="errorMarker">
             <h:graphicImage url="/images/validationError.png" width="14"
-                height="14" style="margin-right: 4px;" />
+                height="14" style="margin-right: 4px;" alt="" />
         </f:facet>
     </rich:messages>
 

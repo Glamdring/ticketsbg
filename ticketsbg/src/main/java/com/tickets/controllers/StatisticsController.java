@@ -54,7 +54,7 @@ public class StatisticsController extends BaseController {
     private List<SelectItem> purchaseMeansTypeItems;
     private List<String> routeNames;
 
-    private int page;
+    private int page = 1;
     private BigDecimal totalPrice = BigDecimal.ZERO;
 
     private int totalPassengersCount;

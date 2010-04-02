@@ -12,9 +12,13 @@
 
     <ui:define name="body">
         <f:view>
-            <h:form id="firmDetailsForm">
-                <h:outputText value="#{baseController.currentFirm.richDescription}" />
-            </h:form>
+            <rich:panel
+                header="#{msg.aboutFirm} #{localeController.locale.language == 'bg' ? baseController.currentFirm.name : baseController.currentFirm.nameLatin}"
+                headerClass="rich-panel-header-main">
+                <h:form id="firmDetailsForm">
+                    <h:outputText value="#{baseController.currentFirm.richDescription}" />
+                </h:form>
+            </rich:panel>
         </f:view>
     </ui:define>
 </ui:composition>
