@@ -60,6 +60,7 @@ public class BackupTask extends TimerTask {
         log.debug(host + ":" + port + ":" + user + ":" + password + ":" + db);
 
         try {
+            // TODO buffer the whole process
             storeBackup(getData(host, port, user, password, db));
         } catch (Exception ex) {
             log.error("Error during backup", ex);
@@ -94,13 +95,19 @@ public class BackupTask extends TimerTask {
         int count;
         char[] cbuf = new char[BUFFER];
 
-        while ((count = br.read(cbuf, 0, BUFFER)) != -1)
+        while ((count = br.read(cbuf, 0, BUFFER)) != -1) {
             temp.append(cbuf, 0, count);
+        }
 
         br.close();
         in.close();
 
-        return temp.toString();
+        String result = temp.toString();
+
+        result = "SET FOREIGN_KEY_CHECKS = 0;\\n" + result
+                + "\\nSET FOREIGN_KEY_CHECKS = 0;";
+
+        return result;
     }
 
     private void storeBackup(String stringData) throws IOException {

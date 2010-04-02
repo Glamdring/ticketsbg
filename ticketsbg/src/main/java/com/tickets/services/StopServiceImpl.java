@@ -16,6 +16,9 @@ public class StopServiceImpl extends BaseService<Stop> implements StopService {
 
     public Stop addStopToRoute(Stop stop, Route route) {
 
+        // trim the name
+        stop.setName(stop.getName().trim());
+
         if (stop.getIdx() == 0) {
             if (containsStop(route.getStops(), stop)) {
                 throw new IllegalArgumentException();

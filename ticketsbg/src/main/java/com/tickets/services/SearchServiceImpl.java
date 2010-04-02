@@ -2,6 +2,8 @@ package com.tickets.services;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -31,18 +33,56 @@ public class SearchServiceImpl extends BaseService implements SearchService {
         List<SearchResultEntry> result;
         if (currentFirm == null) {
             result = getDao().findByNamedQuery("Run.search",
-                    new String[] { "fromStop", "toStop" },
-                    new Object[] { fromStop + "%", toStop + "%"});
+                    new String[] { "fromStop", "toStop", "runDate" },
+                    new Object[] { fromStop + "%", toStop + "%", date});
         } else {
             result = getDao().findByNamedQuery("Run.searchByFirm",
-                    new String[] { "fromStop", "toStop", "firm" },
-                    new Object[] { fromStop + "%", toStop + "%", currentFirm});
+                    new String[] { "fromStop", "toStop", "firm", "runDate" },
+                    new Object[] { fromStop + "%", toStop + "%", currentFirm, date});
         }
 
         filterSearchResults(fromStop, toStop, date, fromHour, toHour,
                 isTimeForDeparture, result);
 
+        sortResult(result, isTimeForDeparture);
         return result;
+    }
+
+    private void sortResult(List<SearchResultEntry> result,
+            boolean isTimeForDeparture) {
+
+        Comparator<SearchResultEntry> comparator = null;
+
+        if (isTimeForDeparture) {
+            comparator = new DepartureComparator();
+        } else {
+            comparator = new ArrivalComparator();
+        }
+
+        Collections.sort(result, comparator);
+    }
+
+    private class DepartureComparator implements Comparator<SearchResultEntry> {
+        @Override
+        public int compare(SearchResultEntry o1, SearchResultEntry o2) {
+            int timing = o1.getDepartureTime().compareTo(o2.getDepartureTime());
+            if (timing != 0) {
+                return timing;
+            }
+
+            return o1.getPrice().getPrice().compareTo(o2.getPrice().getPrice());
+        }
+    }
+    private class ArrivalComparator implements Comparator<SearchResultEntry> {
+        @Override
+        public int compare(SearchResultEntry o1, SearchResultEntry o2) {
+            int timing = o1.getArrivalTime().compareTo(o2.getArrivalTime());
+            if (timing != 0) {
+                return timing;
+            }
+
+            return o1.getPrice().getPrice().compareTo(o2.getPrice().getPrice());
+        }
     }
 
     @Override
@@ -54,12 +94,12 @@ public class SearchServiceImpl extends BaseService implements SearchService {
 
         if (endStop == null || endStop.length() == 0) {
             result = getDao().findByNamedQuery("Run.adminSearchNoEndStop",
-                    new String[] { "fromStop", "user" },
-                    new Object[] { startStop + "%", user });
+                    new String[] { "fromStop", "user", "runDate" },
+                    new Object[] { startStop + "%", user, date });
         } else {
             result = getDao().findByNamedQuery("Run.adminSearch",
-                    new String[] { "fromStop", "toStop", "user" },
-                    new Object[] { startStop + "%", endStop + "%", user });
+                    new String[] { "fromStop", "toStop", "user", "runDate" },
+                    new Object[] { startStop + "%", endStop + "%", user, date });
         }
 
         filterSearchResults(startStop, endStop, date, fromHour, toHour,
@@ -172,7 +212,45 @@ public class SearchServiceImpl extends BaseService implements SearchService {
             stops = getDao().findByNamedQuery("Stop.listAllStopNames");
         }
 
+        addCommonStopNames(stops);
         return stops;
+    }
+
+    private static final String CITY_DELIMITER = " - ";
+
+    /**
+     * Adds stop names that consist of the common parts of existing stop names.
+     * For example for "Sofia - Central" and "Sofia - Serdika" the name "Sofia"
+     * should be added
+     *
+     * @param stops
+     */
+    private void addCommonStopNames(List<String> stops) {
+        Set<String> additions = new HashSet<String>();
+        String currentCommonPart = "";
+        for (String name : stops) {
+            int idx = name.indexOf(CITY_DELIMITER);
+            if (idx != -1) {
+                // changing currentCommonPart only if this is the first of the group
+                // otherwise, if it is the second or more, add it to the set;
+                // the set doesn't allow duplicates
+                if (currentCommonPart.length() > 0
+                        && name.startsWith(currentCommonPart)
+                        && !stops.contains(currentCommonPart)) {// this line might be inefficient
+                    additions.add(currentCommonPart);
+                } else {
+                    currentCommonPart = name.substring(0, idx).trim();
+                }
+            }
+        }
+
+        // this could be made more efficient by adding the name at the correct
+        // point in the above loop (and by mirroring the List to a LinkedList),
+        // but it is not justified for the small number
+        if (additions.size() > 0) {
+            stops.addAll(additions);
+            Collections.sort(stops);
+        }
     }
 
     @Override
