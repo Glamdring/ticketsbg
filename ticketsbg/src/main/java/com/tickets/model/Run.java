@@ -39,6 +39,7 @@ import org.hibernate.annotations.LazyCollectionOption;
                 name = "Run.getLastRuns",
                 query = "SELECT DISTINCT new list(route, MAX(run), MAX(run.time)) FROM Route AS route LEFT OUTER JOIN route.runs AS run WHERE (run.manuallyAdded = false OR run.manuallyAdded IS NULL) GROUP BY route"
         ),
+        //TODO Adjacent days
         @NamedQuery(
                 name = "Run.search",
                 query = "SELECT DISTINCT new com.tickets.model.SearchResultEntry(run, price, run.time, price.price) FROM Run run, IN(run.route.prices) price " +
@@ -46,10 +47,7 @@ import org.hibernate.annotations.LazyCollectionOption;
                         "AND price.price > 0 " +
                         "AND run.seatsExceeded = false " +
                         "AND run.route.firm.isActive = true " +
-                        "AND day(run.time.time) = day(:runDate) " +
-                        "AND month(run.time.time) = month(:runDate) " +
-                        "AND year(run.time.time) = year(:runDate) " +
-                        "ORDER BY run.time, price.price DESC"
+                        Run.dateCriteriaAndOrder
         ),
         @NamedQuery(
                 name = "Run.searchByFirm",
@@ -58,10 +56,7 @@ import org.hibernate.annotations.LazyCollectionOption;
                         "AND price.price > 0 " +
                         "AND run.seatsExceeded = false " +
                         "AND run.route.firm=:firm " +
-                        "AND day(run.time.time) = day(:runDate) " +
-                        "AND month(run.time.time) = month(:runDate) " +
-                        "AND year(run.time.time) = year(:runDate) " +
-                        "ORDER BY run.time, price.price DESC"
+                        Run.dateCriteriaAndOrder
         ),
         @NamedQuery(
                 name = "Run.adminSearch",
@@ -71,10 +66,7 @@ import org.hibernate.annotations.LazyCollectionOption;
                         "AND run.route.firm = firm " +
                         "AND user=:user " +
                         "AND (user.firm=firm OR user.agent=agent) " +
-                        "AND day(run.time.time) = day(:runDate) " +
-                        "AND month(run.time.time) = month(:runDate) " +
-                        "AND year(run.time.time) = year(:runDate) " +
-                        "ORDER BY run.time, price.price DESC"
+                        Run.dateCriteriaAndOrder
         ),
 
         @NamedQuery(
@@ -85,13 +77,18 @@ import org.hibernate.annotations.LazyCollectionOption;
                         "AND run.route.firm = firm " +
                         "AND user=:user " +
                         "AND (user.firm=firm OR user.agent=agent) " +
-                        "AND day(run.time.time) = day(:runDate) " +
-                        "AND month(run.time.time) = month(:runDate) " +
-                        "AND year(run.time.time) = year(:runDate) " +
-                        "ORDER BY run.time, price.price DESC"
+                        Run.dateCriteriaAndOrder
         )
 })
 public class Run implements Serializable, Comparable<Run> {
+
+    // Adjacent days are also taken because of runs starting near midnight;
+    // they are later filtered programatically
+    private static final String dateCriteriaAndOrder =
+        "AND (day(run.time.time) >= day(:runDate) - 1 AND day(run.time.time) <=  day(:runDate) + 1) " +
+        "AND (month(run.time.time) >= month(:runDate) - 1 AND month(run.time.time) <=  month(:runDate) + 1) " +
+        "AND (year(run.time.time) >= year(:runDate) - 1 AND year(run.time.time) <=  year(:runDate) + 1) " +
+        "ORDER BY run.time, price.price DESC";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -33,7 +33,9 @@
                             size="5" converter="#{timeToMinutesConverter}" />
 
                     <h:panelGroup>
-                        <h:outputLabel value="#{msg.timeToDeparture}" for="timeToDeparture" />
+                        <h:outputLabel value="#{msg.timeToDeparture}" for="timeToDeparture" id="timeToDepartureLabel" />
+                        <rich:toolTip for="timeToDepartureLabel"
+                            value="#{msg.timeToDepartureNote}" followMouse="true" />
                         <h:outputText value=" #{msg.timeForStopFormatSpecification}"/>
                     </h:panelGroup>
                     <h:inputText value="#{routeController.stop.timeToDeparture}"

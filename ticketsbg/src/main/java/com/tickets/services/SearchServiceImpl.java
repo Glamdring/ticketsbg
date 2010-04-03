@@ -159,8 +159,16 @@ public class SearchServiceImpl extends BaseService implements SearchService {
             // Cloning in order to avoid update queries, as the run object
             // is still associated with the session
             Calendar departureTime = (Calendar) run.getTime().clone();
-            departureTime
-                    .add(Calendar.MINUTE, fromStopObj.getTimeToDeparture());
+
+            // if the set departure time = 0 (would this be the last stop
+            // doesn't matter because there are no sub-routes starting from it),
+            // this means there is no difference between the arrival and
+            // departure time for this stop
+            int timeToDeparture = fromStopObj.getTimeToDeparture();
+            if (timeToDeparture == 0) {
+                timeToDeparture = fromStopObj.getTimeToArrival();
+            }
+            departureTime.add(Calendar.MINUTE, timeToDeparture);
 
             Calendar arrivalTime = (Calendar) run.getTime().clone();
             arrivalTime.add(Calendar.MINUTE, toStopObj.getTimeToArrival());
