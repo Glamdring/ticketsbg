@@ -116,7 +116,7 @@ public class StatisticsServiceImpl extends BaseService
             StatsDataType dataType, PurchaseMeansType purchaseMeansType) {
 
         //String query = "SELECT t FROM Ticket t WHERE t.timeouted=false AND t.committed=true AND ";
-        String query = "SELECT t FROM Ticket t WHERE ";
+        String query = "SELECT t FROM Ticket t WHERE t.committed=true AND ";
         String returnQuery = query;
         List<String> paramNames = new ArrayList<String>();
         List<Object> values = new ArrayList<Object>();
