@@ -14,6 +14,7 @@ import com.tickets.model.Run;
 import com.tickets.model.Ticket;
 import com.tickets.services.valueobjects.TravelListSubroute;
 
+@SuppressWarnings("unchecked")
 @Service("travelListService")
 public class TravelListServiceImpl extends BaseService implements TravelListService {
 
@@ -22,11 +23,15 @@ public class TravelListServiceImpl extends BaseService implements TravelListServ
         List<TravelListSubroute> travelList = new ArrayList<TravelListSubroute>(run.getRoute()
                 .getPrices().size());
         for (Ticket ticket : run.getTickets()) {
-            insertTicketDataIntoTravelList(run, travelList, ticket, false, onlineOnly);
+            if (ticket.isCommitted()) {
+                insertTicketDataIntoTravelList(run, travelList, ticket, false, onlineOnly);
+            }
         }
 
         for (Ticket ticket : run.getReturnTickets()) {
-            insertTicketDataIntoTravelList(run, travelList, ticket, true, onlineOnly);
+            if (ticket.isCommitted()) {
+                insertTicketDataIntoTravelList(run, travelList, ticket, true, onlineOnly);
+            }
         }
 
         for (TravelListSubroute tls : travelList) {
