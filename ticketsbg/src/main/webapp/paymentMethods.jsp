@@ -13,11 +13,16 @@
             <rich:panel header="#{msg.paymentMethods}"
                 headerClass="rich-panel-header-main" id="statistics">
                 <h:panelGrid columns="1" style="text-align: center;">
-                    <h:graphicImage url="/images/epay.jpg" alt="ePay" title="ePay"
-                        style="width: 87px; height: 33px;" />
-                    <h:graphicImage url="/images/creditCards.gif"
-                        alt="#{msg.CREDIT_CARD}" title="#{msg.CREDIT_CARD}"
-                        stlyle="width: 153px; height: 45px;" />
+                    <h:outputLink value="http://epay.bg" target="_blank">
+                        <h:graphicImage url="/images/epay.jpg" alt="ePay" title="ePay"
+                            style="width: 87px; height: 33px; border-style: none;" />
+                    </h:outputLink>
+
+                    <h:outputLink value="http://borica.bg" target="_blank">
+                        <h:graphicImage url="/images/creditCards.gif"
+                            alt="#{msg.CREDIT_CARD}" title="#{msg.CREDIT_CARD}"
+                            style="width: 153px; height: 45px; border-style: none;" />
+                    </h:outputLink>
                 </h:panelGrid>
             </rich:panel>
         </a4j:form>
