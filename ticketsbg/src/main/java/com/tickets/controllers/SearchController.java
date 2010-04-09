@@ -127,7 +127,7 @@ public class SearchController extends BaseController {
 
     private boolean reRenderSeatChoices;
 
-    private UIInput admin;
+    private transient UIInput admin;
 
     private Ticket ticketToAlter;
 
