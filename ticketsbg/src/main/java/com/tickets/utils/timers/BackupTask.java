@@ -1,17 +1,16 @@
 package com.tickets.utils.timers;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -35,12 +34,11 @@ public class BackupTask extends TimerTask {
     public void run() {
         if (performBackup) {
             parseAndPerformBackup(dataSource.getUser(), dataSource.getPassword(),
-                dataSource.getJdbcUrl());
+                    dataSource.getJdbcUrl());
         }
     }
 
-    private void parseAndPerformBackup(String user, String password,
-            String jdbcUrl) {
+    private void parseAndPerformBackup(String user, String password, String jdbcUrl) {
         String port = "3306";
 
         Pattern hostPattern = Pattern.compile("//((\\w)+)/");
@@ -60,15 +58,14 @@ public class BackupTask extends TimerTask {
         log.debug(host + ":" + port + ":" + user + ":" + password + ":" + db);
 
         try {
-            // TODO buffer the whole process
-            storeBackup(getData(host, port, user, password, db));
+            createBackup(host, port, user, password, db);
         } catch (Exception ex) {
             log.error("Error during backup", ex);
         }
 
     }
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
         BackupTask bt = new BackupTask();
 
         bt.parseAndPerformBackup("root", "",
@@ -76,58 +73,47 @@ public class BackupTask extends TimerTask {
 
     }
 
-    private int BUFFER = 10485760;
+    private void createBackup(String host, String port, String user, String password,
+            String db) throws Exception {
 
-    private String getData(String host, String port, String user,
-            String password, String db) throws Exception {
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy-HH-mm");
+        String fileName = Settings.getValue("backup.dir") + "/backup-"
+                + df.format(GeneralUtils.createCalendar().getTime()) + ".sql";
 
         String execString = "mysqldump --host=" + host + " --port=" + port + " --user="
-            + user + " --password=" + password
-            + " --compact --complete-insert --extended-insert "
-            + "--skip-comments --skip-triggers --default-character-set=utf8 " + db;
+                + user + " --password=" + password
+                + " --compact --complete-insert --extended-insert "
+                + "--skip-comments --skip-triggers --default-character-set=utf8 " + db
+                + " --result-file=" + fileName;
 
-        Process run = Runtime.getRuntime().exec(execString);
-        InputStream in = run.getInputStream();
-        BufferedReader br = new BufferedReader(new InputStreamReader(in));
-
-        StringBuffer temp = new StringBuffer();
-
-        int count;
-        char[] cbuf = new char[BUFFER];
-
-        while ((count = br.read(cbuf, 0, BUFFER)) != -1) {
-            temp.append(cbuf, 0, count);
+        Process process = Runtime.getRuntime().exec(execString);
+        if (process.waitFor() == 0) {
+            zipBackup(fileName);
         }
-
-        br.close();
-        in.close();
-
-        String result = temp.toString();
-
-        result = "SET FOREIGN_KEY_CHECKS = 0;\\n" + result
-                + "\\nSET FOREIGN_KEY_CHECKS = 0;";
-
-        return result;
+        // result = "SET FOREIGN_KEY_CHECKS = 0;\\n" + result
+        // + "\\nSET FOREIGN_KEY_CHECKS = 1;";
     }
 
-    private void storeBackup(String stringData) throws IOException {
-        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy-HH-mm");
-        byte[] data = stringData.getBytes();
-        File filedst = new File(Settings.getValue("backup.dir") + "/backup-"
-                + df.format(GeneralUtils.createCalendar().getTime()) + ".zip");
+    private static final int BUFFER = 2048;
 
-        FileOutputStream dest = new FileOutputStream(filedst);
-        ZipOutputStream zip = new ZipOutputStream(
-                new BufferedOutputStream(dest));
+    private void zipBackup(String fileName) throws IOException {
+        FileOutputStream fos = new FileOutputStream(fileName.replace(".sql", "") + ".zip");
+        ZipOutputStream zos = new ZipOutputStream(new BufferedOutputStream(fos));
 
-        zip.setMethod(ZipOutputStream.DEFLATED);
-        zip.setLevel(Deflater.BEST_COMPRESSION);
+        File entryFile = new File(fileName);
+        FileInputStream fi = new FileInputStream(entryFile);
+        InputStream origin = new BufferedInputStream(fi, BUFFER);
+        ZipEntry entry = new ZipEntry("data.sql");
+        zos.putNextEntry(entry);
+        int count;
+        byte data[] = new byte[BUFFER];
+        while ((count = origin.read(data, 0, BUFFER)) != -1) {
+            zos.write(data, 0, count);
+        }
+        origin.close();
+        zos.close();
 
-        zip.putNextEntry(new ZipEntry("data.sql"));
-        zip.write(data);
-
-        zip.close();
-        dest.close();
+        entryFile.delete();
     }
 
     public boolean isPerformBackup() {
