@@ -23,7 +23,7 @@ import com.tickets.utils.SelectItemUtils;
 public class FirmController extends BaseCRUDController<Firm> {
 
     @Resource(name="baseService")
-    private Service service;
+    private Service<Firm> service;
 
     private Firm firm = new Firm();
 
@@ -31,7 +31,6 @@ public class FirmController extends BaseCRUDController<Firm> {
 
     private List<SelectItem> firmsSelectItems = new ArrayList<SelectItem>();
 
-    @SuppressWarnings("unchecked")
     @Override
     protected void refreshList() {
         List<Firm> firms = service.list(Firm.class);
@@ -51,6 +50,7 @@ public class FirmController extends BaseCRUDController<Firm> {
      *
      */
     @Override
+    @Action(accessLevel=AccessLevel.FIRM_ADMINISTRATOR)
     public void save() {
         if (firm.getFirmKey() == null || firm.getFirmKey().length() == 0) {
             int n = 100000 + (int) (Math.random() * 1000000);
@@ -110,7 +110,7 @@ public class FirmController extends BaseCRUDController<Firm> {
     }
 
     @Override
-    protected Service getService() {
+    protected Service<Firm> getService() {
         return service;
     }
 
