@@ -126,7 +126,7 @@
     </h:form> <a4j:status forceId="generalStatus">
         <f:facet name="start">
             <h:graphicImage value="/images/ajaxloadingBig.gif" id="statusImage"
-                style="float: right; margin-left: -40px; padding-right: 3px; padding-top: 3px; width: 32px; height: 32px;"
+                style="width: 16px; height: 16px; float: right; margin-left: -40px; padding-right: 3px; padding-top: 3px; width: 32px; height: 32px;"
                 alt="loading..." />
         </f:facet>
     </a4j:status> <ui:include src="loginPanel.jsp" /> <h:panelGrid columns="2"

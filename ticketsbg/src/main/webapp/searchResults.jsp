@@ -207,8 +207,8 @@
 
                                             <h:outputText value="#{msg.duration}: " />
                                             <h:panelGroup>
-                                                <h:outputText value="#{result.duration / 60}" styleClass="bold">
-                                                    <f:convertNumber maxFractionDigits="0" />
+                                                <h:outputText value="#{tc:divide(result.duration,60)}" styleClass="bold">
+                                                    <f:convertNumber integerOnly="true" />
                                                 </h:outputText>:<h:outputText value="#{result.duration % 60}" styleClass="bold" />
                                             </h:panelGroup>
 

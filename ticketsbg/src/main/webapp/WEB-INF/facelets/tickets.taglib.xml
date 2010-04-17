@@ -69,4 +69,9 @@
         <function-class>com.tickets.services.ServiceFunctions</function-class>
         <function-signature>String getCurrentHelpPage(javax.faces.context.FacesContext)</function-signature>
     </function>
+    <function>
+        <function-name>divide</function-name>
+        <function-class>com.tickets.services.ServiceFunctions</function-class>
+        <function-signature>int divide(int, int)</function-signature>
+    </function>
 </facelet-taglib>

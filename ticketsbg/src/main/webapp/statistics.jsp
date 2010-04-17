@@ -46,7 +46,8 @@
                 </f:facet>
                 <h:panelGroup style="overflow: auto;" layout="block">
                     <a href="http://mbus-bg.com/" target="_blank">
-                        <h:graphicImage url="/images/companies/mbus.jpg" alt="" style="border-style: none;" />
+                        <h:graphicImage url="/images/companies/mbus.jpg"
+                        alt="" style="border-style: none; width: 310px; height: 90px" />
                     </a>
                 </h:panelGroup>
             </rich:modalPanel>

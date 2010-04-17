@@ -233,4 +233,8 @@ public class ServiceFunctions {
         String currentPageName = viewId.replace(ADMIN_ROOT, "");
         return localizedHelpRoot + currentPageName;
     }
+
+    public static int divide(int i1, int i2) {
+        return i1 / i2;
+    }
 }

@@ -113,6 +113,7 @@ public class SearchController extends BaseController {
 
     private SimpleSelection selection;
 
+    // Needed to be Long by the option-button component
     private Long selectedRowId;
 
     private SearchResultEntry selectedReturnEntry;
@@ -451,10 +452,10 @@ public class SearchController extends BaseController {
         selectedReturnRowId = null;
         seatController.setReturnSeatHandler(null);
 
-        Integer selectedId = (Integer) selection.getKeys().next();
-        selectedRowId = new Long(selectedId);
+
+        selectedRowId = getSelectedIndex();
         selectedEntry = ((List<SearchResultEntry>) resultsModel
-                .getWrappedData()).get(selectedId);
+                .getWrappedData()).get(selectedRowId.intValue());
 
         List<Discount> discounts = searchService.getApplicableDiscounts(selectedEntry, fromStop, toStop);
         ticketCountsHolder.setTicketCounts(new ArrayList<TicketCount>(discounts.size()));
@@ -470,13 +471,26 @@ public class SearchController extends BaseController {
         // in case there is nothing for selection (the filter expression
         // leaves no appropriate result, this wouldn't cause problems
         if (TWO_WAY.equals(travelType)) {
-            returnSelection = new SimpleSelection();
-            returnSelection.addKey(0);
+            selectedReturnRowId = 0l;
+//            returnSelection = new SimpleSelection();
+//            returnSelection.addKey(0);
             returnRowSelectionChanged();
         }
 
         seatController.setSeatHandler(new SeatHandler(selectedEntry,
                 ticketCountsHolder));
+    }
+
+    /**
+     * Included for backward compatibility
+     * @return
+     */
+    private long getSelectedIndex() {
+        if (selection != null && selection.getKeys().hasNext()) {
+            return new Long((Integer) selection.getKeys().next());
+        } else {
+            return selectedRowId;
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -485,15 +499,25 @@ public class SearchController extends BaseController {
             return;
         }
 
-        Integer selectedId = (Integer) returnSelection.getKeys().next();
-        selectedReturnRowId = new Long(selectedId);
+        selectedReturnRowId = getSelectedReturnIndex();
         selectedReturnEntry = ((List<SearchResultEntry>) returnResultsModel
-                .getWrappedData()).get(selectedId);
+                .getWrappedData()).get(selectedReturnRowId.intValue());
 
         seatController.setReturnSeatHandler(new SeatHandler(
                 selectedReturnEntry, ticketCountsHolder));
     }
 
+    /**
+     * Included for backward compatibility
+     * @return
+     */
+    private long getSelectedReturnIndex() {
+        if (returnSelection != null && returnSelection.getKeys().hasNext()) {
+            return new Long((Integer) returnSelection.getKeys().next());
+        } else {
+            return selectedReturnRowId;
+        }
+    }
     public boolean validateReturnDate(Date date) {
         if (!travelType.equals(TWO_WAY)) {
             return true;

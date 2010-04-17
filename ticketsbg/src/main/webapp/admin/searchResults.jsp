@@ -101,14 +101,33 @@
                                     <h:outputText value="#{result.run.route.name}" />
                                 </rich:column>
 
-                                <rich:column sortable="true">
+                                <rich:column>
                                     <f:facet name="header">
                                         <h:outputText value="#{msg.departureTime}" />
                                     </f:facet>
-                                    <h:outputText value="#{result.run.time.time}">
-                                        <f:convertDateTime pattern="HH:mm"
+                                    <h:outputText value="#{result.departureTime.time}">
+                                        <f:convertDateTime type="time" pattern="HH:mm"
                                             timeZone="#{timeZoneController.timeZone}" />
                                     </h:outputText> #{msg.hourAbbr}
+                                </rich:column>
+
+                                <rich:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{msg.arrivalTime}" />
+                                    </f:facet>
+                                    <h:outputText value="#{result.arrivalTime.time}">
+                                        <f:convertDateTime type="time" pattern="HH:mm"
+                                            timeZone="#{timeZoneController.timeZone}" />
+                                    </h:outputText> #{msg.hourAbbr}
+                                </rich:column>
+
+                                <rich:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{msg.duration}" />
+                                    </f:facet>
+                                    <h:outputText value="#{tc:divide(result.duration,60)}">
+                                        <f:convertNumber integerOnly="true" />
+                                    </h:outputText>:<h:outputText value="#{result.duration % 60}" /> #{msg.hourAbbr}
                                 </rich:column>
 
                                 <rich:column sortable="true">
