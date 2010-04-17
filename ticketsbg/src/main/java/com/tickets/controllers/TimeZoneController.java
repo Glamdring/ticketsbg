@@ -5,6 +5,7 @@ import java.util.TimeZone;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
@@ -12,11 +13,20 @@ import org.springframework.stereotype.Controller;
 @Scope("singleton")
 public class TimeZoneController implements Serializable {
 
+    private static final Logger logger = Logger.getLogger(TimeZoneController.class);
+
     private TimeZone timeZone;
 
     @PostConstruct
     public void init() {
         timeZone = TimeZone.getTimeZone("Europe/Helsinki");
+        if (timeZone == null) {
+            timeZone = TimeZone.getTimeZone("Europe/Sofia");
+            if (timeZone == null) {
+                timeZone = TimeZone.getTimeZone("GMT+2");
+            }
+        }
+        logger.info("Initialized application with timeZone=" + timeZone);
     }
 
     public TimeZone getTimeZone() {
