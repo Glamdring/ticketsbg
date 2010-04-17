@@ -19,6 +19,10 @@ public class TimeZoneController implements Serializable {
 
     @PostConstruct
     public void init() {
+        // Important!!!!
+        // the following command muts be run on linux to set the default TZ:
+        // dpkg-reconfigure tzdata
+
         timeZone = TimeZone.getTimeZone("Europe/Helsinki");
         if (timeZone == null) {
             timeZone = TimeZone.getTimeZone("Europe/Sofia");
