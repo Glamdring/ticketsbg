@@ -44,17 +44,13 @@
                              <h:panelGrid columns="2" rowClasses="imageRow,optionRow"
                                 style="text-align: center;" width="500px">
 
-                                <h:outputLabel id="ePayLabel" for="selectedPaymentMethod">
-                                    <h:graphicImage url="/images/epay.jpg" style="border: 0px;"
-                                        height="43" alt="#{msg.E_PAY}" title="#{msg.E_PAY}" />
-                                </h:outputLabel>
+                                <h:graphicImage url="/images/epay.jpg" style="border: 0px;"
+                                    height="43" alt="#{msg.E_PAY}" title="#{msg.E_PAY}" />
 
                                 <h:panelGroup>
-                                    <h:outputLabel id="ccLabel" for="selectedPaymentMethod">
-                                        <h:graphicImage url="/images/creditCards.gif"
-                                            alt="#{msg.CREDIT_CARD}" title="#{msg.CREDIT_CARD}"
-                                            style="border: 0px; margin-top: -2px" height="45" />
-                                    </h:outputLabel>
+                                    <h:graphicImage url="/images/creditCards.gif"
+                                        alt="#{msg.CREDIT_CARD}" title="#{msg.CREDIT_CARD}"
+                                        style="border: 0px; margin-top: -2px" height="45" />
                                 </h:panelGroup>
 
                                 <a4j:commandButton action="#{paymentController.pay}"
@@ -94,13 +90,6 @@
                             document.getElementById("PAGE").value = page;
                         }
 
-                        window.onload=function() {
-                            #{rich:element('ePayLabel')}.setAttribute("for", "paymentForm:selectedPaymentMethod:0");
-                            #{rich:element('ccLabel')}.setAttribute("for", "paymentForm:selectedPaymentMethod:1");
-
-                            #{rich:element('ePayLabel')}.setAttribute("htmlFor", "paymentForm:selectedPaymentMethod:0");
-                            #{rich:element('ccLabel')}.setAttribute("htmlFor", "paymentForm:selectedPaymentMethod:1");
-                        }
                     </script>
                 </a4j:form>
                 <c:set var="url"

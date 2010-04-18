@@ -107,6 +107,13 @@
         </param-value>
     </context-param-->
 
+
+    <listener>
+        <listener-class>
+            com.tickets.utils.StartupListener
+        </listener-class>
+    </listener>
+
     <listener>
         <listener-class>
             org.springframework.web.context.ContextLoaderListener
@@ -130,13 +137,6 @@
             org.apache.myfaces.orchestra.conversation.servlet.ConversationManagerSessionListener
         </listener-class>
     </listener>
-
-    <listener>
-        <listener-class>
-            com.tickets.utils.StartupListener
-        </listener-class>
-    </listener>
-
 
     <filter>
         <filter-name>StaticResourceCacheFilter</filter-name>

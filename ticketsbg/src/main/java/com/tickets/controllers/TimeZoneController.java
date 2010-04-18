@@ -9,6 +9,8 @@ import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import com.tickets.utils.GeneralUtils;
+
 @Controller("timeZoneController")
 @Scope("singleton")
 public class TimeZoneController implements Serializable {
@@ -20,16 +22,11 @@ public class TimeZoneController implements Serializable {
     @PostConstruct
     public void init() {
         // Important!!!!
-        // the following command muts be run on linux to set the default TZ:
+        // the following command muts be run on linux to set the default TZ.
+        // This is needed for MySQL mainly.
         // dpkg-reconfigure tzdata
 
-        timeZone = TimeZone.getTimeZone("Europe/Helsinki");
-        if (timeZone == null) {
-            timeZone = TimeZone.getTimeZone("Europe/Sofia");
-            if (timeZone == null) {
-                timeZone = TimeZone.getTimeZone("GMT+2");
-            }
-        }
+        timeZone = GeneralUtils.getDefaultTimeZone();
         logger.info("Initialized application with timeZone=" + timeZone);
     }
 

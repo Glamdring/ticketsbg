@@ -2,6 +2,7 @@ package com.tickets.utils;
 
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +27,9 @@ public class GeneralUtils {
      * @return calendar
      */
     public static Calendar createCalendar() {
-        return Calendar.getInstance(getDefaultLocale());
+        Calendar c = Calendar.getInstance(getDefaultLocale());
+        c.setTimeZone(getDefaultTimeZone());
+        return c;
     }
 
     private static Locale defaultLocale;
@@ -113,5 +116,19 @@ public class GeneralUtils {
         }
 
         return locale;
+    }
+
+    private static TimeZone timeZone;
+    public static TimeZone getDefaultTimeZone() {
+        if (timeZone == null) {
+            timeZone = TimeZone.getTimeZone("Europe/Helsinki");
+            if (timeZone == null) {
+                timeZone = TimeZone.getTimeZone("Europe/Sofia");
+                if (timeZone == null) {
+                    timeZone = TimeZone.getTimeZone("GMT+2");
+                }
+            }
+        }
+        return timeZone;
     }
 }
