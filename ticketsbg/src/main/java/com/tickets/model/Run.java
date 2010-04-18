@@ -31,15 +31,14 @@ import org.hibernate.annotations.LazyCollectionOption;
         ),
         // The query implies that the last run has also the last runId (hence the MAX)
         // No other decent way of taking the greatest element in group-by queries
-
-        // Ordering is achieved by sorting the result later, using Comparators
-        // for the different scenarios. Here the ordering is for getting the most probable route. For example:
-        // Burgas -> Burgas 9km -> Aytos should result in Burgas -> Aytos
         @NamedQuery(
                 name = "Run.getLastRuns",
                 query = "SELECT DISTINCT new list(route, MAX(run), MAX(run.time)) FROM Route AS route LEFT OUTER JOIN route.runs AS run WHERE (run.manuallyAdded = false OR run.manuallyAdded IS NULL) GROUP BY route"
         ),
         //TODO Adjacent days
+        // Ordering is achieved by sorting the result later, using Comparators
+        // for the different scenarios. Here the ordering is for getting the most probable route. For example:
+        // Burgas -> Burgas 9km -> Aytos should result in Burgas -> Aytos
         @NamedQuery(
                 name = "Run.search",
                 query = "SELECT DISTINCT new com.tickets.model.SearchResultEntry(run, price, run.time, price.price) FROM Run run, IN(run.route.prices) price " +
