@@ -499,13 +499,19 @@ public class TicketServiceImpl extends BaseService<Ticket> implements
 
             String customerEmail = customerInfo.getEmail();
             String customerName = customerInfo.getName();
-            String firmNotificationEmail = firstTicket.getRun().getRoute().getFirm().getNotificationEmail();
 
             HtmlEmail email = (HtmlEmail) emailService.createEmail(true);
             email.addTo(customerEmail);
 
-            if (EmailValidator.getInstance().isValid(firmNotificationEmail) && firmNotificationEmail.length() > 0) {
-                email.addBcc(firmNotificationEmail);
+            if (firstTicket.getRun().getRoute().getFirm().getNotificationEmail() != null) {
+                String[] firmNotificationEmails = firstTicket.getRun().getRoute().getFirm().getNotificationEmail().split(",");
+
+                for (String firmNotificationEmail : firmNotificationEmails) {
+                    firmNotificationEmail = firmNotificationEmail.trim();
+                    if (EmailValidator.getInstance().isValid(firmNotificationEmail) && firmNotificationEmail.length() > 0) {
+                        email.addBcc(firmNotificationEmail);
+                    }
+                }
             }
 
             email.setFrom(Settings.getValue("purchase.email.sender"));
