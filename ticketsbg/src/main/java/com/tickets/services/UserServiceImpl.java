@@ -203,7 +203,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
                 user.setTemporaryPassword(saltAndHashPassword(tempPassword));
                 getDao().persist(user);
             } catch (EmailException eex) {
-                log.error("Mail server not configured", eex);
+                log.error("Mail server not configured or mail invalid: " + eex.getMessage());
                 throw UserException.EMAIL_PROBLEM;
             }
         } else {
