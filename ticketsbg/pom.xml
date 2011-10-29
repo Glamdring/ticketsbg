@@ -15,51 +15,29 @@
                 http://download.java.net/maven/2/
             </url>
         </repository>
-
-        <repository>
-            <id>jboss</id>
-            <url>http://repository.jboss.com/maven2</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-
-        <repository>
-            <id>apache-incubating</id>
-            <name>Apache Incubating Repository</name>
-            <url>http://people.apache.org/repo/m2-incubating-repository/</url>
-        </repository>
-        <repository>
-            <id>apache-incubating</id>
-            <name>Apache Incubating Repository</name>
-            <url>http://people.apache.org/repo/m2-incubating-repository/</url>
-        </repository>
-        <!-- repository>
-            <id>ocpsoft</id>
-            <url>http://ocpsoft.com/repository</url>
-        </repository-->
         <repository>
             <id>prime-repo</id>
-            <name>Prime Technology Maven Repository</name>
-            <url>http://repository.prime.com.tr/</url>
+            <name>PrimeFaces Maven Repository</name>
+            <url>http://repository.primefaces.org</url>
+            <layout>default</layout>
+        </repository>
+        <repository>
+            <id>jboss</id>
+            <url>https://repository.jboss.org/nexus/content/repositories/releases/</url>
+        </repository>
+        <repository>
+            <id>apache-incubating</id>
+            <name>Apache Incubating Repository</name>
+            <url>http://people.apache.org/repo/m2-incubating-repository/</url>
         </repository>
     </repositories>
 
     <dependencies>
         <dependency>
             <groupId>org.primefaces</groupId>
-            <artifactId>primefaces-ui</artifactId>
-            <version>0.9.3</version>
+            <artifactId>primefaces</artifactId>
+            <version>2.2</version>
         </dependency>
-
-        <!--
-            dependency> <groupId>com.ocpsoft</groupId>
-            <artifactId>ocpsoft-pretty-faces</artifactId>
-            <version>2.0.1_GA</version> </dependency
-        -->
 
         <dependency>
             <groupId>log4j</groupId>
@@ -82,7 +60,7 @@
             <artifactId>hibernate-annotations</artifactId>
             <version>3.4.0.GA</version>
         </dependency>
-         <dependency>
+        <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>ejb3-persistence</artifactId>
             <version>3.3.2.Beta1</version>
@@ -132,11 +110,8 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.6</version>
         </dependency>
-        <!-- dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>2.5.6</version>
-        </dependency-->
+        <!-- dependency> <groupId>org.springframework</groupId> <artifactId>spring-webmvc</artifactId>
+            <version>2.5.6</version> </dependency -->
         <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
@@ -354,7 +329,7 @@
                     <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
                 </configuration>
             </plugin>
-            <!--  tell the compiler we can use 1.6 -->
+            <!-- tell the compiler we can use 1.6 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

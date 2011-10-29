@@ -83,7 +83,7 @@ public class Run implements Serializable, Comparable<Run> {
 
     // Adjacent days are also taken because of runs starting near midnight;
     // they are later filtered programatically
-    private static final String dateCriteriaAndOrder =
+    public static final String dateCriteriaAndOrder =
         "AND (day(run.time.time) >= day(:runDate) - 1 AND day(run.time.time) <=  day(:runDate) + 1) " +
         "AND (month(run.time.time) >= month(:runDate) - 1 AND month(run.time.time) <=  month(:runDate) + 1) " +
         "AND (year(run.time.time) >= year(:runDate) - 1 AND year(run.time.time) <=  year(:runDate) + 1) " +
